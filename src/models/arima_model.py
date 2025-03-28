@@ -185,3 +185,99 @@ def generate_arima_report(train_data, test_data, forecast, model_fit, title="ARI
     rmse = evaluate_arima_model(test_data, forecast)
     print(f"\nEvaluation Metrics:")
     print(f"Root Mean Squared Error (RMSE): {rmse:.4f}")
+    
+def plot_arima(data_values, order = (1,1,1), trend = 'c'):
+    print('final model:', order, trend)
+    model = ARIMA(data_values, order=order, trend = trend)
+    results = model.fit()
+    
+    error = mean_squared_error(data_values, results.fittedvalues)   
+    print('MSE error is:', error)
+    
+    from matplotlib import pyplot as plt
+    f = plt.figure()
+    f.set_figwidth(15)
+    f.set_figheight(6)
+    plt.plot(data_values, label = "original Series", linewidth = 4)
+    plt.plot(results.fittedvalues, color='red', label = "Predictions", linestyle='dashed', linewidth = 3)
+    plt.legend(fontsize = 25)
+    plt.xlabel('Months', fontsize = 25)
+    plt.ylabel('Count', fontsize = 25)
+    plt.show()
+
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+import math
+
+# Initialize a list to store metrics for each iteration
+metrics_log = []
+
+# Example function to calculate and log metrics
+def log_metrics(y_true, y_pred, iteration):
+    mae = mean_absolute_error(y_true, y_pred)
+    mse = mean_squared_error(y_true, y_pred)
+    rmse = math.sqrt(mse)
+    
+    # Log metrics for the current iteration
+    metrics_log.append({
+        'iteration': iteration,
+        'MAE': mae,
+        'MSE': mse,
+        'RMSE': rmse
+    })
+    
+    # Print metrics for the current iteration
+    print(f"Iteration {iteration}: MAE={mae}, MSE={mse}, RMSE={rmse}")
+
+import matplotlib.pyplot as plt
+
+def plot_metrics(metrics_log):
+    iterations = [entry['iteration'] for entry in metrics_log]
+    mae_values = [entry['MAE'] for entry in metrics_log]
+    mse_values = [entry['MSE'] for entry in metrics_log]
+    rmse_values = [entry['RMSE'] for entry in metrics_log]
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(iterations, mae_values, label='MAE')
+    plt.plot(iterations, mse_values, label='MSE')
+    plt.plot(iterations, rmse_values, label='RMSE')
+    plt.xlabel('Iteration')
+    plt.ylabel('Metric Value')
+    plt.title('Metrics Over Tuning Iterations')
+    plt.legend()
+    plt.show()
+    
+metrics_storage = {}
+
+def calculate_metrics(test, forecast_values, forecast_steps):
+    """
+    Calculate evaluation metrics for the forecast.
+    """
+    mae = mean_absolute_error(test['Threat_Event_Count'][:forecast_steps], forecast_values)
+    mse = mean_squared_error(test['Threat_Event_Count'][:forecast_steps], forecast_values)
+    rmse = np.sqrt(mse)
+    return {'MAE': mae, 'MSE': mse, 'RMSE': rmse}
+
+def add_metrics(storage, order, metrics):
+    """
+    Add metrics to the storage with the ARIMA order as the key.
+    """
+    storage[order] = metrics
+
+def display_and_save_metrics(order, metrics, log_file="metrics_log.txt"):
+    """
+    Display metrics and save them to a log file.
+    """
+    mae, mse, rmse = metrics['MAE'], metrics['MSE'], metrics['RMSE']
+    log_content = (
+        f"ARIMA Order: {order}\n"
+        f"Mean Absolute Error (MAE): {mae}\n"
+        f"Mean Squared Error (MSE): {mse}\n"
+        f"Root Mean Squared Error (RMSE): {rmse}\n\n"
+        "Interpretation:\n"
+        f"1. Mean Absolute Error (MAE): On average, the forecasted values deviate from the actual values by {mae:.2f} threat events.\n"
+        f"{'   This is a good result, indicating low average deviation.' if mae < 10 else '   This is a bad result, indicating high average deviation.'}\n"
+        f"2. Mean Squared Error (MSE): The average squared difference between the forecasted and actual values is {mse:.2f}. This metric penalizes larger errors more heavily.\n"
+        f"{'   This is a good result, indicating low squared errors.' if mse < 100 else '   This is a bad result, indicating high squared errors.'}\n"
+        f"3. Root Mean Squared Error (RMSE): The RMSE of {rmse:.2f} provides a measure of the average magnitude of the forecast errors, expressed in the same units as the data (threat events). Lower values indicate better model performance.\n"
+        f"{'   This is a good result, indicating low forecast error magnitude.' if rmse < 10 else '   This is a bad result, indicating high forecast error magnitude.'}\n"
+    )
