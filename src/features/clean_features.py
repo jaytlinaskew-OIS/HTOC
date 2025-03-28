@@ -17,3 +17,7 @@ def remove_outliers(data, column, threshold):
 def remove_columns(data, columns):
     data = data.drop(columns, axis=1)
     return data
+
+def extract_numeric(data, column):
+    data[column] = data[column].str.extract('(\d+)').astype(int)
+    return data

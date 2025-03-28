@@ -11,10 +11,37 @@ def check_stationarity(data):
     result = adfuller(data)
     return result[1] < 0.05
 
-def visualize_stationarity(data):
-    plt.figure(figsize=(10, 6))
-    plt.plot(data)
-    plt.title("Time Series Data")
+def visualize_stationarity(data, rolling_window=7, title="Time Series Trends (Rolling Average)"):
+    """
+    Visualize the time series data with rolling mean for multiple columns using subplots.
+
+    Args:
+        data (pd.DataFrame): The time series data with multiple columns.
+        rolling_window (int): The window size for calculating rolling statistics.
+        title (str): The title of the entire plot.
+
+    Returns:
+        None
+    """
+    # Create subplots
+    num_columns = len(data.columns)
+    fig, axes = plt.subplots(nrows=num_columns, ncols=1, figsize=(12, 10), sharex=True)
+
+    # Define colors for consistency
+    colors = ['blue', 'orange', 'green', 'red', 'purple', 'brown']  # Add more colors if needed
+
+    # Plot each variable in a separate subplot
+    for i, column in enumerate(data.columns):
+        axes[i].plot(data.index, data[column].rolling(window=rolling_window).mean(), 
+                     color=colors[i % len(colors)], label=column)
+        axes[i].set_title(column, fontsize=10)
+        axes[i].set_ylabel("Value")
+        axes[i].legend()
+
+    # Adjust layout
+    plt.xlabel("Time")
+    plt.suptitle(title, fontsize=14)
+    plt.tight_layout()
     plt.show()
 
 def check_seasonality(data):
@@ -53,6 +80,50 @@ def make_arima_forecast(model_fit, start, end):
 def evaluate_arima_model(test_data, forecast):
     rmse = np.sqrt(mean_squared_error(test_data, forecast))
     return rmse
+
+def plot_residuals(residuals):
+    """
+    Plot the residuals to check for randomness.
+
+    Args:
+        residuals (pd.Series): The residuals (actual - predicted).
+
+    Returns:
+        None
+    """
+    plt.figure(figsize=(12, 6))
+    plt.plot(residuals, label="Residuals", color="orange")
+    plt.axhline(y=0, color="black", linestyle="--", linewidth=1)
+    plt.title("Residuals of ARIMA Model")
+    plt.xlabel("Time")
+    plt.ylabel("Residuals")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+def plot_forecast(train_data, test_data, forecast):
+    """
+    Plot the training data, test data, and forecast.
+
+    Args:
+        train_data (pd.Series): The training data.
+        test_data (pd.Series): The test data.
+        forecast (pd.Series): The forecasted values.
+
+    Returns:
+        None
+    """
+    plt.figure(figsize=(12, 6))
+    plt.plot(train_data, label="Train Data", color="blue")
+    plt.plot(test_data, label="Test Data", color="green")
+    plt.plot(forecast, label="Forecast", color="red")
+    plt.title("ARIMA Model Forecast vs Actual")
+    plt.xlabel("Time")
+    plt.ylabel("Value")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
 
 def generate_arima_report(train_data, test_data, forecast, model_fit, title="ARIMA Model Report"):
     """
