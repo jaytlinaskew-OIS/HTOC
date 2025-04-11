@@ -28,6 +28,24 @@ def get_files_by_date_range(folder_path, start_date, end_date):
         except (ValueError, IndexError):
             continue  # Skip files that don't match the expected format
     return files_in_range
+def data_preprocessing(data):
+    """
+    Preprocess the data by cleaning and standardizing it.
+    
+    Args:
+        data (pd.DataFrame): The input data to preprocess.
+    
+    Returns:
+        pd.DataFrame: The preprocessed data.
+    """
+    # Cleaning up the data
+    data['curr_date'] = pd.to_datetime(data['curr_date'])
+    data['obs_date'] = pd.to_datetime(data['obs_date'])
+
+    # Dropping the 'indicator_key' column
+    data = data.drop(columns=['indicator_key'], inplace=True)
+    
+    return data
 
 def merge_csv_files(file_list, output_file):
     """
@@ -38,9 +56,11 @@ def merge_csv_files(file_list, output_file):
         output_file (str): Path to save the merged CSV file.
     """
     merged_data = pd.DataFrame()
+
     for file in file_list:
         data = pd.read_csv(file)
         merged_data = pd.concat([merged_data, data], ignore_index=True)
+        data_preprocessing(merged_data)
     merged_data.to_csv(output_file, index=False)
 
 if __name__ == "__main__":
