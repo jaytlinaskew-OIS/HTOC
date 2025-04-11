@@ -3,7 +3,11 @@ import pandas as pd
 from datetime import datetime
 
 start_date = "20250401"  
-end_date = "20250402"   
+end_date = "20250403" 
+# Define the folder path and date range
+folder_path = r"C:\Users\jaskew\Documents\project_repository\data\raw\ObservationDataFiles"
+
+output_file = r"C:\Users\jaskew\Documents\project_repository\data\processed\ProcessedObservedData.csv"  
 
 def get_files_by_date_range(folder_path, start_date, end_date):
     """
@@ -64,14 +68,18 @@ def merge_csv_files(file_list, output_file):
     merged_data.to_csv(output_file, index=False)
 
 if __name__ == "__main__":
-    # Define the folder path and date range
-    folder_path = r"C:\Users\jaskew\Documents\project_repository\data\raw\ObservationDataFiles"
-
-    output_file = r"C:\Users\jaskew\Documents\project_repository\data\processed\ProcessedObservedData.csv"
-    
     # Get files in the date range
     files_to_merge = get_files_by_date_range(folder_path, start_date, end_date)
-    
+
+    #prevent duplicate records in ProcessedObservedData from merging
+    if os.path.exists(output_file) and os.path.getsize(output_file) > 0:
+        existing_data = pd.read_csv(output_file)
+        existing_dates = set(existing_data['obs_date'].astype(str))
+        files_to_merge = [file for file in files_to_merge if file.split('_')[-1].split('.')[0][1:] not in existing_dates]
+        print(f"Filtered out {len(files_to_merge)} files already in {output_file}")
+    elif os.path.exists(output_file):
+        print(f"{output_file} exists but is empty. Proceeding without filtering existing dates.")
+
     # Merge the files
     if files_to_merge:
         merge_csv_files(files_to_merge, output_file)
