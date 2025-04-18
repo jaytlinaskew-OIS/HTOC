@@ -2,8 +2,8 @@ import os
 import pandas as pd
 from datetime import datetime
 
-start_date = "20250101"  
-end_date = "20250417" 
+start_date = "20240101"  
+end_date = "20250418" 
 # Define the folder path and date range
 folder_path = r"C:\Users\jaskew\Documents\project_repository\data\raw\ObservationDataFiles"
 
