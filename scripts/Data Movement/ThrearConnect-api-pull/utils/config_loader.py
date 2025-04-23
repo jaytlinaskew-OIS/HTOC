@@ -13,14 +13,16 @@ def load_config(config_file):
 
     # Safely get each field, raise if missing
     try:
-        api_key = config.get('api_key')
-        access_id = config.get('access_id')
-        url_base = config.get('url_base')
+        api_secret_key = config.get('api_secret_key')
+        api_access_id = config.get('api_access_id')
+        api_base_url = config.get('api_base_url')
+        api_default_org = config.get('api_default_org')
 
-        if not all([api_key, access_id, url_base]):
-            raise KeyError("One or more required keys ('api_key', 'access_id', 'url_base') are missing or have null values in the config file.")
+
+        if not all([api_secret_key, api_access_id, api_base_url, api_default_org]):
+            raise KeyError("One or more required keys ('api_secret_key', 'api_access_id', 'api_base_url', 'api_default_org') are missing or have null values in the config file.")
 
     except KeyError as e:
         raise KeyError(f"Missing key in config.json: {e}")
 
-    return api_key, access_id, url_base
+    return api_secret_key, api_access_id, api_base_url, api_default_org
