@@ -1,2 +1,2 @@
-id,name,lastUsed,description,summary
-23630,NIH Splunk API,2025-04-24T16:45:58Z,This indicator is benign and being used to test observation visibility and reporting amongst integrated partners.,alynforensics.com
+id,name,lastUsed,description,summary,observations
+23630,NIH Splunk API,2025-04-24T17:48:46Z,This indicator is benign and being used to test observation visibility and reporting amongst integrated partners.,alynforensics.com,2
