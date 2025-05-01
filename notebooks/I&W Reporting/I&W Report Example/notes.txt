@@ -1,0 +1,31 @@
+Criteria:
+
+Automate as much of the basic processes/steps for creating an I&W as possible, attached is the I&W template I use, as well as an example draft.
+Have an API/script go to any/all of the investigation links from ThreatConnect, here is an example indicator with investigation links:
+https://hvs.threatconnect.com/auth/indicators/details/host.xhtml?host=almabooks.com
+My preferred sources include:
+                                                              i.      https://otx.alienvault.com/
+
+                                                             ii.      https://www.virustotal.com/gui/home/search
+
+                                                           iii.      https://pulsedive.com/
+
+                                                           iv.      https://advantage.mandiant.com/
+
+Create a basic, editable word doc with basic info pulled from the aforementioned sources and ThreatConnect.
+ 
+
+My I&W Process—Other I&W authors may have a different process:
+
+Scan ThreatConnect for indicators that have observations in two or more partners, sort by most recently seen or added.
+If an indicator meets the requisite threshold, conduct research on the indicator in AlienVault OTX, VirusTotal, Mandiant, Pulsedive; and other sources as necessary. If an indicator has open ports listed on AlienVault OTX, check those ports using https://www.speedguide.net/port.php?port=8081 and do minor port characterization. If an indicator is linked to a state-sponsored, or other threat actor campaign, include brief research on the campaign in question and identify the actor in question. In the linked I&W example I include information concerning the indicator’s ties to Russian Foreign Intelligence Service (SVR) affiliated Midnight Blizzard.
+Write narrative/fill in technical details as noted in the draft and the template.
+Send report draft for review.
+After review, convert Word doc to a PDF and upload to ThreatConnect, email to HTOC distro for dissemination.
+ 
+
+Pre-fill request:
+
+Basic info/intel from the sources, along with adding the source URLs to the Sources section of an I&W report.
+Generic narrative that can be further modified/edited as needed.
+For campaigns with multiple indicators, automatically adding indicators to the table in the Technical Details.
