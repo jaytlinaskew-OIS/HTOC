@@ -1,18 +1,18 @@
 [
     {
-        "search_term": "65.21.203.39",
-        "timestamp": "2025-05-05 14:04:24",
-        "title": "VirusTotal API Report for 65.21.203.39",
-        "link": "https://www.virustotal.com/gui/ip-address/65.21.203.39",
-        "asn": 24940,
-        "as_owner": "Hetzner Online GmbH",
-        "country": "FI",
-        "network": "65.21.0.0/16",
+        "search_term": "190.92.174.130",
+        "timestamp": "2025-05-07 08:36:17",
+        "title": "VirusTotal API Report for 190.92.174.130",
+        "link": "https://www.virustotal.com/gui/ip-address/190.92.174.130",
+        "asn": 199404,
+        "as_owner": "WHG Hosting Services Ltd",
+        "country": "IN",
+        "network": "190.92.174.0/23",
         "last_analysis_stats": {
-            "malicious": 4,
-            "suspicious": 3,
-            "undetected": 30,
-            "harmless": 57,
+            "malicious": 1,
+            "suspicious": 1,
+            "undetected": 32,
+            "harmless": 60,
             "timeout": 0
         },
         "reputation": 0,
@@ -24,13 +24,13 @@
         "publish_date": "N/A"
     },
     {
-        "search_term": "65.21.203.39",
-        "timestamp": "2025-05-05 14:04:24",
-        "title": "OTX API Report for 65.21.203.39",
-        "link": "https://otx.alienvault.com/indicator/ip/65.21.203.39",
+        "search_term": "190.92.174.130",
+        "timestamp": "2025-05-07 08:36:17",
+        "title": "OTX API Report for 190.92.174.130",
+        "link": "https://otx.alienvault.com/indicator/ip/190.92.174.130",
         "base_indicator": {
-            "id": 4021236615,
-            "indicator": "65.21.203.39",
+            "id": 4021232611,
+            "indicator": "190.92.174.130",
             "type": "IPv4",
             "title": "",
             "description": "",
@@ -40,8 +40,89 @@
         },
         "reputation": 0,
         "geo": {},
-        "whois": "http://whois.domaintools.com/65.21.203.39",
+        "whois": "http://whois.domaintools.com/190.92.174.130",
         "open_ports": [],
         "publish_date": "N/A"
     },
-    
+    {
+        "search_term": "190.92.174.30",
+        "timestamp": "2025-05-07 08:36:17",
+        "title": "VirusTotal API Report for 190.92.174.30",
+        "link": "https://www.virustotal.com/gui/ip-address/190.92.174.30",
+        "asn": 199404,
+        "as_owner": "WHG Hosting Services Ltd",
+        "country": "IN",
+        "network": "190.92.174.0/23",
+        "last_analysis_stats": {
+            "malicious": 1,
+            "suspicious": 0,
+            "undetected": 32,
+            "harmless": 61,
+            "timeout": 0
+        },
+        "reputation": 0,
+        "total_votes": {
+            "harmless": 0,
+            "malicious": 0
+        },
+        "open_ports": [],
+        "publish_date": "N/A"
+    },
+    {
+        "search_term": "190.92.174.30",
+        "timestamp": "2025-05-07 08:36:17",
+        "title": "OTX API Report for 190.92.174.30",
+        "link": "https://otx.alienvault.com/indicator/ip/190.92.174.30",
+        "base_indicator": {
+            "id": 4021281258,
+            "indicator": "190.92.174.30",
+            "type": "IPv4",
+            "title": "",
+            "description": "",
+            "content": "",
+            "access_type": "public",
+            "access_reason": ""
+        },
+        "reputation": 0,
+        "geo": {},
+        "whois": "http://whois.domaintools.com/190.92.174.30",
+        "open_ports": [],
+        "publish_date": "N/A"
+    },
+    {
+        "search_term": "190.92.174.36",
+        "timestamp": "2025-05-07 08:36:18",
+        "title": "VirusTotal API Report for 190.92.174.36",
+        "link": "https://www.virustotal.com/gui/ip-address/190.92.174.36",
+        "asn": 199404,
+        "as_owner": "WHG Hosting Services Ltd",
+        "country": "IN",
+        "network": "190.92.174.0/23",
+        "last_analysis_stats": {
+            "malicious": 1,
+            "suspicious": 0,
+            "undetected": 33,
+            "harmless": 60,
+            "timeout": 0
+        },
+        "reputation": -1,
+        "total_votes": {
+            "harmless": 0,
+            "malicious": 1
+        },
+        "open_ports": [],
+        "publish_date": "N/A"
+    },
+    {
+        "search_term": "190.92.174.36",
+        "timestamp": "2025-05-07 08:36:18",
+        "title": "OTX API Report for 190.92.174.36",
+        "link": "https://otx.alienvault.com/indicator/ip/190.92.174.36",
+        "base_indicator": {},
+        "reputation": 0,
+        "geo": {},
+        "whois": "http://whois.domaintools.com/190.92.174.36",
+        "open_ports": [],
+        "publish_date": "N/A"
+    }
+]
