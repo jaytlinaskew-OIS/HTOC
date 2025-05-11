@@ -1,18 +1,17 @@
 [
     {
-        "search_term": "65.21.203.39",
-        "timestamp": "2025-05-05 14:04:24",
-        "title": "VirusTotal API Report for 65.21.203.39",
-        "link": "https://www.virustotal.com/gui/ip-address/65.21.203.39",
-        "asn": 24940,
-        "as_owner": "Hetzner Online GmbH",
-        "country": "FI",
-        "network": "65.21.0.0/16",
+        "search_term": "104.237.131.164",
+        "timestamp": "2025-05-08 13:35:03",
+        "link": "https://www.virustotal.com/gui/ip-address/104.237.131.164",
+        "asn": 63949,
+        "as_owner": "Akamai Connected Cloud",
+        "country": "US",
+        "network": "104.237.128.0/19",
         "last_analysis_stats": {
-            "malicious": 4,
+            "malicious": 8,
             "suspicious": 3,
-            "undetected": 30,
-            "harmless": 57,
+            "undetected": 27,
+            "harmless": 56,
             "timeout": 0
         },
         "reputation": 0,
@@ -21,16 +20,16 @@
             "malicious": 0
         },
         "open_ports": [],
-        "publish_date": "N/A"
+        "observed_by": "CMS, DHA, HRSA, IHS",
+        "partner_count": 4
     },
     {
-        "search_term": "65.21.203.39",
-        "timestamp": "2025-05-05 14:04:24",
-        "title": "OTX API Report for 65.21.203.39",
-        "link": "https://otx.alienvault.com/indicator/ip/65.21.203.39",
+        "search_term": "104.237.131.164",
+        "timestamp": "2025-05-08 13:35:03",
+        "link": "https://otx.alienvault.com/indicator/ip/104.237.131.164",
         "base_indicator": {
-            "id": 4021236615,
-            "indicator": "65.21.203.39",
+            "id": 4052847153,
+            "indicator": "104.237.131.164",
             "type": "IPv4",
             "title": "",
             "description": "",
@@ -40,8 +39,279 @@
         },
         "reputation": 0,
         "geo": {},
-        "whois": "http://whois.domaintools.com/65.21.203.39",
+        "whois": "http://whois.domaintools.com/104.237.131.164",
         "open_ports": [],
-        "publish_date": "N/A"
+        "observed_by": "CMS, DHA, HRSA, IHS",
+        "partner_count": 4
     },
-    
+    {
+        "search_term": "193.105.73.21",
+        "timestamp": "2025-05-08 13:35:05",
+        "link": "https://www.virustotal.com/gui/ip-address/193.105.73.21",
+        "asn": 6696,
+        "as_owner": "VERIXI SA",
+        "country": "BE",
+        "network": "193.105.73.0/24",
+        "last_analysis_stats": {
+            "malicious": 5,
+            "suspicious": 3,
+            "undetected": 29,
+            "harmless": 57,
+            "timeout": 0
+        },
+        "reputation": -1,
+        "total_votes": {
+            "harmless": 0,
+            "malicious": 1
+        },
+        "open_ports": [],
+        "observed_by": "DHA, OS",
+        "partner_count": 2
+    },
+    {
+        "search_term": "193.105.73.21",
+        "timestamp": "2025-05-08 13:35:05",
+        "link": "https://otx.alienvault.com/indicator/ip/193.105.73.21",
+        "base_indicator": {
+            "id": 4064094976,
+            "indicator": "193.105.73.21",
+            "type": "IPv4",
+            "title": "",
+            "description": "",
+            "content": "",
+            "access_type": "public",
+            "access_reason": ""
+        },
+        "reputation": 0,
+        "geo": {},
+        "whois": "http://whois.domaintools.com/193.105.73.21",
+        "open_ports": [],
+        "observed_by": "DHA, OS",
+        "partner_count": 2
+    },
+    {
+        "search_term": "37.19.200.131",
+        "timestamp": "2025-05-08 13:35:05",
+        "link": "https://www.virustotal.com/gui/ip-address/37.19.200.131",
+        "asn": 212238,
+        "as_owner": "Datacamp Limited",
+        "country": "US",
+        "network": "37.19.200.0/23",
+        "last_analysis_stats": {
+            "malicious": 3,
+            "suspicious": 0,
+            "undetected": 31,
+            "harmless": 60,
+            "timeout": 0
+        },
+        "reputation": 0,
+        "total_votes": {
+            "harmless": 0,
+            "malicious": 0
+        },
+        "open_ports": [],
+        "observed_by": "CMS, DHA, HRSA, IHS",
+        "partner_count": 4
+    },
+    {
+        "search_term": "37.19.200.131",
+        "timestamp": "2025-05-08 13:35:05",
+        "link": "https://otx.alienvault.com/indicator/ip/37.19.200.131",
+        "base_indicator": {
+            "id": 3606023289,
+            "indicator": "37.19.200.131",
+            "type": "IPv4",
+            "title": "",
+            "description": "",
+            "content": "",
+            "access_type": "public",
+            "access_reason": ""
+        },
+        "reputation": 0,
+        "geo": {},
+        "whois": "http://whois.domaintools.com/37.19.200.131",
+        "open_ports": [],
+        "observed_by": "CMS, DHA, HRSA, IHS",
+        "partner_count": 4
+    },
+    {
+        "search_term": "45.135.57.192",
+        "timestamp": "2025-05-08 13:35:06",
+        "link": "https://www.virustotal.com/gui/ip-address/45.135.57.192",
+        "asn": 206176,
+        "as_owner": "GreenEdge B.V.",
+        "country": "NL",
+        "network": "45.135.56.0/22",
+        "last_analysis_stats": {
+            "malicious": 12,
+            "suspicious": 3,
+            "undetected": 27,
+            "harmless": 52,
+            "timeout": 0
+        },
+        "reputation": -1,
+        "total_votes": {
+            "harmless": 0,
+            "malicious": 1
+        },
+        "open_ports": [],
+        "observed_by": "CMS, HRSA, IHS",
+        "partner_count": 3
+    },
+    {
+        "search_term": "45.135.57.192",
+        "timestamp": "2025-05-08 13:35:06",
+        "link": "https://otx.alienvault.com/indicator/ip/45.135.57.192",
+        "base_indicator": {
+            "id": 4057460929,
+            "indicator": "45.135.57.192",
+            "type": "IPv4",
+            "title": "",
+            "description": "",
+            "content": "",
+            "access_type": "public",
+            "access_reason": ""
+        },
+        "reputation": 0,
+        "geo": {},
+        "whois": "http://whois.domaintools.com/45.135.57.192",
+        "open_ports": [],
+        "observed_by": "CMS, HRSA, IHS",
+        "partner_count": 3
+    },
+    {
+        "search_term": "193.3.19.2",
+        "timestamp": "2025-05-08 13:35:41",
+        "link": "https://www.virustotal.com/gui/ip-address/193.3.19.2",
+        "asn": 50340,
+        "as_owner": "JSC Selectel",
+        "country": "RU",
+        "network": "193.3.19.0/24",
+        "last_analysis_stats": {
+            "malicious": 7,
+            "suspicious": 3,
+            "undetected": 28,
+            "harmless": 56,
+            "timeout": 0
+        },
+        "reputation": 0,
+        "total_votes": {
+            "harmless": 0,
+            "malicious": 0
+        },
+        "open_ports": [],
+        "observed_by": "FDA, OS",
+        "partner_count": 2
+    },
+    {
+        "search_term": "193.3.19.2",
+        "timestamp": "2025-05-08 13:35:41",
+        "link": "https://otx.alienvault.com/indicator/ip/193.3.19.2",
+        "base_indicator": {
+            "id": 4066049246,
+            "indicator": "193.3.19.2",
+            "type": "IPv4",
+            "title": "",
+            "description": "",
+            "content": "",
+            "access_type": "public",
+            "access_reason": ""
+        },
+        "reputation": 0,
+        "geo": {},
+        "whois": "http://whois.domaintools.com/193.3.19.2",
+        "open_ports": [],
+        "observed_by": "FDA, OS",
+        "partner_count": 2
+    },
+    {
+        "search_term": "45.33.120.158",
+        "timestamp": "2025-05-08 13:35:41",
+        "link": "https://www.virustotal.com/gui/ip-address/45.33.120.158",
+        "asn": 63949,
+        "as_owner": "Akamai Connected Cloud",
+        "country": "US",
+        "network": "45.33.0.0/17",
+        "last_analysis_stats": {
+            "malicious": 8,
+            "suspicious": 4,
+            "undetected": 27,
+            "harmless": 55,
+            "timeout": 0
+        },
+        "reputation": 0,
+        "total_votes": {
+            "harmless": 0,
+            "malicious": 0
+        },
+        "open_ports": [],
+        "observed_by": "CMS, DHA, HRSA, IHS",
+        "partner_count": 4
+    },
+    {
+        "search_term": "45.33.120.158",
+        "timestamp": "2025-05-08 13:35:41",
+        "link": "https://otx.alienvault.com/indicator/ip/45.33.120.158",
+        "base_indicator": {
+            "id": 2134940259,
+            "indicator": "45.33.120.158",
+            "type": "IPv4",
+            "title": "",
+            "description": "",
+            "content": "",
+            "access_type": "public",
+            "access_reason": ""
+        },
+        "reputation": 0,
+        "geo": {},
+        "whois": "http://whois.domaintools.com/45.33.120.158",
+        "open_ports": [],
+        "observed_by": "CMS, DHA, HRSA, IHS",
+        "partner_count": 4
+    },
+    {
+        "search_term": "119.96.59.16",
+        "timestamp": "2025-05-08 13:35:43",
+        "link": "https://www.virustotal.com/gui/ip-address/119.96.59.16",
+        "asn": 58563,
+        "as_owner": "CHINANET Hubei province network",
+        "country": "CN",
+        "network": "119.96.48.0/20",
+        "last_analysis_stats": {
+            "malicious": 5,
+            "suspicious": 1,
+            "undetected": 30,
+            "harmless": 58,
+            "timeout": 0
+        },
+        "reputation": 0,
+        "total_votes": {
+            "harmless": 0,
+            "malicious": 0
+        },
+        "open_ports": [],
+        "observed_by": "CMS, HRSA, OS",
+        "partner_count": 3
+    },
+    {
+        "search_term": "119.96.59.16",
+        "timestamp": "2025-05-08 13:35:43",
+        "link": "https://otx.alienvault.com/indicator/ip/119.96.59.16",
+        "base_indicator": {
+            "id": 4012559237,
+            "indicator": "119.96.59.16",
+            "type": "IPv4",
+            "title": "",
+            "description": "",
+            "content": "",
+            "access_type": "public",
+            "access_reason": ""
+        },
+        "reputation": 0,
+        "geo": {},
+        "whois": "http://whois.domaintools.com/119.96.59.16",
+        "open_ports": [],
+        "observed_by": "CMS, HRSA, OS",
+        "partner_count": 3
+    }
+]
