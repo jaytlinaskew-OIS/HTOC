@@ -52,11 +52,23 @@ def populate_table(table, data):
     for index, row in data.iterrows():
         # Insert a new row before the last row (template row)
         new_row = table.add_row().cells
+
+        # Extract and set the observed dates
+        observed_dates = row.get('observed_date', 'N/A')
+        if observed_dates and observed_dates != 'N/A':
+            # Extract the earliest date and the full list of dates
+            date_list = [date.strip() for date in observed_dates.split(',')]
+            date_list.sort()
+            earliest_date = date_list[0]
+        else:
+            earliest_date = 'N/A'
+
+        # Populate cells with processed data
         new_row[0].text = str(row.get('search_term', 'N/A'))
-        new_row[1].text = str(row.get('base_type', 'N/A'))
-        new_row[2].text = extract_date(row.get('timestamp_vt', 'N/A'))
-        new_row[3].text = str(row.get('observed_by_otx', 'N/A'))
-        new_row[4].text = str(row.get('notes', ''))
+        new_row[1].text = str(row.get('type', 'N/A'))
+        new_row[2].text = earliest_date  # Display the earliest date explicitly
+        new_row[3].text = str(row.get('partners', 'N/A'))  # Adjusted to 'partners' as per previous logic
+
 
 def fill_word_template(template_path, output_path, df):
     """ Fill the template with data and place sources outside the table. """
@@ -90,20 +102,52 @@ def fill_word_template(template_path, output_path, df):
     except Exception as e:
         print(f"Error while generating report: {e}")
 
-def generate_report(vt_df, otx_df):
-    """ Main function to handle report generation. """
-    # Combine the DataFrames and drop duplicates
-    combined_df = pd.merge(vt_df, otx_df, on='search_term', how='outer', suffixes=('_vt', '_otx'))
-    
-    # Consolidate sources
-    sources_df = consolidate_sources(vt_df, otx_df)
+def generate_report(vt_df, otx_df, processed_data):
+    """Main function to handle report generation."""
 
-    # Merge sources into the combined DataFrame
-    combined_df = pd.merge(combined_df, sources_df, on='search_term', how='inner')
-    
+    # Combine VirusTotal and OTX dataframes
+    combined_df = pd.merge(
+        vt_df, otx_df, on='search_term', how='outer', suffixes=('_vt', '_otx')
+    )
+
+    # Consolidate sources into a single dataframe
+    sources_df = consolidate_sources(vt_df, otx_df)
+    combined_df = pd.merge(
+        combined_df, sources_df, on='search_term', how='left'
+    )
+
+    # Clearly aggregate observations to avoid duplication
+    if not processed_data.empty:
+        # Aggregate observations per indicator to single rows
+        agg_processed_data = (
+            processed_data.groupby('summary', as_index=False)
+            .agg({
+                'observed_date': lambda x: ', '.join(sorted(set(x.astype(str)))),
+                'partners': lambda x: ', '.join(sorted(set(', '.join(x.dropna()).split(', ')))),
+                'type': 'first',
+                'observations': 'first'
+            })
+        )
+
+        combined_df = pd.merge(
+            combined_df,
+            agg_processed_data,
+            left_on='search_term',
+            right_on='summary',
+            how='left'
+        )
+
+        # Remove redundant 'summary' after merge
+        combined_df.drop(columns=['summary'], inplace=True)
+
+    # Remove any remaining exact duplicates
+    combined_df.drop_duplicates(subset=['search_term', 'type', 'observed_date', 'partners'], inplace=True)
+
     # Define output file path
     current_date = pd.Timestamp.now().strftime("%Y-%m-%d")
     output_file = os.path.join(OUTPUT_DIR, f"I&W_Report_{current_date}.docx")
 
-    # Fill the template table with data
+    # Fill the template table with the clearly deduplicated data
     fill_word_template(TEMPLATE_PATH, output_file, combined_df)
+
+

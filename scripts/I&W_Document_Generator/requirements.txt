@@ -1,7 +1,7 @@
 pandas
 requests
+ipaddress
 urllib3
 python-docx
 pytz
 threatconnect
-RequestObject

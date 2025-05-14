@@ -9,13 +9,12 @@ import concurrent.futures
 import logging
 import pandas as pd
 from datetime import datetime, timedelta
-from collections import defaultdict
 import pytz
 from scripts.config_loader import load_config
 sys.path.append("Z:/HTOC/Data_Analytics/threatconnect")
 
-from ThreatConnect import ThreatConnect
-from RequestObject import RequestObject
+from ThreatConnect import ThreatConnect # type: ignore
+from RequestObject import RequestObject # type: ignore
 
 # Load API config
 project_root = r"C:\Users\jaskew\Documents\project_repository\scripts\I&W_Document_Generator"

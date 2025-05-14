@@ -62,7 +62,7 @@ def main():
             print("[ERROR] processed_data is not in the expected format.")
             sys.exit(1)
 
-        generate_report(vt_df, otx_df)
+        generate_report(vt_df, otx_df, processed_data)
         print(f"Report generated at: {report_path}")
     except Exception as e:
         print(f"[ERROR] Failed to generate report: {e}")
