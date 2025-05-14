@@ -1,7 +1,25 @@
 {
-    "api_secret_key": "GOIUnxSqhP@9%BFvFHr9OnzGrn?DpPGDkdn2w6h@VfnRqK28vwiOaA$Cc@CD4%u5",
-    "api_access_id": "09783848890162390382",
-    "api_base_url": "https://hvs.threatconnect.com/api",
-    "api_default_org": "HTOC Org"
-
+    "threatconnect": {
+        "credentials": {
+            "secret_key": "GOIUnxSqhP@9%BFvFHr9OnzGrn?DpPGDkdn2w6h@VfnRqK28vwiOaA$Cc@CD4%u5",
+            "access_id": "09783848890162390382",
+            "base_url": "https://hvs.threatconnect.com/api",
+            "default_org": "HTOC Org"
+        }
+    },
+    "virustotal": {
+        "api_key": "a8b3e24dbd2e6c0cb002784aeb8fee6217a6a425cb11ddf9a3d3361281fbbb08",
+        "endpoints": {
+            "ip": "https://www.virustotal.com/api/v3/ip_addresses/{}",
+            "domain": "https://www.virustotal.com/api/v3/domains/{}"
+        }
+    },
+    "otx": {
+        "api_key": "ea83cf4792fc5db7acc741e82286c0b717fc99be98ec5b14de7e63cd3f74bcfe",
+        "endpoints": {
+            "ip": "https://otx.alienvault.io/api/v1/indicators/IPv4/{}/general",
+            "domain": "https://otx.alienvault.io/api/v1/indicators/domain/{}/general",
+            "hostname": "https://otx.alienvault.io/api/v1/indicators/hostname/{}"
+        }
+    }
 }

@@ -1,11 +1,34 @@
 import os
 import pandas as pd
 from datetime import datetime, timedelta
+from scripts.config_loader import get_threatconnect_config, get_virustotal_config, get_AlienVaultOtx_config
 
-# Base file path with placeholder for date
-base_path = r"Z:/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d{date}.csv"
-#base_path = r"C:\Users\jaskew\Documents\project_repository\data\raw\ObservationDataFiles\htoc_opdiv_obs_d{date}.csv"
 date_format = "%Y%m%d"
+
+# Path to configuration file
+project_root = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(project_root, "..", "utils", "config.json")
+
+def get_tc_config():
+    """Load and return ThreatConnect configuration."""
+    try:
+        return get_threatconnect_config(config_path)
+    except Exception as e:
+        raise RuntimeError(f"Error loading VirusTotal config: {e}")
+
+def get_vt_config():
+    """Load and return VirusTotal configuration."""
+    try:
+        return get_virustotal_config(config_path)
+    except Exception as e:
+        raise RuntimeError(f"Error loading VirusTotal config: {e}")
+
+def get_otx_config():
+    """Load and return OTX configuration."""
+    try:
+        return get_AlienVaultOtx_config(config_path)
+    except Exception as e:
+        raise RuntimeError(f"Error loading OTX config: {e}")
 
 def get_file_paths(base_path, days=3):
     """ Generate file paths for the last `days` days using list comprehension. """

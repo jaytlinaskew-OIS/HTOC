@@ -10,7 +10,7 @@ import logging
 import pandas as pd
 from datetime import datetime, timedelta
 import pytz
-from scripts.config_loader import load_config
+from scripts.data_processing import get_otx_config, get_vt_config
 sys.path.append("Z:/HTOC/Data_Analytics/threatconnect")
 
 from ThreatConnect import ThreatConnect # type: ignore
@@ -23,32 +23,26 @@ if project_root not in sys.path:
 
 config_path = os.path.join(project_root, "utils", "config.json")
 
-try:
-    api_secret_key, api_access_id, api_base_url, api_default_org = load_config(config_path)
-    logging.info(f"Loaded config from: {config_path}")
-except Exception as e:
-    logging.error(f"Failed to load configuration: {e}")
-    raise
-
 # Disable SSL verification warnings (use cautiously)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Initialize ThreatConnect session
-try:
-    tc = ThreatConnect(api_access_id, api_secret_key, api_default_org, api_base_url)
-    logging.info("ThreatConnect initialized.")
-except Exception as e:
-    logging.error(f"Failed to initialize ThreatConnect: {e}")
-    raise
 
-def initialize_api_client(api_access_id, api_secret_key, api_base_url, api_default_org):
+tc = None
+
+def initialize_api_client(tc_config):
     """
     Fetch indicators from ThreatConnect for the specified organization.
     """
+    global tc
+
     try:
-        # Initialize ThreatConnect session
-        tc = ThreatConnect(api_access_id, api_secret_key, api_default_org, api_base_url)
-        logging.info("ThreatConnect initialized.")
+        tc = ThreatConnect(
+            tc_config["access_id"],
+            tc_config["secret_key"],
+            tc_config["default_org"],
+            tc_config["base_url"]
+        )
     except Exception as e:
         logging.error(f"Failed to initialize ThreatConnect: {e}")
         sys.exit(1)
@@ -149,19 +143,6 @@ def fetch_indicators(ro):
     return observed_src
 
 
-# VirusTotal and OTX API Integration
-VT_API_KEY = "a8b3e24dbd2e6c0cb002784aeb8fee6217a6a425cb11ddf9a3d3361281fbbb08"
-OTX_API_KEY = "ea83cf4792fc5db7acc741e82286c0b717fc99be98ec5b14de7e63cd3f74bcfe"
-
-VT_HEADERS = {"x-apikey": VT_API_KEY}
-OTX_HEADERS = {"X-OTX-API-KEY": OTX_API_KEY}
-
-VT_URL_IP = "https://www.virustotal.com/api/v3/ip_addresses/{}"
-VT_URL_DOMAIN = "https://www.virustotal.com/api/v3/domains/{}"
-OTX_URL_IP = "https://otx.alienvault.io/api/v1/indicators/IPv4/{}/general"
-OTX_URL_DOMAIN = "https://otx.alienvault.io/api/v1/indicators/domain/{}/general"
-OTX_URL_HOSTNAME = "https://otx.alienvault.io/api/v1/indicators/hostname/{}"
-
 def is_ip(value):
     try:
         ipaddress.ip_address(value)
@@ -177,14 +158,44 @@ def determine_query_type(query):
     else:
         return "domain"
 
-def fetch_virustotal_data(query):
-    query_type = determine_query_type(query)
-    url = VT_URL_IP.format(query) if query_type == "ip" else VT_URL_DOMAIN.format(query)
+class VirusTotal:
+    def __init__(self, api_key, ip_url, domain_url):
+        self.api_key = api_key
+        self.ip_url = ip_url
+        self.domain_url = domain_url
+        self.headers = {"x-apikey": api_key}
 
-    try:
-        response = requests.get(url, headers=VT_HEADERS, verify=False)
-        response.raise_for_status()
-        data = response.json().get("data", {}).get("attributes", {})
+    def get_data(self, url):
+        """Helper method to fetch data from VirusTotal."""
+        try:
+            response = requests.get(url, headers=self.headers, verify=False)
+            response.raise_for_status()
+            return response.json().get("data", {}).get("attributes", {})
+        except Exception as e:
+            logging.error(f"VirusTotal Error: {e}")
+            return None
+        
+def fetch_virustotal_data(query):
+    """
+    Fetch data from VirusTotal based on query type (IP/Domain).
+    """
+    query_type = determine_query_type(query)
+    vt_config = get_vt_config()
+
+    # Initialize VirusTotal instance
+    vt = VirusTotal(
+        api_key=vt_config["api_key"],
+        ip_url=vt_config["endpoints"]["ip"],
+        domain_url=vt_config["endpoints"]["domain"]
+    )
+    
+    # Determine the appropriate URL
+    url = vt.ip_url.format(query) if query_type == "ip" else vt.domain_url.format(query)
+
+    # Fetch data using the VirusTotal instance
+    data = vt.get_data(url)
+
+    if data:
         return {
             "search_term": query,
             "asn": data.get('asn'),
@@ -195,22 +206,51 @@ def fetch_virustotal_data(query):
             "reputation": data.get('reputation'),
             "total_votes": data.get('total_votes'),
             "open_ports": [s.get("port") for s in data.get("services", []) if "port" in s],
-            "link": f"https://www.virustotal.com/gui/ip-address/{query}" if query_type == "ip" else f"https://www.virustotal.com/gui/domain/{query}"
+            "link": f"https://www.virustotal.com/gui/{query_type}/{query}"
         }
-    except Exception as e:
-        logging.error(f"VirusTotal Error for {query}: {e}")
-        return None
 
+    return None
+
+class OTX:
+    def __init__(self, api_key, ip_url, domain_url, hostname_url):
+        self.api_key = api_key
+        self.ip_url = ip_url
+        self.domain_url = domain_url
+        self.hostname_url = hostname_url
+        self.headers = {"X-OTX-API-KEY": api_key}
+
+    def get_data(self, url):
+        """Helper method to fetch data from OTX."""
+        try:
+            response = requests.get(url, headers=self.headers, verify=False)
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            logging.error(f"OTX Error: {e}")
+            return None
+        
 def fetch_otx_data(query):
+    """
+    Fetch data from VirusTotal based on query type (IP/Domain).
+    """
     query_type = determine_query_type(query)
-    url = OTX_URL_IP.format(query) if query_type == "ip" else (
-        OTX_URL_HOSTNAME.format(query) if query_type == "hostname" else OTX_URL_DOMAIN.format(query)
+    otx_config = get_otx_config()
+
+    # Initialize VirusTotal instance
+    otx = OTX(
+        api_key=otx_config["api_key"],
+        ip_url=otx_config["endpoints"]["ip"],
+        domain_url=otx_config["endpoints"]["domain"],
+        hostname_url=otx_config["endpoints"]["hostname"]
     )
 
-    try:
-        response = requests.get(url, headers=OTX_HEADERS, verify=False)
-        response.raise_for_status()
-        data = response.json()
+    # Determine the appropriate URL
+    url = otx.ip_url.format(query) if query_type == "ip" else otx.domain_url.format(query)
+
+    # Fetch data using the VirusTotal instance
+    data = otx.get_data(url)
+
+    if data:
         return {
             "search_term": query,
             "base_indicator": data.get('base_indicator', {}),
@@ -220,9 +260,7 @@ def fetch_otx_data(query):
             "open_ports": data.get('open_ports', []),
             "link": f"https://otx.alienvault.com/indicator/{query_type}/{query}"
         }
-    except Exception as e:
-        logging.error(f"OTX Error for {query}: {e}")
-        return None
+    return None
 
 def unnest_base_indicator(df):
     if 'base_indicator' not in df.columns:

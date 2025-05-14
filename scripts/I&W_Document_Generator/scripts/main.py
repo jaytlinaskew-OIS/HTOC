@@ -2,38 +2,30 @@ import sys
 import os
 import pandas as pd
 from datetime import datetime
-from scripts.config_loader import load_config
 from scripts.api_integration import fetch_indicators, process_indicators, initialize_api_client
-from scripts.data_processing import process_data, get_file_paths
+from scripts.data_processing import process_data, get_file_paths, get_tc_config
 from scripts.report_generator import generate_report
 
 # Base file path with placeholder for date
 base_path = r"Z:/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d{date}.csv"
 #base_path = r"C:\Users\jaskew\Documents\project_repository\data\raw\ObservationDataFiles\htoc_opdiv_obs_d{date}.csv"
 
-def main():
-    # Load API configuration
-    project_root = os.path.dirname(os.path.abspath(__file__))
-    config_path = os.path.join(project_root, "..", "utils", "config.json")
-    
-    try:
-        api_secret_key, api_access_id, api_base_url, api_default_org = load_config(config_path)
-        print(f"Loaded config from: {config_path}")
-    except Exception as e:
-        print(f"[ERROR] Failed to load configuration: {e}")
-        sys.exit(1)
+# Load API config
+project_root = r"C:\Users\jaskew\Documents\project_repository\scripts\I&W_Document_Generator"
+if project_root not in sys.path:
+    sys.path.append(project_root)
 
-    #initialize API client
-    try:
-        ro = initialize_api_client(api_secret_key, api_access_id, api_base_url, api_default_org)
-        print("API client initialized successfully.")
-    except Exception as e:
-        print(f"[ERROR] Failed to initialize API client: {e}")
-        sys.exit(1)
+config_path = os.path.join(project_root, "utils", "config.json")
+
+def main():
+
+    tc_config = get_tc_config()
+    # Initialize API client (configuration handled internally)
+    tc = initialize_api_client(tc_config)
         
-    # Fetch indicators from the API
+    # Fetch indicators
     try:
-        indicators = fetch_indicators(ro)
+        indicators = fetch_indicators(tc)
         print(f"Fetched {len(indicators)} indicators.")
     except Exception as e:
         print(f"[ERROR] Failed to fetch indicators: {e}")
