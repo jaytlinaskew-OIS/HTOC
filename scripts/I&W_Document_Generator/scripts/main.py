@@ -3,7 +3,7 @@ import os
 import pandas as pd
 from datetime import datetime
 from scripts.api_integration import fetch_indicators, process_indicators, initialize_api_client
-from scripts.data_processing import process_data, get_file_paths, get_tc_config
+from scripts.data_processing import process_data, get_file_paths, get_tc_config, filter_unwanted_indicators
 from scripts.report_generator import generate_report
 
 # Base file path with placeholder for date
@@ -40,21 +40,23 @@ def main():
     except Exception as e:
         print(f"[ERROR] Failed to process data: {e}")
         sys.exit(1)
+    # Remove SOAR integration indicators
+    filered_processed_data = filter_unwanted_indicators(processed_data, tc)
 
     # Generate report
     try:
         current_date = datetime.now().strftime("%Y-%m-%d")
         report_path = os.path.join(project_root, "..", "reports", f"IW_Report_{current_date}.docx")
         # Ensure processed_data is in the correct format
-        if isinstance(processed_data, pd.DataFrame) and 'summary' in processed_data.columns:
-            vt_df, otx_df = process_indicators(processed_data)
+        if isinstance(filered_processed_data, pd.DataFrame) and 'summary' in filered_processed_data.columns:
+            vt_df, otx_df = process_indicators(filered_processed_data)
             print(f"Processed VirusTotal data: {len(vt_df)} records.")
             print(f"Processed OTX data: {len(otx_df)} records.")
         else:
             print("[ERROR] processed_data is not in the expected format.")
             sys.exit(1)
 
-        generate_report(vt_df, otx_df, processed_data)
+        generate_report(vt_df, otx_df, filered_processed_data)
         print(f"Report generated at: {report_path}")
     except Exception as e:
         print(f"[ERROR] Failed to generate report: {e}")

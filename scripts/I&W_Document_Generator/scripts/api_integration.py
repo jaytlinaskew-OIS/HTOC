@@ -142,6 +142,35 @@ def fetch_indicators(ro):
 
     return observed_src
 
+def fetch_attributes_data(indicators, ro):
+
+    attributes_data = []
+
+    for indicator in indicators:
+        try:
+            # API Request
+            ro.set_http_method('GET')
+            ro.set_request_uri(f'/v3/indicators/{indicator}?fields=attributes&resultStart=0&resultLimit=1000')
+            response = tc.api_request(ro)
+
+            # Parse JSON response
+            if response.headers.get('content-type') == 'application/json':
+                data = response.json().get('data', {})
+                
+                # Extract attributes data
+                for attr in data.get('attributes', {}).get('data', []):
+                    attr.update({
+                        'id': data.get('id'),
+                        'summary': data.get('summary'),
+                        'type': data.get('type'),
+                        'ownerName': data.get('ownerName')
+                    })
+                    attributes_data.append(attr)
+
+        except Exception:
+            pass  # Silent fail to keep processing
+
+    return attributes_data
 
 def is_ip(value):
     try:
