@@ -36,30 +36,33 @@ def main():
     # Process the fetched data
     try:
         processed_data = process_data(indicators, observed_data)
-        processed_data
+
     except Exception as e:
         print(f"[ERROR] Failed to process data: {e}")
         sys.exit(1)
     # Remove SOAR integration indicators
-    filered_processed_data = filter_unwanted_indicators(processed_data, tc)
+    filtered_processed_data = filter_unwanted_indicators(processed_data, tc)
+    if filtered_processed_data is not None and not filtered_processed_data.empty:
+        # Generate report
+        try:
+            current_date = datetime.now().strftime("%Y-%m-%d")
+            report_path = os.path.join(project_root, "..", "reports", f"IW_Report_{current_date}.docx")
+            # Ensure processed_data is in the correct format
+            if isinstance(filtered_processed_data, pd.DataFrame) and 'summary' in filtered_processed_data.columns:
+                vt_df, otx_df = process_indicators(filtered_processed_data)
+                print(f"Processed VirusTotal data: {len(vt_df)} records.")
+                print(f"Processed OTX data: {len(otx_df)} records.")
+            else:
+                print("[ERROR] processed_data is not in the expected format.")
+                sys.exit(1)
 
-    # Generate report
-    try:
-        current_date = datetime.now().strftime("%Y-%m-%d")
-        report_path = os.path.join(project_root, "..", "reports", f"IW_Report_{current_date}.docx")
-        # Ensure processed_data is in the correct format
-        if isinstance(filered_processed_data, pd.DataFrame) and 'summary' in filered_processed_data.columns:
-            vt_df, otx_df = process_indicators(filered_processed_data)
-            print(f"Processed VirusTotal data: {len(vt_df)} records.")
-            print(f"Processed OTX data: {len(otx_df)} records.")
-        else:
-            print("[ERROR] processed_data is not in the expected format.")
+            generate_report(vt_df, otx_df, filtered_processed_data)
+            print(f"Report generated at: {report_path}")
+        except Exception as e:
+            print(f"[ERROR] Failed to generate report: {e}")
             sys.exit(1)
-
-        generate_report(vt_df, otx_df, filered_processed_data)
-        print(f"Report generated at: {report_path}")
-    except Exception as e:
-        print(f"[ERROR] Failed to generate report: {e}")
+    else:
+        print("No indicators to process after filtering.")
         sys.exit(1)
 
 if __name__ == "__main__":
