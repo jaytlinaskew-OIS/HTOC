@@ -2,6 +2,8 @@ import os
 import pandas as pd
 from datetime import datetime, timedelta
 from scripts.config_loader import get_threatconnect_config, get_virustotal_config, get_AlienVaultOtx_config
+from scripts.api_integration import fetch_attributes_data
+
 
 date_format = "%Y%m%d"
 
@@ -211,4 +213,33 @@ def process_data(observed_src, observed_data_df):
     return tags_df
 
 
+def process_attributes_data(attributes_data):
 
+    # Convert to DataFrame
+    attributes_observed_src = pd.DataFrame(attributes_data)
+
+    # Un-nest 'createdBy' and filter out 'SOAR' entries
+    if not attributes_observed_src.empty and 'createdBy' in attributes_observed_src.columns:
+        created_by_df = pd.json_normalize(attributes_observed_src.pop('createdBy'))
+        attributes_observed_src = pd.concat([attributes_observed_src, created_by_df], axis=1)
+        attributes_observed_src = attributes_observed_src[attributes_observed_src['lastName'] != 'SOAR']
+
+    # Drop duplicates based on 'id'
+    return attributes_observed_src.drop_duplicates(subset='id').reset_index(drop=True)
+
+
+def filter_unwanted_indicators(recent_tags, ro):
+  
+    # Extract unique indicators
+    indicators = recent_tags['summary'].unique()
+
+    # Fetch attributes data
+    attributes_data = fetch_attributes_data(indicators, ro)
+
+    # Process attributes data
+    attributes_observed_src = process_attributes_data(attributes_data)
+
+    # Filter `recent_tags` based on common 'summary' values
+    filtered_recent_tags = recent_tags[recent_tags['summary'].isin(attributes_observed_src['summary'])].reset_index(drop=True)
+
+    return filtered_recent_tags

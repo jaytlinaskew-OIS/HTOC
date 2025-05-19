@@ -1,12 +1,15 @@
 import os
 import pandas as pd
+import docx
 from datetime import datetime
 from docx import Document
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+from docx.oxml.shared import OxmlElement
 
 # File paths
 TEMPLATE_PATH = r"z:\\HTOC\\HTOC Reports\\I&W Reports\\5. I&W Staging\\I&W Report Template.docx"
-#OUTPUT_DIR = r"z:\\HTOC\\HTOC Reports\\I&W Reports\\5. I&W Staging\\Generated Reports"
-OUTPUT_DIR = r"C:\Users\jaskew\Documents\project_repository\notebooks\I&W Reporting\Generated_reports"
+OUTPUT_DIR = r"z:\\HTOC\\HTOC Reports\\I&W Reports\\5. I&W Staging\\Generated Reports"
 
 # Ensure output directory exists
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -52,30 +55,23 @@ def populate_table(table, data):
     for index, row in data.iterrows():
         # Insert a new row before the last row (template row)
         new_row = table.add_row().cells
-
-        # Extract and set the observed dates
-        observed_dates = row.get('observed_date', 'N/A')
-        if observed_dates and observed_dates != 'N/A':
-            # Extract the earliest date and the full list of dates
-            date_list = [date.strip() for date in observed_dates.split(',')]
-            date_list.sort()
-            earliest_date = date_list[0]
-        else:
-            earliest_date = 'N/A'
-
-        # Populate cells with processed data
         new_row[0].text = str(row.get('search_term', 'N/A'))
         new_row[1].text = str(row.get('type', 'N/A'))
-        new_row[2].text = earliest_date  # Display the earliest date explicitly
-        new_row[3].text = str(row.get('partners', 'N/A'))  # Adjusted to 'partners' as per previous logic
-
-
+        new_row[2].text = extract_date(row.get('observed_date', 'N/A'))
+        # For the 'observed_by_otx' column, stack values instead of comma-separating
+        observed_by_otx = row.get('observed_by_otx', 'N/A')
+        if pd.notna(observed_by_otx) and isinstance(observed_by_otx, str):
+            # Split by comma, strip whitespace, and join with newlines
+            observed_by_otx = '\n'.join([v.strip() for v in observed_by_otx.split(',') if v.strip()])
+        new_row[3].text = str(observed_by_otx)
+        new_row[4].text = str(row.get('notes', ''))
+        
 def fill_word_template(template_path, output_path, df):
     """ Fill the template with data and place sources outside the table. """
     if not os.path.exists(template_path):
         print(f"Template not found: {template_path}")
         return
-
+    
     try:
         doc = Document(template_path)
 
@@ -91,9 +87,95 @@ def fill_word_template(template_path, output_path, df):
 
         # Find and replace `{{sources}}` placeholder outside the table
         for para in doc.paragraphs:
+            if "{{ipaddress}}" in para.text:
+                # Try to get the first search_term as the IP address
+                ip_address = str(df['search_term'].iloc[0]) if 'search_term' in df.columns else 'N/A'
+                para.text = para.text.replace("{{ipaddress}}", ip_address)
+            if "{{asn}}" in para.text:
+                # Try to get ASN from vt_df if available, else use 'N/A'
+                asn_value = str(df['asn'].iloc[0]) if 'asn' in df.columns and not df.empty else 'N/A'
+                para.text = para.text.replace("{{asn}}", asn_value)
+            if "{{whois}}" in para.text:
+                # Try to get WHOIS info from otx_df if available, else use 'N/A'
+                whois_value = str(df['whois'].iloc[0]) if 'whois' in df.columns and not df.empty else 'N/A'
+                para.text = para.text.replace("{{whois}}", whois_value)
+            if "{{partners}}" in para.text:
+                # Try to get partners from recent_tags if available, else use 'N/A'
+                partners_value = ''
+                if 'search_term' in df.columns and not df.empty:
+                    search_term = df['search_term'].iloc[0]
+                    partners_row = df[df['summary'] == search_term]
+                    if not partners_row.empty and 'partners' in partners_row.columns:
+                        partners_value = str(partners_row['partners'].iloc[0])
+                if not partners_value:
+                    partners_value = 'N/A'
+                para.text = para.text.replace("{{partners}}", partners_value)
+            if "{{weblink}}" in para.text:
+                weblink_value = ''
+                if 'search_term' in df.columns and not df.empty:
+                    search_term = df['search_term'].iloc[0]
+                    match = df[df['indicator'] == search_term]
+                    if not match.empty and 'webLink' in match.columns:
+                        weblink_value = str(match['webLink'].iloc[0])
+                para.text = para.text.replace("{{weblink}}", "")
+                if weblink_value:
+                    # Add hyperlink using WordprocessingML (only show the link, no display text)
+                    r_id = doc.part.relate_to(
+                        weblink_value, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True
+                    )
+                    hyperlink = OxmlElement('w:hyperlink')
+                    hyperlink.set(qn('r:id'), r_id)
+                    new_run = OxmlElement('w:r')
+                    rPr = OxmlElement('w:rPr')
+                    rStyle = OxmlElement('w:rStyle')
+                    rStyle.set(qn('w:val'), 'Hyperlink')
+                    rPr.append(rStyle)
+                    new_run.append(rPr)
+                    t = OxmlElement('w:t')
+                    t.text = weblink_value
+                    new_run.append(t)
+                    hyperlink.append(new_run)
+                    para._p.append(hyperlink)
+                else:
+                    para.text = "N/A"
             if "{{sources}}" in para.text:
-                all_sources = ', '.join(df['sources'].dropna().unique())
-                para.text = para.text.replace("{{sources}}", all_sources)
+                # Build sources as hyperlinks if possible
+
+                # Helper to add a hyperlink to a paragraph
+                def add_hyperlink(paragraph, url):
+                    # Create the w:hyperlink tag and add needed values
+                    part = paragraph.part
+                    r_id = part.relate_to(url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
+                    hyperlink = OxmlElement('w:hyperlink')
+                    hyperlink.set(qn('r:id'), r_id)
+                    # Create a w:r element
+                    new_run = OxmlElement('w:r')
+                    # Create a w:rPr element
+                    rPr = OxmlElement('w:rPr')
+                    # Add color and underline for hyperlink style
+                    rStyle = OxmlElement('w:rStyle')
+                    rStyle.set(qn('w:val'), 'Hyperlink')
+                    rPr.append(rStyle)
+                    new_run.append(rPr)
+                    # Create a w:t element and set the text
+                    t = OxmlElement('w:t')
+                    t.text = url
+                    new_run.append(t)
+                    hyperlink.append(new_run)
+                    paragraph._p.append(hyperlink)
+
+                # Remove the placeholder
+                para.text = para.text.replace("{{sources}}", "")
+
+                # Add each source as a hyperlink, separated by commas
+                sources = []
+                for srcs in df['sources'].dropna().unique():
+                    for src in [s.strip() for s in srcs.split(',') if s.strip()]:
+                        sources.append(src)
+                for i, src in enumerate(sources):
+                    add_hyperlink(para, src)
+                    if i < len(sources) - 1:
+                        para.add_run(", ")
 
         # Save the modified document
         doc.save(output_path)
