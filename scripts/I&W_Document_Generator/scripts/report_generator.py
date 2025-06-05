@@ -37,7 +37,7 @@ def consolidate_sources(vt_df, otx_df):
 
 def extract_date(timestamp):
     """ Extract only the date from the timestamp. """
-    if pd.isna(timestamp) or timestamp == 'N/A':
+    if pd.isna(timestamp) or timestamp == '':
         return 'N/A'
     
     # Handle datetime object or string
@@ -224,6 +224,8 @@ def generate_report(vt_df, otx_df, processed_data):
 
     # Remove any remaining exact duplicates
     combined_df.drop_duplicates(subset=['search_term', 'type', 'observed_date', 'partners'], inplace=True)
+    print(combined_df[['search_term', 'observed_date']].head(10))
+    print(combined_df['observed_date'].apply(type).value_counts())
 
     # Define output file path
     current_date = pd.Timestamp.now().strftime("%Y-%m-%d")
