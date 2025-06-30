@@ -1,0 +1,51 @@
+Indicator,Forecast Date,Forecast Type,Confidence,Forecasted Check Date,Outcome
+1-you.njalla.no,2025-06-16,14-Day,Possibly active,2025-06-30,Pending
+1-you.njalla.no,2025-06-16,30-Day,Possibly active,2025-07-16,Pending
+1-you.njalla.no,2025-06-16,7-Day,Low confidence,2025-06-23,Not Seen
+1-you.njalla.no,2025-06-17,14-Day,Possibly active,2025-07-01,Pending
+1-you.njalla.no,2025-06-17,30-Day,Possibly active,2025-07-17,Pending
+1-you.njalla.no,2025-06-17,7-Day,Low confidence,2025-06-24,Not Seen
+1-you.njalla.no,2025-06-18,14-Day,Possibly active,2025-07-02,Pending
+1-you.njalla.no,2025-06-18,30-Day,Possibly active,2025-07-18,Pending
+1-you.njalla.no,2025-06-18,7-Day,Low confidence,2025-06-25,Not Seen
+102.90.61.13,2025-06-16,14-Day,Low confidence,2025-06-30,Pending
+102.90.61.13,2025-06-16,30-Day,Low confidence,2025-07-16,Pending
+102.90.61.13,2025-06-16,7-Day,Low confidence,2025-06-23,Not Seen
+102.90.61.13,2025-06-17,14-Day,Low confidence,2025-07-01,Pending
+102.90.61.13,2025-06-17,30-Day,Low confidence,2025-07-17,Pending
+102.90.61.13,2025-06-17,7-Day,Low confidence,2025-06-24,Not Seen
+102.90.61.13,2025-06-18,14-Day,Low confidence,2025-07-02,Pending
+102.90.61.13,2025-06-18,30-Day,Low confidence,2025-07-18,Pending
+102.90.61.13,2025-06-18,7-Day,Low confidence,2025-06-25,Not Seen
+102.91.94.193,2025-06-16,14-Day,Low confidence,2025-06-30,Pending
+102.91.94.193,2025-06-16,30-Day,Low confidence,2025-07-16,Pending
+102.91.94.193,2025-06-16,7-Day,Low confidence,2025-06-23,Not Seen
+102.91.94.193,2025-06-17,14-Day,Low confidence,2025-07-01,Pending
+102.91.94.193,2025-06-17,30-Day,Low confidence,2025-07-17,Pending
+102.91.94.193,2025-06-17,7-Day,Low confidence,2025-06-24,Not Seen
+102.91.94.193,2025-06-18,14-Day,Low confidence,2025-07-02,Pending
+102.91.94.193,2025-06-18,30-Day,Low confidence,2025-07-18,Pending
+102.91.94.193,2025-06-18,7-Day,Low confidence,2025-06-25,Not Seen
+103.108.231.67,2025-06-16,14-Day,Low confidence,2025-06-30,Pending
+103.108.231.67,2025-06-16,30-Day,Low confidence,2025-07-16,Pending
+103.108.231.67,2025-06-16,7-Day,Low confidence,2025-06-23,Not Seen
+103.108.231.67,2025-06-17,14-Day,Low confidence,2025-07-01,Pending
+103.108.231.67,2025-06-17,30-Day,Low confidence,2025-07-17,Pending
+103.108.231.67,2025-06-17,7-Day,Low confidence,2025-06-24,Not Seen
+103.108.231.67,2025-06-18,14-Day,Low confidence,2025-07-02,Pending
+103.108.231.67,2025-06-18,30-Day,Low confidence,2025-07-18,Pending
+103.108.231.67,2025-06-18,7-Day,Low confidence,2025-06-25,Not Seen
+103.120.176.224,2025-06-17,14-Day,Possibly active,2025-07-01,Pending
+103.120.176.224,2025-06-17,30-Day,Possibly active,2025-07-17,Pending
+103.120.176.224,2025-06-17,7-Day,Possibly active,2025-06-24,Not Seen
+103.120.176.224,2025-06-18,14-Day,Possibly active,2025-07-02,Pending
+103.120.176.224,2025-06-18,30-Day,Possibly active,2025-07-18,Pending
+103.120.176.224,2025-06-18,7-Day,Possibly active,2025-06-25,Not Seen
+103.133.107.28,2025-06-16,14-Day,Highly likely,2025-06-30,Pending
+103.133.107.28,2025-06-16,30-Day,Highly likely,2025-07-16,Pending
+103.133.107.28,2025-06-16,7-Day,Low confidence,2025-06-23,Not Seen
+103.133.107.28,2025-06-17,14-Day,Highly likely,2025-07-01,Pending
+103.133.107.28,2025-06-17,30-Day,Highly likely,2025-07-17,Pending
+103.133.107.28,2025-06-17,7-Day,Low confidence,2025-06-24,Not Seen
+103.133.107.28,2025-06-18,14-Day,Possibly active,2025-07-02,Pending
+103.133.107.28,2025-06-18,30-Day,Highly likely,2025-07-18,Pending
