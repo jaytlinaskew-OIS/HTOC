@@ -1,229 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Indicator Profile UI</title>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #f4f6fa, #e8ebf0);
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        .container {
-            max-width: 700px;
-            margin: 50px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 40px;
-        }
-        h2 {
-            font-size: 1.8em;
-            color: #0078d4;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .search-bar {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 1em;
-            margin-bottom: 24px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        .search-bar:focus {
-            border-color: #0078d4;
-            outline: none;
-        }
-        .dropdown-label {
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: block;
-            color: #555;
-        }
-        select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 1em;
-            margin-bottom: 24px;
-            transition: border-color 0.3s;
-        }
-        select:focus {
-            border-color: #0078d4;
-            outline: none;
-        }
-        .indicator-details {
-            background: #f9fbfd;
-            border-left: 6px solid #0078d4;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        .indicator-title {
-            margin: 0 0 8px 0;
-            font-size: 1.3em;
-            color: #0078d4;
-        }
-        .indicator-description {
-            margin: 0;
-            color: #555;
-            line-height: 1.6;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Indicator Profile UI</title>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #f4f6fa, #e8ebf0);
+      margin: 0; padding: 0; color: #333;
+    }
+    .container {
+      max-width: 700px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 40px;
+    }
+    h2 {
+      font-size: 1.8em;
+      color: #0078d4;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .dropdown-label {
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
+      color: #555;
+    }
+    .search-bar, .date-filter, input[list] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+      margin-bottom: 24px;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+    .search-bar:focus, .date-filter:focus, input[list]:focus {
+      border-color: #0078d4;
+      outline: none;
+    }
+    .indicator-details {
+      background: #f9fbfd;
+      border-left: 6px solid #0078d4;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .indicator-title {
+      margin: 0 0 8px;
+      font-size: 1.3em;
+      color: #0078d4;
+    }
+    .indicator-description {
+      margin: 0;
+      color: #555;
+      line-height: 1.6;
+    }
+    .entry {
+      margin-bottom: 20px;
+    }
+    .error {
+      color: #c00;
+    }
+    /* Sidebar styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 250px;
+      background: #0078d4;
+      color: #fff;
+      padding: 20px;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    }
+    .sidebar h3 {
+      margin-top: 0;
+      font-size: 1.5em;
+      color: #fff;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .sidebar ul li {
+      margin-bottom: 10px;
+    }
+    .sidebar ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1em;
+      transition: color 0.3s;
+    }
+    .sidebar ul li a:hover {
+      color: #f4f6fa;
+    }
+    .container {
+      margin-left: 270px; /* Adjust for sidebar width */
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Indicator Profile Beta</h2>
-        <input type="text" id="search-bar" class="search-bar" placeholder="Search for an indicator...">
-        <label class="dropdown-label" for="partner-select">Filter by Partner:</label>
-        <select id="partner-select">
-            <option value="">All Partners</option>
-        </select>
-        <script>
-            // Populate partner-select with unique partners after fetching data
-            let partnerSelect = document.getElementById('partner-select');
-            function populatePartners(indicators) {
-                const partners = Array.from(new Set(indicators.map(ind => ind.title))).sort();
-                partners.forEach(partner => {
-                    const option = document.createElement('option');
-                    option.value = partner;
-                    option.textContent = partner;
-                    partnerSelect.appendChild(option);
-                });
-            }
+  <div class="sidebar">
+    <h3>Menu</h3>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Indicators</a></li>
+    </ul>
+  </div>
 
-            // Wait for indicators to be loaded, then populate partners
-            fetch('Indicator_Dictionary.json')
-                .then(response => response.json())
-                .then(data => {
-                    indicators = Object.keys(data).map(key => {
-                        const entry = data[key][0];
-                        return {
-                            number: entry["Indicator"],
-                            title: entry["Partner"] || "Unknown Partner",
-                            description: `
-                                Observed Today: ${entry["Observed Today"]}<br>
-                                Frequency (7d): ${entry["Frequency (7d)"]}<br>
-                                Frequency (30d): ${entry["Frequency (30d)"]}<br>
-                                Probability (7-Day): ${entry["Probability: 7-Day"]} (${entry["Confidence: 7-Day"]})<br>
-                                Probability (14-Day): ${entry["Probability: 14-Day"]} (${entry["Confidence: 14-Day"]})<br>
-                                Probability (30-Day): ${entry["Probability: 30-Day"]} (${entry["Confidence: 30-Day"]})<br>
-                                FileDate: ${entry["FileDate"]}
-                            `
-                        };
-                    });
-                    filteredIndicators = indicators.slice();
-                    populatePartners(indicators); // <-- Add this line
-                    renderOptions(filteredIndicators);
-                    updateDetails(0, filteredIndicators);
-                });
-            // Add event listener for partner-select to filter indicators
-            partnerSelect.addEventListener('change', function() {
-                const partner = partnerSelect.value;
-                const query = searchBar.value.toLowerCase();
-                filteredIndicators = indicators.filter(ind => {
-                    const matchesPartner = !partner || ind.title === partner;
-                    const matchesQuery =
-                        ind.number.toLowerCase().includes(query) ||
-                        ind.title.toLowerCase().includes(query) ||
-                        ind.description.toLowerCase().includes(query);
-                    return matchesPartner && matchesQuery;
-                });
-                renderOptions(filteredIndicators);
-                updateDetails(0, filteredIndicators);
-            });
-        </script>
-        <label class="dropdown-label" for="indicator-select">Select Indicator:</label>
-        <select id="indicator-select">
-            <!-- Options will be populated dynamically -->
-        </select>
-        <div id="indicator-details" class="indicator-details">
-            <!-- Details will be populated dynamically -->
-        </div>
+  <div class="container">
+    <h2>Indicator Profile Beta</h2>
+
+    <label class="dropdown-label" for="partner-select">Filter by Partner:</label>
+    <select id="partner-select" class="search-bar">
+      <option value="">All Partners</option>
+    </select>
+
+    <label class="dropdown-label" for="search-bar">Search indicators:</label>
+    <input type="text" id="search-bar" class="search-bar" placeholder="Type to filter…" list="indicator-list">
+    <datalist id="indicator-list" class="search-bar"></datalist>
+
+    <label class="dropdown-label" for="date-filter">Filter by Date:</label>
+    <input type="date" id="date-filter" class="date-filter">
+
+    <div id="indicator-details" class="indicator-details">
+      <!-- rendered details go here -->
     </div>
-    <script>
-        let indicators = [];
-        fetch('Indicator_Dictionary.json')
-            .then(response => response.json())
-            .then(data => {
-                // Transform the object into an array of indicator objects
-                indicators = Object.keys(data).map(key => {
-                    const entry = data[key][0];
-                    return {
-                        number: entry["Indicator"],
-                        title: entry["Partner"] || "Unknown Partner",
-                        description: `
-                            Observed Today: ${entry["Observed Today"]}<br>
-                            Frequency (7d): ${entry["Frequency (7d)"]}<br>
-                            Frequency (30d): ${entry["Frequency (30d)"]}<br>
-                            Probability (7-Day): ${entry["Probability: 7-Day"]} (${entry["Confidence: 7-Day"]})<br>
-                            Probability (14-Day): ${entry["Probability: 14-Day"]} (${entry["Confidence: 14-Day"]})<br>
-                            Probability (30-Day): ${entry["Probability: 30-Day"]} (${entry["Confidence: 30-Day"]})<br>
-                            FileDate: ${entry["FileDate"]}
-                        `
-                    };
-                });
-                filteredIndicators = indicators.slice();
-                renderOptions(filteredIndicators);
-                updateDetails(0, filteredIndicators);
-            })
-            .catch(error => {
-                console.error('Error loading indicators:', error);
-                details.innerHTML = '<p>Error loading indicators.</p>';
-            });
+  </div>
 
-        const select = document.getElementById('indicator-select');
-        const details = document.getElementById('indicator-details');
-        const searchBar = document.getElementById('search-bar');
+  <script>
+    let indicators = [], groupedByNumber = {};
 
-        function renderOptions(filteredIndicators) {
-            select.innerHTML = '';
-            filteredIndicators.forEach((indicator, idx) => {
-                const option = document.createElement('option');
-                option.value = idx;
-                option.textContent = `${indicator.number}`; // Updated to show only the number
-                select.appendChild(option);
-            });
-        }
+    function formatFileDate(fdInt) {
+      const s = fdInt.toString().padStart(8, '0');
+      return `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`;
+    }
 
-        function updateDetails(idx, filteredIndicators) {
-            const indicator = filteredIndicators[idx];
-            if (indicator) {
-                details.innerHTML = `
-                    <h3 class="indicator-title">${indicator.title}</h3>
-                    <p class="indicator-description">${indicator.description}</p>
-                `;
-            } else {
-                details.innerHTML = '<p>No indicator selected.</p>';
-            }
-        }
+    // Fetch & prepare
+    fetch('Indicator_Dictionary.json')
+      .then(r => r.json())
+      .then(data => {
+        // flatten and format
+        indicators = Object.values(data).flatMap(arr =>
+          arr.map(e => ({
+            number: e.Indicator,
+            partner: e.Partner || 'Unknown Partner',
+            fileDate: e.FileDate,
+            description: `
+              Indicator: ${e.Indicator}<br>
+              Frequency Last 7 Days: ${e['Frequency (7d)']}<br>
+              Frequency Last 30 Days: ${e['Frequency (30d)']}<br>
+              Probability (7d): ${e['Probability: 7-Day']}<br>
+              Probability (14d): ${e['Probability: 14-Day']}<br>
+              Probability (30d): ${e['Probability: 30-Day']}<br>
+            `
+          }))
+        );
 
-        // Initial state
-        let filteredIndicators = indicators.slice();
-        renderOptions(filteredIndicators);
-        updateDetails(0, filteredIndicators);
+        // group and sort
+        groupedByNumber = indicators.reduce((acc, itm) => {
+          (acc[itm.number] = acc[itm.number]||[]).push(itm);
+          return acc;
+        }, {});
+        Object.values(groupedByNumber).forEach(arr =>
+          arr.sort((a,b) => b.fileDate - a.fileDate)
+        );
 
-        select.addEventListener('change', function() {
-            const idx = select.selectedIndex;
-            updateDetails(idx, filteredIndicators);
+        populatePartners();
+        applyFilters();
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('indicator-details').innerHTML =
+          '<p class="error">Failed to load indicators.</p>';
+      });
+
+    const partnerSelect = document.getElementById('partner-select');
+    const searchBar     = document.getElementById('search-bar');
+    const dateFilter    = document.getElementById('date-filter');
+    const datalist      = document.getElementById('indicator-list');
+    const detailsDiv    = document.getElementById('indicator-details');
+
+    // default today
+    dateFilter.value = new Date().toISOString().split('T')[0];
+
+    function populatePartners() {
+      const pts = [...new Set(indicators.map(i=>i.partner))].sort();
+      pts.forEach(p => {
+        const o = document.createElement('option');
+        o.value = p; o.textContent = p;
+        partnerSelect.appendChild(o);
+      });
+    }
+
+    function renderDatalist(nums) {
+      datalist.innerHTML = '';
+      nums.sort().forEach(num => {
+        const o = document.createElement('option');
+        o.value = num;
+        datalist.appendChild(o);
+      });
+    }
+
+    function applyFilters() {
+      const p    = partnerSelect.value;
+      const q    = searchBar.value.trim().toLowerCase();
+      const dVal = dateFilter.value;
+
+      const filtered = indicators.filter(i => {
+        const matchesPartner = !p || i.partner === p;
+        const matchesDate = !dVal || formatFileDate(i.fileDate) === dVal;
+        const matchesQuery = !q || `${i.number} ${i.partner} ${i.description}`.toLowerCase().includes(q);
+        return matchesPartner && matchesDate && matchesQuery;
+      });
+
+      detailsDiv.innerHTML = '';
+      if (filtered.length === 0) {
+        detailsDiv.innerHTML = '<p class="error">No data available for the selected filters.</p>';
+      } else {
+        filtered.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'entry';
+          div.innerHTML = `
+            <h3 class="indicator-title">${item.partner}</h3>
+            <p class="indicator-description">${item.description}</p>
+          `;
+          detailsDiv.appendChild(div);
+        });
+      }
+    }
+
+    // Apply filters on page load to show all data for the current date
+    applyFilters();
+
+    function renderDetails(num) {
+      detailsDiv.innerHTML = '';
+      if (!groupedByNumber[num]) return;
+      const p    = partnerSelect.value;
+      const dVal = dateFilter.value;
+
+      groupedByNumber[num]
+        .filter(i=>(!p||i.partner===p) && (!dVal||formatFileDate(i.fileDate)===dVal))
+        .forEach(item=>{
+          const div = document.createElement('div');
+          div.className='entry';
+          div.innerHTML=`
+            <h3 class="indicator-title">${item.partner}</h3>
+            <p class="indicator-description">${item.description}</p>
+          `;
+          detailsDiv.appendChild(div);
         });
 
-        searchBar.addEventListener('input', function() {
-            const query = searchBar.value.toLowerCase();
-            filteredIndicators = indicators.filter(ind =>
-                ind.number.toLowerCase().includes(query) ||
-                ind.title.toLowerCase().includes(query) ||
-                ind.description.toLowerCase().includes(query)
-            );
-            renderOptions(filteredIndicators);
-            updateDetails(0, filteredIndicators);
-        });
-    </script>
+      if (!detailsDiv.innerHTML.trim()) {
+        detailsDiv.innerHTML = '<p class="error">No data available for the selected indicator and date.</p>';
+      }
+    }
+
+    // events
+    partnerSelect.addEventListener('change', applyFilters);
+    dateFilter.addEventListener('change', () => {
+      const num = searchBar.value.trim();
+      if (num) {
+        renderDetails(num);
+      } else {
+        applyFilters();
+      }
+    });
+    searchBar.addEventListener('input', applyFilters);
+    searchBar.addEventListener('change', ()=> renderDetails(searchBar.value.trim()));
+  </script>
 </body>
 </html>
