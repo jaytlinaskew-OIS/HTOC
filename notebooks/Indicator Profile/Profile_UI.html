@@ -3,153 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>Indicator Profile UI</title>
-  <style>
-    /* Enhanced design styles */
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      margin: 0; padding: 0; color: #fff;
-    }
-    .container {
-      max-width: 800px;
-      margin: 50px auto;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      padding: 40px;
-      animation: fadeIn 1s ease-in-out;
-      position: relative; /* Ensure it stays above the sidebar */
-      z-index: 1;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    h2 {
-      font-size: 2em;
-      color: #0078d4;
-      margin-bottom: 20px;
-      text-align: center;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-    }
-    .dropdown-label {
-      font-weight: bold;
-      margin-bottom: 8px;
-      display: block;
-      color: #555;
-    }
-    .search-bar, .date-filter, input[list], select {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1em;
-      margin-bottom: 24px;
-      box-sizing: border-box;
-      transition: box-shadow 0.3s, border-color 0.3s;
-    }
-    .search-bar:focus, .date-filter:focus, input[list]:focus, select:focus {
-      border-color: #0078d4;
-      box-shadow: 0 0 8px rgba(0,120,212,0.5);
-      outline: none;
-    }
-    .indicator-details {
-      background: #f9fbfd;
-      border-left: 6px solid #0078d4;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      max-height: 600px;
-      overflow-y: auto;
-      animation: slideIn 0.5s ease-in-out;
-    }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(-20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    .indicator-title {
-      margin: 0 0 8px;
-      font-size: 1.5em;
-      color: #0078d4;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    }
-    .indicator-description {
-      margin: 0;
-      color: #555;
-      line-height: 1.6;
-      font-size: 0.9em; /* Adjust font size for better fit */
-      padding: 10px; /* Add padding for spacing */
-      background: #f4f6fa; /* Light background for hover boxes */
-      border-radius: 8px; /* Rounded corners */
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Subtle shadow */
-    }
-    .entry {
-      margin-bottom: 20px;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .entry:hover {
-      transform: scale(1.02);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .error {
-      color: #c00;
-      text-align: center;
-      font-weight: bold;
-    }
-    /* Sidebar styles */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 250px;
-      background: linear-gradient(135deg, #0078d4, #0053a6);
-      color: #fff;
-      padding: 20px;
-      box-shadow: 2px 0 8px rgba(0,0,0,0.2);
-      animation: fadeInSidebar 1s ease-in-out;
-      z-index: -1; /* Move behind other content */
-    }
-    @keyframes fadeInSidebar {
-      from { opacity: 0; transform: translateX(-20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    .sidebar h3 {
-      margin-top: 0;
-      font-size: 1.8em;
-      color: #fff;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-    }
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-      margin: 20px 0;
-    }
-    .sidebar ul li {
-      margin-bottom: 10px;
-    }
-    .sidebar ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 1.2em;
-      transition: color 0.3s;
-    }
-    .sidebar ul li a:hover {
-      color: #f4f6fa;
-    }
-    .container {
-      margin-left: 270px; /* Adjust for sidebar width */
-    }
-  </style>
+  <!-- Link external styles -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="sidebar">
-    <h3>Menu</h3>
-    <ul>
-      <li><a href="Profile_UI.html">Home</a></li>
-      <li><a href="#">Next Observed</a></li>
-    </ul>
-  </div>
+  <!-- Include navigation dynamically -->
+  <div id="navigation"></div>
+  <script>
+    fetch('./navigation.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navigation').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading navigation:', error));
+  </script>
 
   <div class="container">
     <h2>Indicator Profile Beta</h2>
