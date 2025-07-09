@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Indicator Profile UI</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f4f6fa, #e8ebf0);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+        h2 {
+            font-size: 1.8em;
+            color: #0078d4;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            margin-bottom: 24px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        .search-bar:focus {
+            border-color: #0078d4;
+            outline: none;
+        }
+        .dropdown-label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+            color: #555;
+        }
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            margin-bottom: 24px;
+            transition: border-color 0.3s;
+        }
+        select:focus {
+            border-color: #0078d4;
+            outline: none;
+        }
+        .indicator-details {
+            background: #f9fbfd;
+            border-left: 6px solid #0078d4;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .indicator-title {
+            margin: 0 0 8px 0;
+            font-size: 1.3em;
+            color: #0078d4;
+        }
+        .indicator-description {
+            margin: 0;
+            color: #555;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Indicator Profile Beta</h2>
+        <input type="text" id="search-bar" class="search-bar" placeholder="Search for an indicator...">
+        <label class="dropdown-label" for="partner-select">Filter by Partner:</label>
+        <select id="partner-select">
+            <option value="">All Partners</option>
+        </select>
+        <script>
+            // Populate partner-select with unique partners after fetching data
+            let partnerSelect = document.getElementById('partner-select');
+            function populatePartners(indicators) {
+                const partners = Array.from(new Set(indicators.map(ind => ind.title))).sort();
+                partners.forEach(partner => {
+                    const option = document.createElement('option');
+                    option.value = partner;
+                    option.textContent = partner;
+                    partnerSelect.appendChild(option);
+                });
+            }
+
+            // Wait for indicators to be loaded, then populate partners
+            fetch('Indicator_Dictionary.json')
+                .then(response => response.json())
+                .then(data => {
+                    indicators = Object.keys(data).map(key => {
+                        const entry = data[key][0];
+                        return {
+                            number: entry["Indicator"],
+                            title: entry["Partner"] || "Unknown Partner",
+                            description: `
+                                Observed Today: ${entry["Observed Today"]}<br>
+                                Frequency (7d): ${entry["Frequency (7d)"]}<br>
+                                Frequency (30d): ${entry["Frequency (30d)"]}<br>
+                                Probability (7-Day): ${entry["Probability: 7-Day"]} (${entry["Confidence: 7-Day"]})<br>
+                                Probability (14-Day): ${entry["Probability: 14-Day"]} (${entry["Confidence: 14-Day"]})<br>
+                                Probability (30-Day): ${entry["Probability: 30-Day"]} (${entry["Confidence: 30-Day"]})<br>
+                                FileDate: ${entry["FileDate"]}
+                            `
+                        };
+                    });
+                    filteredIndicators = indicators.slice();
+                    populatePartners(indicators); // <-- Add this line
+                    renderOptions(filteredIndicators);
+                    updateDetails(0, filteredIndicators);
+                });
+            // Add event listener for partner-select to filter indicators
+            partnerSelect.addEventListener('change', function() {
+                const partner = partnerSelect.value;
+                const query = searchBar.value.toLowerCase();
+                filteredIndicators = indicators.filter(ind => {
+                    const matchesPartner = !partner || ind.title === partner;
+                    const matchesQuery =
+                        ind.number.toLowerCase().includes(query) ||
+                        ind.title.toLowerCase().includes(query) ||
+                        ind.description.toLowerCase().includes(query);
+                    return matchesPartner && matchesQuery;
+                });
+                renderOptions(filteredIndicators);
+                updateDetails(0, filteredIndicators);
+            });
+        </script>
+        <label class="dropdown-label" for="indicator-select">Select Indicator:</label>
+        <select id="indicator-select">
+            <!-- Options will be populated dynamically -->
+        </select>
+        <div id="indicator-details" class="indicator-details">
+            <!-- Details will be populated dynamically -->
+        </div>
+    </div>
+    <script>
+        let indicators = [];
+        fetch('Indicator_Dictionary.json')
+            .then(response => response.json())
+            .then(data => {
+                // Transform the object into an array of indicator objects
+                indicators = Object.keys(data).map(key => {
+                    const entry = data[key][0];
+                    return {
+                        number: entry["Indicator"],
+                        title: entry["Partner"] || "Unknown Partner",
+                        description: `
+                            Observed Today: ${entry["Observed Today"]}<br>
+                            Frequency (7d): ${entry["Frequency (7d)"]}<br>
+                            Frequency (30d): ${entry["Frequency (30d)"]}<br>
+                            Probability (7-Day): ${entry["Probability: 7-Day"]} (${entry["Confidence: 7-Day"]})<br>
+                            Probability (14-Day): ${entry["Probability: 14-Day"]} (${entry["Confidence: 14-Day"]})<br>
+                            Probability (30-Day): ${entry["Probability: 30-Day"]} (${entry["Confidence: 30-Day"]})<br>
+                            FileDate: ${entry["FileDate"]}
+                        `
+                    };
+                });
+                filteredIndicators = indicators.slice();
+                renderOptions(filteredIndicators);
+                updateDetails(0, filteredIndicators);
+            })
+            .catch(error => {
+                console.error('Error loading indicators:', error);
+                details.innerHTML = '<p>Error loading indicators.</p>';
+            });
+
+        const select = document.getElementById('indicator-select');
+        const details = document.getElementById('indicator-details');
+        const searchBar = document.getElementById('search-bar');
+
+        function renderOptions(filteredIndicators) {
+            select.innerHTML = '';
+            filteredIndicators.forEach((indicator, idx) => {
+                const option = document.createElement('option');
+                option.value = idx;
+                option.textContent = `${indicator.number}`; // Updated to show only the number
+                select.appendChild(option);
+            });
+        }
+
+        function updateDetails(idx, filteredIndicators) {
+            const indicator = filteredIndicators[idx];
+            if (indicator) {
+                details.innerHTML = `
+                    <h3 class="indicator-title">${indicator.title}</h3>
+                    <p class="indicator-description">${indicator.description}</p>
+                `;
+            } else {
+                details.innerHTML = '<p>No indicator selected.</p>';
+            }
+        }
+
+        // Initial state
+        let filteredIndicators = indicators.slice();
+        renderOptions(filteredIndicators);
+        updateDetails(0, filteredIndicators);
+
+        select.addEventListener('change', function() {
+            const idx = select.selectedIndex;
+            updateDetails(idx, filteredIndicators);
+        });
+
+        searchBar.addEventListener('input', function() {
+            const query = searchBar.value.toLowerCase();
+            filteredIndicators = indicators.filter(ind =>
+                ind.number.toLowerCase().includes(query) ||
+                ind.title.toLowerCase().includes(query) ||
+                ind.description.toLowerCase().includes(query)
+            );
+            renderOptions(filteredIndicators);
+            updateDetails(0, filteredIndicators);
+        });
+    </script>
+</body>
+</html>
