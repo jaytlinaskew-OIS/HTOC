@@ -3,82 +3,121 @@
 <head>
   <meta charset="UTF-8">
   <title>Indicator Dictionary</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      margin: 0; padding: 0; color: #fff;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      padding: 40px;
+      animation: fadeIn 1s ease-in-out;
+      margin-left: 270px; /* Adjust for sidebar width */
+      max-height: 600px; /* Limit height */
+      overflow-y: auto; /* Enable scrolling */
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      font-size: 2em;
+      color: #0078d4;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    }
+    .indicator {
+      background: #f9fbfd;
+      border-left: 6px solid #0078d4;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .indicator h3 {
+      margin: 0 0 8px;
+      font-size: 1.5em;
+      color: #0078d4;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+    .indicator p {
+      margin: 0;
+      color: #555;
+      line-height: 1.6;
+      white-space: pre-wrap; /* Preserve formatting */
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 250px;
+      background: linear-gradient(135deg, #0078d4, #0053a6);
+      color: #fff;
+      padding: 20px;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+      animation: fadeInSidebar 1s ease-in-out;
+    }
+    .sidebar h3 {
+      margin-top: 0;
+      font-size: 1.8em;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .sidebar ul li {
+      margin-bottom: 10px;
+    }
+    .sidebar ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.2em;
+      transition: color 0.3s;
+    }
+    .sidebar ul li a:hover {
+      color: #f4f6fa;
+    }
+  </style>
 </head>
 <body>
-  <!-- Include navigation.html dynamically -->
-  <div id="navigation"></div>
+  <div class="sidebar">
+    <h3>Menu</h3>
+    <ul>
+      <li><a href="./Profile_UI.html">Home</a></li>
+      <li><a href="./Dictionary.html">Dictionary</a></li>
+    </ul>
+  </div>
 
   <div class="container">
     <h2>Indicator Dictionary</h2>
-    <div id="summary-card">
-      <!-- Summary card for total unique indicators -->
-    </div>
-    <div id="indicator-list" style="max-height: 800px; overflow-y: auto;">
+    <div id="indicator-list">
       <!-- Indicator data will be dynamically loaded here -->
     </div>
   </div>
 
   <script>
-    // Dynamically load navigation.html
-    fetch('./navigation.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('navigation').innerHTML = html;
-      })
-      .catch(error => console.error('Error loading navigation:', error));
-
     fetch('Indicator_Dictionary.json')
       .then(response => response.json())
       .then(data => {
-        const summaryContainer = document.getElementById('summary-card');
-        const indicatorContainer = document.getElementById('indicator-list');
-
-        // Add a card at the top for the number of unique indicators
-        const uniqueIndicatorsCount = Object.keys(data).length;
-        const summaryCard = document.createElement('div');
-        summaryCard.className = 'indicator';
-        summaryCard.style.background = '#0078d4';
-        summaryCard.style.color = '#fff';
-        summaryCard.style.textAlign = 'center';
-        summaryCard.style.marginBottom = '20px';
-        summaryCard.innerHTML = `
-          <h3 style="color: #fff;">Total Unique Indicators</h3>
-          <p style="color: #fff;">${uniqueIndicatorsCount}</p>
-        `;
-        summaryContainer.appendChild(summaryCard);
-
-        // Aggregate all entries for each indicator
+        const container = document.getElementById('indicator-list');
         Object.keys(data).forEach(indicator => {
-          const entries = Array.isArray(data[indicator]) ? data[indicator] : [data[indicator]];
-
-          // Helper function to calculate the average or total frequency/probability
-          const calculateAverage = (field) => {
-            const fieldValues = entries.map(e => parseFloat(e[field])).filter(value => !isNaN(value));
-            const average = fieldValues.reduce((sum, value) => sum + value, 0) / fieldValues.length;
-            const rounded = Math.round(average);
-            return rounded === 0 ? 1 : rounded;
-          };
-
-          const fileDate = entries.map(e => e.FileDate).sort((a, b) => b - a)[0] || 'N/A';
-          const freq7d = calculateAverage('Frequency (7d)') || 'N/A';
-          const freq30d = calculateAverage('Frequency (30d)') || 'N/A';
-          const prob7d = calculateAverage('Probability: 7-Day') ? `${calculateAverage('Probability: 7-Day')}%` : 'N/A';
-          const prob14d = calculateAverage('Probability: 14-Day') ? `${calculateAverage('Probability: 14-Day')}%` : 'N/A';
-          const prob30d = calculateAverage('Probability: 30-Day') ? `${calculateAverage('Probability: 30-Day')}%` : 'N/A';
-
           const div = document.createElement('div');
           div.className = 'indicator';
           div.innerHTML = `
             <h3>Indicator: ${indicator}</h3>
-            <p><strong>Most Recent Date:</strong> ${fileDate}</p>
-            <p><strong>Frequency (7d):</strong> ${freq7d}</p>
-            <p><strong>Frequency (30d):</strong> ${freq30d}</p>
-            <p><strong>Probability (7d):</strong> ${prob7d}</p>
-            <p><strong>Probability (14d):</strong> ${prob14d}</p>
-            <p><strong>Probability (30d):</strong> ${prob30d}</p>
+            <p>${JSON.stringify(data[indicator], null, 2)}</p>
           `;
-          indicatorContainer.appendChild(div);
+          container.appendChild(div);
         });
       })
       .catch(error => {
