@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Indicator Dictionary</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Include navigation.html dynamically -->
+  <div id="navigation"></div>
+
+  <div class="container">
+    <h2>Indicator Dictionary</h2>
+    <div id="summary-card">
+      <!-- Summary card for total unique indicators -->
+    </div>
+    <div id="indicator-list" style="max-height: 800px; overflow-y: auto;">
+      <!-- Indicator data will be dynamically loaded here -->
+    </div>
+  </div>
+
+  <script>
+    // Dynamically load navigation.html
+    fetch('./navigation.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('navigation').innerHTML = html;
+      })
+      .catch(error => console.error('Error loading navigation:', error));
+
+    fetch('Indicator_Dictionary.json')
+      .then(response => response.json())
+      .then(data => {
+        const summaryContainer = document.getElementById('summary-card');
+        const indicatorContainer = document.getElementById('indicator-list');
+
+        // Add a card at the top for the number of unique indicators
+        const uniqueIndicatorsCount = Object.keys(data).length;
+        const summaryCard = document.createElement('div');
+        summaryCard.className = 'summary-card';
+        summaryCard.innerHTML = `
+          <h3>Total Unique Indicators</h3>
+          <p>${uniqueIndicatorsCount}</p>
+        `;
+        summaryContainer.appendChild(summaryCard);
+
+        // Aggregate all entries for each indicator
+        Object.keys(data).forEach(indicator => {
+          const entries = Array.isArray(data[indicator]) ? data[indicator] : [data[indicator]];
+
+          // Helper function to calculate the average or total frequency/probability
+          const calculateAverage = (field) => {
+            const fieldValues = entries.map(e => parseFloat(e[field])).filter(value => !isNaN(value));
+            const average = fieldValues.reduce((sum, value) => sum + value, 0) / fieldValues.length;
+            return fieldValues.length > 0 ? (average < 1 ? average.toFixed(2) : Math.round(average)) : 'N/A';
+          };
+
+          const fileDate = entries.map(e => e.FileDate).sort((a, b) => b - a)[0] || 'N/A';
+          const freq7d = calculateAverage('Frequency (7d)');
+          const freq30d = calculateAverage('Frequency (30d)');
+          const prob7d = calculateAverage('Probability: 7-Day') !== 'N/A' ? `${calculateAverage('Probability: 7-Day')}%` : 'N/A';
+          const prob14d = calculateAverage('Probability: 14-Day') !== 'N/A' ? `${calculateAverage('Probability: 14-Day')}%` : 'N/A';
+          const prob30d = calculateAverage('Probability: 30-Day') !== 'N/A' ? `${calculateAverage('Probability: 30-Day')}%` : 'N/A';
+
+          const div = document.createElement('div');
+          div.className = 'indicator-card';
+          div.innerHTML = `
+            <h3>Indicator: ${indicator}</h3>
+            <p><strong>Average 7 Day Frequency:</strong> ${freq7d}</p>
+            <p><strong>Average 30 Day Frequency:</strong> ${freq30d}</p>
+            <p><strong>Average Probability (7d):</strong> ${prob7d}</p>
+            <p><strong>Average Probability (14d):</strong> ${prob14d}</p>
+            <p><strong>Average Probability (30d):</strong> ${prob30d}</p>
+          `;
+          indicatorContainer.appendChild(div);
+        });
+      })
+      .catch(error => {
+        console.error('Error loading indicator dictionary:', error);
+        document.getElementById('indicator-list').innerHTML = '<p class="error">Failed to load indicator dictionary.</p>';
+      });
+  </script>
+</body>
+</html>

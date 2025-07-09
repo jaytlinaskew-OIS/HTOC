@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Indicator Profile UI</title>
+  <!-- Link external styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Include navigation dynamically -->
+  <div id="navigation"></div>
+  <script>
+    fetch('./navigation.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navigation').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading navigation:', error));
+  </script>
+
+  <div class="container">
+    <h2>Indicator Profile Beta</h2>
+
+    <label class="dropdown-label" for="partner-select">Filter by Partner:</label>
+    <select id="partner-select" class="search-bar">
+      <option value="">All Partners</option>
+    </select>
+
+    <label class="dropdown-label" for="search-bar">Search indicators:</label>
+    <input type="text" id="search-bar" class="search-bar" placeholder="Type to filter…" list="indicator-list">
+    <datalist id="indicator-list" class="search-bar"></datalist>
+
+    <label class="dropdown-label" for="date-filter">Filter by Date:</label>
+    <input type="date" id="date-filter" class="date-filter">
+
+    <div id="indicator-details" class="indicator-details">
+      <!-- rendered details go here -->
+    </div>
+  </div>
+
+  <script>
+    let indicators = [], groupedByNumber = {};
+
+    function formatFileDate(fdInt) {
+      const s = fdInt.toString().padStart(8, '0');
+      return `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`;
+    }
+
+    // Fetch & prepare
+    fetch('Indicator_Dictionary.json')
+      .then(r => r.json())
+      .then(data => {
+        // flatten and format
+        indicators = Object.values(data).flatMap(arr =>
+          arr.map(e => ({
+            number: e.Indicator,
+            partner: e.Partner || 'Unknown Partner',
+            fileDate: e.FileDate,
+            description: `
+              Indicator: ${e.Indicator}<br>
+              Frequency Last 7 Days: ${e['Frequency (7d)']}<br>
+              Frequency Last 30 Days: ${e['Frequency (30d)']}<br>
+              Probability (7d): ${e['Probability: 7-Day']}<br>
+              Probability (14d): ${e['Probability: 14-Day']}<br>
+              Probability (30d): ${e['Probability: 30-Day']}<br>
+            `
+          }))
+        );
+
+        // group and sort
+        groupedByNumber = indicators.reduce((acc, itm) => {
+          (acc[itm.number] = acc[itm.number]||[]).push(itm);
+          return acc;
+        }, {});
+        Object.values(groupedByNumber).forEach(arr =>
+          arr.sort((a,b) => b.fileDate - a.fileDate)
+        );
+
+        populatePartners();
+        applyFilters();
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('indicator-details').innerHTML =
+          '<p class="error">Failed to load indicators.</p>';
+      });
+
+    const partnerSelect = document.getElementById('partner-select');
+    const searchBar     = document.getElementById('search-bar');
+    const dateFilter    = document.getElementById('date-filter');
+    const datalist      = document.getElementById('indicator-list');
+    const detailsDiv    = document.getElementById('indicator-details');
+
+    // default today
+    dateFilter.value = new Date().toISOString().split('T')[0];
+
+    function populatePartners() {
+      const pts = [...new Set(indicators.map(i=>i.partner))].sort();
+      pts.forEach(p => {
+        const o = document.createElement('option');
+        o.value = p; o.textContent = p;
+        partnerSelect.appendChild(o);
+      });
+    }
+
+    function renderDatalist(nums) {
+      datalist.innerHTML = '';
+      nums.sort().forEach(num => {
+        const o = document.createElement('option');
+        o.value = num;
+        datalist.appendChild(o);
+      });
+    }
+
+    function applyFilters() {
+      const p    = partnerSelect.value;
+      const q    = searchBar.value.trim().toLowerCase();
+      const dVal = dateFilter.value;
+
+      const queryIndicators = q.split(',').map(ind => ind.trim()); // Split multiple indicators by comma
+
+      const filtered = indicators.filter(i => {
+        const matchesPartner = !p || i.partner === p;
+        const matchesDate = !dVal || formatFileDate(i.fileDate) === dVal;
+        const matchesQuery = queryIndicators.some(ind => `${i.number} ${i.partner} ${i.description}`.toLowerCase().includes(ind));
+        return matchesPartner && matchesDate && matchesQuery;
+      });
+
+      detailsDiv.innerHTML = '';
+      if (filtered.length === 0) {
+        detailsDiv.innerHTML = '<p class="error">No data available for the selected filters.</p>';
+      } else {
+        filtered.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'entry';
+          div.innerHTML = `
+            <h3 class="indicator-title">${item.partner}</h3>
+            <p class="indicator-description">${item.description}</p>
+          `;
+          detailsDiv.appendChild(div);
+        });
+      }
+    }
+
+    // Apply filters on page load to show all data for the current date
+    applyFilters();
+
+    function renderDetails(num) {
+      detailsDiv.innerHTML = '';
+      if (!groupedByNumber[num]) return;
+      const p    = partnerSelect.value;
+      const dVal = dateFilter.value;
+
+      groupedByNumber[num]
+        .filter(i=>(!p||i.partner===p) && (!dVal||formatFileDate(i.fileDate)===dVal))
+        .forEach(item=>{
+          const div = document.createElement('div');
+          div.className='entry';
+          div.innerHTML=`
+            <h3 class="indicator-title">${item.partner}</h3>
+            <p class="indicator-description">${item.description}</p>
+          `;
+          detailsDiv.appendChild(div);
+        });
+
+      if (!detailsDiv.innerHTML.trim()) {
+        detailsDiv.innerHTML = '<p class="error">No data available for the selected indicator and date.</p>';
+      }
+    }
+
+    function validateInputs() {
+      const errors = [];
+
+      if (!dateFilter.value) {
+        errors.push('Date filter is required.');
+      }
+
+      if (searchBar.value.trim() === '') {
+        errors.push('Search bar cannot be empty.');
+      }
+
+      if (errors.length > 0) {
+        alert(errors.join('\n'));
+        return false;
+      }
+
+      return true;
+    }
+
+    // events
+    partnerSelect.addEventListener('change', () => {
+      applyFilters();
+    });
+    dateFilter.addEventListener('change', () => {
+      if (validateInputs()) {
+        const num = searchBar.value.trim();
+        if (num) {
+          renderDetails(num);
+        } else {
+          applyFilters();
+        }
+      }
+    });
+    searchBar.addEventListener('input', applyFilters);
+    searchBar.addEventListener('change', ()=> renderDetails(searchBar.value.trim()));
+    searchBar.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        if (validateInputs()) {
+          applyFilters();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
