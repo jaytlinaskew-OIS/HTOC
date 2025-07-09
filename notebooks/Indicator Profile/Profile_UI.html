@@ -18,6 +18,8 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.2);
       padding: 40px;
       animation: fadeIn 1s ease-in-out;
+      position: relative; /* Ensure it stays above the sidebar */
+      z-index: 1;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -106,6 +108,7 @@
       padding: 20px;
       box-shadow: 2px 0 8px rgba(0,0,0,0.2);
       animation: fadeInSidebar 1s ease-in-out;
+      z-index: -1; /* Move behind other content */
     }
     @keyframes fadeInSidebar {
       from { opacity: 0; transform: translateX(-20px); }
@@ -143,7 +146,7 @@
   <div class="sidebar">
     <h3>Menu</h3>
     <ul>
-      <li><a href="#">Home</a></li>
+      <li><a href="Profile_UI.html">Home</a></li>
       <li><a href="#">Next Observed</a></li>
     </ul>
   </div>
@@ -319,9 +322,7 @@
 
     // events
     partnerSelect.addEventListener('change', () => {
-      if (validateInputs()) {
-        applyFilters();
-      }
+      applyFilters();
     });
     dateFilter.addEventListener('change', () => {
       if (validateInputs()) {
