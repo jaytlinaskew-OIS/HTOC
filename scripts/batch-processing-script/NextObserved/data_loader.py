@@ -3,15 +3,27 @@ import numpy as np
 import os
 from datetime import datetime, timedelta
 
+import os
+import pandas as pd
+
 def load_files(filenames):
     dataframes = []
-    for filename in filenames:
-        if not os.path.exists(filename):
-            print(f"File {filename} does not exist. Skipping.")
-            continue
-        df = pd.read_csv(filename)
-        dataframes.append(df)
+    for path in filenames:
+        if os.path.exists(path):
+            try:
+                df = pd.read_csv(path)
+                dataframes.append(df)
+            except Exception as e:
+                print(f"Error reading {path!r}: {e}")
+        else:
+            print(f"File {path!r} does not exist. Skipping.")
+
+    if not dataframes:
+        print("No input files found—returning empty DataFrame.")
+        return pd.DataFrame()
+
     return pd.concat(dataframes, ignore_index=True)
+
 
 def load_data(file_path_template, start_date, end_date):
     date_format = "%Y%m%d"
@@ -23,7 +35,7 @@ def generate_date_list(n_days=100):
     today = datetime.today()
     start_date = today - timedelta(days=n_days)
     date_format = "%Y%m%d"
-    file_path_template = "Z:/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d{date}.csv"
+    file_path_template = r"\\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Observations\htoc_opdiv_obs_d{date}.csv"
     dates_to_pull = pd.date_range(start_date, today, freq='D')
     datelist = [file_path_template.format(date=dt.strftime(date_format)) for dt in dates_to_pull]
     return datelist
