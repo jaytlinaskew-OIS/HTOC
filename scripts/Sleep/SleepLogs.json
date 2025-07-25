@@ -1,262 +1,170 @@
 [
   {
-    "timestamp": "2025-07-21T16:03:46.192787",
+    "timestamp": "2025-07-25T09:18:22.787653",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:05:26.204996",
+    "timestamp": "2025-07-25T09:20:02.794395",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:07:06.212136",
+    "timestamp": "2025-07-25T09:21:42.808017",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:08:46.223226",
+    "timestamp": "2025-07-25T09:23:22.811418",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:10:26.231881",
+    "timestamp": "2025-07-25T09:25:02.819416",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:12:06.239127",
+    "timestamp": "2025-07-25T09:26:42.825275",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:13:46.241292",
+    "timestamp": "2025-07-25T09:28:22.831208",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:15:26.244270",
+    "timestamp": "2025-07-25T09:30:02.851201",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:17:06.252140",
+    "timestamp": "2025-07-25T09:31:42.857690",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:18:46.256923",
+    "timestamp": "2025-07-25T09:33:22.864068",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:20:26.266891",
+    "timestamp": "2025-07-25T09:35:02.888890",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:22:06.271599",
+    "timestamp": "2025-07-25T09:36:42.916058",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:23:46.308086",
+    "timestamp": "2025-07-25T09:38:22.926700",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:25:26.320088",
+    "timestamp": "2025-07-25T09:40:02.933304",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:27:06.328875",
+    "timestamp": "2025-07-25T09:41:42.940669",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:28:46.334692",
+    "timestamp": "2025-07-25T09:43:22.944968",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:30:26.338895",
+    "timestamp": "2025-07-25T09:45:02.964187",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:32:06.347570",
+    "timestamp": "2025-07-25T09:46:42.972227",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:33:46.381763",
+    "timestamp": "2025-07-25T09:48:22.981309",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:35:26.390469",
+    "timestamp": "2025-07-25T09:50:02.988296",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:37:06.399378",
+    "timestamp": "2025-07-25T09:51:42.996594",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:38:46.403180",
+    "timestamp": "2025-07-25T09:53:23.032877",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:40:26.414072",
+    "timestamp": "2025-07-25T09:55:03.042959",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:42:06.422668",
+    "timestamp": "2025-07-25T09:56:43.048237",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:43:46.429959",
+    "timestamp": "2025-07-25T09:58:23.050940",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:45:26.439203",
+    "timestamp": "2025-07-25T10:00:03.060804",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:47:06.462484",
+    "timestamp": "2025-07-25T10:01:43.069758",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:48:46.471818",
+    "timestamp": "2025-07-25T10:03:23.085744",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:50:26.502278",
+    "timestamp": "2025-07-25T10:05:03.091717",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:52:06.509016",
+    "timestamp": "2025-07-25T10:06:43.094880",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:53:46.536553",
+    "timestamp": "2025-07-25T10:08:23.105831",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:55:26.548128",
+    "timestamp": "2025-07-25T10:10:03.113765",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:57:06.556885",
+    "timestamp": "2025-07-25T10:11:43.123829",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T16:58:46.561444",
+    "timestamp": "2025-07-25T10:13:23.134933",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T17:00:26.567064",
+    "timestamp": "2025-07-25T10:15:03.144463",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T17:02:06.588135",
+    "timestamp": "2025-07-25T10:16:43.167744",
     "message": "Purged records older than 1 hour"
   },
   {
-    "timestamp": "2025-07-21T17:02:06.601024",
+    "timestamp": "2025-07-25T10:16:43.177850",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T17:03:46.630821",
+    "timestamp": "2025-07-25T10:18:23.180606",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T17:05:26.633130",
+    "timestamp": "2025-07-25T10:20:03.189058",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T17:07:06.634736",
+    "timestamp": "2025-07-25T10:21:43.193573",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T17:08:46.637545",
+    "timestamp": "2025-07-25T10:23:23.201703",
     "message": "Screen poked"
   },
   {
-    "timestamp": "2025-07-21T17:10:26.641664",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:12:06.644997",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:13:46.651648",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:15:26.657417",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:17:06.666012",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:18:46.677464",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:20:26.681293",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:22:06.734381",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:23:46.742541",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:25:26.751288",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:27:06.768058",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:28:46.785395",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:30:26.793779",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:32:06.801733",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:33:46.811316",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:35:26.823167",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:37:06.832099",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:38:46.837811",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:40:26.845835",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:42:06.858727",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:43:46.879398",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:45:26.894337",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:47:06.901800",
-    "message": "Screen poked"
-  },
-  {
-    "timestamp": "2025-07-21T17:48:46.910621",
+    "timestamp": "2025-07-25T10:25:03.209026",
     "message": "Screen poked"
   }
 ]
