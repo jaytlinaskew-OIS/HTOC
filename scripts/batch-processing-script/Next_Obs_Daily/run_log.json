@@ -1,0 +1,18 @@
+﻿[
+    {
+        "timestamp":  "2025-07-28T08:51:51",
+        "output":  "File already exists: Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250728.csv"
+    },
+    {
+        "timestamp":  "2025-07-28T08:54:14",
+        "output":  "File already exists: Z:\\\\HTOC\\\\Data_Analytics\\\\Data\\\\OpDiv_Predictions\\\\Full Daily Reports\\\\full_daily_report_20250728.csv"
+    },
+    {
+        "timestamp":  "2025-07-28T08:55:26",
+        "output":  "File already exists: Z:\\\\HTOC\\\\Data_Analytics\\\\Data\\\\OpDiv_Predictions\\\\Full Daily Reports\\\\full_daily_report_20250728.csv"
+    },
+    {
+        "timestamp":  "2025-07-28T08:56:22",
+        "output":  "File already exists: Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250728.csv"
+    }
+]
