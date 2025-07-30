@@ -816,3 +816,137 @@ Partner: DHA, Records: 25
 Partner: HHS, Records: 34
 Partner: CDC, Records: 1
 Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20250728.xlsx
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000044316A0>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/pandas/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CE710>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/pandas/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CE990>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/pandas/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CEC10>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/pandas/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CEE90>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/pandas/
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000000004448050>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/pytz/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000044482D0>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/pytz/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000000004448550>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/pytz/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000044487D0>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/pytz/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000000004448A50>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/pytz/
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CFB10>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/numpy/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CFED0>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/numpy/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CF4D0>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/numpy/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CDE50>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/numpy/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CEE90>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/numpy/
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CE850>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/requests/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CDBD0>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/requests/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000043CDD10>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/requests/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x00000000044491D0>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/requests/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000000004448A50>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/requests/
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000000004448910>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/xlsxwriter/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000000004448410>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/xlsxwriter/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000000004448190>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/xlsxwriter/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x0000000004449E50>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/xlsxwriter/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x000000000444A0D0>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/xlsxwriter/
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x000000000444A490>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/openpyxl/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x000000000444A990>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/openpyxl/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x000000000444AC10>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/openpyxl/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x000000000444AE90>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/openpyxl/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x000000000444B110>: Failed to establish a new connection: [Errno 11002] getaddrinfo failed')': /simple/openpyxl/
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:53: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Exiting: HTTPSConnectionPool(host='hvs.threatconnect.com', port=443): Max retries exceeded with url: /api/v3/indicators?tql=ownerName%20EQ%20%22HTOC%20Org%22%20AND%20typeName%20IN%20%28%22Address%22%2C%20%22EmailAddress%22%2C%20%22File%22%2C%20%22Host%22%2C%20%22URL%22%2C%20%22ASN%22%2C%20%22CIDR%22%2C%20%22Email%20Subject%22%2C%20%22Hashtag%22%2C%20%22Mutex%22%2C%20%22Registry%20Key%22%2C%20%22Stripped%20URL%22%2C%20%22User%20Agent%22%29%20AND%20lastObserved%20%3E%3D%20%222025-07-26T00%3A00%3A00Z%22&fields=tags,observations&resultStart=0&resultLimit=10000&createActivityLog=false (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000000037EE6350>: Failed to resolve 'hvs.threatconnect.com' ([Errno 11002] getaddrinfo failed)"))
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x0000000037DDA120>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+Failed to query indicators for HTOC Org: HTTPSConnectionPool(host='hvs.threatconnect.com', port=443): Max retries exceeded with url: /api/v3/indicators?tql=ownerName%20EQ%20%22HTOC%20Org%22%20AND%20typeName%20IN%20%28%22Address%22%2C%20%22EmailAddress%22%2C%20%22File%22%2C%20%22Host%22%2C%20%22URL%22%2C%20%22ASN%22%2C%20%22CIDR%22%2C%20%22Email%20Subject%22%2C%20%22Hashtag%22%2C%20%22Mutex%22%2C%20%22Registry%20Key%22%2C%20%22Stripped%20URL%22%2C%20%22User%20Agent%22%29%20AND%20lastObserved%20%3E%3D%20%222025-07-26T00%3A00%3A00Z%22&fields=tags,observations&resultStart=0&resultLimit=10000&createActivityLog=false (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000000037EE6350>: Failed to resolve 'hvs.threatconnect.com' ([Errno 11002] getaddrinfo failed)"))
+Traceback (most recent call last):
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 354, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 312, in main
+    observed_src = query_observed_src(tc)
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 298, in query_observed_src
+    observed_src['indicator'] = observed_src['summary'].str.split().str[0].str.strip()
+                                ~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\site-packages\pandas\core\frame.py", line 4107, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File "C:\Program Files\Python313\Lib\site-packages\pandas\core\indexes\range.py", line 417, in get_loc
+    raise KeyError(key)
+KeyError: 'summary'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:53: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host calbbs.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host rqipartners.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host uploads-ssl.webflow.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host ctrk.klclick2.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host www.sthda.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host sadsa.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host vtext.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host cdcfoundation.org cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host link.mail.beehiiv.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host setup.msi cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host com.ar cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host freeweddingpsd.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host condor-customsolutions.de cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host bimbinlombardia.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host arpdcresources.ca cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host metalhoz.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host r3.o.lencr.org cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress k.baker@positiveproximity.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 404
+Failed API Response: b'{"message":"Resource not found, check the requested path. Please review your request and try again. If the problem persists, contact technical support.","status":"Error"}'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:234: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y%m%d")
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x000000003772A120>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (7181, 19)
+[DEBUG] Observed data subset shape: (12135, 3)
+[DEBUG] Recent tags after merge shape: (10132, 22)
+[DEBUG] Recent tags after filtering shape: (2830, 22)
+[DEBUG] Partner groups shape: (777, 3)
+[DEBUG] Final recent tags shape: (777, 25)
+Enriching 777 indicators with DomainTools and VirusTotalV3...
+Successfully enriched and merged 754 indicators.
+[DEBUG] recent_tags DataFrame:
+         Indicator  ...                          Partners
+1    85.93.218.204  ...                          CMS, IHS
+3   176.65.148.234  ...                               HHS
+9    205.210.31.55  ...            CMS, FDA, IHS, NIH, OS
+11  205.210.31.212  ...  CDC, CMS, DHA, FDA, IHS, NIH, OS
+16  78.153.140.177  ...                           NIH, OS
+
+[5 rows x 10 columns]
+[DEBUG] all_partners set: {'CDC', 'FDA', 'DHA', 'OS', 'NIH', 'HHS', 'IHS', 'CMS'}
+[DEBUG] partner_buckets dictionary:
+Partner: CDC, Records: 4
+Partner: FDA, Records: 84
+Partner: DHA, Records: 56
+Partner: OS, Records: 57
+Partner: NIH, Records: 18
+Partner: HHS, Records: 28
+Partner: IHS, Records: 65
+Partner: CMS, Records: 117
+Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20250730.xlsx
