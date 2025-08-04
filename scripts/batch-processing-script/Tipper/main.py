@@ -75,6 +75,7 @@ def process_recent_tags(observed_src, observed_data_df):
         tags_data = row.get('tags.data')
         if isinstance(tags_data, list):
             tags_df = pd.json_normalize(tags_data)
+            tags_df['name'] = tags_df['name'].str.replace('VA CSOC CTS Splunk', 'VA Splunk API', regex=False)
             api_tags = tags_df[tags_df['name'].str.contains('API', case=False, na=False)].copy()
             if not api_tags.empty:
                 all_tags_list = tags_df['name'].astype(str).tolist()
