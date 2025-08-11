@@ -1536,3 +1536,259 @@ Partner: DHA, Records: 47
 Partner: CMS, Records: 74
 Partner: FDA, Records: 65
 Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20250807.xlsx
+
+[notice] A new release of pip is available: 25.1.1 -> 25.2
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:53: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host setup.msi cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host pdf.ac cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host data-seed-prebsc-1-s1.bnbchain.org cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host yourpensionmeeting.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host cdcfoundation.org cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host www.sthda.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host uploads-ssl.webflow.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host scan.cypex.ai cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host ctrk.klclick2.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host vtext.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host facebookmail.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host tpmr.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host link.mail.beehiiv.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host mavink.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress cameron@yourpensionmeeting.com cannot be enriched with VirusTotal because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host freeweddingpsd.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host condor-customsolutions.de cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host bimbinlombardia.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host svgarchive.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host jendolstores.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host hcmiu.edu.vn cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host metalhoz.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host r3.o.lencr.org cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:235: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y%m%d")
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x000000003790A120>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (8607, 19)
+[DEBUG] Observed data subset shape: (12679, 3)
+[DEBUG] Recent tags after merge shape: (12628, 22)
+[DEBUG] Recent tags after filtering shape: (3769, 22)
+[DEBUG] Partner groups shape: (809, 3)
+[DEBUG] Final recent tags shape: (809, 25)
+Enriching 809 indicators with DomainTools and VirusTotalV3...
+Successfully enriched and merged 783 indicators.
+[DEBUG] recent_tags DataFrame:
+          Indicator  ...                     Partners
+3    176.65.149.231  ...            CDC, CMS, IHS, OS
+25  196.251.116.191  ...                      CMS, OS
+31   60.165.126.250  ...                 CMS, FDA, OS
+32   117.50.216.193  ...                 CMS, FDA, OS
+55    141.98.11.145  ...  CMS, DHA, FDA, HHS, IHS, OS
+
+[5 rows x 10 columns]
+[DEBUG] all_partners set: {'VA', 'OS', 'IHS', 'DHA', 'CMS', 'CDC', 'NIH', 'FDA', 'HHS'}
+[DEBUG] partner_buckets dictionary:
+Partner: VA, Records: 49
+Partner: OS, Records: 55
+Partner: IHS, Records: 41
+Partner: DHA, Records: 37
+Partner: CMS, Records: 63
+Partner: CDC, Records: 5
+Partner: NIH, Records: 16
+Partner: FDA, Records: 53
+Partner: HHS, Records: 25
+Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20250808.xlsx
+
+[notice] A new release of pip is available: 25.1.1 -> 25.2
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:53: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x000000003814A120>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (8297, 19)
+[DEBUG] Observed data subset shape: (8263, 3)
+[DEBUG] Recent tags after merge shape: (8230, 22)
+[DEBUG] Recent tags after filtering shape: (0, 22)
+[DEBUG] Partner groups shape: (0, 3)
+[DEBUG] Final recent tags shape: (0, 25)
+Enriching 0 indicators with DomainTools and VirusTotalV3...
+No enrichment data retrieved.
+Traceback (most recent call last):
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 355, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 319, in main
+    recent_tags = process_recent_tags(observed_src, observed_data_df)
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 210, in process_recent_tags
+    recent_tags = recent_tags[
+                  ~~~~~~~~~~~^
+        [
+        ^
+    ...<10 lines>...
+        ]
+        ^
+    ]
+    ^
+  File "C:\Program Files\Python313\Lib\site-packages\pandas\core\frame.py", line 4113, in __getitem__
+    indexer = self.columns._get_indexer_strict(key, "columns")[1]
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\site-packages\pandas\core\indexes\base.py", line 6212, in _get_indexer_strict
+    self._raise_if_missing(keyarr, indexer, axis_name)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\site-packages\pandas\core\indexes\base.py", line 6264, in _raise_if_missing
+    raise KeyError(f"{not_found} not in index")
+KeyError: "['Malicious Score/Count', 'ASN', 'City', 'Country', 'ThreatConnect Link'] not in index"
+
+[notice] A new release of pip is available: 25.1.1 -> 25.2
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:53: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x000000003750A120>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (8155, 19)
+[DEBUG] Observed data subset shape: (3776, 3)
+[DEBUG] Recent tags after merge shape: (3769, 22)
+[DEBUG] Recent tags after filtering shape: (0, 22)
+[DEBUG] Partner groups shape: (0, 3)
+[DEBUG] Final recent tags shape: (0, 25)
+Enriching 0 indicators with DomainTools and VirusTotalV3...
+No enrichment data retrieved.
+Traceback (most recent call last):
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 355, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 319, in main
+    recent_tags = process_recent_tags(observed_src, observed_data_df)
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 210, in process_recent_tags
+    recent_tags = recent_tags[
+                  ~~~~~~~~~~~^
+        [
+        ^
+    ...<10 lines>...
+        ]
+        ^
+    ]
+    ^
+  File "C:\Program Files\Python313\Lib\site-packages\pandas\core\frame.py", line 4113, in __getitem__
+    indexer = self.columns._get_indexer_strict(key, "columns")[1]
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\site-packages\pandas\core\indexes\base.py", line 6212, in _get_indexer_strict
+    self._raise_if_missing(keyarr, indexer, axis_name)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\site-packages\pandas\core\indexes\base.py", line 6264, in _raise_if_missing
+    raise KeyError(f"{not_found} not in index")
+KeyError: "['Malicious Score/Count', 'ASN', 'City', 'Country', 'ThreatConnect Link'] not in index"
+
+[notice] A new release of pip is available: 25.1.1 -> 25.2
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:53: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host minaffet.gov.rw cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host link.mail.beehiiv.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host yourpensionmeeting.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host cdcfoundation.org cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host www.sthda.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host uploads-ssl.webflow.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host scan.cypex.ai cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host ctrk.klclick2.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host brppharma.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host vtext.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host freeweddingpsd.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host condor-customsolutions.de cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host bimbinlombardia.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host arpdcresources.ca cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host svgarchive.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host hcmiu.edu.vn cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host metalhoz.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:235: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y%m%d")
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x0000000037EFA120>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (7926, 19)
+[DEBUG] Observed data subset shape: (12351, 3)
+[DEBUG] Recent tags after merge shape: (12321, 22)
+[DEBUG] Recent tags after filtering shape: (3745, 22)
+[DEBUG] Partner groups shape: (808, 3)
+[DEBUG] Final recent tags shape: (808, 25)
+Enriching 808 indicators with DomainTools and VirusTotalV3...
+Successfully enriched and merged 788 indicators.
+[DEBUG] recent_tags DataFrame:
+          Indicator  ...                         Partners
+4        65.49.1.92  ...  CMS, DHA, FDA, IHS, NIH, OS, VA
+9     170.64.134.89  ...  CMS, DHA, FDA, HHS, IHS, OS, VA
+12       65.49.1.49  ...       CMS, DHA, FDA, IHS, OS, VA
+27  195.178.110.160  ...                              CMS
+28   192.42.116.213  ...                          CMS, OS
+
+[5 rows x 10 columns]
+[DEBUG] all_partners set: {'NIH', 'OS', 'VA', 'DHA', 'IHS', 'CDC', 'CMS', 'FDA', 'HHS'}
+[DEBUG] partner_buckets dictionary:
+Partner: NIH, Records: 13
+Partner: OS, Records: 81
+Partner: VA, Records: 56
+Partner: DHA, Records: 40
+Partner: IHS, Records: 51
+Partner: CDC, Records: 3
+Partner: CMS, Records: 72
+Partner: FDA, Records: 58
+Partner: HHS, Records: 35
+Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20250811.xlsx
