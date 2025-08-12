@@ -41,22 +41,31 @@ def main():
         print(f"[ERROR] Failed to process data: {e}")
         sys.exit(1)
     # Remove SOAR integration indicators
-    #filtered_processed_data = filter_unwanted_indicators(processed_data, tc)
-    if processed_data is not None and not processed_data.empty:
-        # Generate report
+    filtered_processed_data = filter_unwanted_indicators(processed_data, tc)
+    data_to_use = None
+
+    # Prefer filtered data if it exists
+    if filtered_processed_data is not None and not filtered_processed_data.empty:
+        data_to_use = filtered_processed_data
+    elif processed_data is not None and not processed_data.empty:
+        print("[WARNING] No SOAR filtered data available, using data containing SOAR tags as well.")
+        data_to_use = processed_data
+
+    if data_to_use is not None:
         try:
             current_date = datetime.now().strftime("%Y-%m-%d")
             report_path = os.path.join(project_root, "..", "reports", f"IW_Report_{current_date}.docx")
-            # Ensure processed_data is in the correct format
-            if isinstance(processed_data, pd.DataFrame) and 'summary' in processed_data.columns:
-                vt_df, otx_df = process_indicators(processed_data)
+
+            # Ensure correct format
+            if isinstance(data_to_use, pd.DataFrame) and 'summary' in data_to_use.columns:
+                vt_df, otx_df = process_indicators(data_to_use)
                 print(f"Processed VirusTotal data: {len(vt_df)} records.")
                 print(f"Processed OTX data: {len(otx_df)} records.")
             else:
-                print("[ERROR] processed_data is not in the expected format.")
+                print("[ERROR] Data is not in the expected format.")
                 sys.exit(1)
 
-            generate_report(vt_df, otx_df, processed_data)
+            generate_report(vt_df, otx_df, data_to_use)
             print(f"Report generated at: {report_path}")
         except Exception as e:
             print(f"[ERROR] Failed to generate report: {e}")
@@ -64,6 +73,7 @@ def main():
     else:
         print("No indicators met all conditions as of this moment.")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
