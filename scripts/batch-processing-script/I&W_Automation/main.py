@@ -42,10 +42,14 @@ def main():
         sys.exit(1)
     # Remove SOAR integration indicators
     filtered_processed_data = filter_unwanted_indicators(processed_data, tc)
+    if isinstance(filtered_processed_data, pd.DataFrame):
+        print(filtered_processed_data.shape)
+    
     data_to_use = None
 
     # Prefer filtered data if it exists
     if filtered_processed_data is not None and not filtered_processed_data.empty:
+        print("[INFO] Using SOAR filtered data.")
         data_to_use = filtered_processed_data
     elif processed_data is not None and not processed_data.empty:
         print("[WARNING] No SOAR filtered data available, using data containing SOAR tags as well.")
@@ -64,7 +68,7 @@ def main():
             else:
                 print("[ERROR] Data is not in the expected format.")
                 sys.exit(1)
-
+            
             generate_report(vt_df, otx_df, data_to_use)
             print(f"Report generated at: {report_path}")
         except Exception as e:

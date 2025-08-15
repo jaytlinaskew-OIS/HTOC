@@ -74,38 +74,31 @@ def initialize_dataframe():
     """Initialize an empty DataFrame for storing filtered tags."""
     return pd.DataFrame()
 
-def normalize_tags_data(row):
-    """Normalize tags data and extract relevant information."""
-    tags_data = row.get('tags.data')
-
-    if not isinstance(tags_data, list):
-        return pd.DataFrame()
-
-    tags = pd.json_normalize(tags_data)
-    tags['name'] = tags['name'].astype(str)
-    all_tags_list = tags['name'].tolist()
-
-    # Filter for "API" tags
-    api_tags = tags[tags['name'].str.contains('API', case=False, na=False)].copy()
-
-    if not api_tags.empty:
-        # Add metadata columns and all_tags list
-        metadata_columns = ['summary', 'observations', 'description', 'type', 'dateAdded', 'lastModified', 'lastObserved', 'webLink']
-        for col in metadata_columns:
-            api_tags[col] = row.get(col)
-
-        api_tags['all_tags'] = [all_tags_list] * len(api_tags)
-
-    return api_tags
-
 def extract_api_tags(observed_src):
     """Extract and process API tags from observed data."""
     filtered_tags = initialize_dataframe()
 
     for _, row in observed_src.iterrows():
-        api_tags = normalize_tags_data(row)
-        if not api_tags.empty:
-            filtered_tags = pd.concat([filtered_tags, api_tags], ignore_index=True)
+        tags_data = row.get('tags.data')
+        if isinstance(tags_data, list):
+            tags = pd.json_normalize(tags_data)
+            tags['name'] = tags['name'].astype(str)
+
+            # Unnest 'associatedGroups.data' and skip if all are 'Adversary'
+            ag_data = row.get('associatedGroups.data')
+            if isinstance(ag_data, list) and len(ag_data) > 0:
+                groups_df = pd.json_normalize(ag_data)
+                if 'type' in groups_df.columns and set(groups_df['type']) == {'Adversary'}:
+                    continue
+
+            all_tags_list = tags['name'].tolist()
+            api_tags = tags[tags['name'].str.contains('API', case=False, na=False)].copy()
+
+            if not api_tags.empty:
+                for col in ['summary', 'observations', 'description', 'type', 'dateAdded', 'lastModified', 'lastObserved', 'webLink']:
+                    api_tags[col] = row.get(col)
+                api_tags['all_tags'] = [all_tags_list] * len(api_tags)
+                filtered_tags = pd.concat([filtered_tags, api_tags], ignore_index=True)
 
     return filtered_tags
 
