@@ -2292,3 +2292,11 @@ Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tipper
 
 [notice] A new release of pip is available: 25.1.1 -> 25.2
 [notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
