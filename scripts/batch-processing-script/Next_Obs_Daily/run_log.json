@@ -86,5 +86,21 @@
     {
         "timestamp":  "2025-08-15T08:05:18",
         "output":  "No data to save."
+    },
+    {
+        "timestamp":  "2025-08-15T08:29:07",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250815.csv"
+    },
+    {
+        "timestamp":  "2025-08-16T07:30:02",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250816.csv"
+    },
+    {
+        "timestamp":  "2025-08-17T07:30:02",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250817.csv"
+    },
+    {
+        "timestamp":  "2025-08-18T07:30:02",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250818.csv"
     }
 ]
