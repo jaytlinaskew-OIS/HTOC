@@ -102,5 +102,33 @@
     {
         "timestamp":  "2025-08-18T07:30:02",
         "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250818.csv"
+    },
+    {
+        "timestamp":  "2025-08-19T07:30:02",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250819.csv"
+    },
+    {
+        "timestamp":  "2025-08-20T07:30:02",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250820.csv"
+    },
+    {
+        "timestamp":  "2025-08-21T07:30:02",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250821.csv"
+    },
+    {
+        "timestamp":  "2025-08-22T07:30:02",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250822.csv"
+    },
+    {
+        "timestamp":  "2025-08-23T07:30:02",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250823.csv"
+    },
+    {
+        "timestamp":  "2025-08-24T07:30:01",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250824.csv"
+    },
+    {
+        "timestamp":  "2025-08-25T07:30:01",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250825.csv"
     }
 ]
