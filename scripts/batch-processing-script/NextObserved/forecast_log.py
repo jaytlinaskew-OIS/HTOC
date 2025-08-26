@@ -9,7 +9,7 @@ def update_long_forecast_log_with_formatting(production_df, actuals_df, excel_ou
     today_date = date.today()
     records = []
 
-    for h in [7, 14, 30]:
+    for h in [7, 14, 30, 45]:
         tag_col = f'Confidence: {h}-Day'
         target_date = today + pd.Timedelta(days=h)
 

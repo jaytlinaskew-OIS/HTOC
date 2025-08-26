@@ -73,6 +73,12 @@ def group_and_merge_by_opdiv(src):
         merged['day'] = merged['date'].dt.day
         merged['month'] = merged['date'].dt.month
         merged['seen'] = (merged['observations'] > 0).astype(int)
+        # Add total number of seen for each indicator
+        seen_totals = merged.groupby('indicator')['seen'].sum().rename('total_seen')
+        merged = merged.merge(seen_totals, on='indicator', how='left')
+        # Filter out indicators seen only 1 time
+        merged = merged[merged['total_seen'] > 1].reset_index(drop=True)
         opdiv_merged[opdiv] = merged
+        
 
     return opdiv_merged

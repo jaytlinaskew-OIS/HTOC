@@ -1,9 +1,7 @@
 import os
 import pandas as pd
 from datetime import datetime, timedelta
-from scripts.config_loader import get_threatconnect_config, get_virustotal_config, get_AlienVaultOtx_config
-from scripts.api_integration import fetch_attributes_data
-
+from config_loader import get_threatconnect_config, get_virustotal_config, get_AlienVaultOtx_config
 
 date_format = "%Y%m%d"
 
@@ -76,38 +74,31 @@ def initialize_dataframe():
     """Initialize an empty DataFrame for storing filtered tags."""
     return pd.DataFrame()
 
-def normalize_tags_data(row):
-    """Normalize tags data and extract relevant information."""
-    tags_data = row.get('tags.data')
-
-    if not isinstance(tags_data, list):
-        return pd.DataFrame()
-
-    tags = pd.json_normalize(tags_data)
-    tags['name'] = tags['name'].astype(str)
-    all_tags_list = tags['name'].tolist()
-
-    # Filter for "API" tags
-    api_tags = tags[tags['name'].str.contains('API', case=False, na=False)].copy()
-
-    if not api_tags.empty:
-        # Add metadata columns and all_tags list
-        metadata_columns = ['summary', 'observations', 'description', 'type', 'dateAdded', 'lastModified', 'lastObserved']
-        for col in metadata_columns:
-            api_tags[col] = row.get(col)
-
-        api_tags['all_tags'] = [all_tags_list] * len(api_tags)
-
-    return api_tags
-
 def extract_api_tags(observed_src):
     """Extract and process API tags from observed data."""
     filtered_tags = initialize_dataframe()
 
     for _, row in observed_src.iterrows():
-        api_tags = normalize_tags_data(row)
-        if not api_tags.empty:
-            filtered_tags = pd.concat([filtered_tags, api_tags], ignore_index=True)
+        tags_data = row.get('tags.data')
+        if isinstance(tags_data, list):
+            tags = pd.json_normalize(tags_data)
+            tags['name'] = tags['name'].astype(str)
+
+            # Unnest 'associatedGroups.data' and skip if all are 'Adversary'
+            ag_data = row.get('associatedGroups.data')
+            if isinstance(ag_data, list) and len(ag_data) > 0:
+                groups_df = pd.json_normalize(ag_data)
+                if 'type' in groups_df.columns and set(groups_df['type']) == {'Adversary'}:
+                    continue
+
+            all_tags_list = tags['name'].tolist()
+            api_tags = tags[tags['name'].str.contains('API', case=False, na=False)].copy()
+
+            if not api_tags.empty:
+                for col in ['summary', 'observations', 'description', 'type', 'dateAdded', 'lastModified', 'lastObserved', 'webLink']:
+                    api_tags[col] = row.get(col)
+                api_tags['all_tags'] = [all_tags_list] * len(api_tags)
+                filtered_tags = pd.concat([filtered_tags, api_tags], ignore_index=True)
 
     return filtered_tags
 
@@ -134,7 +125,7 @@ def map_observed_dates(tags_df, observed_data_df):
     tags_df['observed_date'] = pd.to_datetime(tags_df['observed_date'], errors='coerce')
     return tags_df
 
-def filter_recent_tags(tags_df, hours=48):
+def filter_recent_tags(tags_df, hours=24):
     """Filter tags observed within the last specified hours."""
     cutoff = pd.Timestamp.utcnow() - timedelta(hours=hours)
     return tags_df[tags_df['lastObserved'] >= cutoff].copy()
@@ -176,6 +167,10 @@ def remove_iw_tags(tags_df):
     """Remove rows where 'all_tags' contains 'I&W'."""
     return tags_df[~tags_df['all_tags'].apply(lambda x: 'I&W' in x)]
 
+def remove_htoc_wl_tags(tags_df):
+    """Remove rows where 'all_tags' contains 'I&W'."""
+    return tags_df[~tags_df['all_tags'].apply(lambda x: 'htoc_wl' in x)]
+
 def process_data(observed_src, observed_data_df):
     """
     Main function to orchestrate data processing.
@@ -209,6 +204,7 @@ def process_data(observed_src, observed_data_df):
     # Drop unnecessary columns and remove I&W tags
     tags_df = drop_unnecessary_columns(tags_df)
     tags_df = remove_iw_tags(tags_df)
+    tags_df = remove_htoc_wl_tags(tags_df)
 
     return tags_df
 
@@ -216,20 +212,19 @@ def process_data(observed_src, observed_data_df):
 def process_attributes_data(attributes_data):
 
     # Convert to DataFrame
-    attributes_observed_src = pd.DataFrame(attributes_data)
+    attributes_observed_src = pd.json_normalize(attributes_data)
 
     # Un-nest 'createdBy' and filter out 'SOAR' entries
-    if not attributes_observed_src.empty and 'createdBy' in attributes_observed_src.columns:
-        created_by_df = pd.json_normalize(attributes_observed_src.pop('createdBy'))
-        attributes_observed_src = pd.concat([attributes_observed_src, created_by_df], axis=1)
-        attributes_observed_src = attributes_observed_src[attributes_observed_src['lastName'] != 'SOAR']
+    if not attributes_observed_src.empty and attributes_observed_src['createdBy.lastName'].notnull().any():
+        attributes_observed_src = attributes_observed_src[attributes_observed_src['createdBy.lastName'] != 'SOAR']
 
     # Drop duplicates based on 'id'
     return attributes_observed_src.drop_duplicates(subset='id').reset_index(drop=True)
 
 
 def filter_unwanted_indicators(recent_tags, ro):
-  
+    from api_integration import fetch_attributes_data
+
     # Extract unique indicators
     indicators = recent_tags['summary'].unique()
 

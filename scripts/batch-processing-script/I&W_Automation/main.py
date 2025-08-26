@@ -2,9 +2,9 @@ import sys
 import os
 import pandas as pd
 from datetime import datetime
-from scripts.api_integration import fetch_indicators, process_indicators, initialize_api_client
-from scripts.data_processing import process_data, get_file_paths, get_tc_config, filter_unwanted_indicators
-from scripts.report_generator import generate_report
+from api_integration import fetch_indicators, process_indicators, initialize_api_client
+from data_processing import process_data, get_file_paths, get_tc_config, filter_unwanted_indicators
+from report_generator import generate_report
 
 # Base file path with placeholder for date
 base_path = r"Z:/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d{date}.csv"
@@ -36,34 +36,48 @@ def main():
     # Process the fetched data
     try:
         processed_data = process_data(indicators, observed_data)
-
+        processed_data
     except Exception as e:
         print(f"[ERROR] Failed to process data: {e}")
         sys.exit(1)
     # Remove SOAR integration indicators
     filtered_processed_data = filter_unwanted_indicators(processed_data, tc)
+    if isinstance(filtered_processed_data, pd.DataFrame):
+        print(filtered_processed_data.shape)
+    
+    data_to_use = None
+
+    # Prefer filtered data if it exists
     if filtered_processed_data is not None and not filtered_processed_data.empty:
-        # Generate report
+        print("[INFO] Using SOAR filtered data.")
+        data_to_use = filtered_processed_data
+    elif processed_data is not None and not processed_data.empty:
+        print("[WARNING] No SOAR filtered data available, using data containing SOAR tags as well.")
+        data_to_use = processed_data
+
+    if data_to_use is not None:
         try:
             current_date = datetime.now().strftime("%Y-%m-%d")
             report_path = os.path.join(project_root, "..", "reports", f"IW_Report_{current_date}.docx")
-            # Ensure processed_data is in the correct format
-            if isinstance(filtered_processed_data, pd.DataFrame) and 'summary' in filtered_processed_data.columns:
-                vt_df, otx_df = process_indicators(filtered_processed_data)
+
+            # Ensure correct format
+            if isinstance(data_to_use, pd.DataFrame) and 'summary' in data_to_use.columns:
+                vt_df, otx_df = process_indicators(data_to_use)
                 print(f"Processed VirusTotal data: {len(vt_df)} records.")
                 print(f"Processed OTX data: {len(otx_df)} records.")
             else:
-                print("[ERROR] processed_data is not in the expected format.")
+                print("[ERROR] Data is not in the expected format.")
                 sys.exit(1)
-
-            generate_report(vt_df, otx_df, filtered_processed_data)
+            
+            generate_report(vt_df, otx_df, data_to_use)
             print(f"Report generated at: {report_path}")
         except Exception as e:
             print(f"[ERROR] Failed to generate report: {e}")
             sys.exit(1)
     else:
-        print("No indicators to process after filtering.")
+        print("No indicators met all conditions as of this moment.")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

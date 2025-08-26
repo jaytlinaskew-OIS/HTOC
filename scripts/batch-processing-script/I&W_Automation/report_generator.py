@@ -36,16 +36,15 @@ def consolidate_sources(vt_df, otx_df):
     return consolidated[['search_term', 'sources']]
 
 def extract_date(timestamp):
-    """ Extract only the date from the timestamp. """
-    if pd.isna(timestamp) or timestamp == '':
+    """Extract only the date from the timestamp."""
+    if pd.isna(timestamp) or timestamp == 'N/A':
         return 'N/A'
-    
-    # Handle datetime object or string
     try:
-        # Attempt to parse as a datetime object
-        if isinstance(timestamp, str):
-            timestamp = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
-        return timestamp.strftime("%Y-%m-%d")
+        # Automatically parse any valid date string or datetime
+        dt = pd.to_datetime(timestamp, errors='coerce')
+        if pd.isna(dt):
+            return 'N/A'
+        return dt.strftime('%Y-%m-%d')
     except Exception:
         return 'N/A'
 
@@ -57,7 +56,7 @@ def populate_table(table, data):
         new_row = table.add_row().cells
         new_row[0].text = str(row.get('search_term', 'N/A'))
         new_row[1].text = str(row.get('type', 'N/A'))
-        new_row[2].text = extract_date(row.get('observed_date', 'N/A'))
+        new_row[2].text = extract_date(row.get('observed_date', ''))
         # For the 'observed_by_otx' column, stack values instead of comma-separating
         observed_by_otx = row.get('observed_by_otx', 'N/A')
         if pd.notna(observed_by_otx) and isinstance(observed_by_otx, str):
@@ -87,24 +86,24 @@ def fill_word_template(template_path, output_path, df):
 
         # Find and replace `{{sources}}` placeholder outside the table
         for para in doc.paragraphs:
-            if "{{ipaddress}}" in para.text:
+            if "{{indicator}}" in para.text:
                 # Try to get the first search_term as the IP address
                 ip_address = str(df['search_term'].iloc[0]) if 'search_term' in df.columns else 'N/A'
-                para.text = para.text.replace("{{ipaddress}}", ip_address)
+                para.text = para.text.replace("{{indicator}}", ip_address)
             if "{{asn}}" in para.text:
                 # Try to get ASN from vt_df if available, else use 'N/A'
-                asn_value = str(df['asn'].iloc[0]) if 'asn' in df.columns and not df.empty else 'N/A'
+                asn_value = str(df['asn'].iloc[0]) if 'asn' in df.columns and not df['asn'].isna().all() else 'N/A'
                 para.text = para.text.replace("{{asn}}", asn_value)
             if "{{whois}}" in para.text:
                 # Try to get WHOIS info from otx_df if available, else use 'N/A'
-                whois_value = str(df['whois'].iloc[0]) if 'whois' in df.columns and not df.empty else 'N/A'
+                whois_value = str(df['whois'].iloc[0]) if 'whois' in df.columns and not df['whois'].isna().all() else 'N/A'
                 para.text = para.text.replace("{{whois}}", whois_value)
             if "{{partners}}" in para.text:
                 # Try to get partners from recent_tags if available, else use 'N/A'
                 partners_value = ''
                 if 'search_term' in df.columns and not df.empty:
                     search_term = df['search_term'].iloc[0]
-                    partners_row = df[df['summary'] == search_term]
+                    partners_row = recent_tags[recent_tags['summary'] == search_term]
                     if not partners_row.empty and 'partners' in partners_row.columns:
                         partners_value = str(partners_row['partners'].iloc[0])
                 if not partners_value:
@@ -112,11 +111,20 @@ def fill_word_template(template_path, output_path, df):
                 para.text = para.text.replace("{{partners}}", partners_value)
             if "{{weblink}}" in para.text:
                 weblink_value = ''
+                # Try to get the first search_term as the indicator
+                weblink_value = ''
                 if 'search_term' in df.columns and not df.empty:
                     search_term = df['search_term'].iloc[0]
-                    match = df[df['indicator'] == search_term]
-                    if not match.empty and 'webLink' in match.columns:
-                        weblink_value = str(match['webLink'].iloc[0])
+                    # Try to find a 'webLink' in df for the indicator (if present)
+                    if 'webLink' in df.columns:
+                        match = df[df['search_term'] == search_term]
+                        if not match.empty and pd.notna(match['webLink'].iloc[0]):
+                            weblink_value = str(match['webLink'].iloc[0])
+                    # Fallback: try 'link' column if 'webLink' is not present or empty
+                    if not weblink_value and 'link' in df.columns:
+                        match = df[df['search_term'] == search_term]
+                        if not match.empty and pd.notna(match['link'].iloc[0]):
+                            weblink_value = str(match['link'].iloc[0])
                 para.text = para.text.replace("{{weblink}}", "")
                 if weblink_value:
                     # Add hyperlink using WordprocessingML (only show the link, no display text)
@@ -167,7 +175,7 @@ def fill_word_template(template_path, output_path, df):
                 # Remove the placeholder
                 para.text = para.text.replace("{{sources}}", "")
 
-                # Add each source as a hyperlink, separated by commas
+                # Add each source as a hyperlink, stacked (one per line, no commas)
                 sources = []
                 for srcs in df['sources'].dropna().unique():
                     for src in [s.strip() for s in srcs.split(',') if s.strip()]:
@@ -175,19 +183,27 @@ def fill_word_template(template_path, output_path, df):
                 for i, src in enumerate(sources):
                     add_hyperlink(para, src)
                     if i < len(sources) - 1:
-                        para.add_run(", ")
+                        para.add_run().add_break()  # Add line break instead of comma
 
-        # Save the modified document
+        # --- Save the document ---
+        indicator_name = str(df['search_term'].iloc[0]) if 'search_term' in df.columns else 'Unnamed_Indicator'
+        sanitized_name = indicator_name.replace(":", "_").replace("/", "_")
+
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        folder_path = os.path.join(OUTPUT_DIR, current_date)
+        os.makedirs(folder_path, exist_ok=True)
+
+        output_path = os.path.join(folder_path, f"I&W_Report_{sanitized_name}.docx")
         doc.save(output_path)
         print(f"Saved report: {output_path}")
 
     except Exception as e:
-        print(f"Error while generating report: {e}")
+        print(f"Error while generating report for {indicator_name}: {e}")
 
 def generate_report(vt_df, otx_df, processed_data):
     """Main function to handle report generation."""
 
-    # Combine VirusTotal and OTX dataframes
+    # Combine VirusTotal and OTX dataframes using `search_term`
     combined_df = pd.merge(
         vt_df, otx_df, on='search_term', how='outer', suffixes=('_vt', '_otx')
     )
@@ -198,40 +214,41 @@ def generate_report(vt_df, otx_df, processed_data):
         combined_df, sources_df, on='search_term', how='left'
     )
 
-    # Clearly aggregate observations to avoid duplication
+    # Ensure `processed_data` uses `search_term` for consistency
     if not processed_data.empty:
+        # Standardize column name to `search_term` for merging consistency
+        processed_data = processed_data.rename(columns={"summary": "search_term"})
+
         # Aggregate observations per indicator to single rows
         agg_processed_data = (
-            processed_data.groupby('summary', as_index=False)
+            processed_data.groupby('search_term', as_index=False)
             .agg({
                 'observed_date': lambda x: ', '.join(sorted(set(x.astype(str)))),
                 'partners': lambda x: ', '.join(sorted(set(', '.join(x.dropna()).split(', ')))),
                 'type': 'first',
-                'observations': 'first'
+                'observations': 'first',
+                'webLink': 'first'
             })
         )
 
+        # Merge aggregated data into the combined DataFrame
         combined_df = pd.merge(
             combined_df,
             agg_processed_data,
-            left_on='search_term',
-            right_on='summary',
+            on='search_term',
             how='left'
         )
 
-        # Remove redundant 'summary' after merge
-        combined_df.drop(columns=['summary'], inplace=True)
-
     # Remove any remaining exact duplicates
     combined_df.drop_duplicates(subset=['search_term', 'type', 'observed_date', 'partners'], inplace=True)
-    print(combined_df[['search_term', 'observed_date']].head(10))
-    print(combined_df['observed_date'].apply(type).value_counts())
 
-    # Define output file path
+    # Generate individual reports per unique indicator
     current_date = pd.Timestamp.now().strftime("%Y-%m-%d")
-    output_file = os.path.join(OUTPUT_DIR, f"I&W_Report_{current_date}.docx")
+    for indicator in combined_df['search_term'].unique():
+        indicator_df = combined_df[combined_df['search_term'] == indicator]
+        sanitized_indicator = indicator.replace(":", "_").replace("/", "_")
+        output_file = os.path.join(OUTPUT_DIR, f"I&W_Report_{sanitized_indicator}_{current_date}.docx")
+        fill_word_template(TEMPLATE_PATH, output_file, indicator_df)
 
-    # Fill the template table with the clearly deduplicated data
-    fill_word_template(TEMPLATE_PATH, output_file, combined_df)
 
 

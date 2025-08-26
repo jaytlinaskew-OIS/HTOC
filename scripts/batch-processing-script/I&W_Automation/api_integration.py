@@ -10,7 +10,7 @@ import logging
 import pandas as pd
 from datetime import datetime, timedelta
 import pytz
-from scripts.data_processing import get_otx_config, get_vt_config
+from data_processing import get_otx_config, get_vt_config
 sys.path.append("Z:/HTOC/Data_Analytics/threatconnect")
 
 from ThreatConnect import ThreatConnect # type: ignore
@@ -143,32 +143,51 @@ def fetch_indicators(ro):
     return observed_src
 
 def fetch_attributes_data(indicators, ro):
+    # Override and silence the ThreatConnect SDK logger completely
+    tc_logger = logging.getLogger('threatconnect')
+    tc_logger.setLevel(logging.CRITICAL + 1)  # Disable all levels, even CRITICAL
+    for handler in tc_logger.handlers[:]:
+        tc_logger.removeHandler(handler)
+    tc_logger.propagate = False  # Ensure it doesn't propagate to root logger
+
 
     attributes_data = []
+    indicators_with_no_attributes = []
 
     for indicator in indicators:
         try:
-            # API Request
             ro.set_http_method('GET')
-            ro.set_request_uri(f'/v3/indicators/{indicator}?fields=attributes&resultStart=0&resultLimit=1000')
+            ro.set_request_uri(
+                f'/v3/indicators/{indicator}?fields=attributes&resultStart=0&resultLimit=1000'
+            )
             response = tc.api_request(ro)
 
-            # Parse JSON response
             if response.headers.get('content-type') == 'application/json':
-                data = response.json().get('data', {})
-                
-                # Extract attributes data
-                for attr in data.get('attributes', {}).get('data', []):
-                    attr.update({
-                        'id': data.get('id'),
-                        'summary': data.get('summary'),
-                        'type': data.get('type'),
-                        'ownerName': data.get('ownerName')
-                    })
-                    attributes_data.append(attr)
+                json_data = response.json()
+
+                # ❗ Skip known ambiguous-match indicators
+                if json_data.get('status') == 'Error' and json_data.get('errCode') == '0x1001':
+                    # Optionally track or log the ambiguous indicator
+                    continue
+
+                data = json_data.get('data', {})
+                attributes = data.get('attributes', {}).get('data', [])
+
+                if not attributes:
+                    indicators_with_no_attributes.append(indicator)
+                else:
+                    for attr in attributes:
+                        attr.update({
+                            'id': data.get('id'),
+                            'summary': data.get('summary'),
+                            'type': data.get('type'),
+                            'ownerName': data.get('ownerName')
+                        })
+                        attributes_data.append(attr)
 
         except Exception:
-            pass  # Silent fail to keep processing
+            # Suppress all unexpected exceptions silently
+            continue
 
     return attributes_data
 

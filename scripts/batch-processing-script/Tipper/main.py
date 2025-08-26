@@ -21,7 +21,7 @@ TIPPERS_PATH = r'\\10.1.4.22\data\HTOC\HTOC Reports\Tippers'
 BASE_PATH = r"\\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Observations\htoc_opdiv_obs_d{date}.csv"
 
 DATE_FORMAT = "%Y%m%d"
-
+#=================== initialize =======================
 # Functions
 def initialize_threatconnect():
     """Initialize ThreatConnect session and request object."""
@@ -47,8 +47,9 @@ def initialize_threatconnect():
     except Exception as e:
         print(f"[ERROR] Failed to initialize ThreatConnect or RequestObject: {e}")
         sys.exit(1)
-
-def get_file_paths(base_path, days=3):
+#=============================================================
+#=========== Observation File Path Generation ============================
+def get_file_paths(base_path, days=1):
     """Generate file paths for the last `days` days."""
     today = datetime.utcnow()
     dates_to_pull = [(today - timedelta(days=i)).strftime(DATE_FORMAT) for i in range(days)]
@@ -65,7 +66,8 @@ def load_observed_data(file_paths):
         except Exception as e:
             print(f"Error reading file {file_path}: {e}")
     return pd.concat(data_frames, ignore_index=True) if data_frames else pd.DataFrame()
-
+#=============================================================
+#=================== Processing Recent Tags ====================
 def process_recent_tags(observed_src, observed_data_df):
     """Process recent tags and prepare partner buckets."""
     all_filtered = []
@@ -75,6 +77,7 @@ def process_recent_tags(observed_src, observed_data_df):
         tags_data = row.get('tags.data')
         if isinstance(tags_data, list):
             tags_df = pd.json_normalize(tags_data)
+            tags_df['name'] = tags_df['name'].str.replace('VA CSOC CTS Splunk', 'VA Splunk API', regex=False)
             api_tags = tags_df[tags_df['name'].str.contains('API', case=False, na=False)].copy()
             if not api_tags.empty:
                 all_tags_list = tags_df['name'].astype(str).tolist()
@@ -119,9 +122,62 @@ def process_recent_tags(observed_src, observed_data_df):
     recent_tags = recent_tags.merge(partner_groups, on='summary', how='left')
     recent_tags.drop_duplicates(subset='summary', inplace=True)
     print(f"[DEBUG] Final recent tags shape: {recent_tags.shape}")
+    return recent_tags
+#=============================================================
+#================= SOAR Exclusion ============================
+def excludeSoarData(recent_tags):
+    # Extract unique indicators from recent_tags
+    indicators = recent_tags['indicator'].unique()
 
+    attributes_data = []
+    indicators_with_no_attributes = []
+
+    for indicator in indicators:
+        try:
+            ro.set_http_method('GET')
+            ro.set_request_uri(f'/v3/indicators/{indicator}?fields=attributes&resultStart=0&resultLimit=1000')
+            response = tc.api_request(ro)
+
+            if response.headers.get('content-type') == 'application/json':
+                data = response.json().get('data', {})
+                attributes = data.get('attributes', {}).get('data', [])
+
+                if not attributes:
+                    indicators_with_no_attributes.append(indicator)
+                else:
+                    for attr in attributes:
+                        attr.update({
+                            'id': data.get('id'),
+                            'summary': data.get('summary'),
+                            'type': data.get('type'),
+                            'ownerName': data.get('ownerName')
+                        })
+                        attributes_data.append(attr)
+        except Exception as e:
+            if hasattr(e, 'response') and getattr(e.response, 'status_code', None) == 400:
+                continue
+            if "Status Code: 400" in str(e):
+                continue
+            pass
+
+    attributes_observed_src = pd.json_normalize(attributes_data)
+
+    if not attributes_observed_src.empty and attributes_observed_src['createdBy.lastName'].notnull().any():
+        attributes_observed_src = attributes_observed_src[attributes_observed_src['createdBy.lastName'] != 'SOAR']
+
+    attributes_observed_src = attributes_observed_src.drop_duplicates(subset='id').reset_index(drop=True)
+
+    filtered_with_attrs = recent_tags[recent_tags['summary'].isin(attributes_observed_src['summary'])]
+    no_attrs_df = recent_tags[recent_tags['summary'].isin(indicators_with_no_attributes)]
+
+    filtered_recent_tags = pd.concat([filtered_with_attrs, no_attrs_df], ignore_index=True)
+    filtered_recent_tags = filtered_recent_tags.drop_duplicates(subset='summary').reset_index(drop=True)
+    print(f"[DEBUG] Final recent tags shape: {filtered_recent_tags.shape}")
+
+#=============================================================
+#========== Enrichment Process ==============================
     # Enrich only final filtered indicators
-    indicator_values = recent_tags['summary'].dropna().unique().tolist()
+    indicator_values = filtered_recent_tags['summary'].dropna().unique().tolist()
     enriched_results = []
 
     print(f"Enriching {len(indicator_values)} indicators with DomainTools and VirusTotalV3...")
@@ -153,25 +209,26 @@ def process_recent_tags(observed_src, observed_data_df):
 
     if enriched_results:
         df_enriched = pd.json_normalize(enriched_results)
-        recent_tags = recent_tags.merge(df_enriched, on='summary', how='left')
+        filtered_recent_tags = filtered_recent_tags.merge(df_enriched, on='summary', how='left')
 
         # Unnest 'data.enrichment.data' (list of dicts) into separate columns
-        if 'data.enrichment.data' in recent_tags.columns:
+        if 'data.enrichment.data' in filtered_recent_tags.columns:
             enrichment_df = pd.json_normalize(
-                recent_tags['data.enrichment.data'].dropna().explode()
+                filtered_recent_tags['data.enrichment.data'].dropna().explode()
             )
-            enrichment_df.index = recent_tags['data.enrichment.data'].dropna().explode().index
-            enrichment_cols = [col for col in enrichment_df.columns if col not in recent_tags.columns]
-            # Join enrichment columns back to recent_tags
-            recent_tags = recent_tags.join(enrichment_df[enrichment_cols], how='left')
+            enrichment_df.index = filtered_recent_tags['data.enrichment.data'].dropna().explode().index
+            enrichment_cols = [col for col in enrichment_df.columns if col not in filtered_recent_tags.columns]
+            # Join enrichment columns back to filtered_recent_tags
+            filtered_recent_tags = filtered_recent_tags.join(enrichment_df[enrichment_cols], how='left')
 
         # Keep only records with vtMaliciousCount > 10
-        recent_tags = recent_tags[recent_tags['vtMaliciousCount'] > 10]
+        filtered_recent_tags = filtered_recent_tags[filtered_recent_tags['vtMaliciousCount'] > 10]
 
         print(f"Successfully enriched and merged {len(df_enriched)} indicators.")
     else:
         print("No enrichment data retrieved.")
-
+#=============================================================
+#=================== Enrichment Data Extraction ==============
     # Unnest the 'data.enrichment.data' column into separate columns for each enrichment type
     def extract_enrichment(row):
         """Extracts enrichment fields from the list of dicts in 'data.enrichment.data'."""
@@ -189,10 +246,10 @@ def process_recent_tags(observed_src, observed_data_df):
         return pd.Series(result)
 
     # Apply extraction to recent_tags
-    enrichment_expanded = recent_tags.apply(extract_enrichment, axis=1)
-    recent_tags = pd.concat([recent_tags, enrichment_expanded], axis=1)
+    enrichment_expanded = filtered_recent_tags.apply(extract_enrichment, axis=1)
+    filtered_recent_tags = pd.concat([filtered_recent_tags, enrichment_expanded], axis=1)
 
-    recent_tags = recent_tags.rename(columns={
+    filtered_recent_tags = filtered_recent_tags.rename(columns={
         'indicator': 'Indicator',
         'vtMaliciousCount': 'Malicious Score/Count',
         'obs_date': 'Observation Date',
@@ -206,7 +263,7 @@ def process_recent_tags(observed_src, observed_data_df):
     })
 
     # Now select only the columns you want, after renaming
-    recent_tags = recent_tags[
+    filtered_recent_tags = filtered_recent_tags[
         [
             'Indicator',
             'Malicious Score/Count',
@@ -222,12 +279,12 @@ def process_recent_tags(observed_src, observed_data_df):
     ]
 
     # Remove duplicate columns by keeping only the first occurrence
-    recent_tags = recent_tags.loc[:, ~recent_tags.columns.duplicated()]
-    recent_tags = recent_tags.fillna('unknown')
-    recent_tags = recent_tags.drop_duplicates()
+    filtered_recent_tags = filtered_recent_tags.loc[:, ~filtered_recent_tags.columns.duplicated()]
+    filtered_recent_tags = filtered_recent_tags.fillna('unknown')
+    filtered_recent_tags = filtered_recent_tags.drop_duplicates()
 
-    return recent_tags
-
+    return filtered_recent_tags
+#=============================================================
 def save_to_excel(partner_buckets):
     """Save partner buckets to an Excel file."""
     os.makedirs(TIPPERS_PATH, exist_ok=True)
@@ -316,21 +373,25 @@ def main():
         return
 
     recent_tags = process_recent_tags(observed_src, observed_data_df)
+    if recent_tags is None or recent_tags.empty:
+        print("[DEBUG] recent_tags is empty after processing. Exiting.")
+        return
+    filtered_recent_tags = excludeSoarData(recent_tags)
 
     print(f"[DEBUG] recent_tags DataFrame:")
-    print(recent_tags.head())
+    print(filtered_recent_tags.head())
 
-    if recent_tags.empty:
-        print("[DEBUG] recent_tags is empty after processing. Exiting.")
+    if filtered_recent_tags.empty:
+        print("[DEBUG] filtered_recent_tags is empty after processing. Exiting.")
         return
 
     all_partners = set(
         p.strip()
-        for partners in recent_tags['Partners'].dropna().unique()
+        for partners in filtered_recent_tags['Partners'].dropna().unique()
         for p in partners.split(',')
     )
     partner_buckets = {
-        partner: recent_tags[recent_tags['Partners'].str.contains(fr'\b{re.escape(partner)}\b', na=False, regex=True)]
+        partner: filtered_recent_tags[filtered_recent_tags['Partners'].str.contains(fr'\b{re.escape(partner)}\b', na=False, regex=True)]
         for partner in all_partners
     }
 
