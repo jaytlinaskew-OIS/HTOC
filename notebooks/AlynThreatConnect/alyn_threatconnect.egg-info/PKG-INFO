@@ -1,0 +1,31 @@
+Metadata-Version: 2.4
+Name: alyn-threatconnect
+Version: 0.1.1
+Summary: Lightweight ThreatConnect client (GET-only) used internally
+Author-email: Your Name <you@example.com>
+License-Expression: MIT
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: requests>=2.31.0
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: pytz>=2023.3
+
+# alyn-threatconnect
+
+Lightweight ThreatConnect client (GET-only) with a convenience `get_tc_data(days)` function.
+
+Quickstart (PowerShell):
+
+```
+py -m pip install --upgrade pip build
+py -m build --wheel
+```
+
+Usage:
+
+```python
+from AlynThreatConnect import get_tc_data
+
+df = get_tc_data(7)
+print(df.head())
+```

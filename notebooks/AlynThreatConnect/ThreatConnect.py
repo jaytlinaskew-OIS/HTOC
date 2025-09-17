@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Minimal ThreatConnect client (GET-only) used by get_tc_data()."""
+"""Minimal ThreatConnect client (GET-only) + get_tc_data(days) helper."""
 
 import base64
 import hashlib
@@ -9,6 +9,7 @@ import re
 import socket
 import time
 from datetime import datetime
+from pathlib import Path
 
 from requests import exceptions, packages, Request, Session
 packages.urllib3.disable_warnings()
@@ -188,3 +189,136 @@ class ThreatConnect:
             self.tcl.debug('Request Time: %s', datetime.now() - start)
 
         return api_response
+
+
+# ---------------------------------------------------------------------
+# High-level helper: get_tc_data(days)
+# ---------------------------------------------------------------------
+
+def get_tc_data(days):
+    """
+    Query indicators from ThreatConnect observed within `days` and return a pandas DataFrame.
+
+    Universal-friendly:
+      - No sys.path hacks or absolute paths.
+      - Loads config relative to the installed package.
+      - Assumes dependencies are declared in pyproject.toml.
+    """
+    import urllib.parse
+    import urllib3
+    from datetime import timedelta
+    import pandas as pd
+    import pytz
+
+    # Local imports (within package)
+    from AlynThreatConnect.RequestObject import RequestObject
+    from AlynThreatConnect.utils.config_loader import load_config
+
+    # --- Settings you wanted hardcoded ---
+    OWNERS = ["HTOC Org"]
+    VERIFY_SSL = False
+
+    # Resolve config.json inside the installed package
+    package_dir = Path(__file__).resolve().parent  # .../AlynThreatConnect
+    config_path = package_dir / "utils" / "config.json"
+
+    api_secret_key, api_access_id, api_base_url, api_default_org = load_config(str(config_path))
+
+    # Init client
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    tc = ThreatConnect(
+        api_aid=api_access_id,
+        api_sec=api_secret_key,
+        api_org=api_default_org,
+        api_url=api_base_url,
+    )
+    tc.set_verify_ssl(VERIFY_SSL)
+
+    # RequestObject
+    ro = RequestObject()
+    ro.set_http_method("GET")
+    ro.set_owner_allowed(True)
+
+    # Build cutoff (UTC midnight)
+    start_date = (datetime.now(pytz.UTC) - timedelta(days=days)).date()
+    start = f"{start_date}T00:00:00Z"
+
+    # Indicator types
+    type_names = [
+        "Address", "Email Address", "File", "Host", "URL", "ASN", "CIDR",
+        "Email Subject", "Hashtag", "Mutex", "Registry Key",
+        "Stripped URL", "User Agent",
+    ]
+    type_name_condition = ", ".join([f'"{t}"' for t in type_names])
+
+    # Query indicators with pagination
+    final_results = []
+    for owner in OWNERS:
+        try:
+            tql_raw = (
+                f'ownerName EQ "{owner}" AND '
+                f'typeName IN ({type_name_condition}) AND '
+                f'lastObserved >= "{start}"'
+            )
+            tql_encoded = urllib.parse.quote(tql_raw)
+
+            result_start = 0
+            page_size = 10000
+
+            while True:
+                ro.set_request_uri(
+                    f"/v3/indicators?tql={tql_encoded}"
+                    f"&fields=tags,observations,associatedGroups,falsePositives"
+                    f"&resultStart={result_start}&resultLimit={page_size}"
+                )
+                response = tc.api_request(ro)
+
+                ctype = (response.headers.get("content-type") or "").lower()
+                if "application/json" not in ctype:
+                    break
+
+                payload = response.json() or {}
+                data = payload.get("data", [])
+                if not data:
+                    break
+
+                final_results.append(payload)
+
+                if len(data) < page_size:
+                    break
+                result_start += page_size
+
+        except Exception as e:
+            print(f"Failed to query indicators for {owner}: {e}")
+
+    # Normalize -> DataFrame
+    normalized_data = []
+    for result in final_results:
+        for item in result.get("data", []):
+            if isinstance(item, dict) and "summary" in item:
+                normalized_data.append(item)
+
+    if not normalized_data:
+        return pd.DataFrame()
+
+    df = pd.json_normalize(normalized_data)
+
+    # Choose a stable indicator column
+    indicator_col = None
+    for cand in ["indicator", "value", "name", "summary"]:
+        if cand in df.columns:
+            indicator_col = cand
+            break
+
+    if indicator_col == "summary" or indicator_col is None:
+        df["indicator"] = df["summary"].astype(str).str.split().str[0].str.strip()
+    else:
+        df["indicator"] = df[indicator_col].astype(str).str.strip()
+
+    df.drop_duplicates(subset="indicator", inplace=True)
+
+    if "lastObserved" in df.columns:
+        df["lastObserved"] = pd.to_datetime(df["lastObserved"], utc=True, errors="coerce")
+        df = df[df["lastObserved"] >= pd.to_datetime(start, utc=True)]
+
+    return df.reset_index(drop=True)
