@@ -9,7 +9,7 @@ description = "Lightweight ThreatConnect client (GET-only) used internally"
 readme = "README.md"                    # create this file; see below
 requires-python = ">=3.9"
 license = "MIT"                         # SPDX-style string (fixes warning)
-authors = [{ name = "Your Name", email = "you@example.com" }]
+authors = [{ name = "Jaytlin Askew", email = "jaytlin.askew@hhs.gov" }]
 dependencies = ["requests>=2.31.0", "pandas>=2.0.0", "pytz>=2023.3"]
 
 [tool.setuptools]
