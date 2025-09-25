@@ -1,0 +1,77 @@
+[
+  {
+    "term": "207.244.71.84",
+    "kind": "preferred-source",
+    "saved_at": "2025-09-25T13:53:08Z",
+    "url": "https://www.abuseipdb.com/check/207.244.71.84",
+    "url_normalized": "https://www.abuseipdb.com/check/207.244.71.84",
+    "tags": [],
+    "source": "abuseipdb",
+    "meta": {
+      "status": 200,
+      "domain": "www.abuseipdb.com",
+      "title_tag": "207.244.71.84 | One Liberty Ventures | AbuseIPDB",
+      "article_published_time": null,
+      "page_text_excerpt": "207.244.71.84 | One Liberty Ventures | AbuseIPDB Toggle navigation Login Sign Up Report IP Bulk Tools Bulk Checker Bulk Reporter Bulk Checker Bulk Reporter Pricing Docs APIv2 Documentation Report Categories Feature Tutorials Range Alerts Download API Logs Bulk Checker Integrations Fail2Ban Integration CSF Integration Suricata Integration ArGoSoft Integration Splunk© Integration Fortinet Integration OpenCTI Integration PolarityCE Integration Laravel Integration Node.js Integration IP Utilities Convert IP Address Format Subnet Calculator Bulkcheck Tool Ping IP DNS Lookup Contact More About Us FAQ Statistics AbuseIPDB » 207.244.71.84 Check an IP Address, Domain Name, or Subnet e.g. 158.74.38.155 , microsoft.com , or 5.188.10.0/24 Check 207.244.71.84 was found in our database! This IP was reported 65 times. Confidence of Abuse is 8% : ? 8% ISP One Liberty Ventures Usage Type Data Center/Web Hosting/Transit ASN AS30633 Domain Name oneliberty.com Country 🇺🇸 United States of America City Lake Ridge, Virginia IP info including ISP, Usage Type, and Location provided by IPInfo . Updated biweekly. Report 207.244.71.84 Whois 207.244.71.84 IP Abuse Reports for 207.244.71.84 : This IP address has been reported a total of 65 times from 29 distinct sources. 207.244.71.84 was first reported on November 23rd 2020 , and the most recent report was 1 month ago"
+    },
+    "parsed": {
+      "reports_flat": [
+        "[Web Spam] Form spam",
+        "[Hacking] inorpelcybersecurity.com.br identifies communication and Exfiltration Over C2 Channel.",
+        "[Web Spam, Blog Spam] Review System Spam",
+        "[DDoS Attack, Bad Web Bot] VM1 Bad user agents ignoring web crawling rules. Draing bandwidth",
+        "[Phishing, Web Spam] (From [email protected] ) Beloved website owner, I’m Jordan from the ... (From [email protected] ) Beloved website owner, I’m Jordan from the USA, and I’ve been helping businesses around the world wi…",
+        "[Blog Spam] IPBlock protected site ID [4730-fr]. Public forum SPAM"
+      ],
+      "category_counts": {
+        "Web Spam": 9,
+        "DDoS Attack": 4,
+        "Bad Web Bot": 4,
+        "Blog Spam": 3,
+        "Hacking": 1,
+        "Phishing": 1
+      }
+    }
+  },
+  {
+    "term": "1.192.18.4",
+    "kind": "preferred-source",
+    "saved_at": "2025-09-25T13:54:02Z",
+    "url": "https://www.abuseipdb.com/check/1.192.18.4",
+    "url_normalized": "https://www.abuseipdb.com/check/1.192.18.4",
+    "tags": [],
+    "source": "abuseipdb",
+    "meta": {
+      "status": 200,
+      "domain": "www.abuseipdb.com",
+      "title_tag": "1.192.18.4 | CHINANET henan province network | AbuseIPDB",
+      "article_published_time": null,
+      "page_text_excerpt": "1.192.18.4 | CHINANET henan province network | AbuseIPDB Toggle navigation Login Sign Up Report IP Bulk Tools Bulk Checker Bulk Reporter Bulk Checker Bulk Reporter Pricing Docs APIv2 Documentation Report Categories Feature Tutorials Range Alerts Download API Logs Bulk Checker Integrations Fail2Ban Integration CSF Integration Suricata Integration ArGoSoft Integration Splunk© Integration Fortinet Integration OpenCTI Integration PolarityCE Integration Laravel Integration Node.js Integration IP Utilities Convert IP Address Format Subnet Calculator Bulkcheck Tool Ping IP DNS Lookup Contact More About Us FAQ Statistics AbuseIPDB » 1.192.18.4 Check an IP Address, Domain Name, or Subnet e.g. 158.74.38.155 , microsoft.com , or 5.188.10.0/24 Check 1.192.18.4 was found in our database! This IP was reported 298 times. Confidence of Abuse is 40% : ? 40% ISP CHINANET henan province network Usage Type Fixed Line ISP ASN Unknown Domain Name hntele.com Country 🇨🇳 China City Zhengzhou, Henan IP info including ISP, Usage Type, and Location provided by IPInfo . Updated biweekly. Report 1.192.18.4 Whois 1.192.18.4 IP Abuse Reports for 1.192.18.4 : This IP address has been reported a total of 298 times from 130 distinct sources. 1.192.18.4 was first reported on August 20th 2024 , and the most recent report was 1 week ago . Old"
+    },
+    "parsed": {
+      "reports_flat": [
+        "[Port Scan, Brute-Force] *Port Scan* detected from 1.192.18.4 (CN/China/-). 11 hits in the last 30 seconds",
+        "[Brute-Force] RDP connect attempt: Nmap Scanner",
+        "[Port Scan] 1.192.18.4 was recorded 3 times by 1 hosts attempting to connect to 2 unique ports. Incident counter ... 1.192.18.4 was recorded 3 times by 1 hosts attempting to connect to 2 unique ports. Incident c…",
+        "[Web App Attack] ThreatBook Intelligence: Zombie,Scanner more details on 20 ... ThreatBook Intelligence: Zombie,Scanner more details on 2025-09-03 17:24:29 /bad%20ip%2C/Tr%69nity.php%2ebakup 2025-09-03 17:24:29 / 202…",
+        "[Brute-Force, Web App Attack] \\[03/Sep/2025:11:32:37 +0200\\] aLgLNdaFTiC4iaGcrN7quwAAAMc 1.192.18.4 53274 78.46.187.162 443 ... \\[03/Sep/2025:11:32:37 +0200\\] aLgLNdaFTiC4iaGcrN7quwAAAMc 1.192.18.4 53274 78.46.187.162 443 \\[03/Se…",
+        "[Web App Attack] ThreatBook Intelligence: Zombie,Scanner more details on 20 ... ThreatBook Intelligence: Zombie,Scanner more details on 2025-08-26 16:33:39 / 2025-08-26 14:22:24 / 2025-08-26 16:33:40 / 2025-08-26 23:…",
+        "[Port Scan] [08:29] Port scanning. Port(s) scanned: TCP/1433",
+        "[SSH] ThreatBook Intelligence: Zombie,Scanner more details on 20 ... ThreatBook Intelligence: Zombie,Scanner more details on 2025-08-25 04:05:15 / 2025-08-25 04:05:40 / 2025-08-25 04:05:15 / 2025-08-25 04:…",
+        "[Web App Attack] ThreatBook Intelligence: Zombie,Scanner more details on 20 ... ThreatBook Intelligence: Zombie,Scanner more details on 2025-08-23 09:06:48 / 2025-08-23 09:06:48 /s/kg9ugn/808000/6411e0087192541a09d88…",
+        "[Web App Attack] ThreatBook Intelligence: Zombie,Scanner more details on 20 ... ThreatBook Intelligence: Zombie,Scanner more details on 2025-08-22 09:45:49 / 2025-08-22 09:45:49 / 2025-08-22 09:45:49 / 2025-08-22 09:…",
+        "[Port Scan] *Port Scan* detected from 1.192.18.4 (CN/China/-). 11 hits in the last 146 seconds (0-122)",
+        "[Web App Attack] ThreatBook Intelligence: Zombie,Scanner more details on 20 ... ThreatBook Intelligence: Zombie,Scanner more details on 2025-08-18 18:07:53 / 2025-08-18 07:41:35 /favicon.ico 2025-08-18 18:07:53 / 202…",
+        "[Port Scan] #3 *Port Scan* detected from 1.192.18.4 (CN/China/-). 11 hits in the last 235 seconds; Ports: *; Dir ... #3 *Port Scan* detected from 1.192.18.4 (CN/China/-). 11 hits in the last 235 seconds; Ports: …",
+        "[SSH] ThreatBook Intelligence: Zombie,Scanner more details on",
+        "[Web App Attack] ThreatBook Intelligence: Zombie,Scanner more details on 20 ... ThreatBook Intelligence: Zombie,Scanner more details on 2025-08-15 05:35:20 /"
+      ],
+      "category_counts": {
+        "Web App Attack": 7,
+        "Port Scan": 5,
+        "Brute-Force": 3,
+        "SSH": 2
+      }
+    }
+  }
+]
