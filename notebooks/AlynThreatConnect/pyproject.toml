@@ -4,18 +4,20 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "alyn-threatconnect"
-version = "0.1.1"                       # bump version
+version = "0.1.3"                     # bump version
 description = "Lightweight ThreatConnect client (GET-only) used internally"
-readme = "README.md"                    # create this file; see below
+readme = "README.md"
 requires-python = ">=3.9"
-license = "MIT"                         # SPDX-style string (fixes warning)
+license = "MIT"
 authors = [{ name = "Jaytlin Askew", email = "jaytlin.askew@hhs.gov" }]
 dependencies = ["requests>=2.31.0", "pandas>=2.0.0", "pytz>=2023.3"]
 
-[tool.setuptools]
-packages = ["AlynThreatConnect"]        # the package name
-package-dir = { "AlynThreatConnect" = "AlynThreatConnect" }
-include-package-data = true
+# Auto-discover AlynThreatConnect and its subpackages (e.g., AlynThreatConnect.utils)
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["AlynThreatConnect*"]
 
+# Include non-Python data files
 [tool.setuptools.package-data]
-AlynThreatConnect = ["utils/config.json", "tc.conf"]
+"AlynThreatConnect" = ["tc.conf"]
+"AlynThreatConnect.utils" = ["config.json"]
