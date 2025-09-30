@@ -322,30 +322,35 @@ def get_v3_threatconnect_data(lastObserved_date: date):
         df["indicator"] = df[indicator_col].astype(str).str.strip()
 
     df.drop_duplicates(subset="indicator", inplace=True)
-    df.drop(columns=["summary", "ip", "text", "sha256", "sha1", "url", "md5", "hostName"], inplace=True)
+    cols_to_drop = ["summary", "ip", "text", "sha256", "sha1", "url", "md5", "hostName"]
+    existing_cols = [col for col in cols_to_drop if col in df.columns]
+    if existing_cols:
+        df.drop(columns=existing_cols, inplace=True)
 
     return df.reset_index(drop=True)
 
 def get_v2_threatconnect_data():
-    
-    from datetime import datetime
+
     from pathlib import Path
+    from datetime import datetime, timezone
+    import urllib.parse
     import urllib3
     import pandas as pd
-    import pytz
 
-    from HTOCThreatConnect.ThreatConnect import ThreatConnect
+    # Local imports (within your package)
     from HTOCThreatConnect.RequestObject import RequestObject
+    from HTOCThreatConnect.ThreatConnect import ThreatConnect
     from HTOCThreatConnect.utils.config_loader import load_config
 
+    # --- Hardcoded settings ---
+    OWNERS = ["HTOC Org"]
     VERIFY_SSL = False
 
-    # Load packaged config
+    # ── Setup ────────────────────────────────────────────────────────────────
     package_dir = Path(__file__).resolve().parent
     config_path = package_dir / "utils" / "config.json"
     api_secret_key, api_access_id, api_base_url, api_default_org = load_config(str(config_path))
 
-    # Client
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     tc = ThreatConnect(
         api_aid=api_access_id,
@@ -355,54 +360,66 @@ def get_v2_threatconnect_data():
     )
     tc.set_verify_ssl(VERIFY_SSL)
 
-    # Request setup
-    ro = RequestObject()
-    ro.set_http_method("GET")
-    ro.set_owner_allowed(True)
+    today_str = datetime.now(timezone.utc).date().isoformat()  # 'YYYY-MM-DD'
+    all_rows = []
 
-    # Today (UTC)
-    current_date = datetime.now(pytz.UTC).date().isoformat()  # 'YYYY-MM-DD'
+    # ── Single call per owner (no pagination) ───────────────────────────────
+    for owner in OWNERS:
+        owner_q = urllib.parse.quote(owner)
 
-    final_results = []
-    try:
-        # NOTE: Adjust the v2 path/params if your tenant expects different names.
-        ro.set_request_uri(f"/v2/indicators?dateObserved={current_date}")
-        response = tc.api_request(ro)
+        # One wide call: all observed indicators for today (server returns full set)
+        uri = (
+            f"/v2/indicators/observed"
+            f"?owner={owner_q}"
+            f"&dateObserved={today_str}"
+        )
 
-        ctype = (response.headers.get("content-type") or "").lower()
-        if "application/json" in ctype:
-            payload = response.json() or {}
-            data = payload.get("data", [])
-            if data:
-                final_results.append(payload)
-    except Exception as e:
-        print(f"Failed to query indicators: {e}")
+        ro = RequestObject()
+        ro.set_http_method("GET")
+        ro.set_owner_allowed(True)
+        ro.set_request_uri(uri)
 
-    # Normalize → DataFrame
-    normalized = []
-    for result in final_results:
-        for item in result.get("data", []):
-            if isinstance(item, dict):
-                normalized.append(item)
+        resp = tc.api_request(ro)
+        print(f"[DEBUG] status={resp.status_code}")
+        if resp.status_code != 200:
+            try:
+                print(f"[DEBUG] error body: {resp.text[:500]}")
+            except Exception:
+                pass
+            continue
 
-    if not normalized:
+        payload = resp.json() or {}
+        data_obj = payload.get("data", {}) or {}
+        items = data_obj.get("indicator", [])
+        print(f"[DEBUG] Retrieved {len(items)} observed indicators for {owner} on {today_str}")
+        all_rows.extend(items)
+
+    # ── Normalize to DataFrame ───────────────────────────────────────────────
+    if not all_rows:
+        print("[DEBUG] No rows returned.")
         return pd.DataFrame()
 
-    df = pd.json_normalize(normalized)
+    df = pd.json_normalize(all_rows)
 
-    # Stable "indicator" column
-    indicator_col = next((c for c in ("indicator", "value", "name", "summary") if c in df.columns), None)
-    if indicator_col in (None, "summary"):
+    # Choose a stable indicator column
+    indicator_col = None
+    for cand in ("indicator", "value", "name", "summary"):
+        if cand in df.columns:
+            indicator_col = cand
+            break
+
+    if indicator_col is None:
         if "summary" in df.columns:
             df["indicator"] = df["summary"].astype(str).str.split().str[0].str.strip()
         else:
-            df["indicator"] = ""
+            df["indicator"] = None
     else:
         df["indicator"] = df[indicator_col].astype(str).str.strip()
 
-    df.drop_duplicates(subset="indicator", inplace=True)
+    # Light cleanup (keep 'type' so you can filter client-side if needed)
+    if "summary" in df.columns:
+        df.drop(columns=["summary"], inplace=True)
 
-    # Be forgiving: drop optional columns only if present
-    df.drop(columns=["summary", "ip", "text", "sha256", "sha1", "url", "md5", "hostName"], errors="ignore", inplace=True)
+    df.drop_duplicates(subset="indicator", inplace=True)
 
     return df.reset_index(drop=True)
