@@ -3,21 +3,21 @@ requires = ["setuptools>=68", "wheel", "build"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "alyn-threatconnect"
+name = "HTOC-threatconnect"
 version = "0.1.4"                     # bump version
 description = "Lightweight ThreatConnect client (GET-only) used internally"
 readme = "README.md"
 requires-python = ">=3.9"
-license = "MIT"
+license = {file = "LICENSE"}
 authors = [{ name = "Jaytlin Askew", email = "jaytlin.askew@hhs.gov" }]
 dependencies = ["requests>=2.31.0", "pandas>=2.0.0", "pytz>=2023.3"]
 
-# Auto-discover AlynThreatConnect and its subpackages (e.g., AlynThreatConnect.utils)
+# Auto-discover HTOCThreatConnect and its subpackages (e.g., HTOCThreatConnect.utils)
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["AlynThreatConnect*"]
+include = ["HTOCThreatConnect*"]
 
 # Include non-Python data files
 [tool.setuptools.package-data]
-"AlynThreatConnect" = ["tc.conf"]
-"AlynThreatConnect.utils" = ["config.json"]
+"HTOCThreatConnect" = ["tc.conf"]
+"HTOCThreatConnect.utils" = ["config.json"]

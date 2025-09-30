@@ -1,6 +1,0 @@
-include README.md
-include LICENSE
-recursive-include AlynThreatConnect *.conf
-recursive-include AlynThreatConnect/utils *.json
-global-exclude *.ipynb
-global-exclude __pycache__/*

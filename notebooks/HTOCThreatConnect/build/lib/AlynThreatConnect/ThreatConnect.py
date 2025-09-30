@@ -212,7 +212,7 @@ def get_tc_data(days):
 
     # Local imports (within package)
     from AlynThreatConnect.RequestObject import RequestObject
-    from AlynThreatConnect.utils.config_loader import load_config
+    from HTOCThreatConnect.utils.config_loader import load_config
 
     # --- Settings you wanted hardcoded ---
     OWNERS = ["HTOC Org"]

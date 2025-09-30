@@ -202,8 +202,8 @@ def get_v3_threatconnect_data(lastObserved_date: date):
     import pandas as pd
 
     # Local imports (within package)
-    from AlynThreatConnect.RequestObject import RequestObject
-    from AlynThreatConnect.utils.config_loader import load_config
+    from HTOCThreatConnect.RequestObject import RequestObject
+    from HTOCThreatConnect.utils.config_loader import load_config
 
     # --- Settings you wanted hardcoded ---
     OWNERS = ["HTOC Org"]
@@ -334,9 +334,9 @@ def get_v2_threatconnect_data():
     import pandas as pd
     import pytz
 
-    from AlynThreatConnect.ThreatConnect import ThreatConnect
-    from AlynThreatConnect.RequestObject import RequestObject
-    from AlynThreatConnect.utils.config_loader import load_config
+    from HTOCThreatConnect.ThreatConnect import ThreatConnect
+    from HTOCThreatConnect.RequestObject import RequestObject
+    from HTOCThreatConnect.utils.config_loader import load_config
 
     VERIFY_SSL = False
 

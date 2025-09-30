@@ -1,0 +1,6 @@
+include README.md
+include LICENSE
+recursive-include HTOCThreatConnect *.conf
+recursive-include HTOCThreatConnect/utils *.json
+global-exclude *.ipynb
+global-exclude __pycache__/*

@@ -1,0 +1,16 @@
+LICENSE
+MANIFEST.in
+README.md
+pyproject.toml
+HTOCThreatConnect/RequestObject.py
+HTOCThreatConnect/ThreatConnect.py
+HTOCThreatConnect/__init__.py
+HTOCThreatConnect/tc.conf
+HTOCThreatConnect/utils/__init__.py
+HTOCThreatConnect/utils/config.json
+HTOCThreatConnect/utils/config_loader.py
+HTOC_threatconnect.egg-info/PKG-INFO
+HTOC_threatconnect.egg-info/SOURCES.txt
+HTOC_threatconnect.egg-info/dependency_links.txt
+HTOC_threatconnect.egg-info/requires.txt
+HTOC_threatconnect.egg-info/top_level.txt
