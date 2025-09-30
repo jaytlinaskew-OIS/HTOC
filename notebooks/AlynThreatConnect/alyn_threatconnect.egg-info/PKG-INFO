@@ -1,8 +1,8 @@
 Metadata-Version: 2.4
 Name: alyn-threatconnect
-Version: 0.1.1
+Version: 0.1.4
 Summary: Lightweight ThreatConnect client (GET-only) used internally
-Author-email: Your Name <you@example.com>
+Author-email: Jaytlin Askew <jaytlin.askew@hhs.gov>
 License-Expression: MIT
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
