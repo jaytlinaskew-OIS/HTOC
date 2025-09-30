@@ -8,7 +8,7 @@ import logging
 import re
 import socket
 import time
-from datetime import datetime
+from datetime import datetime, date
 from pathlib import Path
 
 from requests import exceptions, packages, Request, Session
@@ -195,23 +195,14 @@ class ThreatConnect:
 # High-level helper: get_tc_data(days)
 # ---------------------------------------------------------------------
 
-def get_tc_data(days):
-    """
-    Query indicators from ThreatConnect observed within `days` and return a pandas DataFrame.
+def get_v3_threatconnect_data(lastObserved_date: date):
 
-    Universal-friendly:
-      - No sys.path hacks or absolute paths.
-      - Loads config relative to the installed package.
-      - Assumes dependencies are declared in pyproject.toml.
-    """
     import urllib.parse
     import urllib3
-    from datetime import timedelta
     import pandas as pd
-    import pytz
 
     # Local imports (within package)
-    from AlynThreatConnect.RequestObject import RequestObject
+    from HTOCThreatConnect.RequestObject import RequestObject
     from HTOCThreatConnect.utils.config_loader import load_config
 
     # --- Settings you wanted hardcoded ---
@@ -239,9 +230,24 @@ def get_tc_data(days):
     ro.set_http_method("GET")
     ro.set_owner_allowed(True)
 
-    # Build cutoff (UTC midnight)
-    start_date = (datetime.now(pytz.UTC) - timedelta(days=days)).date()
-    start = f"{start_date}T00:00:00Z"
+    # Normalize lastObserved_date to a date and build ISO8601 start at 00:00:00Z
+    if not lastObserved_date:
+        lastObserved_date = "2023-01-01"
+
+    if isinstance(lastObserved_date, datetime):
+        _date = lastObserved_date.date()
+    elif isinstance(lastObserved_date, date):
+        _date = lastObserved_date
+    elif isinstance(lastObserved_date, str):
+        try:
+            _date = datetime.strptime(lastObserved_date, "%Y-%m-%d").date()
+        except ValueError:
+            raise ValueError("lastObserved_date must be in YYYY-MM-DD format")
+    else:
+        # Fallback to safe default
+        _date = datetime.strptime("2023-01-01", "%Y-%m-%d").date()
+
+    start = f"{_date.isoformat()}T00:00:00Z"
 
     # Indicator types
     type_names = [
@@ -268,7 +274,7 @@ def get_tc_data(days):
             while True:
                 ro.set_request_uri(
                     f"/v3/indicators?tql={tql_encoded}"
-                    f"&fields=tags,observations,associatedGroups,falsePositives"
+                    f"&fields=tags,associatedGroups"
                     f"&resultStart={result_start}&resultLimit={page_size}"
                 )
                 response = tc.api_request(ro)
@@ -316,9 +322,87 @@ def get_tc_data(days):
         df["indicator"] = df[indicator_col].astype(str).str.strip()
 
     df.drop_duplicates(subset="indicator", inplace=True)
+    df.drop(columns=["summary", "ip", "text", "sha256", "sha1", "url", "md5", "hostName"], inplace=True)
 
-    if "lastObserved" in df.columns:
-        df["lastObserved"] = pd.to_datetime(df["lastObserved"], utc=True, errors="coerce")
-        df = df[df["lastObserved"] >= pd.to_datetime(start, utc=True)]
+    return df.reset_index(drop=True)
+
+def get_v2_threatconnect_data():
+    
+    from datetime import datetime
+    from pathlib import Path
+    import urllib3
+    import pandas as pd
+    import pytz
+
+    from HTOCThreatConnect.ThreatConnect import ThreatConnect
+    from HTOCThreatConnect.RequestObject import RequestObject
+    from HTOCThreatConnect.utils.config_loader import load_config
+
+    VERIFY_SSL = False
+
+    # Load packaged config
+    package_dir = Path(__file__).resolve().parent
+    config_path = package_dir / "utils" / "config.json"
+    api_secret_key, api_access_id, api_base_url, api_default_org = load_config(str(config_path))
+
+    # Client
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    tc = ThreatConnect(
+        api_aid=api_access_id,
+        api_sec=api_secret_key,
+        api_org=api_default_org,
+        api_url=api_base_url,
+    )
+    tc.set_verify_ssl(VERIFY_SSL)
+
+    # Request setup
+    ro = RequestObject()
+    ro.set_http_method("GET")
+    ro.set_owner_allowed(True)
+
+    # Today (UTC)
+    current_date = datetime.now(pytz.UTC).date().isoformat()  # 'YYYY-MM-DD'
+
+    final_results = []
+    try:
+        # NOTE: Adjust the v2 path/params if your tenant expects different names.
+        ro.set_request_uri(f"/v2/indicators?dateObserved={current_date}")
+        response = tc.api_request(ro)
+
+        ctype = (response.headers.get("content-type") or "").lower()
+        if "application/json" in ctype:
+            payload = response.json() or {}
+            data = payload.get("data", [])
+            if data:
+                final_results.append(payload)
+    except Exception as e:
+        print(f"Failed to query indicators: {e}")
+
+    # Normalize → DataFrame
+    normalized = []
+    for result in final_results:
+        for item in result.get("data", []):
+            if isinstance(item, dict):
+                normalized.append(item)
+
+    if not normalized:
+        return pd.DataFrame()
+
+    df = pd.json_normalize(normalized)
+
+    # Stable "indicator" column
+    indicator_col = next((c for c in ("indicator", "value", "name", "summary") if c in df.columns), None)
+    if indicator_col in (None, "summary"):
+        if "summary" in df.columns:
+            df["indicator"] = df["summary"].astype(str).str.split().str[0].str.strip()
+        else:
+            df["indicator"] = ""
+    else:
+        df["indicator"] = df[indicator_col].astype(str).str.strip()
+
+    df.drop_duplicates(subset="indicator", inplace=True)
+
+    # Be forgiving: drop optional columns only if present
+    df.drop(columns=["summary", "ip", "text", "sha256", "sha1", "url", "md5", "hostName"], errors="ignore", inplace=True)
 
     return df.reset_index(drop=True)

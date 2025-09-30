@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: HTOC-threatconnect
-Version: 0.1.4
+Version: 0.1.5
 Summary: Lightweight ThreatConnect client (GET-only) used internally
 Author-email: Jaytlin Askew <jaytlin.askew@hhs.gov>
 License: HHS License

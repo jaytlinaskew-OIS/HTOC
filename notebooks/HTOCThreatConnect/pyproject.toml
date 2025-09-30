@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "HTOC-threatconnect"
-version = "0.1.4"                     # bump version
+version = "0.1.5"                     # bump version
 description = "Lightweight ThreatConnect client (GET-only) used internally"
 readme = "README.md"
 requires-python = ">=3.9"
