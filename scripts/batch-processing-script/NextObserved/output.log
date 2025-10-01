@@ -22486,3 +22486,286 @@ You may close this window now.
 
  [COMPLETE] All OpDivs processed.
 You may close this window now.
+
+[notice] A new release of pip available: 22.3.1 -> 25.2
+[notice] To update, run: \\10.1.4.22\data\HTOC\Data_Analytics\Py\python.exe -m pip install --upgrade pip
+[START] Forecast pipeline initiated for 2025-09-30
+[INFO] Generating date list and loading files...
+[INFO] Preprocessing source data...
+[INFO] Grouping and merging data by OpDiv...
+
+[PROCESSING] CDC...
+[DEBUG] CDC - first 5 records:
+           API_UserName       date        indicator  ... month  seen  total_seen
+0  00818860012482918321 2025-06-22      104.21.48.1  ...     6     1          85
+1  00818860012482918321 2025-06-22  162.142.125.242  ...     6     1          93
+2  00818860012482918321 2025-06-22  162.142.125.255  ...     6     1          75
+3  00818860012482918321 2025-06-22   172.240.108.68  ...     6     1          87
+4  00818860012482918321 2025-06-22   176.65.148.236  ...     6     1           2
+
+[5 rows x 11 columns]
+[CDC] Building features...
+[CDC] Running model inference...
+[CDC] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+         Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0  102.129.153.158               0  ...         4.96%   45-Day: Low confidence
+1   102.129.153.43               0  ...        50.41%  45-Day: Possibly active
+2   102.129.153.71               0  ...        46.41%  45-Day: Possibly active
+3    103.125.189.6               0  ...         0.17%   45-Day: Low confidence
+4    104.18.32.191               0  ...         75.1%    45-Day: Highly likely
+
+[5 rows x 12 columns]
+[CDC] Updating forecast log...
+[CDC] Saving updated forecast log to: \\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions\Logs\CDC\CDC_forecast_log.xlsx
+[CDC] Saving today's production output...
+[CDC] Completed.
+
+[PROCESSING] CMS...
+[DEBUG] CMS - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  15920309593055310684 2025-06-22  101.89.174.236  ...     6     1         101
+1  15920309593055310684 2025-06-22  103.149.86.208  ...     6     1          82
+2  15920309593055310684 2025-06-22    103.203.59.0  ...     6     1         101
+3  15920309593055310684 2025-06-22   103.61.44.100  ...     6     1          26
+4  15920309593055310684 2025-06-22  104.152.52.239  ...     6     1          14
+
+[5 rows x 11 columns]
+[CMS] Building features...
+[CMS] Running model inference...
+[CMS] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+        Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0      1.192.18.4               0  ...        75.44%    45-Day: Highly likely
+1     1.204.166.3               0  ...        38.84%  45-Day: Possibly active
+2   100.27.42.247               0  ...        54.45%  45-Day: Possibly active
+3    101.89.148.7               0  ...         97.2%    45-Day: Highly likely
+4  101.89.174.236               1  ...        99.88%    45-Day: Highly likely
+
+[5 rows x 12 columns]
+[CMS] Updating forecast log...
+[CMS] Saving updated forecast log to: \\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions\Logs\CMS\CMS_forecast_log.xlsx
+[CMS] Saving today's production output...
+[CMS] Completed.
+
+[PROCESSING] DHA...
+[DEBUG] DHA - first 5 records:
+           API_UserName       date        indicator  ... month  seen  total_seen
+0  20790633968691748718 2025-06-22   103.108.229.67  ...     6     1           5
+1  20790633968691748718 2025-06-22   103.108.231.51  ...     6     1           5
+2  20790633968691748718 2025-06-22   103.108.231.67  ...     6     1           5
+3  20790633968691748718 2025-06-22  103.136.147.130  ...     6     1           4
+4  20790633968691748718 2025-06-22    103.136.147.4  ...     6     1           5
+
+[5 rows x 11 columns]
+[DHA] Building features...
+[DHA] Running model inference...
+[DHA] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+        Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0    101.89.148.7               0  ...        77.94%    45-Day: Highly likely
+1  101.89.174.236               0  ...        51.68%  45-Day: Possibly active
+2  103.108.229.67               0  ...         0.89%   45-Day: Low confidence
+3  103.108.231.51               0  ...         0.89%   45-Day: Low confidence
+4  103.108.231.67               0  ...         0.89%   45-Day: Low confidence
+
+[5 rows x 12 columns]
+[DHA] Updating forecast log...
+[DHA] Saving updated forecast log to: \\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions\Logs\DHA\DHA_forecast_log.xlsx
+[DHA] Saving today's production output...
+[DHA] Completed.
+
+[PROCESSING] FDA...
+[DEBUG] FDA - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  13983566077459384977 2025-06-22  101.89.174.236  ...     6     1         101
+1  13983566077459384977 2025-06-22  103.149.86.208  ...     6     1          75
+2  13983566077459384977 2025-06-22    103.203.59.0  ...     6     1         101
+3  13983566077459384977 2025-06-22  104.156.155.31  ...     6     1           4
+4  13983566077459384977 2025-06-22  104.234.115.77  ...     6     1          23
+
+[5 rows x 11 columns]
+[FDA] Building features...
+[FDA] Running model inference...
+[FDA] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+        Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0      1.192.18.4               0  ...        74.21%    45-Day: Highly likely
+1     1.204.166.3               0  ...         70.7%  45-Day: Possibly active
+2   100.27.42.247               0  ...        73.48%    45-Day: Highly likely
+3    101.89.148.7               0  ...        95.52%    45-Day: Highly likely
+4  101.89.174.236               1  ...        99.88%    45-Day: Highly likely
+
+[5 rows x 12 columns]
+[FDA] Updating forecast log...
+[FDA] Saving updated forecast log to: \\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions\Logs\FDA\FDA_forecast_log.xlsx
+[FDA] Saving today's production output...
+[FDA] Completed.
+
+[PROCESSING] HHS...
+[DEBUG] HHS - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  13520457953477229971 2025-06-22  103.125.146.77  ...     6     1           8
+1  13520457953477229971 2025-06-22   107.189.30.69  ...     6     1          25
+2  13520457953477229971 2025-06-22  118.193.72.187  ...     6     1          85
+3  13520457953477229971 2025-06-22  119.200.13.201  ...     6     1         100
+4  13520457953477229971 2025-06-22   136.144.43.81  ...     6     1          21
+
+[5 rows x 11 columns]
+[HHS] Building features...
+[HHS] Running model inference...
+[HHS] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+         Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0  101.251.238.174               0  ...        74.87%    45-Day: Highly likely
+1   101.89.174.236               1  ...        88.22%    45-Day: Highly likely
+2     102.0.12.184               0  ...        55.93%  45-Day: Possibly active
+3   102.129.153.71               0  ...        29.63%  45-Day: Possibly active
+4   102.215.12.242               0  ...        75.75%    45-Day: Highly likely
+
+[5 rows x 12 columns]
+[HHS] Updating forecast log...
+[HHS] Saving updated forecast log to: \\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions\Logs\HHS\HHS_forecast_log.xlsx
+[HHS] Saving today's production output...
+[HHS] Completed.
+
+[PROCESSING] HRSA...
+[DEBUG] HRSA - first 5 records:
+           API_UserName       date        indicator  ... month  seen  total_seen
+0  35664937356778434955 2025-06-22   101.89.174.236  ...     6     1          36
+1  35664937356778434955 2025-06-22   103.149.86.208  ...     6     1          20
+2  35664937356778434955 2025-06-22     103.203.59.0  ...     6     1          36
+3  35664937356778434955 2025-06-22   104.152.52.238  ...     6     1           2
+4  35664937356778434955 2025-06-22  104.234.115.167  ...     6     1           4
+
+[5 rows x 11 columns]
+[HRSA] Building features...
+[HRSA] Running model inference...
+[HRSA] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+        Indicator  Observed Today  ...  ensemble_45d      Confidence: 45-Day
+0      1.192.18.4               0  ...          nan%  45-Day: Low confidence
+1    101.89.148.7               0  ...          nan%  45-Day: Low confidence
+2  101.89.174.236               1  ...          nan%  45-Day: Low confidence
+3   103.124.94.57               0  ...          nan%  45-Day: Low confidence
+4  103.149.86.208               1  ...          nan%  45-Day: Low confidence
+
+[5 rows x 12 columns]
+[HRSA] Updating forecast log...
+[HRSA] Saving updated forecast log to: \\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions\Logs\HRSA\HRSA_forecast_log.xlsx
+[HRSA] Saving today's production output...
+[HRSA] Completed.
+
+[PROCESSING] IHS...
+[DEBUG] IHS - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  80363974983666420473 2025-06-22  103.149.86.208  ...     6     1          25
+1  80363974983666420473 2025-06-22    103.203.59.0  ...     6     1          92
+2  80363974983666420473 2025-06-22   104.131.6.219  ...     6     1          15
+3  80363974983666420473 2025-06-22  104.16.230.132  ...     6     1           6
+4  80363974983666420473 2025-06-22    104.192.3.74  ...     6     1          33
+
+[5 rows x 11 columns]
+[IHS] Building features...
+[IHS] Running model inference...
+[IHS] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+        Indicator  Observed Today  ...  ensemble_45d      Confidence: 45-Day
+0   100.27.42.247               0  ...          nan%  45-Day: Low confidence
+1    101.89.148.7               0  ...          nan%  45-Day: Low confidence
+2  101.89.174.236               0  ...          nan%  45-Day: Low confidence
+3  103.149.86.208               0  ...          nan%  45-Day: Low confidence
+4  103.186.30.186               0  ...          nan%  45-Day: Low confidence
+
+[5 rows x 12 columns]
+[IHS] Updating forecast log...
+[IHS] Saving updated forecast log to: \\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions\Logs\IHS\IHS_forecast_log.xlsx
+[IHS] Saving today's production output...
+[IHS] Completed.
+
+[PROCESSING] NIH...
+[DEBUG] NIH - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  50189120947314147395 2025-06-22    103.203.59.0  ...     6     1          86
+1  50189120947314147395 2025-06-22     104.21.3.76  ...     6     1          83
+2  50189120947314147395 2025-06-22   118.26.111.94  ...     6     1           4
+3  50189120947314147395 2025-06-22   120.48.45.123  ...     6     1          15
+4  50189120947314147395 2025-06-22  148.113.206.49  ...     6     1          45
+
+[5 rows x 11 columns]
+[NIH] Building features...
+[NIH] Running model inference...
+[NIH] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+         Indicator  Observed Today  ...  ensemble_45d     Confidence: 45-Day
+0  1-you.njalla.no               0  ...        77.36%  45-Day: Highly likely
+1    100.27.42.247               0  ...        72.77%  45-Day: Highly likely
+2  101.251.238.174               0  ...        79.88%  45-Day: Highly likely
+3     101.89.148.7               0  ...        71.26%  45-Day: Highly likely
+4   102.215.12.242               0  ...        74.57%  45-Day: Highly likely
+
+[5 rows x 12 columns]
+[NIH] Updating forecast log...
+[NIH] Saving updated forecast log to: \\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions\Logs\NIH\NIH_forecast_log.xlsx
+[NIH] Saving today's production output...
+[NIH] Completed.
+
+[PROCESSING] OS...
+[DEBUG] OS - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  64853912235916233429 2025-06-22    103.203.59.0  ...     6     1         101
+1  64853912235916233429 2025-06-22   104.131.6.219  ...     6     1          20
+2  64853912235916233429 2025-06-22  104.152.52.110  ...     6     1          20
+3  64853912235916233429 2025-06-22  104.152.52.155  ...     6     1          22
+4  64853912235916233429 2025-06-22  104.152.52.238  ...     6     1          15
+
+[5 rows x 11 columns]
+[OS] Building features...
+[OS] Running model inference...
+[OS] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+        Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0      1.192.18.4               0  ...        76.86%    45-Day: Highly likely
+1     1.204.166.3               0  ...        49.51%  45-Day: Possibly active
+2   100.27.42.247               0  ...        73.91%    45-Day: Highly likely
+3    101.89.148.7               0  ...        99.21%    45-Day: Highly likely
+4  101.89.174.236               1  ...        99.91%    45-Day: Highly likely
+
+[5 rows x 12 columns]
+[OS] Updating forecast log...
+[OS] Saving updated forecast log to: \\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions\Logs\OS\OS_forecast_log.xlsx
+[OS] Saving today's production output...
+[OS] Completed.
+
+[PROCESSING] VA...
+[DEBUG] VA - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  74198686107399967946 2025-06-22  103.149.86.208  ...     6     1          61
+1  74198686107399967946 2025-06-22  103.191.76.181  ...     6     1          11
+2  74198686107399967946 2025-06-22   103.61.44.100  ...     6     1          17
+3  74198686107399967946 2025-06-22  104.152.52.105  ...     6     1          80
+4  74198686107399967946 2025-06-22  104.152.52.110  ...     6     1         101
+
+[5 rows x 11 columns]
+[VA] Building features...
+[VA] Running model inference...
+[VA] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+         Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0  1-you.njalla.no               0  ...        46.12%  45-Day: Possibly active
+1       1.4.195.14               0  ...        46.26%  45-Day: Possibly active
+2    100.27.42.247               0  ...        74.39%    45-Day: Highly likely
+3      102.0.5.152               0  ...        74.21%    45-Day: Highly likely
+4    102.207.128.2               0  ...        46.11%  45-Day: Possibly active
+
+[5 rows x 12 columns]
+[VA] Updating forecast log...
+[VA] Saving updated forecast log to: \\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions\Logs\VA\VA_forecast_log.xlsx
+[VA] Saving today's production output...
+[VA] Completed.
+
+ [COMPLETE] All OpDivs processed.
+You may close this window now.
+
+[notice] A new release of pip available: 22.3.1 -> 25.2
+[notice] To update, run: \\10.1.4.22\data\HTOC\Data_Analytics\Py\python.exe -m pip install --upgrade pip
