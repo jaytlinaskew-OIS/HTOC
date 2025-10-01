@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "HTOC-threatconnect"
+version = "0.1.7"                     # bump version
+description = "Lightweight ThreatConnect client (GET-only) used internally"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+authors = [{ name = "Jaytlin Askew", email = "jaytlin.askew@hhs.gov" }]
+dependencies = ["requests>=2.31.0", "pandas>=2.0.0", "pytz>=2023.3"]
+
+# Auto-discover HTOCThreatConnect and its subpackages (e.g., HTOCThreatConnect.utils)
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["HTOCThreatConnect*"]
+
+# Include non-Python data files
+[tool.setuptools.package-data]
+"HTOCThreatConnect" = ["tc.conf"]
+"HTOCThreatConnect.utils" = ["config.json"]
