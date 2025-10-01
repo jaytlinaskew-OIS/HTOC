@@ -222,53 +222,5 @@
     {
         "timestamp":  "2025-09-17T07:30:01",
         "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250917.csv"
-    },
-    {
-        "timestamp":  "2025-09-18T07:30:01",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250918.csv"
-    },
-    {
-        "timestamp":  "2025-09-19T07:30:01",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250919.csv"
-    },
-    {
-        "timestamp":  "2025-09-20T07:30:01",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250920.csv"
-    },
-    {
-        "timestamp":  "2025-09-21T07:30:01",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250921.csv"
-    },
-    {
-        "timestamp":  "2025-09-22T11:24:55",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250922.csv"
-    },
-    {
-        "timestamp":  "2025-09-23T07:30:01",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250923.csv"
-    },
-    {
-        "timestamp":  "2025-09-24T07:30:01",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250924.csv"
-    },
-    {
-        "timestamp":  "2025-09-25T07:30:01",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250925.csv"
-    },
-    {
-        "timestamp":  "2025-09-26T07:30:01",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250926.csv"
-    },
-    {
-        "timestamp":  "2025-09-27T07:30:01",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250927.csv"
-    },
-    {
-        "timestamp":  "2025-09-28T07:30:01",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250928.csv"
-    },
-    {
-        "timestamp":  "2025-09-29T07:30:01",
-        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20250929.csv"
     }
 ]

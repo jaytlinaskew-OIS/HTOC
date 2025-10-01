@@ -1,0 +1,38 @@
+Metadata-Version: 2.4
+Name: HTOC-threatconnect
+Version: 0.1.7
+Summary: Lightweight ThreatConnect client (GET-only) used internally
+Author-email: Jaytlin Askew <jaytlin.askew@hhs.gov>
+License: HHS License
+        
+        Copyright (c) 2025 Jaytlin Askew
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy...
+        
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: requests>=2.31.0
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: pytz>=2023.3
+Dynamic: license-file
+
+# alyn-threatconnect
+
+Lightweight ThreatConnect client (GET-only) with a convenience `get_v3_threatconnect_data(lastObserved_date=None)` function.
+
+Quickstart (PowerShell):
+
+```
+py -m pip install --upgrade pip build
+py -m build --wheel
+```
+
+Usage:
+
+```python
+from AlynThreatConnect import get_v3_threatconnect_data
+
+df = get_v3_threatconnect_data(lastObserved_date=None) #none can be set to a specific date like '2025-01-01' by default it is '2023-01-01' with none as its input
+print(df.head())
+```
