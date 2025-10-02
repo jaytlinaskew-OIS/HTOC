@@ -30,6 +30,19 @@ def get_otx_config():
     except Exception as e:
         raise RuntimeError(f"Error loading OTX config: {e}")
 
+def extract_group_ids(recent_tags):
+    """Extract group IDs from associatedGroups.data."""
+    if 'associatedGroups.data' in recent_tags.columns:
+        recent_tags['group_id'] = recent_tags['associatedGroups.data'].apply(
+            lambda x: x[0]['id'] if isinstance(x, list) and len(x) > 0 and 'id' in x[0] else None
+        )
+        # Convert group_id to string type and remove trailing decimals if it exists
+        if 'group_id' in recent_tags.columns:
+            recent_tags['group_id'] = recent_tags['group_id'].apply(
+                lambda x: str(int(float(x))) if pd.notna(x) and str(x) != 'None' else x
+            ).astype(str)
+    return recent_tags
+
 def get_file_paths(base_path, days=3):
     """ Generate file paths for the last `days` days using list comprehension. """
     today = datetime.utcnow()
@@ -179,19 +192,34 @@ def clean_name_column(tags_df):
     return tags_df
 
 def map_observed_dates(tags_df, observed_data_df):
-    tags_df['observed_date'] = pd.NaT
+    """Map observed dates from observed_data_df to tags_df using vectorized operations."""
+    if tags_df.empty or observed_data_df.empty:
+        tags_df['observed_date'] = pd.NaT
+        return tags_df
+    
+    # Ensure obs_date is datetime
+    observed_data_df = observed_data_df.copy()
     observed_data_df['obs_date'] = pd.to_datetime(observed_data_df['obs_date'], errors='coerce')
-
-    for index, row in tags_df.iterrows():
-        summary = row['summary']
-        cleaned_name = row['cleaned_name']
-        match = observed_data_df[
-            (observed_data_df['indicator'] == summary) &
-            (observed_data_df['OpDiv'] == cleaned_name)
-        ]
-        if not match.empty:
-            tags_df.at[index, 'observed_date'] = match['obs_date'].iloc[0]
-
+    
+    # Create a mapping dictionary for fast lookup
+    # Use (indicator, OpDiv) as key and obs_date as value
+    observed_data_df_clean = observed_data_df.dropna(subset=['indicator', 'OpDiv', 'obs_date'])
+    
+    # Create lookup dictionary
+    lookup_dict = {}
+    for _, row in observed_data_df_clean.iterrows():
+        key = (row['indicator'], row['OpDiv'])
+        if key not in lookup_dict:  # Keep first occurrence
+            lookup_dict[key] = row['obs_date']
+    
+    # Apply mapping using vectorized operations
+    tags_df = tags_df.copy()
+    tags_df['lookup_key'] = list(zip(tags_df['summary'], tags_df['cleaned_name']))
+    tags_df['observed_date'] = tags_df['lookup_key'].map(lookup_dict)
+    
+    # Clean up temporary column
+    tags_df = tags_df.drop(columns=['lookup_key'])
+    
     return tags_df
 
 def filter_recent_tags(tags_df, hours=24):
@@ -273,6 +301,9 @@ def process_data(observed_src, observed_data_df):
     tags_df = drop_unnecessary_columns(tags_df)
     tags_df = remove_iw_tags(tags_df)
     tags_df = remove_htoc_wl_tags(tags_df)
+
+    # Extract group IDs from associatedGroups.data
+    tags_df = extract_group_ids(tags_df)
 
     return tags_df
 

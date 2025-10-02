@@ -335,13 +335,34 @@ def generate_report(vt_df: pd.DataFrame | None,
 
     # ── Grouping logic ────────────────────────────────────────────────────────
     has_group = "group_id" in combined_df.columns and combined_df["group_id"].notna().any()
+    
+    # Debug group_id information
+    if "group_id" in combined_df.columns:
+        total_indicators = len(combined_df)
+        indicators_with_groups = combined_df["group_id"].notna().sum()
+        unique_groups = combined_df["group_id"].dropna().unique()
+        print(f"Group_id column found: {total_indicators} total indicators, {indicators_with_groups} have group_id")
+        print(f"Unique group_ids: {list(unique_groups)}")
+    else:
+        print("No group_id column found in combined_df")
 
     if has_group:
+        print(f"Processing grouped reports...")
         # 1) One report per non-null group_id
         for gid, gdf in combined_df.dropna(subset=["group_id"]).groupby("group_id", dropna=True):
             # Sort for nice, stable output (optional)
             gdf_sorted = gdf.sort_values(["search_term", "observed_date"], na_position="last")
-            base_name = f"Group_{gid}"
+            unique_indicators = list(gdf_sorted['search_term'].unique())
+            print(f"Creating group report for group_id {gid} with {len(gdf_sorted)} indicators: {unique_indicators}")
+            
+            # If only one unique indicator in this group, use indicator name; otherwise use group_id
+            if len(unique_indicators) == 1:
+                base_name = unique_indicators[0]
+                print(f"  Single indicator in group - using indicator name: {base_name}")
+            else:
+                base_name = f"Group_{gid}"
+                print(f"  Multiple indicators in group - using group name: {base_name}")
+            
             sanitized = str(base_name).replace(":", "_").replace("/", "_")
             output_file = os.path.join(folder_path, f"I&W_Report_{sanitized}.docx")
             fill_word_template(TEMPLATE_PATH, output_file, gdf_sorted, recent_tags=recent_tags)
@@ -349,12 +370,14 @@ def generate_report(vt_df: pd.DataFrame | None,
         # 2) Orphans (no group_id) → one doc per indicator
         orphan_df = combined_df[combined_df["group_id"].isna()] if "group_id" in combined_df.columns else combined_df.iloc[0:0]
         if "search_term" in orphan_df.columns and orphan_df["search_term"].notna().any():
+            print(f"Creating individual reports for {len(orphan_df)} orphaned indicators: {list(orphan_df['search_term'].unique())}")
             for indicator in orphan_df["search_term"].dropna().unique():
                 idf = orphan_df[orphan_df["search_term"] == indicator].copy()
                 sanitized = str(indicator).replace(":", "_").replace("/", "_")
                 output_file = os.path.join(folder_path, f"I&W_Report_{sanitized}.docx")
                 fill_word_template(TEMPLATE_PATH, output_file, idf, recent_tags=recent_tags)
     else:
+        print(f"No group_id data found, creating individual reports...")
         # Fallback: one report per indicator
         indicators = list(combined_df["search_term"].dropna().unique()) if "search_term" in combined_df.columns else []
         if not indicators:
