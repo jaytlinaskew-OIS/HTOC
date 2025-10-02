@@ -156,8 +156,6 @@ def normalize_tags_data(row: dict) -> pd.DataFrame:
     api_tags["group_id"] = group_id
     api_tags["all_tags"] = [all_tags_list] * len(api_tags)
 
-    print("api_tags DataFrame (first 20 rows):")
-    print(api_tags['group_id'].head(20))
     # Ensure final schema
     for col in API_COLS:
         if col not in api_tags.columns:
@@ -235,7 +233,6 @@ def drop_unnecessary_columns(tags_df):
 
 def remove_iw_tags(tags_df):
     """Remove rows where 'all_tags' contains 'I&W'."""
-    print(f"tags_df shape before removing I&W tags: {tags_df.shape}")
     return tags_df[~tags_df['all_tags'].apply(lambda x: isinstance(x, list) and 'I&W' in x)]
 
 def remove_htoc_wl_tags(tags_df):
