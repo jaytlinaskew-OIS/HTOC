@@ -9,7 +9,8 @@ from docx.oxml.ns import qn
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 TEMPLATE_PATH = r"z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\I&W Report Template.docx"
-OUTPUT_DIR    = r"z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\Generated Reports"
+#OUTPUT_DIR    = r"z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\Generated Reports"
+OUTPUT_DIR    = r"C:\Users\jaskew\Documents\project_repository\notebooks\I&W Reporting\Generated Reports"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # ── Internal helpers (new, private) ───────────────────────────────────────────
