@@ -29,7 +29,7 @@ def extract_time_series_features(group):
     label_7 = 1 if np.any(series[-7:]) else 0
     label_14 = 1 if np.any(series[-14:]) else 0
     label_30 = 1 if np.any(series[-30:]) else 0
-    label_45 = 1 if np.any(series[-45]) else 0
+    label_45 = 1 if np.any(series[-45:]) else 0
     return pd.Series({
         'last_seen': last_seen,
         'freq_7': freq_7,
