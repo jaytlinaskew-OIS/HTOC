@@ -80,18 +80,47 @@ set "TEMP_OUT=%LOG_DIR%\temp_output.log"
 "%PYTHON_EXE%" "%SCRIPT_PATH%" > "%TEMP_OUT%" 2>&1
 set "SCRIPT_EXIT_CODE=%ERRORLEVEL%"
 
-REM Check exit code
+REM Check exit code and provide detailed logging
 if %SCRIPT_EXIT_CODE% EQU 0 (
     echo [%date% %time%] I^&W Spreadsheet completed successfully
-    echo [%date% %time%] I^&W Spreadsheet completed successfully >> "%LOG_FILE%" 2>nul
+    echo [%date% %time%] SUCCESS: I^&W Spreadsheet completed successfully >> "%LOG_FILE%" 2>nul
+    echo [%date% %time%] Script output: >> "%LOG_FILE%" 2>nul
 ) else (
     echo [%date% %time%] I^&W Spreadsheet failed with error code %SCRIPT_EXIT_CODE%
-    echo [%date% %time%] I^&W Spreadsheet failed with error code %SCRIPT_EXIT_CODE% >> "%LOG_FILE%" 2>nul
+    echo [%date% %time%] ERROR: I^&W Spreadsheet failed with error code %SCRIPT_EXIT_CODE% >> "%LOG_FILE%" 2>nul
+    echo [%date% %time%] Script error output: >> "%LOG_FILE%" 2>nul
+    
+    REM Create additional error log file for failed runs
+    set "ERROR_LOG=%LOG_DIR%\error_iw_spreadsheet_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%.log"
+    echo [%date% %time%] FAILURE DETAILS - Error Code: %SCRIPT_EXIT_CODE% > "%ERROR_LOG%" 2>nul
+    echo Script Path: %SCRIPT_PATH% >> "%ERROR_LOG%" 2>nul
+    echo Working Directory: %WORK_DIR% >> "%ERROR_LOG%" 2>nul
+    echo Python Executable: %PYTHON_EXE% >> "%ERROR_LOG%" 2>nul
+    echo ======== ERROR OUTPUT ======== >> "%ERROR_LOG%" 2>nul
+    type "%TEMP_OUT%" >> "%ERROR_LOG%" 2>nul
+    echo ============================== >> "%ERROR_LOG%" 2>nul
+    
+    echo [%date% %time%] Error details written to: %ERROR_LOG%
+    echo [%date% %time%] Error log created: %ERROR_LOG% >> "%LOG_FILE%" 2>nul
 )
 
+REM Append script output to main log
 type "%TEMP_OUT%" >> "%LOG_FILE%" 2>nul
+
+REM Clean up temporary output file
 if exist "%TEMP_OUT%" del "%TEMP_OUT%" >nul 2>&1
 
-echo [%date% %time%] I^&W Spreadsheet batch script completed
+REM Final status logging
+if %SCRIPT_EXIT_CODE% EQU 0 (
+    echo [%date% %time%] I^&W Spreadsheet batch script completed successfully
+    echo [%date% %time%] Batch script completed successfully >> "%LOG_FILE%" 2>nul
+) else (
+    echo [%date% %time%] I^&W Spreadsheet batch script completed with errors
+    echo [%date% %time%] Batch script completed with errors >> "%LOG_FILE%" 2>nul
+)
+
+REM Keep window open
+pause
+
 popd >nul
 exit /b %SCRIPT_EXIT_CODE%

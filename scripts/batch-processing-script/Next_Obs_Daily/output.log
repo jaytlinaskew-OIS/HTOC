@@ -245,3 +245,10 @@ Saved to Z:\HTOC\Data_Analytics\Data\OpDiv_Predictions\Full Daily Reports\full_d
 [notice] A new release of pip available: 22.3.1 -> 25.2
 [notice] To update, run: \\10.1.4.22\data\HTOC\Data_Analytics\Py\python.exe -m pip install --upgrade pip
 Saved to Z:\HTOC\Data_Analytics\Data\OpDiv_Predictions\Full Daily Reports\full_daily_report_20251008.csv
+WARNING: Ignoring invalid distribution ~andas (C:\Users\jaskew\AppData\Roaming\Python\Python311\site-packages)
+WARNING: Ignoring invalid distribution ~andas (C:\Users\jaskew\AppData\Roaming\Python\Python311\site-packages)
+WARNING: Ignoring invalid distribution ~andas (C:\Users\jaskew\AppData\Roaming\Python\Python311\site-packages)
+
+[notice] A new release of pip available: 22.3.1 -> 25.2
+[notice] To update, run: \\10.1.4.22\data\HTOC\Data_Analytics\Py\python.exe -m pip install --upgrade pip
+Saved to Z:\HTOC\Data_Analytics\Data\OpDiv_Predictions\Full Daily Reports\full_daily_report_20251009.csv

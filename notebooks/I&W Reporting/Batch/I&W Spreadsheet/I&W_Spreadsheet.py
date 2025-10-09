@@ -33,17 +33,25 @@ def main():
     from ThreatConnect import ThreatConnect
     from RequestObject import RequestObject
 
-    # Add your project repo to path
-    project_root = r"C:\Users\jaskew\Documents\project_repository\scripts\Data Movement\ThrearConnect-api-pull"
+    # Load API config - using the same approach as main.py
+    project_root = r"Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\I&W Report Processing Scripts"
     if project_root not in sys.path:
         sys.path.append(project_root)
 
-    from utils.config_loader import load_config
+    # Add the scripts directory to the path to import config_loader
+    scripts_path = os.path.join(project_root, "scripts")
+    if scripts_path not in sys.path:
+        sys.path.append(scripts_path)
 
-    # Load API config
+    from config_loader import get_threatconnect_config
+
     config_path = os.path.join(project_root, "utils", "config.json")
     try:
-        api_secret_key, api_access_id, api_base_url, api_default_org = load_config(config_path)
+        tc_config = get_threatconnect_config(config_path)
+        api_secret_key = tc_config["secret_key"]
+        api_access_id = tc_config["access_id"]
+        api_base_url = tc_config["base_url"]
+        api_default_org = tc_config["default_org"]
         print(f"Loaded config from: {config_path}")
         print(f"Base URL: {api_base_url}")
         print(f"Access ID: {api_access_id}")

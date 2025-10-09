@@ -15,13 +15,10 @@ import os
 import pandas as pd
 import requests
 import ipaddress
-from datetime import datetime
+from datetime import datetime, timezone
 import concurrent.futures
 import urllib.parse
-import docx
 from docx import Document
-from docx.oxml import OxmlElement
-from docx.oxml.ns import qn
 
 
 def main():
@@ -33,7 +30,6 @@ def main():
     # ═══════════════════════════════════════════════════════════════════════════════
     
     # API Keys
-    VT_API_KEY = "a8b3e24dbd2e6c0cb002784aeb8fee6217a6a425cb11ddf9a3d3361281fbbb08"
     OTX_API_KEY = "ea83cf4792fc5db7acc741e82286c0b717fc99be98ec5b14de7e63cd3f74bcfe"
 
     # File paths
@@ -80,20 +76,28 @@ def main():
         from ThreatConnect import ThreatConnect
         from RequestObject import RequestObject
         
-        # Add project repo to path for config
-        project_root = r"C:\Users\jaskew\Documents\project_repository\scripts\Data Movement\ThrearConnect-api-pull"
+        # Load API config - using the same approach as I&W Spreadsheet
+        project_root = r"Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\I&W Report Processing Scripts"
         if project_root not in sys.path:
             sys.path.append(project_root)
-        
-        from utils.config_loader import load_config
-        
-        # Load API config
+
+        # Add the scripts directory to the path to import config_loader
+        scripts_path = os.path.join(project_root, "scripts")
+        if scripts_path not in sys.path:
+            sys.path.append(scripts_path)
+
+        from config_loader import get_threatconnect_config
+
         config_path = os.path.join(project_root, "utils", "config.json")
-        api_secret_key, api_access_id, api_base_url, api_default_org = load_config(config_path)
+        tc_config = get_threatconnect_config(config_path)
+        api_secret_key = tc_config["secret_key"]
+        api_access_id = tc_config["access_id"]
+        api_base_url = tc_config["base_url"]
+        api_default_org = tc_config["default_org"]
         
         # Initialize ThreatConnect
         global tc, ro
-        tc = ThreatConnect(api_secret_key, api_access_id, api_default_org, api_base_url)
+        tc = ThreatConnect(api_access_id, api_secret_key, api_default_org, api_base_url)
         ro = RequestObject()
         print("ThreatConnect initialized for VirusTotal enrichment")
         
@@ -104,7 +108,7 @@ def main():
         ro = None
 
     # Collect threat intelligence
-    vt_df, otx_df = collect_threat_intelligence(filtered_recent_tags, VT_API_KEY, OTX_API_KEY)
+    vt_df, otx_df = collect_threat_intelligence(filtered_recent_tags, OTX_API_KEY)
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # REPORT GENERATION
@@ -133,11 +137,10 @@ def find_latest_excel_file(directory, pattern):
     return files[0]
 
 
-def collect_threat_intelligence(recent_tags, vt_api_key, otx_api_key):
+def collect_threat_intelligence(recent_tags, otx_api_key):
     """Collect threat intelligence from APIs."""
     
-    # Headers for API requests
-    VT_HEADERS = {"x-apikey": vt_api_key}
+    # Headers for OTX API requests
     OTX_HEADERS = {"X-OTX-API-KEY": otx_api_key}
 
     if 'summary' not in recent_tags.columns:
@@ -158,7 +161,7 @@ def collect_threat_intelligence(recent_tags, vt_api_key, otx_api_key):
             observed_by = partners[0] if len(partners) > 0 else "N/A"
             partner_count = partner_count[0] if len(partner_count) > 0 else "N/A"
 
-            futures.append(executor.submit(process_indicator, indicator, observed_by, partner_count, VT_HEADERS, OTX_HEADERS))
+            futures.append(executor.submit(process_indicator, indicator, observed_by, partner_count, OTX_HEADERS))
 
         for future in concurrent.futures.as_completed(futures):
             vt_data, otx_data = future.result()
@@ -278,9 +281,9 @@ def unnest_base_indicator(df):
     return df
 
 
-def process_indicator(indicator, observed_by, partner_count, vt_headers, otx_headers):
+def process_indicator(indicator, observed_by, partner_count, otx_headers):
     """Fetch data for a single indicator."""
-    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
     # Fetch data from both APIs
     vt_data = fetch_virustotal_data(indicator)

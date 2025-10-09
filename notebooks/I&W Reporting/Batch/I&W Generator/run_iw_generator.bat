@@ -29,6 +29,7 @@ REM Check if Python executable exists
 if not exist "%PYTHON_EXE%" (
     echo ERROR: Python executable not found at %PYTHON_EXE%
     echo [%date% %time%] ERROR: Python executable not found >> "%LOG_FILE%"
+    pause
     exit /b 1
 )
 
@@ -36,6 +37,7 @@ REM Check if script exists
 if not exist "%SCRIPT_PATH%" (
     echo ERROR: Script not found at %SCRIPT_PATH%
     echo [%date% %time%] ERROR: Script not found >> "%LOG_FILE%"
+    pause
     exit /b 1
 )
 
@@ -52,6 +54,7 @@ REM Install required packages with warnings suppressed
 "%PYTHON_EXE%" -m pip install --quiet --upgrade --trusted-host pypi.org --trusted-host files.pythonhosted.org --disable-pip-version-check --no-warn-script-location pandas openpyxl requests python-docx 2>nul || (
     echo ERROR: Failed to install required packages
     echo [%date% %time%] ERROR: Failed to install required packages >> "%LOG_FILE%"
+    pause
     exit /b 1
 )
 
@@ -75,6 +78,9 @@ REM Clean up temporary output file
 if exist "%LOG_DIR%\temp_output.log" del "%LOG_DIR%\temp_output.log"
 
 echo [%date% %time%] I^&W Report Generator batch script completed
+
+REM Keep window open
+pause
 
 REM Exit with the same code as the Python script
 exit /b %ERRORLEVEL%
