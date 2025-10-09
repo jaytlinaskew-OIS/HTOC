@@ -16,32 +16,34 @@ import warnings
 # Suppress warnings
 warnings.simplefilter(action='ignore', category=pd.errors.SettingWithCopyWarning)
 
-def setup_paths_and_imports():
-    """Setup system paths and import required modules."""
-    print("Setting up paths and imports...")
+def setup_threatconnect_config():
+    """Setup ThreatConnect configuration and API connection."""
+    print("Setting up ThreatConnect configuration...")
     
     # Add your local ThreatConnect SDK to path
     sys.path.append("Z:/HTOC/Data_Analytics/threatconnect")
     from ThreatConnect import ThreatConnect
     from RequestObject import RequestObject
 
-    # Add your project repo to path
-    project_root = r"C:\Users\jaskew\Documents\project_repository\scripts\Data Movement\ThrearConnect-api-pull"
+    # Load API config - using the same approach as I&W_Spreadsheet.py
+    project_root = r"Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\I&W Report Processing Scripts"
     if project_root not in sys.path:
         sys.path.append(project_root)
 
-    from utils.config_loader import load_config
-    
-    return ThreatConnect, RequestObject, load_config, project_root
+    # Add the scripts directory to the path to import config_loader
+    scripts_path = os.path.join(project_root, "scripts")
+    if scripts_path not in sys.path:
+        sys.path.append(scripts_path)
 
-def initialize_threatconnect(project_root, load_config):
-    """Initialize ThreatConnect API connection."""
-    print("Initializing ThreatConnect connection...")
-    
-    # Load API config
+    from config_loader import get_threatconnect_config
+
     config_path = os.path.join(project_root, "utils", "config.json")
     try:
-        api_secret_key, api_access_id, api_base_url, api_default_org = load_config(config_path)
+        tc_config = get_threatconnect_config(config_path)
+        api_secret_key = tc_config["secret_key"]
+        api_access_id = tc_config["access_id"]
+        api_base_url = tc_config["base_url"]
+        api_default_org = tc_config["default_org"]
         print(f"Loaded config from: {config_path}")
         print(f"Base URL: {api_base_url}")
         print(f"Access ID: {api_access_id}")
@@ -405,50 +407,125 @@ def fetch_attributes(tc, ro, recent_tags):
     
     return filtered_recent_tags
 
+def _load_indicator_values(path: str, col: str = "Indicator"):
+    """
+    Robust loader for indicator values from CSV files.
+    Returns (list_of_nonempty_values, column_used).
+    """
+    import io
+    import csv
+    
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"File not found: {path}")
+
+    # 1) Try pandas with delimiter sniffing (no noisy warnings)
+    try:
+        df = pd.read_csv(
+            path,
+            sep=None,
+            engine="python",
+            encoding="utf-8-sig",
+            dtype=str
+        )
+        if col not in df.columns:
+            # Case-insensitive fallback
+            ci_match = [c for c in df.columns if c.strip().lower() == col.lower()]
+            if ci_match:
+                col = ci_match[0]
+            else:
+                raise KeyError(f"Column '{col}' not found. Columns: {list(df.columns)}")
+
+        ser = (
+            df[col]
+            .astype(str)
+            .str.strip()
+            .replace("", pd.NA)
+            .dropna()
+        )
+        return ser.tolist(), col
+
+    except Exception:
+        # 2) Fallback to csv.Sniffer for very messy files
+        with open(path, "rb") as fh:
+            raw = fh.read()
+
+        text = None
+        for enc in ("utf-8-sig", "utf-8", "latin-1"):
+            try:
+                text = raw.decode(enc)
+                break
+            except UnicodeDecodeError:
+                continue
+        if text is None:
+            raise UnicodeDecodeError("utf-8/latin-1", b"", 0, 1, "Could not decode file")
+
+        sample = text[:4096]
+        try:
+            dialect = csv.Sniffer().sniff(sample)
+            has_header = csv.Sniffer().has_header(sample)
+        except Exception:
+            dialect = csv.excel
+            dialect.delimiter = ","
+            dialect.skipinitialspace = True
+            has_header = True
+
+        if has_header:
+            reader = csv.DictReader(io.StringIO(text), dialect=dialect)
+            header = [h.strip().lstrip("\ufeff") for h in reader.fieldnames or []]
+            # normalize to located column name actually present
+            if col not in header:
+                ci_match = [h for h in header if h.lower() == col.lower()]
+                if ci_match:
+                    col = ci_match[0]
+                else:
+                    raise KeyError(f"Column '{col}' not found. Columns: {header}")
+
+            vals = []
+            for row in reader:
+                if not row:
+                    continue
+                v = (row.get(col) or "").strip()
+                if v:
+                    vals.append(v)
+            return vals, col
+        else:
+            # no header, assume first column is Indicator
+            rdr = csv.reader(io.StringIO(text), dialect=dialect)
+            vals = []
+            for parts in rdr:
+                if parts:
+                    v = (parts[0] or "").strip()
+                    if v:
+                        vals.append(v)
+            return vals, col  # col label remains as requested
+
 def filter_reported_indicators(filtered_recent_tags):
-    """Filter out already-reported indicators."""
+    """Filter out already-reported indicators using robust CSV loading."""
     print("Filtering out already-reported indicators...")
     
     reported_indicators_path = r"Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\Reported Indicators\indicators.csv"
 
     try:
-        reported_indicators_df = pd.read_csv(reported_indicators_path, on_bad_lines='skip')
-        print(f"Loaded reported indicators - shape: {reported_indicators_df.shape}")
-        
-        if not reported_indicators_df.empty:
-            reported_indicators_df = reported_indicators_df.drop_duplicates().reset_index(drop=True)
-            
-            if 'Indicator' in reported_indicators_df.columns:
-                reported_set = set(reported_indicators_df['Indicator'].astype(str))
-                col_name = 'Indicator'
-            elif 'indicator' in reported_indicators_df.columns:
-                reported_set = set(reported_indicators_df['indicator'].astype(str))
-                col_name = 'indicator'
-            elif 'summary' in reported_indicators_df.columns:
-                reported_set = set(reported_indicators_df['summary'].astype(str))
-                col_name = 'summary'
-            elif len(reported_indicators_df.columns) == 1:
-                col_name = reported_indicators_df.columns[0]
-                reported_set = set(reported_indicators_df[col_name].astype(str))
-            else:
-                print("No suitable indicator column found")
-                reported_set = set()
-            
-            print(f"Found {len(reported_set)} indicators in '{col_name}' column")
-            
-            if not filtered_recent_tags.empty and reported_set:
-                before_count = len(filtered_recent_tags)
-                filtered_recent_tags = filtered_recent_tags[
-                    ~filtered_recent_tags['summary'].astype(str).isin(reported_set)
-                ].reset_index(drop=True)
-                after_count = len(filtered_recent_tags)
-                print(f"Removed {before_count - after_count} already-reported indicators")
-                print(f"Final filtered dataset: {after_count} indicators")
+        values, col_name = _load_indicator_values(reported_indicators_path, col="Indicator")
+        print(f"Loaded reported indicators — non-empty rows in '{col_name}': {len(values)}")
+
+        # Unique set for filtering
+        reported_set = set(values)
+
+        # Filter out already-reported indicators from filtered_recent_tags
+        if not filtered_recent_tags.empty and reported_set:
+            before_count = len(filtered_recent_tags)
+            filtered_recent_tags = filtered_recent_tags[
+                ~filtered_recent_tags['summary'].astype(str).isin(reported_set)
+            ].reset_index(drop=True)
+            after_count = len(filtered_recent_tags)
+            print(f"Removed {before_count - after_count} already-reported indicators")
+            print(f"Final filtered dataset: {after_count} indicators")
         else:
-            print("No reported indicators loaded")
+            print("No filtering applied (empty dataset or no reported indicators).")
             
     except Exception as e:
-        print(f"Error loading reported indicators: {e}")
+        print(f"[ERROR] {e}")
     
     return filtered_recent_tags
 
@@ -486,8 +563,7 @@ def main():
     
     try:
         # Setup and initialization
-        ThreatConnect, RequestObject, load_config, project_root = setup_paths_and_imports()
-        tc, ro = initialize_threatconnect(project_root, load_config)
+        tc, ro = setup_threatconnect_config()
         
         # Fetch data
         observed_src, start = fetch_indicators(tc, ro)

@@ -24,32 +24,34 @@ import warnings
 # Suppress warnings
 warnings.simplefilter(action='ignore', category=pd.errors.SettingWithCopyWarning)
 
-def setup_paths_and_imports():
-    """Setup system paths and import required modules."""
-    print("Setting up paths and imports...")
+def setup_threatconnect_config():
+    """Setup ThreatConnect configuration and API connection."""
+    print("Setting up ThreatConnect configuration...")
     
     # Add your local ThreatConnect SDK to path
     sys.path.append("Z:/HTOC/Data_Analytics/threatconnect")
     from ThreatConnect import ThreatConnect
     from RequestObject import RequestObject
 
-    # Add your project repo to path
-    project_root = r"C:\Users\jaskew\Documents\project_repository\scripts\Data Movement\ThrearConnect-api-pull"
+    # Load API config - using the same approach as I&W_Spreadsheet.py
+    project_root = r"Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\I&W Report Processing Scripts"
     if project_root not in sys.path:
         sys.path.append(project_root)
 
-    from utils.config_loader import load_config
-    
-    return ThreatConnect, RequestObject, load_config, project_root
+    # Add the scripts directory to the path to import config_loader
+    scripts_path = os.path.join(project_root, "scripts")
+    if scripts_path not in sys.path:
+        sys.path.append(scripts_path)
 
-def initialize_threatconnect(project_root, load_config):
-    """Initialize ThreatConnect API connection."""
-    print("Initializing ThreatConnect connection...")
-    
-    # Load API config
+    from config_loader import get_threatconnect_config
+
     config_path = os.path.join(project_root, "utils", "config.json")
     try:
-        api_secret_key, api_access_id, api_base_url, api_default_org = load_config(config_path)
+        tc_config = get_threatconnect_config(config_path)
+        api_secret_key = tc_config["secret_key"]
+        api_access_id = tc_config["access_id"]
+        api_base_url = tc_config["base_url"]
+        api_default_org = tc_config["default_org"]
         print(f"Loaded config from: {config_path}")
         print(f"Base URL: {api_base_url}")
         print(f"Access ID: {api_access_id}")
@@ -580,8 +582,7 @@ def main():
     
     try:
         # Setup and initialization
-        ThreatConnect, RequestObject, load_config, project_root = setup_paths_and_imports()
-        tc, ro = initialize_threatconnect(project_root, load_config)
+        tc, ro = setup_threatconnect_config()
         
         # Load most recent spreadsheet
         df = load_most_recent_spreadsheet()
