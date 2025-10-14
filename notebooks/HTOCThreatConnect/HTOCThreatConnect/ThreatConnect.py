@@ -195,7 +195,7 @@ class ThreatConnect:
 # High-level helper: get_tc_data(days)
 # ---------------------------------------------------------------------
 
-def get_v3_threatconnect_data(lastObserved_date: date):
+def get_v3_threatconnect_data(lastObserved_date: date, indicatorActive: bool):
 
     import urllib.parse
     import urllib3
@@ -264,7 +264,8 @@ def get_v3_threatconnect_data(lastObserved_date: date):
             tql_raw = (
                 f'ownerName EQ "{owner}" AND '
                 f'typeName IN ({type_name_condition}) AND '
-                f'lastObserved >= "{start}"'
+                f'lastObserved >= "{start}" AND '
+                f"indicatorActive={indicatorActive} "
             )
             tql_encoded = urllib.parse.quote(tql_raw)
 
