@@ -5,17 +5,17 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 def add_rule_and_ensemble(output):
-    features = ['last_seen', 'freq_7', 'freq_30', 'avg_gap', 'burstiness']
+    features = ['last_seen', 'freq_1', 'freq_7', 'freq_30', 'avg_gap', 'burstiness']
     X = output[features]
 
     # Rule-based labels
-    output['rule_today'] = output['last_seen'].apply(lambda x: 1 if x == 0 else 0)
+    output['rule_1d'] = output['last_seen'].apply(lambda x: 1 if x == 0 else 0)
     output['rule_7d'] = output['last_seen'].apply(lambda x: 1 if x <= 6 else 0)
     output['rule_14d'] = output['last_seen'].apply(lambda x: 1 if x <= 13 else 0)
     output['rule_30d'] = output['last_seen'].apply(lambda x: 1 if x <= 29 else 0)
     output['rule_45d'] = output['last_seen'].apply(lambda x: 1 if x <= 44 else 0)
 
-    y_today = output['rule_today']
+    y_1 = output['rule_1d']
     y_7 = output['rule_7d']
     y_14 = output['rule_14d']
     y_30 = output['rule_30d']
@@ -31,13 +31,19 @@ def add_rule_and_ensemble(output):
         model.fit(X, y)
         return model.predict_proba(X)[:, 1]
 
-    output['prob_today'] = train_logistic_model(X, y_today)
+    output['prob_1d'] = train_logistic_model(X, y_1)
     output['prob_7d'] = train_logistic_model(X, y_7)
     output['prob_14d'] = train_logistic_model(X, y_14)
     output['prob_30d'] = train_logistic_model(X, y_30)
     output['prob_45d'] = train_logistic_model(X, y_45)
 
     # Ensemble, combines predictions from all models and prevents overfitting
+    output['ensemble_1d'] = (
+        0.3 * output['prob_1d'].astype(float) +
+        0.25 * output['gbt_1'] +
+        0.25 * output['weibull_1'] +
+        0.2 * output['exp_1']
+    )
     output['ensemble_7d'] = (
         0.3 * output['prob_7d'].astype(float) +
         0.25 * output['gbt_7'] +
@@ -73,6 +79,9 @@ def classify_window(prob, freq, high_thresh, label):
         return f"{label}: Low confidence"
 
 def add_confidence_and_format(output):
+    output['confidence_1d'] = output.apply(
+        lambda row: classify_window(float(row['ensemble_1d']), row['freq_1'], 0.6, '1-Day'), axis=1
+    )
     output['confidence_7d'] = output.apply(
         lambda row: classify_window(float(row['ensemble_7d']), row['freq_7'], 0.6, '7-Day'), axis=1
     )
@@ -87,13 +96,15 @@ def add_confidence_and_format(output):
     )
 
     # Format percentages
-    for col in ['prob_7d', 'prob_14d', 'prob_30d','prob_45d', 'ensemble_7d', 'ensemble_14d', 'ensemble_30d', 'ensemble_45d']:
+    for col in ['prob_1d', 'prob_7d', 'prob_14d', 'prob_30d','prob_45d', 'ensemble_1d', 'ensemble_7d', 'ensemble_14d', 'ensemble_30d', 'ensemble_45d']:
         output[col] = np.clip(output[col].astype(float) * 100, 0, 100).round(2).astype(str) + '%'
     return output
 
 def build_production_output(output):
+    warnings.simplefilter(action='ignore', category=pd.errors.SettingWithCopyWarning)
     production_output = output[[
-        'indicator', 'seen_today', 'freq_7', 'freq_30',
+        'indicator', 'seen_today', 'freq_1', 'freq_7', 'freq_30',
+        'ensemble_1d', 'confidence_1d',
         'ensemble_7d', 'confidence_7d',
         'ensemble_14d', 'confidence_14d',
         'ensemble_30d', 'confidence_30d',
@@ -102,9 +113,12 @@ def build_production_output(output):
     production_output.rename(columns={
         'indicator': 'Indicator',
         'seen_today': 'Observed Today',
+        'freq_1': 'Frequency (1d)',
         'freq_7': 'Frequency (7d)',
         'freq_30': 'Frequency (30d)',
         'freq_45': 'Frequency (45d)',
+        'ensemble_1d': 'Probability: 1-Day',
+        'confidence_1d': 'Confidence: 1-Day',
         'ensemble_7d': 'Probability: 7-Day',
         'confidence_7d': 'Confidence: 7-Day',
         'ensemble_14d': 'Probability: 14-Day',
