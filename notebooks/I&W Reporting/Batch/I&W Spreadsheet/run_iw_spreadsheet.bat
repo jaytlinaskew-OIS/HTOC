@@ -54,17 +54,11 @@ if not exist "%SCRIPT_PATH%" (
     exit /b 1
 )
 
-echo [%date% %time%] Installing/updating required packages...
-
-REM Clean up any corrupted pandas remnants
-"%PYTHON_EXE%" -m pip uninstall -y pandas 2>nul
-
-REM Remove corrupted directories using simple Windows commands
-rmdir /s /q "%USERPROFILE%\AppData\Roaming\Python\Python311\site-packages\~andas" 2>nul
-rmdir /s /q "%USERPROFILE%\AppData\Roaming\Python\Python311\site-packages\pandas" 2>nul
-
-REM Install required packages with warnings suppressed
-"%PYTHON_EXE%" -m pip install --quiet --upgrade --trusted-host pypi.org --trusted-host files.pythonhosted.org --disable-pip-version-check --no-warn-script-location pandas openpyxl requests urllib3 pytz 2>nul
+REM ── Install required packages (safe if already installed) ──────────────────
+echo [%date% %time%] Installing required packages...
+"%PYTHON_EXE%" -m pip install --quiet --user --disable-pip-version-check --no-warn-script-location ^
+  --trusted-host pypi.org --trusted-host files.pythonhosted.org ^
+  pandas openpyxl requests urllib3 pytz >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     echo [ERROR] Failed to install required packages. Error level: %ERRORLEVEL%
     echo [%date% %time%] ERROR: Failed to install required packages >> "%LOG_FILE%" 2>nul
