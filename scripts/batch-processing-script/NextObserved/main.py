@@ -18,8 +18,8 @@ from forecast_log import update_long_forecast_log_with_formatting
 def main():
     today = pd.Timestamp.today().date()
 
-    prediction_path = r'C:\Users\jaskew\Documents\Test Outputs'
-    log_path = r'C:\Users\jaskew\Documents\Test Logs'
+    prediction_path = r'\\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions'
+    log_path = r'\\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Predictions\Logs'
 
     opdiv_production_outputs = {}
     opdiv_forecast_logs = {}
