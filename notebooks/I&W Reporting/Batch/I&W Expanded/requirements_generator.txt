@@ -1,0 +1,27 @@
+# Requirements for I&W Document Expanded Generator
+# Core data processing
+pandas>=1.5.0
+numpy>=1.21.0
+
+# Excel file handling
+openpyxl>=3.0.9
+
+# HTTP requests and API calls
+requests>=2.28.0
+urllib3>=1.26.0
+
+# Word document processing
+python-docx>=0.8.11
+
+# Concurrent processing
+# (concurrent.futures is part of standard library since Python 3.2)
+
+# Date/time and IP address handling
+# (datetime and ipaddress are part of standard library)
+
+# File operations
+# (glob, os, csv are part of standard library)
+
+# Note: ThreatConnect SDK and custom modules are loaded from local paths:
+# - Z:/HTOC/Data_Analytics/threatconnect (ThreatConnect, RequestObject)
+# - C:\Users\jaskew\Documents\project_repository\scripts\Data Movement\ThrearConnect-api-pull\utils (config_loader)
