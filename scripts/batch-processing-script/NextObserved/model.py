@@ -29,7 +29,8 @@ def fit_weibull_aft(X, avg_gap, event):
 
 def get_model_outputs(features_df, df):
     df_pred = features_df.copy()
-    X = df_pred[['last_seen', 'freq_7', 'freq_14' ,'freq_30', 'freq_45', 'avg_gap', 'burstiness']]
+    X = df_pred[['last_seen', 'freq_1', 'freq_7', 'freq_14' ,'freq_30', 'freq_45', 'avg_gap', 'burstiness']]
+
     y_7 = df_pred['label_7']
     y_14 = df_pred['label_14']
     y_30 = df_pred['label_30']
@@ -54,20 +55,20 @@ def get_model_outputs(features_df, df):
     df_pred['exp_14'] = 1 - np.exp(-rate * 14)
     df_pred['exp_30'] = 1 - np.exp(-rate * 30)
     df_pred['exp_45'] = 1 - np.exp(-rate * 45)
-    df_pred['exp_today'] = 1 - np.exp(-rate * 1)
+    df_pred['exp_1'] = 1 - np.exp(-rate * 1)
 
     # Weibull AFT Model, time-to-event behavor, burstiness
     aft = fit_weibull_aft(X, df_pred['avg_gap'], y_7)
     surv_func = aft.predict_survival_function(X.assign(duration=df_pred['avg_gap'], event=y_7), times=[1, 7, 14, 30, 45])
-    df_pred['weibull_today'] = 1 - surv_func.loc[1].values
+    df_pred['weibull_1'] = 1 - surv_func.loc[1].values
     df_pred['weibull_7'] = 1 - surv_func.loc[7].values
     df_pred['weibull_14'] = 1 - surv_func.loc[14].values
     df_pred['weibull_30'] = 1 - surv_func.loc[30].values
     df_pred['weibull_45'] = 1 - surv_func.loc[45].values
 
-    # Today's forecast
-    df_pred['logistic_today'] = train_predict(LogisticRegression, X, y_7)
-    df_pred['gbt_today'] = train_gbt(X, y_7)
+    # 1-Day forecast (tomorrow)
+    df_pred['logistic_1'] = train_predict(LogisticRegression, X, y_7)
+    df_pred['gbt_1'] = train_gbt(X, y_7)
 
     # Merge in actual "seen" value for today's date
     latest_date = df['date'].max()
