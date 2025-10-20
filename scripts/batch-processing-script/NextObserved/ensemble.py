@@ -101,6 +101,7 @@ def add_confidence_and_format(output):
     return output
 
 def build_production_output(output):
+    warnings.simplefilter(action='ignore', category=pd.errors.SettingWithCopyWarning)
     production_output = output[[
         'indicator', 'seen_today', 'freq_1', 'freq_7', 'freq_30',
         'ensemble_1d', 'confidence_1d',
