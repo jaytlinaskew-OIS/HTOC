@@ -7,6 +7,7 @@ def extract_time_series_features(group):
     if len(indices) == 0:
         return pd.Series({
             'last_seen': len(series),
+            'freq_1': 0,
             'freq_7': 0,
             'freq_14': 0,
             'freq_30': 0,
@@ -19,6 +20,7 @@ def extract_time_series_features(group):
             'label_45': 0
         })
     last_seen = len(series) - 1 - indices[-1]
+    freq_1 = np.sum(series[-1:])
     freq_7 = np.sum(series[-7:])
     freq_14 = np.sum(series[-14:])
     freq_30 = np.sum(series[-30:])
@@ -26,12 +28,14 @@ def extract_time_series_features(group):
     gaps = np.diff(indices)
     avg_gap = np.mean(gaps) if len(gaps) > 0 else len(series)
     burstiness = (np.std(gaps) - avg_gap) / (np.std(gaps) + avg_gap) if len(gaps) > 1 else 0
+
     label_7 = 1 if np.any(series[-7:]) else 0
     label_14 = 1 if np.any(series[-14:]) else 0
     label_30 = 1 if np.any(series[-30:]) else 0
-    label_45 = 1 if np.any(series[-45:]) else 0
+    label_45 = 1 if np.any(series[-45]) else 0
     return pd.Series({
         'last_seen': last_seen,
+        'freq_1': freq_1,
         'freq_7': freq_7,
         'freq_14': freq_14,
         'freq_30': freq_30,
