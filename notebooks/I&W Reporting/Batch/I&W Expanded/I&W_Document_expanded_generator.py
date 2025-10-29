@@ -485,7 +485,7 @@ def generate_reports(vt_df, otx_df, recent_tags):
     print("Generating I&W reports...")
     
     # File paths
-    TEMPLATE_PATH = r"C:\Users\jaskew\Documents\project_repository\notebooks\I&W Reporting\I&W Report Template.docx"
+    TEMPLATE_PATH = r"Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\I&W Report Template.docx"
     OUTPUT_DIR = r"Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\Expanded Reports"
     
     # Ensure output directory exists
