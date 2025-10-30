@@ -195,7 +195,7 @@ class ThreatConnect:
 # High-level helper: get_tc_data(days)
 # ---------------------------------------------------------------------
 
-def get_v3_threatconnect_data(lastObserved_date: date, indicatorActive: bool):
+def get_v3_threatconnect_data(lastObserved_date: date | str | None = None, indicatorActive: bool = True, bothActivities: bool = False):
 
     import urllib.parse
     import urllib3
@@ -238,14 +238,11 @@ def get_v3_threatconnect_data(lastObserved_date: date, indicatorActive: bool):
         _date = lastObserved_date.date()
     elif isinstance(lastObserved_date, date):
         _date = lastObserved_date
-    elif isinstance(lastObserved_date, str):
+    else:  # isinstance(lastObserved_date, str)
         try:
             _date = datetime.strptime(lastObserved_date, "%Y-%m-%d").date()
         except ValueError:
-            raise ValueError("lastObserved_date must be in YYYY-MM-DD format")
-    else:
-        # Fallback to safe default
-        _date = datetime.strptime("2023-01-01", "%Y-%m-%d").date()
+            _date = datetime.strptime("2023-01-01", "%Y-%m-%d").date()
 
     start = f"{_date.isoformat()}T00:00:00Z"
 
@@ -256,17 +253,25 @@ def get_v3_threatconnect_data(lastObserved_date: date, indicatorActive: bool):
         "Stripped URL", "User Agent",
     ]
     type_name_condition = ", ".join([f'"{t}"' for t in type_names])
-
     # Query indicators with pagination
     final_results = []
     for owner in OWNERS:
         try:
-            tql_raw = (
-                f'ownerName EQ "{owner}" AND '
-                f'typeName IN ({type_name_condition}) AND '
-                f'lastObserved >= "{start}" AND '
-                f"indicatorActive={indicatorActive} "
-            )
+            if not bothActivities:
+                tql_raw = (
+                    f'ownerName EQ "{owner}" AND '
+                    f'typeName IN ({type_name_condition}) AND '
+                    f'lastObserved >= "{start}" AND '
+                    f"indicatorActive={indicatorActive} "
+                )
+            else:
+                tql_raw = (
+                    f'ownerName EQ "{owner}" AND '
+                    f'typeName IN ({type_name_condition}) AND '
+                    f'lastObserved >= "{start}" AND '
+                    f"(indicatorActive EQ true OR indicatorActive EQ false)"
+                )
+
             tql_encoded = urllib.parse.quote(tql_raw)
 
             result_start = 0
