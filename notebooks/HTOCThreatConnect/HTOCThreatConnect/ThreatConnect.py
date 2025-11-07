@@ -271,7 +271,6 @@ def get_v3_threatconnect_data(lastObserved_date: date | str | None = None, indic
                     f'lastObserved >= "{start}" AND '
                     f"(indicatorActive EQ true OR indicatorActive EQ false)"
                 )
-
             tql_encoded = urllib.parse.quote(tql_raw)
 
             result_start = 0
