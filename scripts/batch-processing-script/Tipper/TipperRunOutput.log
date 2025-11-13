@@ -4808,3 +4808,339 @@ Successfully enriched and merged 66 indicators.
 Partner: HRSA, Records: 2
 Partner: CMS, Records: 4
 Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20251110.xlsx
+
+[notice] A new release of pip is available: 25.1.1 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host www.deepseek.com.cdn.cloudflare.net cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress meganw@wingsprogram.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host irp.cdn-website.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host link.mail.beehiiv.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host warlockstallioniso.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host www.sthda.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress marketing@generalbio-systems.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host freeweddingpsd.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host bimbinlombardia.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host arpdcresources.ca cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host svgarchive.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host yourpensionmeeting.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host ctrk.klclick2.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x0000000037C8E660>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (6753, 19)
+[DEBUG] Observed data subset shape: (11458, 3)
+[DEBUG] Recent tags after merge shape: (11141, 22)
+[DEBUG] Recent tags after filtering shape: (3684, 22)
+[DEBUG] Partner groups shape: (650, 3)
+[DEBUG] Final recent tags shape: (650, 25)
+[DEBUG] Final recent tags shape: (99, 25)
+Enriching 99 indicators with DomainTools and VirusTotalV3...
+Traceback (most recent call last):
+  File "C:\windows\system32\config\systemprofile\AppData\Roaming\Python\Python313\site-packages\pandas\core\indexes\base.py", line 3812, in get_loc
+    return self._engine.get_loc(casted_key)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7088, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7096, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'vtMaliciousCount'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 415, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 379, in main
+    filtered_recent_tags = excludeSoarData(recent_tags)
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 225, in excludeSoarData
+    filtered_recent_tags = filtered_recent_tags[filtered_recent_tags['vtMaliciousCount'] > 10]
+                                                ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\windows\system32\config\systemprofile\AppData\Roaming\Python\Python313\site-packages\pandas\core\frame.py", line 4113, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File "C:\windows\system32\config\systemprofile\AppData\Roaming\Python\Python313\site-packages\pandas\core\indexes\base.py", line 3819, in get_loc
+    raise KeyError(key) from err
+KeyError: 'vtMaliciousCount'
+
+[notice] A new release of pip is available: 25.1.1 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host link.mail.beehiiv.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host hcmiu.edu.vn cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host dub.sh cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host freeweddingpsd.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host condor-customsolutions.de cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host bimbinlombardia.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host arpdcresources.ca cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host svgarchive.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host metalhoz.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host yourpensionmeeting.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host ctrk.klclick2.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host homecarephhc.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x000000003828E660>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (6832, 19)
+[DEBUG] Observed data subset shape: (11661, 3)
+[DEBUG] Recent tags after merge shape: (11332, 22)
+[DEBUG] Recent tags after filtering shape: (3559, 22)
+[DEBUG] Partner groups shape: (641, 3)
+[DEBUG] Final recent tags shape: (641, 25)
+[DEBUG] Final recent tags shape: (98, 25)
+Enriching 98 indicators with DomainTools and VirusTotalV3...
+Traceback (most recent call last):
+  File "C:\windows\system32\config\systemprofile\AppData\Roaming\Python\Python313\site-packages\pandas\core\indexes\base.py", line 3812, in get_loc
+    return self._engine.get_loc(casted_key)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7088, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7096, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'vtMaliciousCount'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 415, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 379, in main
+    filtered_recent_tags = excludeSoarData(recent_tags)
+  File "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py", line 225, in excludeSoarData
+    filtered_recent_tags = filtered_recent_tags[filtered_recent_tags['vtMaliciousCount'] > 10]
+                                                ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\windows\system32\config\systemprofile\AppData\Roaming\Python\Python313\site-packages\pandas\core\frame.py", line 4113, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File "C:\windows\system32\config\systemprofile\AppData\Roaming\Python\Python313\site-packages\pandas\core\indexes\base.py", line 3819, in get_loc
+    raise KeyError(key) from err
+KeyError: 'vtMaliciousCount'
+
+[notice] A new release of pip is available: 25.1.1 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host link.mail.beehiiv.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host hcmiu.edu.vn cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host irp.cdn-website.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host freeweddingpsd.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host condor-customsolutions.de cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host bimbinlombardia.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host arpdcresources.ca cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host svgarchive.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host r3.o.lencr.org cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host yourpensionmeeting.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host ctrk.klclick2.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host homecarephhc.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host tpmr.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress cameron@yourpensionmeeting.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:291: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y%m%d")
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x0000000037F9E660>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (6963, 15)
+[DEBUG] Observed data subset shape: (11992, 3)
+[DEBUG] Recent tags after merge shape: (11629, 18)
+[DEBUG] Recent tags after filtering shape: (3718, 18)
+[DEBUG] Partner groups shape: (668, 3)
+[DEBUG] Final recent tags shape: (668, 21)
+[DEBUG] Final recent tags shape: (97, 21)
+Enriching 97 indicators with DomainTools and VirusTotalV3...
+Successfully enriched and merged 83 indicators.
+[DEBUG] recent_tags DataFrame:
+         Indicator  ...            Partners
+2   192.42.116.210  ...      CMS, FDA, HRSA
+3   192.42.116.192  ...      CMS, FDA, HRSA
+4   185.220.101.37  ...      CMS, FDA, HRSA
+13  185.220.101.21  ...           CMS, HRSA
+15  185.220.101.30  ...  CMS, FDA, HRSA, OS
+
+[5 rows x 10 columns]
+[DEBUG] all_partners set: {'IHS', 'VA', 'FDA', 'OS', 'HRSA', 'CMS'}
+[DEBUG] partner_buckets dictionary:
+Partner: IHS, Records: 1
+Partner: VA, Records: 1
+Partner: FDA, Records: 8
+Partner: OS, Records: 5
+Partner: HRSA, Records: 14
+Partner: CMS, Records: 19
+Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20251113.xlsx
