@@ -419,13 +419,30 @@ def process_data_pipeline(observed_src, observed_data_df):
     print("Mapping observed dates...")
     filtered_tags = map_observed_dates(filtered_tags, observed_data_df)
 
+    # Step 3.5: Get indicators with multiple partners from observed_data_df
+    print("Identifying indicators with multiple partners from observed_data_df...")
+    multi_partner_indicators = get_multi_partner_indicators(observed_data_df, cutoff_naive)
+    print(f"Found {len(multi_partner_indicators)} indicators with multiple partners")
+
     # Step 4: Apply filters and grouping
     print("Applying filters and partner grouping...")
-    recent_tags = apply_filters_and_grouping(filtered_tags, cutoff, date_added_cutoff, cutoff_naive)
+    recent_tags = apply_filters_and_grouping(filtered_tags, cutoff, date_added_cutoff, cutoff_naive, multi_partner_indicators)
 
     # Step 5: Extract group IDs
     print("Extracting group IDs...")
     recent_tags = extract_group_ids(recent_tags)
+
+    # Step 6: Add I&W column indicating if indicator has been tagged as 'I&W' (used in previous report)
+    if 'all_tags' in recent_tags.columns:
+        recent_tags['I&W'] = recent_tags['all_tags'].apply(
+            lambda x: 'Yes' if isinstance(x, list) and 'I&W' in x else 'No'
+        )
+    else:
+        recent_tags['I&W'] = 'No'
+
+    # Move I&W column to the very end
+    cols = [col for col in recent_tags.columns if col != 'I&W'] + ['I&W']
+    recent_tags = recent_tags[cols]
 
     # Final summary
     print(f"Processing complete! Final dataset shape: {recent_tags.shape}")
@@ -516,7 +533,36 @@ def map_observed_dates(filtered_tags, observed_data_df):
     return filtered_tags
 
 
-def apply_filters_and_grouping(filtered_tags, cutoff, date_added_cutoff, cutoff_naive):
+def get_multi_partner_indicators(observed_data_df, cutoff_naive):
+    """Get indicators that have multiple partners from observed_data_df."""
+    if observed_data_df.empty:
+        return pd.DataFrame()
+    
+    # Ensure obs_date is datetime
+    observed_data_df['obs_date'] = pd.to_datetime(observed_data_df['obs_date'], errors='coerce')
+    
+    # Filter by recent dates (last 3 days)
+    recent_obs = observed_data_df[
+        observed_data_df['obs_date'] >= cutoff_naive - timedelta(days=3)
+    ].copy()
+    
+    if recent_obs.empty:
+        return pd.DataFrame()
+    
+    # Group by indicator and count unique OpDiv (partners)
+    partner_counts = (
+        recent_obs.groupby('indicator')['OpDiv']
+        .agg(['nunique', lambda s: ', '.join(sorted(set(s.dropna())))]).reset_index()
+        .rename(columns={'nunique': 'partner_count', '<lambda_0>': 'partners'})
+    )
+    
+    # Keep only indicators with multiple partners
+    multi_partner_indicators = partner_counts[partner_counts['partner_count'] >= 2].copy()
+    
+    return multi_partner_indicators
+
+
+def apply_filters_and_grouping(filtered_tags, cutoff, date_added_cutoff, cutoff_naive, multi_partner_indicators):
     """Apply time filters, partner grouping, and other filtering criteria."""
     if filtered_tags.empty:
         return pd.DataFrame()
@@ -528,7 +574,16 @@ def apply_filters_and_grouping(filtered_tags, cutoff, date_added_cutoff, cutoff_
     if recent_tags.empty:
         return recent_tags
     
-    # Partner extraction and grouping
+    # Filter to only include indicators that have multiple partners in observed_data_df
+    if not multi_partner_indicators.empty:
+        recent_tags = recent_tags[
+            recent_tags['summary'].isin(multi_partner_indicators['indicator'])
+        ].copy()
+    
+    if recent_tags.empty:
+        return recent_tags
+    
+    # Partner extraction and grouping from ThreatConnect tags (as fallback)
     recent_tags['partner'] = recent_tags['name'].str.replace(' Splunk API', '', regex=False)
 
     partner_groups = (
@@ -538,6 +593,20 @@ def apply_filters_and_grouping(filtered_tags, cutoff, date_added_cutoff, cutoff_
     )
 
     recent_tags = recent_tags.merge(partner_groups, on='summary', how='left')
+    
+    # Merge with multi_partner_indicators to get partners from observed_data_df
+    if not multi_partner_indicators.empty:
+        recent_tags = recent_tags.merge(
+            multi_partner_indicators[['indicator', 'partners', 'partner_count']],
+            left_on='summary',
+            right_on='indicator',
+            how='left',
+            suffixes=('', '_from_obs')
+        )
+        # Use partners from observed_data_df if available, otherwise use from tags
+        recent_tags['partners'] = recent_tags['partners_from_obs'].fillna(recent_tags['partners'])
+        recent_tags['partner_count'] = recent_tags['partner_count_from_obs'].fillna(recent_tags['partner_count'])
+        recent_tags = recent_tags.drop(columns=['indicator', 'partners_from_obs', 'partner_count_from_obs'], errors='ignore')
 
     # Additional filters
     recent_tags = recent_tags[recent_tags['partner_count'] >= 2]
@@ -554,10 +623,54 @@ def apply_filters_and_grouping(filtered_tags, cutoff, date_added_cutoff, cutoff_
     ]
     recent_tags = recent_tags.drop(columns=[c for c in cols_to_drop if c in recent_tags.columns], errors='ignore')
 
-    # Remove rows where all_tags contains unwanted markers
+    # Remove rows where all_tags contains unwanted markers (keep htoc_wl filter, but not I&W)
     if 'all_tags' in recent_tags.columns:
-        recent_tags = recent_tags[~recent_tags['all_tags'].apply(lambda x: isinstance(x, list) and 'I&W' in x)]
         recent_tags = recent_tags[~recent_tags['all_tags'].apply(lambda x: isinstance(x, list) and 'htoc_wl' in x)]
+    
+    # Add partners from tags at the end (after all filtering)
+    # Re-extract partners from tags for the final filtered dataset
+    if not recent_tags.empty and 'all_tags' in recent_tags.columns:
+        def extract_partners_from_tags(all_tags_list):
+            """Extract partner names from tags that contain 'API'."""
+            if not isinstance(all_tags_list, list):
+                return []
+            api_partners = []
+            for tag in all_tags_list:
+                if isinstance(tag, str) and 'API' in tag:
+                    # Extract partner name (remove ' Splunk API' suffix)
+                    partner = tag.replace(' Splunk API', '').replace('VA CSOC CTS Splunk', 'VA').strip()
+                    if partner:
+                        api_partners.append(partner)
+            return sorted(set(api_partners))
+        
+        # Extract partners from tags for each indicator
+        tag_partners_series = recent_tags['all_tags'].apply(extract_partners_from_tags)
+        
+        # Combine with existing partners from observed_data_df
+        def combine_partners(row_idx):
+            """Combine partners from observed_data_df and tags for a specific row."""
+            obs_partners = recent_tags.loc[row_idx, 'partners']
+            tag_partners_list = tag_partners_series.loc[row_idx]
+            
+            combined = set()
+            # Add partners from observed_data_df
+            if pd.notna(obs_partners) and obs_partners:
+                for p in str(obs_partners).split(', '):
+                    if p.strip():
+                        combined.add(p.strip())
+            # Add partners from tags
+            if tag_partners_list:
+                for p in tag_partners_list:
+                    if p:
+                        combined.add(p)
+            return ', '.join(sorted(combined)) if combined else obs_partners
+        
+        recent_tags['partners'] = recent_tags.index.to_series().apply(combine_partners)
+        
+        # Update partner_count based on combined partners
+        recent_tags['partner_count'] = recent_tags['partners'].apply(
+            lambda x: len([p for p in str(x).split(', ') if p.strip()]) if pd.notna(x) and x else 0
+        )
 
     return recent_tags
 
