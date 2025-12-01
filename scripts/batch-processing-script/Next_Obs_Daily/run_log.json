@@ -334,5 +334,9 @@
     {
         "timestamp":  "2025-11-30T08:15:02",
         "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20251130.csv"
+    },
+    {
+        "timestamp":  "2025-12-01T08:15:02",
+        "output":  "Saved to Z:\\HTOC\\Data_Analytics\\Data\\OpDiv_Predictions\\Full Daily Reports\\full_daily_report_20251201.csv"
     }
 ]
