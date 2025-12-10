@@ -1,3 +1,4 @@
 [
-    {"timestamp":"2025-12-04T07:00:03","event":"Start","exitCode":null},
-    {"timestamp":"2025-12-04T07:00:03","event":"PipInstallFailed","exitCode":2},
+    {"timestamp":"2025-12-10T07:00:02","event":"Start","exitCode":null},
+    {"timestamp":"2025-12-10T07:01:47","event":"End","exitCode":0}
+]
