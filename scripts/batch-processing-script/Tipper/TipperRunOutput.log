@@ -6602,3 +6602,309 @@ Successfully enriched and merged 47 indicators.
 Partner: CMS, Records: 5
 Partner: OS, Records: 2
 Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20251211.xlsx
+
+[notice] A new release of pip is available: 25.1.1 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress autonotification@concursolutions.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host link.mail.beehiiv.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress marketing@generalbio-systems.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host yourpensionmeeting.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:291: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y%m%d")
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x0000000038022660>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (6334, 15)
+[DEBUG] Observed data subset shape: (12119, 3)
+[DEBUG] Recent tags after merge shape: (9620, 18)
+[DEBUG] Recent tags after filtering shape: (3062, 18)
+[DEBUG] Partner groups shape: (557, 3)
+[DEBUG] Final recent tags shape: (557, 21)
+[DEBUG] Final recent tags shape: (49, 21)
+Enriching 49 indicators with DomainTools and VirusTotalV3...
+Successfully enriched and merged 45 indicators.
+[DEBUG] recent_tags DataFrame:
+         Indicator  ...  Partners
+0   61.153.184.151  ...       CMS
+2   118.193.72.187  ...       CMS
+6   185.220.101.37  ...       CMS
+8   185.220.101.55  ...       CMS
+11  66.235.168.222  ...        OS
+
+[5 rows x 10 columns]
+[DEBUG] all_partners set: {'OS', 'CMS'}
+[DEBUG] partner_buckets dictionary:
+Partner: OS, Records: 1
+Partner: CMS, Records: 5
+Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20251212.xlsx
+
+[notice] A new release of pip is available: 25.1.1 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host link.mail.beehiiv.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress a.nelson@scdatacom.net cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:291: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y%m%d")
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x00000000380F2660>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (6287, 15)
+[DEBUG] Observed data subset shape: (12373, 3)
+[DEBUG] Recent tags after merge shape: (9767, 18)
+[DEBUG] Recent tags after filtering shape: (3067, 18)
+[DEBUG] Partner groups shape: (560, 3)
+[DEBUG] Final recent tags shape: (560, 21)
+[DEBUG] Final recent tags shape: (48, 21)
+Enriching 48 indicators with DomainTools and VirusTotalV3...
+Successfully enriched and merged 46 indicators.
+[DEBUG] recent_tags DataFrame:
+          Indicator  ...  Partners
+0    118.193.72.187  ...       CMS
+8   193.189.100.195  ...       CMS
+12   192.42.116.191  ...        OS
+14   185.220.101.21  ...       CMS
+17   61.153.184.151  ...       CMS
+
+[5 rows x 10 columns]
+[DEBUG] all_partners set: {'OS', 'CMS'}
+[DEBUG] partner_buckets dictionary:
+Partner: OS, Records: 2
+Partner: CMS, Records: 5
+Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20251213.xlsx
+
+[notice] A new release of pip is available: 25.1.1 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:291: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y%m%d")
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x0000000037612660>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (6268, 15)
+[DEBUG] Observed data subset shape: (12461, 3)
+[DEBUG] Recent tags after merge shape: (9852, 18)
+[DEBUG] Recent tags after filtering shape: (3095, 18)
+[DEBUG] Partner groups shape: (573, 3)
+[DEBUG] Final recent tags shape: (573, 21)
+[DEBUG] Final recent tags shape: (49, 21)
+Enriching 49 indicators with DomainTools and VirusTotalV3...
+Successfully enriched and merged 49 indicators.
+[DEBUG] recent_tags DataFrame:
+          Indicator  ...  Partners
+1    147.135.11.223  ...       HHS
+2    185.220.101.55  ...       HHS
+3    185.220.101.21  ...  CMS, HHS
+12   118.193.72.187  ...       CMS
+15  193.189.100.195  ...       CMS
+
+[5 rows x 10 columns]
+[DEBUG] all_partners set: {'CMS', 'HHS', 'FDA'}
+[DEBUG] partner_buckets dictionary:
+Partner: CMS, Records: 6
+Partner: HHS, Records: 4
+Partner: FDA, Records: 1
+Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20251214.xlsx
+
+[notice] A new release of pip is available: 25.1.1 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host link.mail.beehiiv.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"message":"Unable to enrich this indicator. Either the indicator or enrichment types are not compatible, or some other kind of error occurred while trying to get the enrichment information.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Stripped URL gobookmart.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:291: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y%m%d")
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x0000000037752660>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (6206, 15)
+[DEBUG] Observed data subset shape: (12458, 3)
+[DEBUG] Recent tags after merge shape: (9894, 18)
+[DEBUG] Recent tags after filtering shape: (3117, 18)
+[DEBUG] Partner groups shape: (578, 3)
+[DEBUG] Final recent tags shape: (578, 21)
+[DEBUG] Final recent tags shape: (58, 21)
+Enriching 58 indicators with DomainTools and VirusTotalV3...
+Successfully enriched and merged 55 indicators.
+[DEBUG] recent_tags DataFrame:
+          Indicator  ...  Partners
+3   193.189.100.195  ...       CMS
+9    171.25.193.132  ...       CMS
+15   118.193.72.187  ...       CMS
+25   61.153.184.151  ...       CMS
+26       88.80.26.3  ...       CMS
+
+[5 rows x 10 columns]
+[DEBUG] all_partners set: {'HHS', 'CMS'}
+[DEBUG] partner_buckets dictionary:
+Partner: HHS, Records: 2
+Partner: CMS, Records: 7
+Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20251215.xlsx
+
+[notice] A new release of pip is available: 25.1.1 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress autonotification@concursolutions.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:291: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y%m%d")
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x0000000037B82660>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (6273, 15)
+[DEBUG] Observed data subset shape: (12460, 3)
+[DEBUG] Recent tags after merge shape: (9823, 18)
+[DEBUG] Recent tags after filtering shape: (3080, 18)
+[DEBUG] Partner groups shape: (578, 3)
+[DEBUG] Final recent tags shape: (578, 21)
+[DEBUG] Final recent tags shape: (51, 21)
+Enriching 51 indicators with DomainTools and VirusTotalV3...
+Successfully enriched and merged 50 indicators.
+[DEBUG] recent_tags DataFrame:
+          Indicator  ...  Partners
+3    192.42.116.210  ...       CMS
+15   185.220.101.21  ...  CMS, HHS
+16  185.220.101.182  ...       CMS
+19   118.193.72.187  ...       CMS
+28   61.153.184.151  ...       CMS
+
+[5 rows x 10 columns]
+[DEBUG] all_partners set: {'HHS', 'CMS'}
+[DEBUG] partner_buckets dictionary:
+Partner: HHS, Records: 2
+Partner: CMS, Records: 6
+Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20251216.xlsx
+
+[notice] A new release of pip is available: 25.1.1 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress kathy@finnaccounting.org cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress chastity@coalcountryhealth.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress alyssa.palmer@southsidechs.org cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host arbourvalley.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host 1-you.njalla.no cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host 3-get.njalla.fo cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host 2-can.njalla.in cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:291: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y%m%d")
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x0000000037E02660>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (6370, 15)
+[DEBUG] Observed data subset shape: (12460, 3)
+[DEBUG] Recent tags after merge shape: (9816, 18)
+[DEBUG] Recent tags after filtering shape: (3036, 18)
+[DEBUG] Partner groups shape: (575, 3)
+[DEBUG] Final recent tags shape: (575, 21)
+[DEBUG] Final recent tags shape: (51, 21)
+Enriching 51 indicators with DomainTools and VirusTotalV3...
+Successfully enriched and merged 44 indicators.
+[DEBUG] recent_tags DataFrame:
+          Indicator  ...  Partners
+1    118.193.72.187  ...       CMS
+3    61.153.184.151  ...       CMS
+14   185.220.101.30  ...       CMS
+16       88.80.26.3  ...       CMS
+24  185.220.101.182  ...       CMS
+
+[5 rows x 10 columns]
+[DEBUG] all_partners set: {'OS', 'CMS'}
+[DEBUG] partner_buckets dictionary:
+Partner: OS, Records: 1
+Partner: CMS, Records: 7
+Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20251217.xlsx
+
+[notice] A new release of pip is available: 25.1.1 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"More than one indicator matches the criteria you specified. Try looking up by ID instead.","status":"Error"}'
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\Tipper\main.py:291: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today_str = datetime.utcnow().strftime("%Y%m%d")
+[DEBUG] ThreatConnect initialized successfully.
+[DEBUG] ThreatConnect object: <ThreatConnect.ThreatConnect object at 0x0000000037532660>
+[DEBUG] RequestObject successfully created.
+Querying owner: HTOC Org
+[DEBUG] Filtered tags DataFrame shape: (6360, 15)
+[DEBUG] Observed data subset shape: (12473, 3)
+[DEBUG] Recent tags after merge shape: (9732, 18)
+[DEBUG] Recent tags after filtering shape: (3003, 18)
+[DEBUG] Partner groups shape: (549, 3)
+[DEBUG] Final recent tags shape: (549, 21)
+[DEBUG] Final recent tags shape: (44, 21)
+Enriching 44 indicators with DomainTools and VirusTotalV3...
+Successfully enriched and merged 44 indicators.
+[DEBUG] recent_tags DataFrame:
+         Indicator  ...  Partners
+0   185.220.101.21  ...       CMS
+3       88.80.26.3  ...       CMS
+4   61.153.184.151  ...       CMS
+5   185.220.101.30  ...       CMS
+13   171.25.193.25  ...       CMS
+
+[5 rows x 10 columns]
+[DEBUG] all_partners set: {'CMS'}
+[DEBUG] partner_buckets dictionary:
+Partner: CMS, Records: 7
+Excel file with partner tabs saved to: \\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_20251218.xlsx
