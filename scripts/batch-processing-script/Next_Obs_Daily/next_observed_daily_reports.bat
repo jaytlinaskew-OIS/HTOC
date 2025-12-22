@@ -5,10 +5,22 @@ REM ─── Work in this script’s folder ───────────�
 cd /d "%~dp0"
 
 REM ─── Configuration ────────────────────────────────────────────────────────────
-set "PYTHON_EXE=\\10.1.4.22\data\HTOC\Data_Analytics\Py\python.exe"
 set "SCRIPT=%~dp0src\main.py"
 set "LOG_FILE=%~dp0run_log.json"
 set "OUTPUT_FILE=%~dp0output.log"
+
+REM Prefer local Python 3.13; fall back to network Python if unavailable
+set "PYTHON_EXE="
+py -3.13 -c "import sys" >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+  set "PYTHON_EXE=py -3.13"
+) else (
+  set "PYTHON_EXE=\\10.1.4.22\data\HTOC\Data_Analytics\Py\python.exe"
+)
+
+REM Ensure packages install/load from user profile (not systemprofile)
+set "PYTHONUSERBASE=%USERPROFILE%\AppData\Roaming\Python"
+set "PYTHONPATH=%PYTHONUSERBASE%\Python313\site-packages;%PYTHONPATH%"
 
 REM ─── Ensure log file is initialized as JSON array ─────────────────────────────
 if not exist "%LOG_FILE%" (
@@ -21,7 +33,7 @@ for /f "tokens=2 delims==." %%A in ('wmic os get localdatetime /value') do set d
 set "timestamp=%dt:~0,4%-%dt:~4,2%-%dt:~6,2%T%dt:~8,2%:%dt:~10,2%:%dt:~12,2%"
 
 REM ─── Install required packages ────────────────────────────────────────────────
-"%PYTHON_EXE%" -m pip install --quiet --user ^
+%PYTHON_EXE% -m pip install --quiet --user --disable-pip-version-check ^
   --trusted-host pypi.org --trusted-host files.pythonhosted.org ^
   pandas openpyxl >> "%OUTPUT_FILE%" 2>&1
 
@@ -35,7 +47,7 @@ if errorlevel 1 (
 )
 
 REM ─── Run the Python script ────────────────────────────────────────────────────
-"%PYTHON_EXE%" "%SCRIPT%" >> "%OUTPUT_FILE%" 2>&1
+%PYTHON_EXE% "%SCRIPT%" >> "%OUTPUT_FILE%" 2>&1
 
 REM ─── Capture last line of output and escape backslashes ───────────────────────
 for /f "usebackq delims=" %%L in ("%OUTPUT_FILE%") do (
