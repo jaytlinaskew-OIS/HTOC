@@ -9,13 +9,15 @@ set "SCRIPT=%~dp0src\main.py"
 set "LOG_FILE=%~dp0run_log.json"
 set "OUTPUT_FILE=%~dp0output.log"
 
-REM Prefer local Python 3.13; fall back to network Python if unavailable
+REM Require local Python 3.13; exit if unavailable to avoid pip 22.3.1 issues
 set "PYTHON_EXE="
 py -3.13 -c "import sys" >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
   set "PYTHON_EXE=py -3.13"
 ) else (
-  set "PYTHON_EXE=\\10.1.4.22\data\HTOC\Data_Analytics\Py\python.exe"
+  echo [ERROR] Python 3.13 not found. Install from Microsoft Store or python.org.>> "%OUTPUT_FILE%"
+  echo [HINT] After install, ensure 'py -3.13' works in a new terminal.>> "%OUTPUT_FILE%"
+  exit /b 1
 )
 
 REM Ensure packages install/load from user profile (not systemprofile)
@@ -33,7 +35,7 @@ for /f "tokens=2 delims==." %%A in ('wmic os get localdatetime /value') do set d
 set "timestamp=%dt:~0,4%-%dt:~4,2%-%dt:~6,2%T%dt:~8,2%:%dt:~10,2%:%dt:~12,2%"
 
 REM ─── Install required packages ────────────────────────────────────────────────
-%PYTHON_EXE% -m pip install --quiet --user --disable-pip-version-check ^
+%PYTHON_EXE% -m pip install --quiet --user --retries 5 --timeout 60 --no-warn-script-location ^
   --trusted-host pypi.org --trusted-host files.pythonhosted.org ^
   pandas openpyxl >> "%OUTPUT_FILE%" 2>&1
 

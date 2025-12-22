@@ -431,3 +431,11 @@ No data to save.
 ERROR: Wheel 'numpy' located at C:\Users\jaskew\AppData\Local\Temp\pip-unpack-gnysr9gk\numpy-2.4.0-cp311-cp311-win_amd64.whl is invalid.
 WARNING: There was an error checking the latest version of pip.
 Saved to Z:\HTOC\Data_Analytics\Data\OpDiv_Predictions\Full Daily Reports\full_daily_report_20251222.csv
+
+[notice] A new release of pip is available: 25.2 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+File already exists: Z:\HTOC\Data_Analytics\Data\OpDiv_Predictions\Full Daily Reports\full_daily_report_20251222.csv
+
+[notice] A new release of pip is available: 25.2 -> 25.3
+[notice] To update, run: C:\Program Files\Python313\python.exe -m pip install --upgrade pip
+Saved to Z:\HTOC\Data_Analytics\Data\OpDiv_Predictions\Full Daily Reports\full_daily_report_20251222.csv
