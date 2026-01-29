@@ -334,7 +334,7 @@ def get_v3_threatconnect_data(lastObserved_date: date | str | None = None, indic
 
     return df.reset_index(drop=True)
 
-def get_v2_threatconnect_data():
+def get_v2_threatconnect_data(dateObserved: date | str | None = None):
 
     from pathlib import Path
     from datetime import datetime, timezone
@@ -365,8 +365,22 @@ def get_v2_threatconnect_data():
     )
     tc.set_verify_ssl(VERIFY_SSL)
 
-    today_str = datetime.now(timezone.utc).date().isoformat()  # 'YYYY-MM-DD'
-    all_rows = []
+    if not dateObserved:
+        today_str = datetime.now(timezone.utc).date().isoformat()  # 'YYYY-MM-DD'
+        all_rows = []
+    else:
+        if isinstance(dateObserved, datetime):
+            _date = dateObserved.date()
+        elif isinstance(dateObserved, date):
+            _date = dateObserved
+        else:  # isinstance(dateObserved, str)
+            try:
+                _date = datetime.strptime(dateObserved, "%Y-%m-%d").date()
+            except ValueError:
+                _date = datetime.now(timezone.utc).date()
+
+        today_str = _date.isoformat()
+        all_rows = []
 
     # ── Single call per owner (no pagination) ───────────────────────────────
     for owner in OWNERS:
@@ -384,6 +398,7 @@ def get_v2_threatconnect_data():
         ro.set_owner_allowed(True)
         ro.set_request_uri(uri)
 
+        
         resp = tc.api_request(ro)
         print(f"[DEBUG] status={resp.status_code}")
         if resp.status_code != 200:
