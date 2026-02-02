@@ -64,14 +64,14 @@ def main():
 
         opdiv_production_outputs[opdiv_name] = production_output
 
-        print(f"[{opdiv_name}] Updating forecast log...")
+        #print(f"[{opdiv_name}] Updating forecast log...")
         opdiv_log_dir = os.path.join(log_path, opdiv_name)
         os.makedirs(opdiv_log_dir, exist_ok=True)
-        log_xlsx_path = os.path.join(opdiv_log_dir, f"{opdiv_name}_forecast_log.xlsx")
-        forecast_log = update_long_forecast_log_with_formatting(production_output, opdiv_df, log_xlsx_path)
-        opdiv_forecast_logs[opdiv_name] = forecast_log
+        #log_xlsx_path = os.path.join(opdiv_log_dir, f"{opdiv_name}_forecast_log.xlsx")
+        #forecast_log = update_long_forecast_log_with_formatting(production_output, opdiv_df, log_xlsx_path)
+        #opdiv_forecast_logs[opdiv_name] = forecast_log
 
-        print(f"[{opdiv_name}] Saving updated forecast log to: {log_xlsx_path}")
+        #print(f"[{opdiv_name}] Saving updated forecast log to: {log_xlsx_path}")
 
         print(f"[{opdiv_name}] Saving today's production output...")
         opdiv_output_dir = os.path.join(prediction_path, opdiv_name)
