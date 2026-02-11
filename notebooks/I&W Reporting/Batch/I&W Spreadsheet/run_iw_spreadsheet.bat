@@ -6,7 +6,7 @@ REM This script executes the I^&W Spreadsheet Python script for automated schedu
 echo [%date% %time%] Starting I^&W Spreadsheet...
 
 REM Set the Python executable path
-set "PYTHON_EXE=\\10.1.4.22\data\HTOC\Data_Analytics\Py\python.exe"
+set "PYTHON_EXE=Z:\HTOC\JA\Python313\python.exe"
 
 REM Set the script path
 set "SCRIPT_PATH=Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\I&W Report Processing Scripts\Spreadsheet_scripts\I&W_Spreadsheet.py"
@@ -58,7 +58,7 @@ REM ── Install required packages (safe if already installed) ─────
 echo [%date% %time%] Installing required packages...
 "%PYTHON_EXE%" -m pip install --quiet --user --disable-pip-version-check --no-warn-script-location ^
   --trusted-host pypi.org --trusted-host files.pythonhosted.org ^
-  pandas openpyxl requests urllib3 pytz >nul 2>&1
+  pandas openpyxl requests urllib3 pytz
 if %ERRORLEVEL% NEQ 0 (
     echo [ERROR] Failed to install required packages. Error level: %ERRORLEVEL%
     echo [%date% %time%] ERROR: Failed to install required packages >> "%LOG_FILE%" 2>nul
