@@ -19443,3 +19443,305 @@ Some ways to possible ways fix this:
 
  [COMPLETE] All OpDivs processed.
 You may close this window now.
+Installing required packages...  
+Requirement already satisfied: pandas in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.0)
+Requirement already satisfied: pytz in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2025.2)
+Requirement already satisfied: python-dateutil in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.9.0.post0)
+Requirement already satisfied: numpy in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.1)
+Requirement already satisfied: scikit-learn in c:\users\jaskew\appdata\roaming\python\python313\site-packages (1.7.0)
+Requirement already satisfied: lifelines in c:\users\jaskew\appdata\roaming\python\python313\site-packages (0.30.0)
+Requirement already satisfied: openpyxl in c:\users\jaskew\appdata\roaming\python\python313\site-packages (3.1.5)
+Requirement already satisfied: tzdata>=2022.7 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2025.2)
+Requirement already satisfied: six>=1.5 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from python-dateutil) (1.17.0)
+Requirement already satisfied: scipy>=1.8.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (1.16.0)
+Requirement already satisfied: joblib>=1.2.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (1.5.1)
+Requirement already satisfied: threadpoolctl>=3.1.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (3.6.0)
+Requirement already satisfied: matplotlib>=3.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from lifelines) (3.10.3)
+Requirement already satisfied: autograd>=1.5 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from lifelines) (1.8.0)
+Requirement already satisfied: autograd-gamma>=0.3 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from lifelines) (0.5.0)
+Requirement already satisfied: formulaic>=0.2.2 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from lifelines) (1.1.1)
+Requirement already satisfied: et-xmlfile in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from openpyxl) (2.0.0)
+Requirement already satisfied: interface-meta>=1.2.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from formulaic>=0.2.2->lifelines) (1.3.0)
+Requirement already satisfied: typing-extensions>=4.2.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from formulaic>=0.2.2->lifelines) (4.14.0)
+Requirement already satisfied: wrapt>=1.17.0rc1 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from formulaic>=0.2.2->lifelines) (1.17.2)
+Requirement already satisfied: contourpy>=1.0.1 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from matplotlib>=3.0->lifelines) (1.3.2)
+Requirement already satisfied: cycler>=0.10 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from matplotlib>=3.0->lifelines) (0.12.1)
+Requirement already satisfied: fonttools>=4.22.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from matplotlib>=3.0->lifelines) (4.58.4)
+Requirement already satisfied: kiwisolver>=1.3.1 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from matplotlib>=3.0->lifelines) (1.4.8)
+Requirement already satisfied: packaging>=20.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from matplotlib>=3.0->lifelines) (25.0)
+Requirement already satisfied: pillow>=8 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from matplotlib>=3.0->lifelines) (11.3.0)
+Requirement already satisfied: pyparsing>=2.3.1 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from matplotlib>=3.0->lifelines) (3.2.3)
+
+[notice] A new release of pip is available: 25.2 -> 26.0.1
+[notice] To update, run: C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\python.exe -m pip install --upgrade pip
+C:\Users\jaskew\AppData\Roaming\Python\Python313\site-packages\lifelines\fitters\__init__.py:2086: ApproximationWarning: The Hessian was not invertible. We will instead approximate it using the pseudo-inverse.
+
+It's advisable to not trust the variances reported, and to be suspicious of the fitted parameters too.
+
+Some ways to possible ways fix this:
+
+0. Are there any lifelines warnings outputted during the `fit`?
+1. Does a particularly large variable need to be centered to 0?
+2. Inspect your DataFrame: does everything look as expected? Do you need to add/drop a constant (intercept) column?
+3. Is there high-collinearity in the dataset? Try using the variance inflation factor (VIF) to find redundant variables.
+4. Trying adding a small penalizer (or changing it, if already present). Example: `WeibullAFTFitter(penalizer=0.01).fit(...)`.
+5. Are there any extreme outliers? Try modeling them or dropping them to see if it helps convergence.
+
+  warnings.warn(warning_text, exceptions.ApproximationWarning)
+[START] Forecast pipeline initiated for 2026-02-19
+[INFO] Generating date list and loading files...
+[INFO] Preprocessing source data...
+[INFO] Grouping and merging data by OpDiv...
+
+[PROCESSING] CDC...
+[DEBUG] CDC - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  00818860012482918321 2025-11-11     104.21.3.76  ...    11     1           9
+1  00818860012482918321 2025-11-11  167.94.138.137  ...    11     1           3
+2  00818860012482918321 2025-11-11  167.94.138.148  ...    11     1           3
+3  00818860012482918321 2025-11-11  167.94.138.151  ...    11     1           2
+4  00818860012482918321 2025-11-11  167.94.138.157  ...    11     1           5
+
+[5 rows x 11 columns]
+[CDC] Building features...
+[CDC] Running model inference...
+[CDC] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+         Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0      104.21.3.76               0  ...         0.04%   45-Day: Low confidence
+1     104.21.45.12               0  ...          0.1%   45-Day: Low confidence
+2      104.21.48.1               0  ...          0.1%   45-Day: Low confidence
+3   111.61.105.100               0  ...          0.2%   45-Day: Low confidence
+4  135.237.125.158               0  ...         29.8%  45-Day: Possibly active
+
+[5 rows x 15 columns]
+[CDC] Saving today's production output...
+[CDC] Completed.
+
+[PROCESSING] CMS...
+[DEBUG] CMS - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  15920309593055310684 2025-11-11   101.71.130.99  ...    11     1         101
+1  15920309593055310684 2025-11-11  101.89.174.236  ...    11     1           2
+2  15920309593055310684 2025-11-11    103.203.59.0  ...    11     1          87
+3  15920309593055310684 2025-11-11   103.85.84.176  ...    11     1          21
+4  15920309593055310684 2025-11-11   104.131.6.219  ...    11     1           8
+
+[5 rows x 11 columns]
+[CMS] Building features...
+[CMS] Running model inference...
+[CMS] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+        Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0     1.234.83.26               0  ...        97.98%    45-Day: Highly likely
+1      1.4.195.14               0  ...        31.52%  45-Day: Possibly active
+2  101.168.57.163               0  ...         74.4%    45-Day: Highly likely
+3   101.71.130.99               1  ...        99.84%    45-Day: Highly likely
+4  101.89.174.236               0  ...         0.28%   45-Day: Low confidence
+
+[5 rows x 15 columns]
+[CMS] Saving today's production output...
+[CMS] Completed.
+
+[PROCESSING] DHA...
+[DEBUG] DHA - first 5 records:
+           API_UserName       date      indicator  ... month  seen  total_seen
+0  20790633968691748718 2025-11-11   103.20.88.50  ...    11     1           7
+1  20790633968691748718 2025-11-11   103.203.59.0  ...    11     1          33
+2  20790633968691748718 2025-11-11   103.66.62.27  ...    11     1           6
+3  20790633968691748718 2025-11-11  118.193.59.10  ...    11     1          14
+4  20790633968691748718 2025-11-11  123.58.196.49  ...    11     1          67
+
+[5 rows x 11 columns]
+[DHA] Building features...
+[DHA] Running model inference...
+[DHA] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+         Indicator  Observed Today  ...  ensemble_45d      Confidence: 45-Day
+0    101.71.130.99               0  ...        76.39%   45-Day: Highly likely
+1      102.0.5.152               0  ...         0.36%  45-Day: Low confidence
+2   103.114.96.246               0  ...         0.44%  45-Day: Low confidence
+3  103.120.116.162               0  ...        75.49%   45-Day: Highly likely
+4  103.124.139.170               0  ...          0.5%  45-Day: Low confidence
+
+[5 rows x 15 columns]
+[DHA] Saving today's production output...
+[DHA] Completed.
+
+[PROCESSING] FDA...
+[DEBUG] FDA - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  13983566077459384977 2025-11-11   101.71.130.99  ...    11     1         101
+1  13983566077459384977 2025-11-11  101.89.174.236  ...    11     1           2
+2  13983566077459384977 2025-11-11    103.203.59.0  ...    11     1          44
+3  13983566077459384977 2025-11-11   103.85.84.176  ...    11     1          21
+4  13983566077459384977 2025-11-11    107.9.57.100  ...    11     1          94
+
+[5 rows x 11 columns]
+[FDA] Building features...
+[FDA] Running model inference...
+[FDA] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+         Indicator  Observed Today  ...  ensemble_45d      Confidence: 45-Day
+0      1.234.83.26               0  ...        95.41%   45-Day: Highly likely
+1    101.71.130.99               1  ...        99.88%   45-Day: Highly likely
+2   101.89.174.236               0  ...         0.07%  45-Day: Low confidence
+3  103.120.116.162               1  ...        76.51%   45-Day: Highly likely
+4     103.203.59.0               0  ...         1.18%  45-Day: Low confidence
+
+[5 rows x 15 columns]
+[FDA] Saving today's production output...
+[FDA] Completed.
+
+[PROCESSING] HHS...
+[DEBUG] HHS - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  13520457953477229971 2025-11-11   101.71.130.99  ...    11     1          93
+1  13520457953477229971 2025-11-11  103.125.146.40  ...    11     1           5
+2  13520457953477229971 2025-11-11  103.125.146.43  ...    11     1           2
+3  13520457953477229971 2025-11-11  103.125.146.50  ...    11     1           3
+4  13520457953477229971 2025-11-11  103.125.146.52  ...    11     1           2
+
+[5 rows x 11 columns]
+[HHS] Building features...
+[HHS] Running model inference...
+[HHS] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+        Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0   101.71.130.99               1  ...        99.26%    45-Day: Highly likely
+1  102.213.211.10               0  ...         51.9%  45-Day: Possibly active
+2  103.125.146.30               0  ...        76.24%    45-Day: Highly likely
+3  103.125.146.31               0  ...        75.71%    45-Day: Highly likely
+4  103.125.146.32               1  ...        75.62%    45-Day: Highly likely
+
+[5 rows x 15 columns]
+[HHS] Saving today's production output...
+[HHS] Completed.
+
+[PROCESSING] HRSA...
+[DEBUG] HRSA - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  35664937356778434955 2025-11-11  101.89.174.236  ...    11     1           2
+1  35664937356778434955 2025-11-11    103.203.59.0  ...    11     1          26
+2  35664937356778434955 2025-11-11   103.85.84.176  ...    11     1          21
+3  35664937356778434955 2025-11-11  104.152.52.139  ...    11     1           2
+4  35664937356778434955 2025-11-11   107.189.3.148  ...    11     1           4
+
+[5 rows x 11 columns]
+[HRSA] Building features...
+[HRSA] Running model inference...
+[HRSA] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+        Indicator  Observed Today  ...  ensemble_45d      Confidence: 45-Day
+0     1.234.83.26               0  ...         79.5%   45-Day: Highly likely
+1   101.71.130.99               0  ...        90.34%   45-Day: Highly likely
+2  101.89.174.236               0  ...         0.16%  45-Day: Low confidence
+3     102.0.5.152               0  ...         0.17%  45-Day: Low confidence
+4  103.114.96.246               0  ...         0.17%  45-Day: Low confidence
+
+[5 rows x 15 columns]
+[HRSA] Saving today's production output...
+[HRSA] Completed.
+
+[PROCESSING] IHS...
+[DEBUG] IHS - first 5 records:
+           API_UserName       date      indicator  ... month  seen  total_seen
+0  80363974983666420473 2025-11-11   103.203.59.0  ...    11     1          33
+1  80363974983666420473 2025-11-11   107.9.57.100  ...    11     1          48
+2  80363974983666420473 2025-11-11  118.193.59.10  ...    11     1          13
+3  80363974983666420473 2025-11-11  123.58.196.49  ...    11     1          61
+4  80363974983666420473 2025-11-11  123.58.207.81  ...    11     1          55
+
+[5 rows x 11 columns]
+[IHS] Building features...
+[IHS] Running model inference...
+[IHS] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+        Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0   101.71.130.99               0  ...        71.24%  45-Day: Possibly active
+1    103.203.59.0               0  ...         1.61%   45-Day: Low confidence
+2  103.215.25.250               0  ...         0.58%   45-Day: Low confidence
+3  107.189.31.187               0  ...        28.94%  45-Day: Possibly active
+4    107.9.57.100               0  ...        65.88%    45-Day: Highly likely
+
+[5 rows x 15 columns]
+[IHS] Saving today's production output...
+[IHS] Completed.
+
+[PROCESSING] NIH...
+[DEBUG] NIH - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  50189120947314147395 2025-11-11     104.21.3.76  ...    11     1           9
+1  50189120947314147395 2025-11-11   106.8.246.201  ...    11     1          15
+2  50189120947314147395 2025-11-11  116.153.39.128  ...    11     1          78
+3  50189120947314147395 2025-11-11    121.40.98.45  ...    11     1           9
+4  50189120947314147395 2025-11-11   149.28.254.42  ...    11     1           6
+
+[5 rows x 11 columns]
+[NIH] Building features...
+[NIH] Running model inference...
+[NIH] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+         Indicator  Observed Today  ...  ensemble_45d       Confidence: 45-Day
+0       1.62.8.186               0  ...        59.95%  45-Day: Possibly active
+1  101.255.164.198               0  ...         7.25%   45-Day: Low confidence
+2   101.42.149.141               0  ...        10.08%   45-Day: Low confidence
+3    101.67.139.40               0  ...        70.48%  45-Day: Possibly active
+4    101.71.130.99               0  ...        51.49%  45-Day: Possibly active
+
+[5 rows x 15 columns]
+[NIH] Saving today's production output...
+[NIH] Completed.
+
+[PROCESSING] OS...
+[DEBUG] OS - first 5 records:
+           API_UserName       date       indicator  ... month  seen  total_seen
+0  64853912235916233429 2025-11-11   101.71.130.99  ...    11     1         101
+1  64853912235916233429 2025-11-11  101.89.174.236  ...    11     1           2
+2  64853912235916233429 2025-11-11    103.203.59.0  ...    11     1          44
+3  64853912235916233429 2025-11-11  103.215.25.250  ...    11     1           7
+4  64853912235916233429 2025-11-11   103.85.84.176  ...    11     1          21
+
+[5 rows x 11 columns]
+[OS] Building features...
+[OS] Running model inference...
+[OS] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+         Indicator  Observed Today  ...  ensemble_45d      Confidence: 45-Day
+0      1.234.83.26               0  ...         98.4%   45-Day: Highly likely
+1   101.168.57.163               0  ...        74.68%   45-Day: Highly likely
+2    101.71.130.99               1  ...         99.9%   45-Day: Highly likely
+3   101.89.174.236               0  ...         0.16%  45-Day: Low confidence
+4  103.120.116.162               1  ...         79.0%   45-Day: Highly likely
+
+[5 rows x 15 columns]
+[OS] Saving today's production output...
+[OS] Completed.
+
+[PROCESSING] VA...
+[DEBUG] VA - first 5 records:
+           API_UserName       date        indicator  ... month  seen  total_seen
+0  74198686107399967946 2025-11-11   103.215.25.250  ...    11     1           8
+1  74198686107399967946 2025-11-11  104.128.161.233  ...    11     1         101
+2  74198686107399967946 2025-11-11   104.152.52.110  ...    11     1          20
+3  74198686107399967946 2025-11-11   104.152.52.139  ...    11     1          26
+4  74198686107399967946 2025-11-11   104.152.52.216  ...    11     1          21
+
+[5 rows x 11 columns]
+[VA] Building features...
+[VA] Running model inference...
+[VA] Applying ensemble logic and formatting...
+[DEBUG] Production output - first 5 records:
+                                           Indicator  ...       Confidence: 45-Day
+0  0F2C5C39494F15B7EE637AD5B6B5D00A3E2F407B4F27D1...  ...  45-Day: Possibly active
+1                                    1-you.njalla.no  ...    45-Day: Highly likely
+2                                        1.234.83.26  ...  45-Day: Possibly active
+3                                    103.120.116.162  ...    45-Day: Highly likely
+4                                     103.191.76.181  ...   45-Day: Low confidence
+
+[5 rows x 15 columns]
+[VA] Saving today's production output...
+[VA] Completed.
+
+ [COMPLETE] All OpDivs processed.
+You may close this window now.
