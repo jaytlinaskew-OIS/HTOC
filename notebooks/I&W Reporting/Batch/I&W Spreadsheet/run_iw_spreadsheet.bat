@@ -21,7 +21,7 @@ REM ── Set log directory ─────────────────
 set "LOG_DIR=Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\logs"
 
 REM ── Optional offline wheelhouse folder (create once) ───────────────────────
-set "WHEELHOUSE=Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\wheelhouse"
+set "WHEELHOUSE=Z:\HTOC\JA\wheelhouse"
 
 REM ── Set spreadsheet output directory ────────────────────────────────────────
 set "OUTPUT_DIR=Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\Spreadsheet"
@@ -153,6 +153,33 @@ if "!PIP_EXIT!"=="0" (
     echo ========================================================================================================
     echo.
     echo [%date% %time%] SUCCESS: Packages installed from PyPI>> "%LOG_FILE%" 2>nul
+    
+    REM Download packages to wheelhouse for future offline use
+    echo [INFO] Caching packages to wheelhouse for future offline use...
+    echo [%date% %time%] Caching packages to wheelhouse>> "%LOG_FILE%" 2>nul
+    
+    REM Create wheelhouse directory if it doesn't exist
+    if not exist "%WHEELHOUSE%" (
+        mkdir "%WHEELHOUSE%" 2>nul
+        if not exist "%WHEELHOUSE%" (
+            echo [WARNING] Could not create wheelhouse directory
+            echo [%date% %time%] WARNING: Could not create wheelhouse directory>> "%LOG_FILE%" 2>nul
+            goto :pip_done
+        )
+    )
+    
+    REM Download packages to wheelhouse
+    "%PYTHON_EXE%" -m pip download --dest="%WHEELHOUSE%" %PKGS% > "%TEMP_OUT%" 2>&1
+    set "DOWNLOAD_EXIT=!ERRORLEVEL!"
+    
+    if "!DOWNLOAD_EXIT!"=="0" (
+        echo [SUCCESS] Packages cached to wheelhouse successfully
+        echo [%date% %time%] SUCCESS: Packages cached to wheelhouse>> "%LOG_FILE%" 2>nul
+    ) else (
+        echo [WARNING] Failed to cache packages to wheelhouse ^(Error: !DOWNLOAD_EXIT!^)
+        echo [%date% %time%] WARNING: Failed to cache to wheelhouse. Error: !DOWNLOAD_EXIT!>> "%LOG_FILE%" 2>nul
+    )
+    
     goto :pip_done
 )
 
@@ -167,6 +194,21 @@ if "!FINDSTR_EXIT!"=="0" (
     echo ========================================================================================================
     echo.
     echo [%date% %time%] SUCCESS: Packages already satisfied>> "%LOG_FILE%" 2>nul
+    
+    REM Try to cache to wheelhouse if not already there (optional, non-fatal)
+    if not exist "%WHEELHOUSE%" (
+        mkdir "%WHEELHOUSE%" 2>nul
+    )
+    
+    if exist "%WHEELHOUSE%" (
+        echo [INFO] Updating wheelhouse cache...
+        "%PYTHON_EXE%" -m pip download --dest="%WHEELHOUSE%" %PKGS% >nul 2>&1
+        if !ERRORLEVEL!==0 (
+            echo [INFO] Wheelhouse cache updated
+            echo [%date% %time%] INFO: Wheelhouse cache updated>> "%LOG_FILE%" 2>nul
+        )
+    )
+    
     goto :pip_done
 )
 
