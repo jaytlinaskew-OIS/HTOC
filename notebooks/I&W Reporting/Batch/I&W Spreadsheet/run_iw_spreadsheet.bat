@@ -23,6 +23,9 @@ set "LOG_DIR=Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\logs"
 REM ── Optional offline wheelhouse folder (create once) ───────────────────────
 set "WHEELHOUSE=Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\wheelhouse"
 
+REM ── Set spreadsheet output directory ────────────────────────────────────────
+set "OUTPUT_DIR=Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\Spreadsheet"
+
 REM ── Create log directory if it doesn't exist ───────────────────────────────
 if not exist "%LOG_DIR%" (
     mkdir "%LOG_DIR%"
@@ -191,7 +194,7 @@ echo [%date% %time%] Executing I^&W Spreadsheet script...
 echo [%date% %time%] Executing I^&W Spreadsheet script...>> "%LOG_FILE%" 2>nul
 
 "%PYTHON_EXE%" "%SCRIPT_PATH%" > "%TEMP_OUT%" 2>&1
-set "SCRIPT_EXIT_CODE=%ERRORLEVEL%"
+set "SCRIPT_EXIT_CODE=!ERRORLEVEL!"
 
 REM ── Display and log script output ───────────────────────────────────────────
 type "%TEMP_OUT%"
@@ -200,38 +203,84 @@ type "%TEMP_OUT%" >> "%LOG_FILE%" 2>nul
 
 REM ── Detailed success/failure handling (like original) ───────────────────────
 echo.
-if "%SCRIPT_EXIT_CODE%"=="0" (
+if "!SCRIPT_EXIT_CODE!"=="0" (
     echo ========================================================================================================
     echo [SUCCESS] I^&W Spreadsheet completed successfully
     echo ========================================================================================================
+    echo.
     
-    REM Check for key results in output
+    REM Parse output for record counts
+    set "RECORD_COUNT=0"
+    set "INDICATORS_FOUND=Unknown"
+    
+    for /f "tokens=*" %%a in ('findstr /C:"Retrieved" /C:"indicators ready" /C:"Final filtered dataset" "%TEMP_OUT%"') do (
+        echo [INFO] %%a
+        set "LINE=%%a"
+    )
+    
+    REM Check if no records
     findstr /C:"No indicators met the filtering criteria" "%TEMP_OUT%" >nul
-    if %ERRORLEVEL%==0 (
-        echo [INFO] No indicators met filtering criteria - no spreadsheet created
+    set "NO_RECORDS=!ERRORLEVEL!"
+    
+    if "!NO_RECORDS!"=="0" (
+        echo.
+        echo --------------------------------------------------------------------------------------------------------
+        echo RESULT: No indicators met filtering criteria
+        echo --------------------------------------------------------------------------------------------------------
+        echo Excel File: NOT CREATED ^(no records to export^)
+        echo --------------------------------------------------------------------------------------------------------
     ) else (
-        findstr /C:"Successfully saved" "%TEMP_OUT%" >nul
-        if %ERRORLEVEL%==0 (
-            echo [INFO] Spreadsheet created successfully
-            for /f "tokens=*" %%a in ('findstr /C:"Successfully saved" "%TEMP_OUT%"') do echo %%a
-        )
-        findstr /C:"indicators ready for export" "%TEMP_OUT%" >nul
-        if %ERRORLEVEL%==0 (
-            for /f "tokens=*" %%a in ('findstr /C:"indicators ready for export" "%TEMP_OUT%"') do echo %%a
+        REM Check for Excel file creation
+        echo.
+        echo --------------------------------------------------------------------------------------------------------
+        if exist "%OUTPUT_DIR%\*.xlsx" (
+            REM Find the most recent Excel file
+            for /f "delims=" %%f in ('dir /b /od "%OUTPUT_DIR%\*.xlsx" 2^>nul') do set "LATEST_FILE=%%f"
+            
+            if defined LATEST_FILE (
+                echo RESULT: Excel spreadsheet created successfully
+                echo --------------------------------------------------------------------------------------------------------
+                echo File Name: !LATEST_FILE!
+                echo Location:  %OUTPUT_DIR%\
+                
+                REM Get file size
+                for %%a in ("%OUTPUT_DIR%\!LATEST_FILE!") do set "FILE_SIZE=%%~za"
+                
+                REM Convert bytes to KB
+                set /a SIZE_KB=!FILE_SIZE! / 1024
+                echo File Size: !SIZE_KB! KB ^(!FILE_SIZE! bytes^)
+                echo --------------------------------------------------------------------------------------------------------
+            ) else (
+                echo RESULT: Excel file status unknown
+                echo --------------------------------------------------------------------------------------------------------
+                echo Excel File: Unable to verify
+                echo --------------------------------------------------------------------------------------------------------
+            )
+        ) else (
+            echo RESULT: No Excel file found in output directory
+            echo --------------------------------------------------------------------------------------------------------
+            echo Excel File: NOT CREATED
+            echo Output Dir: %OUTPUT_DIR%
+            echo --------------------------------------------------------------------------------------------------------
         )
     )
-    echo ========================================================================================================
     echo.
     
     echo [%date% %time%] I^&W Spreadsheet completed successfully
     echo [%date% %time%] SUCCESS: I^&W Spreadsheet completed successfully>> "%LOG_FILE%" 2>nul
 ) else (
-    echo [%date% %time%] I^&W Spreadsheet failed with error code %SCRIPT_EXIT_CODE%
-    echo [%date% %time%] ERROR: I^&W Spreadsheet failed with error code %SCRIPT_EXIT_CODE%>> "%LOG_FILE%" 2>nul
+    echo ========================================================================================================
+    echo [ERROR] I^&W Spreadsheet failed
+    echo ========================================================================================================
+    echo Error Code: !SCRIPT_EXIT_CODE!
+    echo ========================================================================================================
+    echo.
+    echo [%date% %time%] I^&W Spreadsheet failed with error code !SCRIPT_EXIT_CODE!
+    echo [%date% %time%] ERROR: I^&W Spreadsheet failed with error code !SCRIPT_EXIT_CODE!>> "%LOG_FILE%" 2>nul
 
     set "ERROR_LOG=%LOG_DIR%\error_iw_spreadsheet_%TS%.log"
     (
-        echo [%date% %time%] FAILURE DETAILS - Error Code: %SCRIPT_EXIT_CODE%
+        echo [%date% %time%] FAILURE DETAILS - Error Code: !SCRIPT_EXIT_CODE!
         echo Script Path: "%SCRIPT_PATH%"
         echo Working Directory: "%WORK_DIR%"
         echo Python Executable: %PYTHON_EXE%
@@ -249,13 +298,17 @@ REM ── Clean up ────────────────────
 if exist "%TEMP_OUT%" del "%TEMP_OUT%" >nul 2>&1
 
 REM ── Final status ───────────────────────────────────────────────────────────
-if "%SCRIPT_EXIT_CODE%"=="0" (
+if "!SCRIPT_EXIT_CODE!"=="0" (
+    echo ========================================================================================================
     echo [%date% %time%] Batch script completed successfully
     echo Log file: "%LOG_FILE%"
+    echo ========================================================================================================
     echo [%date% %time%] Batch script completed successfully>> "%LOG_FILE%" 2>nul
 ) else (
+    echo ========================================================================================================
     echo [%date% %time%] Batch script completed with errors
     echo Log file: "%LOG_FILE%"
+    echo ========================================================================================================
     echo [%date% %time%] Batch script completed with errors>> "%LOG_FILE%" 2>nul
 )
 
