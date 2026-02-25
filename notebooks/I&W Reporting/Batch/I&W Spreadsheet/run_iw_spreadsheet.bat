@@ -65,7 +65,7 @@ if errorlevel 1 (
 
 REM ── Check if Python executable exists ───────────────────────────────────────
 if not exist "%PYTHON_EXE%" (
-    echo [ERROR] Python executable not found at %PYTHON_EXE%
+    echo [ERROR] Python executable not found at "%PYTHON_EXE%"
     echo [%date% %time%] ERROR: Python executable not found >> "%LOG_FILE%" 2>nul
     popd >nul
     pause
@@ -246,9 +246,19 @@ type "%TEMP_OUT%" >> "%LOG_FILE%" 2>nul
 REM ── Detailed success/failure handling (like original) ───────────────────────
 echo.
 if "!SCRIPT_EXIT_CODE!"=="0" (
-    echo ========================================================================================================
-    echo [SUCCESS] I^&W Spreadsheet completed successfully
-    echo ========================================================================================================
+    REM Check for various failure conditions first
+    findstr /C:"No indicators retrieved" /C:"No indicators met the filtering criteria" /C:"No data to export" "%TEMP_OUT%" >nul
+    set "NO_DATA_CHECK=!ERRORLEVEL!"
+    
+    if "!NO_DATA_CHECK!"=="0" (
+        echo ========================================================================================================
+        echo [COMPLETED] I^&W Spreadsheet - No data available for processing
+        echo ========================================================================================================
+    ) else (
+        echo ========================================================================================================
+        echo [SUCCESS] I^&W Spreadsheet completed successfully
+        echo ========================================================================================================
+    )
     echo.
     
     REM Parse output for record counts
@@ -260,56 +270,73 @@ if "!SCRIPT_EXIT_CODE!"=="0" (
         set "LINE=%%a"
     )
     
-    REM Check if no records
-    findstr /C:"No indicators met the filtering criteria" "%TEMP_OUT%" >nul
-    set "NO_RECORDS=!ERRORLEVEL!"
+    REM Check for various failure conditions
+    findstr /C:"No indicators retrieved" /C:"No indicators met the filtering criteria" /C:"No data to export" "%TEMP_OUT%" >nul
+    set "NO_DATA=!ERRORLEVEL!"
     
-    if "!NO_RECORDS!"=="0" (
+    REM Check for actual Excel file creation success message
+    findstr /C:"Successfully saved I&W indicators data to Excel" "%TEMP_OUT%" >nul
+    set "EXCEL_CREATED=!ERRORLEVEL!"
+    
+    if "!NO_DATA!"=="0" (
         echo.
         echo --------------------------------------------------------------------------------------------------------
-        echo RESULT: No indicators met filtering criteria
+        echo RESULT: No data available for processing
         echo --------------------------------------------------------------------------------------------------------
-        echo Excel File: NOT CREATED ^(no records to export^)
+        echo Excel File: NOT CREATED ^(no data to export^)
         echo --------------------------------------------------------------------------------------------------------
-    ) else (
-        REM Check for Excel file creation
+    ) else if "!EXCEL_CREATED!"=="0" (
+        REM Script reported successful Excel creation
         echo.
         echo --------------------------------------------------------------------------------------------------------
-        if exist "%OUTPUT_DIR%\*.xlsx" (
-            REM Find the most recent Excel file
-            for /f "delims=" %%f in ('dir /b /od "%OUTPUT_DIR%\*.xlsx" 2^>nul') do set "LATEST_FILE=%%f"
-            
-            if defined LATEST_FILE (
-                echo RESULT: Excel spreadsheet created successfully
-                echo --------------------------------------------------------------------------------------------------------
-                echo File Name: !LATEST_FILE!
-                echo Location:  %OUTPUT_DIR%\
-                
-                REM Get file size
-                for %%a in ("%OUTPUT_DIR%\!LATEST_FILE!") do set "FILE_SIZE=%%~za"
-                
-                REM Convert bytes to KB
-                set /a SIZE_KB=!FILE_SIZE! / 1024
-                echo File Size: !SIZE_KB! KB ^(!FILE_SIZE! bytes^)
-                echo --------------------------------------------------------------------------------------------------------
-            ) else (
-                echo RESULT: Excel file status unknown
-                echo --------------------------------------------------------------------------------------------------------
-                echo Excel File: Unable to verify
-                echo --------------------------------------------------------------------------------------------------------
-            )
-        ) else (
-            echo RESULT: No Excel file found in output directory
+        REM Find the most recent Excel file created today
+        set "TODAY_PATTERN=*%YYYY%%MM%%DD%*.xlsx"
+        set "TODAYS_FILE="
+        
+        for /f "delims=" %%f in ('dir /b /od "%OUTPUT_DIR%\%TODAY_PATTERN%" 2^>nul') do set "TODAYS_FILE=%%f"
+        
+        if defined TODAYS_FILE (
+            echo RESULT: Excel spreadsheet created successfully
             echo --------------------------------------------------------------------------------------------------------
-            echo Excel File: NOT CREATED
-            echo Output Dir: %OUTPUT_DIR%
+            echo File Name: !TODAYS_FILE!
+            echo Location:  "%OUTPUT_DIR%"
+            
+            REM Get file size
+            for %%a in ("%OUTPUT_DIR%\!TODAYS_FILE!") do set "FILE_SIZE=%%~za"
+            
+            REM Convert bytes to KB
+            set /a SIZE_KB=!FILE_SIZE! / 1024
+            echo File Size: !SIZE_KB! KB ^(!FILE_SIZE! bytes^)
+            echo --------------------------------------------------------------------------------------------------------
+        ) else (
+            echo RESULT: Excel file creation reported but file not found
+            echo --------------------------------------------------------------------------------------------------------
+            echo Excel File: NOT FOUND ^(creation may have failed^)
+            echo Expected Pattern: %TODAY_PATTERN%
+            echo Output Dir: "%OUTPUT_DIR%"
             echo --------------------------------------------------------------------------------------------------------
         )
+    ) else (
+        echo.
+        echo --------------------------------------------------------------------------------------------------------
+        echo RESULT: Script completed but no Excel file creation reported
+        echo --------------------------------------------------------------------------------------------------------
+        echo Excel File: NOT CREATED ^(script may have exited early^)
+        echo --------------------------------------------------------------------------------------------------------
     )
     echo.
     
-    echo [%date% %time%] I^&W Spreadsheet completed successfully
-    echo [%date% %time%] SUCCESS: I^&W Spreadsheet completed successfully>> "%LOG_FILE%" 2>nul
+    REM Set overall success based on actual data processing and Excel creation
+    if "!NO_DATA!"=="0" (
+        echo [%date% %time%] I^&W Spreadsheet completed - No data available for processing
+        echo [%date% %time%] COMPLETED: No data available for processing>> "%LOG_FILE%" 2>nul
+    ) else if "!EXCEL_CREATED!"=="0" (
+        echo [%date% %time%] I^&W Spreadsheet completed successfully
+        echo [%date% %time%] SUCCESS: I^&W Spreadsheet completed successfully>> "%LOG_FILE%" 2>nul
+    ) else (
+        echo [%date% %time%] I^&W Spreadsheet completed but no Excel file was created
+        echo [%date% %time%] WARNING: Script completed but no Excel file was created>> "%LOG_FILE%" 2>nul
+    )
 ) else (
     echo ========================================================================================================
     echo [ERROR] I^&W Spreadsheet failed
@@ -325,7 +352,7 @@ if "!SCRIPT_EXIT_CODE!"=="0" (
         echo [%date% %time%] FAILURE DETAILS - Error Code: !SCRIPT_EXIT_CODE!
         echo Script Path: "%SCRIPT_PATH%"
         echo Working Directory: "%WORK_DIR%"
-        echo Python Executable: %PYTHON_EXE%
+        echo Python Executable: "%PYTHON_EXE%"
         echo Wheelhouse: "%WHEELHOUSE%"
         echo ======== ERROR OUTPUT ========
         type "%TEMP_OUT%"
@@ -341,11 +368,23 @@ if exist "%TEMP_OUT%" del "%TEMP_OUT%" >nul 2>&1
 
 REM ── Final status ───────────────────────────────────────────────────────────
 if "!SCRIPT_EXIT_CODE!"=="0" (
-    echo ========================================================================================================
-    echo [%date% %time%] Batch script completed successfully
-    echo Log file: "%LOG_FILE%"
-    echo ========================================================================================================
-    echo [%date% %time%] Batch script completed successfully>> "%LOG_FILE%" 2>nul
+    REM Check what actually happened during execution
+    findstr /C:"No indicators retrieved" /C:"No indicators met the filtering criteria" /C:"No data to export" "%LOG_FILE%" >nul 2>&1
+    set "FINAL_NO_DATA=!ERRORLEVEL!"
+    
+    if "!FINAL_NO_DATA!"=="0" (
+        echo ========================================================================================================
+        echo [%date% %time%] Batch script completed - No data available for processing
+        echo Log file: "%LOG_FILE%"
+        echo ========================================================================================================
+        echo [%date% %time%] Batch script completed - No data available>> "%LOG_FILE%" 2>nul
+    ) else (
+        echo ========================================================================================================
+        echo [%date% %time%] Batch script completed successfully
+        echo Log file: "%LOG_FILE%"
+        echo ========================================================================================================
+        echo [%date% %time%] Batch script completed successfully>> "%LOG_FILE%" 2>nul
+    )
 ) else (
     echo ========================================================================================================
     echo [%date% %time%] Batch script completed with errors

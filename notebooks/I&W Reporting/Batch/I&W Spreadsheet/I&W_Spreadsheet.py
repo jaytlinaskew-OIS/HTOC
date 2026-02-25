@@ -262,6 +262,11 @@ def main():
     
     print(f"Final filtered dataset: {len(filtered_recent_tags)} indicators")
 
+    # Check if we have any data before creating Excel file
+    if len(filtered_recent_tags) == 0:
+        print("No data to export. Excel file will not be created.")
+        return
+
     # ═══════════════════════════════════════════════════════════════════════════════
     # EXCEL OUTPUT GENERATION
     # ═══════════════════════════════════════════════════════════════════════════════
