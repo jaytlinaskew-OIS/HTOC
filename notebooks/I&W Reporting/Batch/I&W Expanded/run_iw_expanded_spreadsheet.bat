@@ -24,7 +24,7 @@ REM ── Optional offline wheelhouse folder (create once) ──────�
 set "WHEELHOUSE=Z:\HTOC\JA\wheelhouse"
 
 REM ── Set spreadsheet output directory ────────────────────────────────────────────────────────────────────
-set "OUTPUT_DIR=Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\Expanded Reports"
+set "OUTPUT_DIR=Z:\HTOC\HTOC Reports\I&W Reports\5. I&W Staging\Spreadsheet\Expanded"
 
 REM ── Create log directory if it doesn't exist ───────────────────────────────
 if not exist "%LOG_DIR%" (
