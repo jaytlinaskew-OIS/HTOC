@@ -1,0 +1,6 @@
+{
+    "api_secret_key": "YOUR_SECRET_KEY",
+    "api_access_id": "YOUR_ACCESS_ID",
+    "api_base_url": "https://api.threatconnect.com",
+    "api_default_org": "Your Organization Name"
+}
