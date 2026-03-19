@@ -1,0 +1,8 @@
+# Tag search CLI + Excel scores lookup
+#
+# Wheels: Z:\HTOC\JA\wheelhouse — run run_search_indicators_by_tags.bat populate
+#         to download wheels; double-click the same .bat (no args) to install from there and run.
+#
+pandas>=2.0
+tabulate>=0.9.0
+openpyxl>=3.0
