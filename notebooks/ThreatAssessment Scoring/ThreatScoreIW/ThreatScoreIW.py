@@ -80,6 +80,7 @@ except Exception as e:
 
 # %% [code cell 1]
 import pandas as pd
+import ast
 from datetime import datetime, timedelta
 import pytz
 import urllib.parse
@@ -238,20 +239,64 @@ _last_observed_col = next(
 if _last_observed_col is None:
     raise KeyError(f"Could not find 'Last Observed' column in df. Columns: {list(df.columns)}")
 
-_last_obs_by_indicator = (
+_assoc_groups_src_col = "associatedGroups.data"
+_assoc_groups_target_col = "Associated Groups"
+if _assoc_groups_src_col not in observed_src.columns:
+    raise KeyError(
+        f"Could not find '{_assoc_groups_src_col}' column in observed_src. Columns: {list(observed_src.columns)}"
+    )
+
+def _extract_group_ids(value):
+    if value is None:
+        return pd.NA
+
+    parsed = value
+    if isinstance(value, str):
+        text = value.strip()
+        if not text:
+            return pd.NA
+        try:
+            parsed = ast.literal_eval(text)
+        except (ValueError, SyntaxError):
+            return text
+    elif isinstance(value, float) and pd.isna(value):
+        return pd.NA
+
+    if isinstance(parsed, dict):
+        gid = parsed.get("id")
+        return f"Group Id: {gid}" if gid is not None else pd.NA
+
+    if isinstance(parsed, list):
+        ids = []
+        for item in parsed:
+            if isinstance(item, dict) and item.get("id") is not None:
+                ids.append(f"Group Id: {item.get('id')}")
+        return ", ".join(ids) if ids else pd.NA
+
+    return pd.NA
+
+_observed_latest = (
     observed_src.dropna(subset=["indicator"])
     .assign(
         indicator=lambda d: d["indicator"].astype(str),
         lastObserved=lambda d: pd.to_datetime(d["lastObserved"], utc=True, errors="coerce"),
     )
-    .groupby("indicator", dropna=False)["lastObserved"]
-    .max()
+    .sort_values("lastObserved")
+    .drop_duplicates(subset=["indicator"], keep="last")
 )
+_last_obs_by_indicator = _observed_latest.set_index("indicator")["lastObserved"]
+_assoc_groups_by_indicator = _observed_latest.set_index("indicator")[_assoc_groups_src_col].map(_extract_group_ids)
 
 # Ensure df's last observed column is datetime-like, then overwrite for matches
 _df_ind = df[_indicator_col].astype(str)
 df[_last_observed_col] = pd.to_datetime(df[_last_observed_col], utc=True, errors="coerce")
 df[_last_observed_col] = _df_ind.map(_last_obs_by_indicator).combine_first(df[_last_observed_col])
+
+# Add associatedGroups.data ids from observed_src by indicator, stored as 'Associated Groups'
+if _assoc_groups_target_col in df.columns:
+    df[_assoc_groups_target_col] = _df_ind.map(_assoc_groups_by_indicator).combine_first(df[_assoc_groups_target_col])
+else:
+    df[_assoc_groups_target_col] = _df_ind.map(_assoc_groups_by_indicator)
 logger.info("Updated '%s' from observed_src.lastObserved (unique indicators=%s).", _last_observed_col, df[_indicator_col].nunique(dropna=True))
 
 df
@@ -593,10 +638,25 @@ _dt_tz_cols = final_indicators.select_dtypes(include=["datetimetz"]).columns
 for _c in _dt_tz_cols:
     final_indicators[_c] = final_indicators[_c].dt.tz_convert(None)
 
-# Write to Excel
+# Write to Excel with explicit column widths/wrapping for readability
 logger.info("Writing Excel output: %s", output_path)
 try:
-    final_indicators.to_excel(output_path, index=False)
+    with pd.ExcelWriter(output_path, engine="xlsxwriter") as writer:
+        final_indicators.to_excel(writer, index=False, sheet_name="Scores")
+
+        workbook = writer.book
+        worksheet = writer.sheets["Scores"]
+        wrap_fmt = workbook.add_format({"text_wrap": True, "valign": "top"})
+
+        worksheet.set_column(0, len(final_indicators.columns) - 1, 18)
+
+        if "Explanation" in final_indicators.columns:
+            _exp_idx = final_indicators.columns.get_loc("Explanation")
+            worksheet.set_column(_exp_idx, _exp_idx, 100, wrap_fmt)
+
+        if "Associated Groups" in final_indicators.columns:
+            _ag_idx = final_indicators.columns.get_loc("Associated Groups")
+            worksheet.set_column(_ag_idx, _ag_idx, 45, wrap_fmt)
     logger.info("Excel write succeeded (rows=%s).", len(final_indicators))
 except Exception:
     logger.exception("Excel write failed: %s", output_path)
