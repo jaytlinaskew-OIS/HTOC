@@ -641,23 +641,38 @@ for _c in _dt_tz_cols:
 # Write to Excel with explicit column widths/wrapping for readability
 logger.info("Writing Excel output: %s", output_path)
 try:
+    iw_col = "Reported I&W?"
+    if iw_col not in final_indicators.columns:
+        raise KeyError(f"Missing required column '{iw_col}' for sheet split.")
+
+    final_iw_no = final_indicators[final_indicators[iw_col] == "No"].copy()
+    final_iw_yes = final_indicators[final_indicators[iw_col] == "Yes"].copy()
+
     with pd.ExcelWriter(output_path, engine="xlsxwriter") as writer:
-        final_indicators.to_excel(writer, index=False, sheet_name="Scores")
+        final_iw_no.to_excel(writer, index=False, sheet_name="I&W_No")
+        final_iw_yes.to_excel(writer, index=False, sheet_name="I&W_Yes")
 
         workbook = writer.book
-        worksheet = writer.sheets["Scores"]
         wrap_fmt = workbook.add_format({"text_wrap": True, "valign": "top"})
 
-        worksheet.set_column(0, len(final_indicators.columns) - 1, 18)
+        for sheet_name, sheet_df in [("I&W_No", final_iw_no), ("I&W_Yes", final_iw_yes)]:
+            worksheet = writer.sheets[sheet_name]
+            worksheet.set_column(0, len(final_indicators.columns) - 1, 18)
 
-        if "Explanation" in final_indicators.columns:
-            _exp_idx = final_indicators.columns.get_loc("Explanation")
-            worksheet.set_column(_exp_idx, _exp_idx, 100, wrap_fmt)
+            if "Explanation" in final_indicators.columns:
+                _exp_idx = final_indicators.columns.get_loc("Explanation")
+                worksheet.set_column(_exp_idx, _exp_idx, 100, wrap_fmt)
 
-        if "Associated Groups" in final_indicators.columns:
-            _ag_idx = final_indicators.columns.get_loc("Associated Groups")
-            worksheet.set_column(_ag_idx, _ag_idx, 45, wrap_fmt)
-    logger.info("Excel write succeeded (rows=%s).", len(final_indicators))
+            if "Associated Groups" in final_indicators.columns:
+                _ag_idx = final_indicators.columns.get_loc("Associated Groups")
+                worksheet.set_column(_ag_idx, _ag_idx, 45, wrap_fmt)
+
+        logger.info(
+            "Excel write succeeded (total=%s, I&W No=%s, I&W Yes=%s).",
+            len(final_indicators),
+            len(final_iw_no),
+            len(final_iw_yes),
+        )
 except Exception:
     logger.exception("Excel write failed: %s", output_path)
     raise
