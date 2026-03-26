@@ -1,0 +1,47 @@
+[project]
+name = "htoc"
+version = "0.1.0"
+description = "HTOC workspace Python project"
+requires-python = ">=3.11"
+dependencies = [
+  "beautifulsoup4",
+  "colorama",
+  "feedparser",
+  "hdbscan",
+  "ipykernel>=7.2.0",
+  "ipython",
+  "lifelines",
+  "matplotlib",
+  "mitreattack-python",
+  "newspaper3k",
+  "nltk",
+  "numpy",
+  "openpyxl",
+  "pandas",
+  "pdfplumber",
+  "plotly",
+  "pmdarima",
+  "prophet",
+  "pymongo",
+  "python-dateutil",
+  "python-docx",
+  "python-dotenv",
+  "python-pptx",
+  "pytz",
+  "pywin32",
+  "requests",
+  "scikit-learn",
+  "scipy",
+  "seaborn",
+  "sentence-transformers",
+  "spacy",
+  "statsmodels",
+  "tabulate",
+  "tensorflow",
+  "torch",
+  "umap-learn",
+  "urllib3",
+]
+
+[tool.uv]
+package = false

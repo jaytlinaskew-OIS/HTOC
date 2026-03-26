@@ -1,0 +1,56 @@
+[Tue 03/24/2026  7:00:04.44] Starting ThreatScoreIW...
+[Tue 03/24/2026  7:00:04.44] Log file: "C:\Users\jaskew\Documents\HTOC\notebooks\ThreatAssessment Scoring\ThreatScoreIW\logs\threatscoreiw_20260324_070004.log"
+[Tue 03/24/2026  7:00:04.47] Installing required packages...
+[Tue 03/24/2026  7:00:04.48] Attempting install from wheelhouse
+Looking in links: z:\HTOC\JA\wheelhouse
+Requirement already satisfied: pandas in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.0)
+Requirement already satisfied: openpyxl in c:\users\jaskew\appdata\roaming\python\python313\site-packages (3.1.5)
+Requirement already satisfied: requests in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.32.4)
+Requirement already satisfied: urllib3 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.5.0)
+Requirement already satisfied: pytz in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2025.2)
+Requirement already satisfied: numpy>=1.26.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2.3.1)
+Requirement already satisfied: python-dateutil>=2.8.2 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2.9.0.post0)
+Requirement already satisfied: tzdata>=2022.7 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2025.2)
+Requirement already satisfied: et-xmlfile in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from openpyxl) (2.0.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from requests) (3.4.2)
+Requirement already satisfied: idna<4,>=2.5 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from requests) (3.10)
+Requirement already satisfied: certifi>=2017.4.17 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from requests) (2025.6.15)
+Requirement already satisfied: six>=1.5 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)
+[Tue 03/24/2026  7:00:04.48] SUCCESS: Packages installed from wheelhouse
+[Tue 03/24/2026  7:00:15.97] Executing ThreatScoreIW script...
+2026-03-24 07:00:29,647 | INFO | ThreatScoreIW | Loaded config from: C:\Users\jaskew\Documents\project_repository\scripts\Data Movement\ThrearConnect-api-pull\utils\config.json
+2026-03-24 07:00:29,647 | INFO | ThreatScoreIW | Base URL: https://hvs.threatconnect.com/api
+2026-03-24 07:00:29,648 | INFO | ThreatScoreIW | Access ID: ****************0382
+2026-03-24 07:00:29,648 | INFO | ThreatScoreIW | Default Org: HTOC Org
+2026-03-24 07:00:29,648 | INFO | ThreatScoreIW | SSL verification disabled: True
+2026-03-24 07:00:29,649 | INFO | ThreatScoreIW | ThreatConnect initialized.
+2026-03-24 07:00:29,650 | INFO | ThreatScoreIW | RequestObject successfully created (owner=HTOC Org).
+2026-03-24 07:00:31,475 | INFO | ThreatScoreIW | Querying indicators (lookback_days=1) starting 2026-03-23T00:00:00Z
+2026-03-24 07:00:35,420 | INFO | ThreatScoreIW | Fetched 500 indicators (resultStart=0).
+2026-03-24 07:00:37,895 | INFO | ThreatScoreIW | Fetched 500 indicators (resultStart=500).
+2026-03-24 07:00:39,190 | INFO | ThreatScoreIW | Fetched 221 indicators (resultStart=1000).
+2026-03-24 07:00:39,348 | INFO | ThreatScoreIW | Indicator query complete (pages=3).
+2026-03-24 07:00:39,350 | INFO | ThreatScoreIW | Normalizing 1221 indicator records.
+2026-03-24 07:00:39,529 | INFO | ThreatScoreIW | observed_src ready (rows=794, cols=34).
+2026-03-24 07:00:39,530 | INFO | ThreatScoreIW | Reading Excel scores: Z:\HTOC\Data_Analytics\Data\Threat Assessment Scores\Threat_Assessment_Scores.xlsx
+2026-03-24 07:00:40,898 | INFO | ThreatScoreIW | Loaded df (rows=2324, cols=16).
+2026-03-24 07:00:40,901 | INFO | ThreatScoreIW | Filtered df by observed_src indicators: 2324 -> 783 rows.
+2026-03-24 07:00:40,914 | INFO | ThreatScoreIW | Updated 'Last Observed' from observed_src.lastObserved (unique indicators=783).
+2026-03-24 07:00:40,917 | INFO | ThreatScoreIW | Last 24h window from max obs (2026-03-24 00:00:00+00:00): 783 rows.
+2026-03-24 07:00:40,919 | INFO | ThreatScoreIW | Multi-partner indicators in window: 771 rows.
+2026-03-24 07:00:40,924 | INFO | ThreatScoreIW | Multi-partner with VT>=10: 452 rows.
+2026-03-24 07:00:40,926 | INFO | ThreatScoreIW | High/Critical in set: 56 rows.
+2026-03-24 07:00:40,928 | INFO | ThreatScoreIW | Final indicators (VT>=15): 34 rows.
+2026-03-24 07:00:40,929 | INFO | ThreatScoreIW | Loaded config from: C:\Users\jaskew\Documents\project_repository\scripts\Data Movement\ThrearConnect-api-pull\utils\config.json
+2026-03-24 07:00:40,930 | INFO | ThreatScoreIW | Base URL: https://hvs.threatconnect.com/api
+2026-03-24 07:00:40,930 | INFO | ThreatScoreIW | Access ID: ****************0382
+2026-03-24 07:00:40,930 | INFO | ThreatScoreIW | Default Org: HTOC Org
+2026-03-24 07:00:40,930 | INFO | ThreatScoreIW | ThreatConnect initialized.
+2026-03-24 07:00:40,930 | INFO | ThreatScoreIW | RequestObject successfully created (owner=HTOC Org).
+2026-03-24 07:00:42,054 | INFO | ThreatScoreIW | Fetched 63 indicators (chunk=34, resultStart=0).
+2026-03-24 07:00:42,180 | INFO | ThreatScoreIW | observed_src (final query) rows=34 cols=31
+2026-03-24 07:00:42,187 | INFO | ThreatScoreIW | Writing Excel output: Z:\HTOC\Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W\ThreatAssessI_W_20260324.xlsx
+2026-03-24 07:00:42,653 | INFO | ThreatScoreIW | Excel write succeeded (total=34, I&W No=29, I&W Yes=5).
+[Tue 03/24/2026  7:00:43.30] SUCCESS: ThreatScoreIW completed successfully
+[Tue 03/24/2026  7:00:43.30] SUCCESS: Excel file found: Z:\HTOC\Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W\ThreatAssessI_W_20260324.xlsx
+[Tue 03/24/2026  7:00:43.38] Batch script completed successfully
