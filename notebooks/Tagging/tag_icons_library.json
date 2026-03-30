@@ -1,0 +1,4239 @@
+{
+  "schema_version": 8,
+  "description": "categories: label, icon, includes, tags. entries: nested by category id — entries.phishing[\"Tag Name\"] = {icon_url}. Sync preserves grouping; migrate converts legacy flat entries[tag].category.",
+  "default_icon": "tags",
+  "entries": {
+    "c2": {
+      "Beacon": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "C2": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "Cobeacon": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "Command and Control": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "UNC2447": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "UNC2546": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "UNC2565": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "UNC2582": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "UNC2835": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "UNC2900": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      }
+    },
+    "credentials": {
+      "Brute Force": {
+        "icon_url": "https://api.iconify.design/lucide/key-round.svg"
+      },
+      "Brute Force Attack": {
+        "icon_url": "https://api.iconify.design/lucide/key-round.svg"
+      },
+      "Credential Harvesting/Theft": {
+        "icon_url": "https://api.iconify.design/lucide/key-round.svg"
+      },
+      "Credentials from Password Stores": {
+        "icon_url": "https://api.iconify.design/lucide/key-round.svg"
+      },
+      "Exploitation for Credential Access": {
+        "icon_url": "https://api.iconify.design/lucide/key-round.svg"
+      },
+      "OS Credential Dumping": {
+        "icon_url": "https://api.iconify.design/lucide/key-round.svg"
+      },
+      "Unsecured Credentials": {
+        "icon_url": "https://api.iconify.design/lucide/key-round.svg"
+      }
+    },
+    "ddos": {
+      "Network Denial of Service": {
+        "icon_url": "https://api.iconify.design/lucide/zap.svg"
+      }
+    },
+    "dns_domains": {
+      "Domain Trust Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/globe.svg"
+      },
+      "Search Open Websites/Domains": {
+        "icon_url": "https://api.iconify.design/lucide/globe.svg"
+      }
+    },
+    "exfiltration": {
+      "Data Exfiltration": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-upload.svg"
+      },
+      "Exfiltration Over Alternative Protocol": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-upload.svg"
+      },
+      "Exfiltration Over C2 Channel": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-upload.svg"
+      },
+      "Exfiltration Over Web Service": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-upload.svg"
+      }
+    },
+    "exploitation": {
+      "Active Exploitation": {
+        "icon_url": "https://api.iconify.design/lucide/shield-alert.svg"
+      },
+      "Exploit Public-Facing Application": {
+        "icon_url": "https://api.iconify.design/lucide/shield-alert.svg"
+      },
+      "Exploitation for Client Execution": {
+        "icon_url": "https://api.iconify.design/lucide/shield-alert.svg"
+      },
+      "Exploitation for Privilege Escalation": {
+        "icon_url": "https://api.iconify.design/lucide/shield-alert.svg"
+      },
+      "Exploitation of Remote Services": {
+        "icon_url": "https://api.iconify.design/lucide/shield-alert.svg"
+      }
+    },
+    "intel_api": {
+      "Native API": {
+        "icon_url": "https://api.iconify.design/lucide/server.svg"
+      }
+    },
+    "malware": {
+      "AsukaStealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Atomic Stealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "BatLoader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Botnet": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Botnet C&C": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Credential Stealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "D3F@ck Loader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Diceloader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Downloader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Dropper": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "EarthWorm Tunneler": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Gootloader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Grapeloader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Grixba Stealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Guloader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Information Stealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Infostealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "InkLoader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Jssloader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Jupyter Stealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Kutaki Stealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "LegionLoader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Loader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Loki Password Stealer (PWS)": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Lumma Stealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Malware-as-a-Service": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Mints Loader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Mystic Stealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "NickelLoader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Orangeworm": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Password Stealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "PureLogsStealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Racoon Stealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Redline Stealer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Remote Access Trojan": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "SmokeLoader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Tool: JSS Loader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Trojan Dropper": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Trojanized Installer": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "VBS Dropper": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Wineloader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Worm": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "XLoader": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "XWORM": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "banking trojan": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      }
+    },
+    "mobile": {
+      "Google / Android (Bluetooth module)": {
+        "icon_url": "https://api.iconify.design/lucide/monitor-smartphone.svg"
+      },
+      "Ivanti EPMM / MobileIron Core": {
+        "icon_url": "https://api.iconify.design/lucide/monitor-smartphone.svg"
+      }
+    },
+    "phishing": {
+      "Domain Masquerading / Phishing": {
+        "icon_url": "https://api.iconify.design/lucide/mail-warning.svg"
+      },
+      "Phishing": {
+        "icon_url": "https://api.iconify.design/lucide/mail-warning.svg"
+      },
+      "Phishing for Information": {
+        "icon_url": "https://api.iconify.design/lucide/mail-warning.svg"
+      },
+      "Phishing-as-a-Service": {
+        "icon_url": "https://api.iconify.design/lucide/mail-warning.svg"
+      },
+      "phishing as a service": {
+        "icon_url": "https://api.iconify.design/lucide/mail-warning.svg"
+      }
+    },
+    "ransomware": {
+      "BlackCat": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "BlackSuit": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "Cuba Ransomware Gang": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "Play Ransomware Group": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "Ransomhub": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "Ransomware": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "Ransomware-as-a-Service": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "Stormous Ransomware Group": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      }
+    },
+    "reconnaissance": {
+      "Reconnaissance": {
+        "icon_url": "https://api.iconify.design/lucide/binoculars.svg"
+      }
+    },
+    "scanning": {
+      "Active Scanning": {
+        "icon_url": "https://api.iconify.design/lucide/scan-search.svg"
+      },
+      "Network Scanning": {
+        "icon_url": "https://api.iconify.design/lucide/scan-search.svg"
+      }
+    },
+    "spam_malware": {
+      "Malspam": {
+        "icon_url": "https://api.iconify.design/lucide/mail.svg"
+      },
+      "Spam Campaign": {
+        "icon_url": "https://api.iconify.design/lucide/mail.svg"
+      }
+    },
+    "threat_actor": {
+      "8220 Gang": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Cisco Adaptive Security Appliances": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Fake CAPTCHA": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Input Capture": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Raptor Train": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "SVR": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Screen Capture": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Video Capture": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      }
+    },
+    "web_attack": {
+      "SQL Injection": {
+        "icon_url": "https://api.iconify.design/lucide/code-xml.svg"
+      }
+    },
+    "wipers": {
+      "BFG Agonizer wiper": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "Caddywiper": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "Data Destruction": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "Data Wiper": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      }
+    },
+    "other": {
+      ".NET Framework": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "3AM": {
+        "icon_url": "https://api.iconify.design/lucide/tag.svg"
+      },
+      "3CX": {
+        "icon_url": "https://api.iconify.design/lucide/alert-triangle.svg"
+      },
+      "3PLA": {
+        "icon_url": "https://api.iconify.design/lucide/inbox.svg"
+      },
+      "7ZIP": {
+        "icon_url": "https://api.iconify.design/lucide/book.svg"
+      },
+      "AIRDRY.V2": {
+        "icon_url": "https://api.iconify.design/lucide/radar.svg"
+      },
+      "ANYDESK": {
+        "icon_url": "https://api.iconify.design/lucide/infinity.svg"
+      },
+      "AWS": {
+        "icon_url": "https://api.iconify.design/lucide/microchip.svg"
+      },
+      "Abuse Elevation Control Mechanism": {
+        "icon_url": "https://api.iconify.design/lucide/globe.svg"
+      },
+      "Accellion FTA": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-down.svg"
+      },
+      "Access Token Manipulation": {
+        "icon_url": "https://api.iconify.design/lucide/wifi.svg"
+      },
+      "Account Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-left.svg"
+      },
+      "Account Manipulation": {
+        "icon_url": "https://api.iconify.design/lucide/shield-check.svg"
+      },
+      "Acquire Infrastructure": {
+        "icon_url": "https://api.iconify.design/lucide/virus.svg"
+      },
+      "AdFind": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "Adobe Acrobat / Reader": {
+        "icon_url": "https://api.iconify.design/lucide/file-lock.svg"
+      },
+      "Adobe ColdFusion": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "Adobe Flash / Reader": {
+        "icon_url": "https://api.iconify.design/lucide/trash-2.svg"
+      },
+      "Adobe Flash Player": {
+        "icon_url": "https://api.iconify.design/lucide/wrench.svg"
+      },
+      "Adversary-in-the-Middle": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "Aerospace": {
+        "icon_url": "https://api.iconify.design/lucide/info.svg"
+      },
+      "Agent Tesla": {
+        "icon_url": "https://api.iconify.design/lucide/flag.svg"
+      },
+      "Aitopia": {
+        "icon_url": "https://api.iconify.design/lucide/pin.svg"
+      },
+      "Akira": {
+        "icon_url": "https://api.iconify.design/lucide/binary.svg"
+      },
+      "Alphv": {
+        "icon_url": "https://api.iconify.design/lucide/file-warning.svg"
+      },
+      "Amadey": {
+        "icon_url": "https://api.iconify.design/lucide/database.svg"
+      },
+      "AmadeyBot": {
+        "icon_url": "https://api.iconify.design/lucide/zap.svg"
+      },
+      "Anchor Panda": {
+        "icon_url": "https://api.iconify.design/lucide/shield-x.svg"
+      },
+      "Andariel Group": {
+        "icon_url": "https://api.iconify.design/lucide/book.svg"
+      },
+      "Anubis Backdoor": {
+        "icon_url": "https://api.iconify.design/lucide/radar.svg"
+      },
+      "Apache HTTP Server": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "Apache Log4j": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "Apache Tapestry": {
+        "icon_url": "https://api.iconify.design/lucide/moon.svg"
+      },
+      "Apothecary Spider": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "AppleJeus": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-cw.svg"
+      },
+      "Application Layer Protocol": {
+        "icon_url": "https://api.iconify.design/lucide/inbox.svg"
+      },
+      "Application Window Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/camera.svg"
+      },
+      "ArcaneDoor": {
+        "icon_url": "https://api.iconify.design/lucide/cpu.svg"
+      },
+      "Archive Collected Data": {
+        "icon_url": "https://api.iconify.design/lucide/heart.svg"
+      },
+      "Arcmaze": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "Artificial Intelligence": {
+        "icon_url": "https://api.iconify.design/lucide/shield.svg"
+      },
+      "Aspxspy": {
+        "icon_url": "https://api.iconify.design/lucide/mic.svg"
+      },
+      "Asylum Ambuscade": {
+        "icon_url": "https://api.iconify.design/lucide/search.svg"
+      },
+      "AsyncRAT": {
+        "icon_url": "https://api.iconify.design/lucide/database.svg"
+      },
+      "Atlassian Confluence Server/Data Center": {
+        "icon_url": "https://api.iconify.design/lucide/triangle-alert.svg"
+      },
+      "Aukill": {
+        "icon_url": "https://api.iconify.design/lucide/message-square.svg"
+      },
+      "Aurora": {
+        "icon_url": "https://api.iconify.design/lucide/check-circle.svg"
+      },
+      "Aurora Panda": {
+        "icon_url": "https://api.iconify.design/lucide/heart.svg"
+      },
+      "Ave Maria": {
+        "icon_url": "https://api.iconify.design/lucide/usb.svg"
+      },
+      "Avneutralizer": {
+        "icon_url": "https://api.iconify.design/lucide/layers.svg"
+      },
+      "Azorult": {
+        "icon_url": "https://api.iconify.design/lucide/sword.svg"
+      },
+      "BEC": {
+        "icon_url": "https://api.iconify.design/lucide/building.svg"
+      },
+      "BIG-IP": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-right.svg"
+      },
+      "BROOMSTICK": {
+        "icon_url": "https://api.iconify.design/lucide/message-square.svg"
+      },
+      "Backdoor": {
+        "icon_url": "https://api.iconify.design/lucide/axe.svg"
+      },
+      "BadPilot": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-in.svg"
+      },
+      "BadSpace": {
+        "icon_url": "https://api.iconify.design/lucide/link.svg"
+      },
+      "Balada Injector": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "Banished Kitten": {
+        "icon_url": "https://api.iconify.design/lucide/play.svg"
+      },
+      "Barbwire": {
+        "icon_url": "https://api.iconify.design/lucide/alert-circle.svg"
+      },
+      "Barracuda": {
+        "icon_url": "https://api.iconify.design/lucide/hard-drive.svg"
+      },
+      "Bashlite": {
+        "icon_url": "https://api.iconify.design/lucide/search.svg"
+      },
+      "Bateleur": {
+        "icon_url": "https://api.iconify.design/lucide/user.svg"
+      },
+      "Beakdrop": {
+        "icon_url": "https://api.iconify.design/lucide/search.svg"
+      },
+      "Beardshell": {
+        "icon_url": "https://api.iconify.design/lucide/bomb.svg"
+      },
+      "Beavertail": {
+        "icon_url": "https://api.iconify.design/lucide/settings-2.svg"
+      },
+      "Beesknees": {
+        "icon_url": "https://api.iconify.design/lucide/binary.svg"
+      },
+      "Beeswing": {
+        "icon_url": "https://api.iconify.design/lucide/cloud.svg"
+      },
+      "Belarus": {
+        "icon_url": "https://api.iconify.design/lucide/package.svg"
+      },
+      "Beserk Bear": {
+        "icon_url": "https://api.iconify.design/lucide/cloud.svg"
+      },
+      "BeyondTrust": {
+        "icon_url": "https://api.iconify.design/lucide/refresh-cw.svg"
+      },
+      "Bianlian": {
+        "icon_url": "https://api.iconify.design/lucide/ban.svg"
+      },
+      "Bifrost": {
+        "icon_url": "https://api.iconify.design/lucide/chart-pie.svg"
+      },
+      "Birdwatch": {
+        "icon_url": "https://api.iconify.design/lucide/camera.svg"
+      },
+      "Bitcoin": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "Black Basta": {
+        "icon_url": "https://api.iconify.design/lucide/plus.svg"
+      },
+      "Black Shadow": {
+        "icon_url": "https://api.iconify.design/lucide/home.svg"
+      },
+      "BlackByte": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "Blackmatter": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "Blindfix": {
+        "icon_url": "https://api.iconify.design/lucide/chart-pie.svg"
+      },
+      "Blindingcan": {
+        "icon_url": "https://api.iconify.design/lucide/shield-off.svg"
+      },
+      "Blockhead": {
+        "icon_url": "https://api.iconify.design/lucide/package.svg"
+      },
+      "Bluetooth BR/EDR devices": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "Bluetooth stacks / chipset vendors": {
+        "icon_url": "https://api.iconify.design/lucide/folder-lock.svg"
+      },
+      "Boatlaunch": {
+        "icon_url": "https://api.iconify.design/lucide/axe.svg"
+      },
+      "Boostwrite": {
+        "icon_url": "https://api.iconify.design/lucide/image.svg"
+      },
+      "Boot or Logon Autostart Execution": {
+        "icon_url": "https://api.iconify.design/lucide/plug.svg"
+      },
+      "Boot or Logon Initialization Scripts": {
+        "icon_url": "https://api.iconify.design/lucide/fingerprint.svg"
+      },
+      "Brickstorm": {
+        "icon_url": "https://api.iconify.design/lucide/search.svg"
+      },
+      "Bronze Vinewood": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-cw.svg"
+      },
+      "Brute Ratel": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "Bughatch": {
+        "icon_url": "https://api.iconify.design/lucide/star.svg"
+      },
+      "Bugsleep": {
+        "icon_url": "https://api.iconify.design/lucide/trash-2.svg"
+      },
+      "Buhti": {
+        "icon_url": "https://api.iconify.design/lucide/chart-bar.svg"
+      },
+      "Bulgaria": {
+        "icon_url": "https://api.iconify.design/lucide/layers.svg"
+      },
+      "BumbleBee": {
+        "icon_url": "https://api.iconify.design/lucide/tag.svg"
+      },
+      "Burntcigar": {
+        "icon_url": "https://api.iconify.design/lucide/alert-circle.svg"
+      },
+      "Business Email Compromise": {
+        "icon_url": "https://api.iconify.design/lucide/trash.svg"
+      },
+      "CCP": {
+        "icon_url": "https://api.iconify.design/lucide/check.svg"
+      },
+      "CDN": {
+        "icon_url": "https://api.iconify.design/lucide/unlink.svg"
+      },
+      "CHAINLINE": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-left.svg"
+      },
+      "CLOP": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-cw.svg"
+      },
+      "CNE": {
+        "icon_url": "https://api.iconify.design/lucide/smartphone.svg"
+      },
+      "Cactus": {
+        "icon_url": "https://api.iconify.design/lucide/shield-check.svg"
+      },
+      "Cadet Blizzard": {
+        "icon_url": "https://api.iconify.design/lucide/fingerprint.svg"
+      },
+      "Calisto": {
+        "icon_url": "https://api.iconify.design/lucide/smartphone.svg"
+      },
+      "Carbanak": {
+        "icon_url": "https://api.iconify.design/lucide/settings-2.svg"
+      },
+      "Carbon Spider": {
+        "icon_url": "https://api.iconify.design/lucide/flag.svg"
+      },
+      "Carrierpigeon": {
+        "icon_url": "https://api.iconify.design/lucide/monitor.svg"
+      },
+      "Casbaneiro": {
+        "icon_url": "https://api.iconify.design/lucide/file-warning.svg"
+      },
+      "Caveman": {
+        "icon_url": "https://api.iconify.design/lucide/axe.svg"
+      },
+      "Charming Kitten": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-cw.svg"
+      },
+      "ChatGPT": {
+        "icon_url": "https://api.iconify.design/lucide/hard-drive.svg"
+      },
+      "Chile Locker": {
+        "icon_url": "https://api.iconify.design/lucide/code.svg"
+      },
+      "China": {
+        "icon_url": "https://api.iconify.design/lucide/chart-pie.svg"
+      },
+      "Choziosi": {
+        "icon_url": "https://api.iconify.design/lucide/cloud.svg"
+      },
+      "Cigril": {
+        "icon_url": "https://api.iconify.design/lucide/alert-circle.svg"
+      },
+      "Circuit Panda": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-left.svg"
+      },
+      "Circular 179": {
+        "icon_url": "https://api.iconify.design/lucide/eye.svg"
+      },
+      "Circular 186": {
+        "icon_url": "https://api.iconify.design/lucide/tree-pine.svg"
+      },
+      "Circular 196": {
+        "icon_url": "https://api.iconify.design/lucide/package.svg"
+      },
+      "Circular 197": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-in.svg"
+      },
+      "Cisco ASA / FTD (Remote Access VPN)": {
+        "icon_url": "https://api.iconify.design/lucide/chevron-down.svg"
+      },
+      "Cisco IOS / IOS XE (Smart Install)": {
+        "icon_url": "https://api.iconify.design/lucide/bell.svg"
+      },
+      "Cisco IOS XE": {
+        "icon_url": "https://api.iconify.design/lucide/check-circle.svg"
+      },
+      "Cisco IOS XE (Web UI)": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "Cisco Nexus 9000 (ACI Multi Site CloudSec)": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "Citrix ADC / Gateway": {
+        "icon_url": "https://api.iconify.design/lucide/zap.svg"
+      },
+      "Citrix Bleed": {
+        "icon_url": "https://api.iconify.design/lucide/virus.svg"
+      },
+      "Citrix NetScaler / ADC": {
+        "icon_url": "https://api.iconify.design/lucide/sun.svg"
+      },
+      "Citrix NetScaler / ADC / Gateway": {
+        "icon_url": "https://api.iconify.design/lucide/shield.svg"
+      },
+      "Citrix ShareFile Storage Zones Controller": {
+        "icon_url": "https://api.iconify.design/lucide/bell.svg"
+      },
+      "Cl0P": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Cleo Harmony/VLTrader/LexiCom": {
+        "icon_url": "https://api.iconify.design/lucide/infinity.svg"
+      },
+      "Clipboard Data": {
+        "icon_url": "https://api.iconify.design/lucide/calendar.svg"
+      },
+      "Cloud Attacks": {
+        "icon_url": "https://api.iconify.design/lucide/layers.svg"
+      },
+      "Cloud Infrastructure Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/bell.svg"
+      },
+      "Cloud Service Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/alert-circle.svg"
+      },
+      "Cloud Storage Object Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "Cloudduke": {
+        "icon_url": "https://api.iconify.design/lucide/camera.svg"
+      },
+      "Cobalt Strike": {
+        "icon_url": "https://api.iconify.design/lucide/link.svg"
+      },
+      "ColdFusion": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "CollectionRAT": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Colordrop": {
+        "icon_url": "https://api.iconify.design/lucide/wifi-off.svg"
+      },
+      "Command Injection": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Command and Scripting Interpreter": {
+        "icon_url": "https://api.iconify.design/lucide/download.svg"
+      },
+      "Comment Panda": {
+        "icon_url": "https://api.iconify.design/lucide/chart-pie.svg"
+      },
+      "Compromise Accounts": {
+        "icon_url": "https://api.iconify.design/lucide/wifi.svg"
+      },
+      "Compromise Infrastructure": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-cw.svg"
+      },
+      "Confluence": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "ConnectWise ScreenConnect": {
+        "icon_url": "https://api.iconify.design/lucide/bot.svg"
+      },
+      "ConnectWise ScreenConnect / Screen Sharing software": {
+        "icon_url": "https://api.iconify.design/lucide/settings.svg"
+      },
+      "Contagious Interview": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Content Delivery Network": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "Conti": {
+        "icon_url": "https://api.iconify.design/lucide/database.svg"
+      },
+      "Cosmicduke": {
+        "icon_url": "https://api.iconify.design/lucide/bus.svg"
+      },
+      "Covenant Grunt": {
+        "icon_url": "https://api.iconify.design/lucide/target.svg"
+      },
+      "Cozy Bear": {
+        "icon_url": "https://api.iconify.design/lucide/wrench.svg"
+      },
+      "Cozyduke": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "Crabpot": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-left.svg"
+      },
+      "Create Account": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "Create or Modify System Process": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "Crimson Collective": {
+        "icon_url": "https://api.iconify.design/lucide/box.svg"
+      },
+      "Crimson Sandstorm": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "CrowdStrike": {
+        "icon_url": "https://api.iconify.design/lucide/tree-pine.svg"
+      },
+      "Crowview": {
+        "icon_url": "https://api.iconify.design/lucide/shield-question.svg"
+      },
+      "CrushFTP": {
+        "icon_url": "https://api.iconify.design/lucide/list.svg"
+      },
+      "Cryptocurrency": {
+        "icon_url": "https://api.iconify.design/lucide/wifi-off.svg"
+      },
+      "Crystalray": {
+        "icon_url": "https://api.iconify.design/lucide/bus.svg"
+      },
+      "Cyber Espionage": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Cyber Intelligence Network (CIN)": {
+        "icon_url": "https://api.iconify.design/lucide/bell.svg"
+      },
+      "DESKPIRATE": {
+        "icon_url": "https://api.iconify.design/lucide/archive.svg"
+      },
+      "DHS": {
+        "icon_url": "https://api.iconify.design/lucide/layers.svg"
+      },
+      "DLRAT": {
+        "icon_url": "https://api.iconify.design/lucide/calendar.svg"
+      },
+      "DanaBot": {
+        "icon_url": "https://api.iconify.design/lucide/radar.svg"
+      },
+      "Dark Frost": {
+        "icon_url": "https://api.iconify.design/lucide/alert-circle.svg"
+      },
+      "Dark Pink": {
+        "icon_url": "https://api.iconify.design/lucide/sun.svg"
+      },
+      "DarkGate": {
+        "icon_url": "https://api.iconify.design/lucide/menu.svg"
+      },
+      "Darkness": {
+        "icon_url": "https://api.iconify.design/lucide/circle.svg"
+      },
+      "Darkside": {
+        "icon_url": "https://api.iconify.design/lucide/tablet.svg"
+      },
+      "Data Encoding": {
+        "icon_url": "https://api.iconify.design/lucide/code.svg"
+      },
+      "Data Encrypted for Impact": {
+        "icon_url": "https://api.iconify.design/lucide/check-circle.svg"
+      },
+      "Data Manipulation": {
+        "icon_url": "https://api.iconify.design/lucide/download.svg"
+      },
+      "Data Obfuscation": {
+        "icon_url": "https://api.iconify.design/lucide/chart-line.svg"
+      },
+      "Data Staged": {
+        "icon_url": "https://api.iconify.design/lucide/bot.svg"
+      },
+      "Data from Cloud Storage": {
+        "icon_url": "https://api.iconify.design/lucide/message-square.svg"
+      },
+      "Data from Information Repositories": {
+        "icon_url": "https://api.iconify.design/lucide/check.svg"
+      },
+      "Data from Local System": {
+        "icon_url": "https://api.iconify.design/lucide/globe.svg"
+      },
+      "Dawncat": {
+        "icon_url": "https://api.iconify.design/lucide/fingerprint.svg"
+      },
+      "Deadglyph": {
+        "icon_url": "https://api.iconify.design/lucide/phone.svg"
+      },
+      "Debugger Evasion": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-right.svg"
+      },
+      "Decoy Dog": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Deep Panda": {
+        "icon_url": "https://api.iconify.design/lucide/mic.svg"
+      },
+      "DeepBlueMagic": {
+        "icon_url": "https://api.iconify.design/lucide/wrench.svg"
+      },
+      "Defacement": {
+        "icon_url": "https://api.iconify.design/lucide/package-open.svg"
+      },
+      "Defense Evasion": {
+        "icon_url": "https://api.iconify.design/lucide/tags.svg"
+      },
+      "Deobfuscate/Decode Files or Information": {
+        "icon_url": "https://api.iconify.design/lucide/camera.svg"
+      },
+      "Department of Management (DOM)": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "Department of the Treasury": {
+        "icon_url": "https://api.iconify.design/lucide/server.svg"
+      },
+      "Detection Evasion": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "Develop Capabilities": {
+        "icon_url": "https://api.iconify.design/lucide/code.svg"
+      },
+      "Dewmode": {
+        "icon_url": "https://api.iconify.design/lucide/mic.svg"
+      },
+      "Diamond Sleet": {
+        "icon_url": "https://api.iconify.design/lucide/fingerprint.svg"
+      },
+      "Direct Volume Access": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "Directory Traversal": {
+        "icon_url": "https://api.iconify.design/lucide/archive.svg"
+      },
+      "Doomhost": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "Double Extortion": {
+        "icon_url": "https://api.iconify.design/lucide/wifi.svg"
+      },
+      "DragonEgg": {
+        "icon_url": "https://api.iconify.design/lucide/book.svg"
+      },
+      "DragonForce": {
+        "icon_url": "https://api.iconify.design/lucide/moon.svg"
+      },
+      "Drawdown": {
+        "icon_url": "https://api.iconify.design/lucide/shield-off.svg"
+      },
+      "Dridex": {
+        "icon_url": "https://api.iconify.design/lucide/shield-x.svg"
+      },
+      "Driftpin": {
+        "icon_url": "https://api.iconify.design/lucide/chart-pie.svg"
+      },
+      "Drive-by Compromise": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "Drupal core": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "Drupalgeddon2": {
+        "icon_url": "https://api.iconify.design/lucide/ban.svg"
+      },
+      "Dtrack": {
+        "icon_url": "https://api.iconify.design/lucide/folder-lock.svg"
+      },
+      "Dynamic Resolution": {
+        "icon_url": "https://api.iconify.design/lucide/bot.svg"
+      },
+      "Dynamite Panda": {
+        "icon_url": "https://api.iconify.design/lucide/lock.svg"
+      },
+      "Dyre": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Earth Lamia": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "Easylook": {
+        "icon_url": "https://api.iconify.design/lucide/info.svg"
+      },
+      "Education": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-cw.svg"
+      },
+      "Elephant Beetle": {
+        "icon_url": "https://api.iconify.design/lucide/chart-pie.svg"
+      },
+      "Elfplead.Linux": {
+        "icon_url": "https://api.iconify.design/lucide/infinity.svg"
+      },
+      "Elfplead.Windows": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Email Collection": {
+        "icon_url": "https://api.iconify.design/lucide/lock-keyhole.svg"
+      },
+      "Email Security Gateway Vulnerability": {
+        "icon_url": "https://api.iconify.design/lucide/settings.svg"
+      },
+      "Emennet Pasargad": {
+        "icon_url": "https://api.iconify.design/lucide/check.svg"
+      },
+      "Emerald Sleet": {
+        "icon_url": "https://api.iconify.design/lucide/search.svg"
+      },
+      "Emissary Panda": {
+        "icon_url": "https://api.iconify.design/lucide/virus.svg"
+      },
+      "Emotet": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Emufarm": {
+        "icon_url": "https://api.iconify.design/lucide/info.svg"
+      },
+      "Encrypted Channel": {
+        "icon_url": "https://api.iconify.design/lucide/building.svg"
+      },
+      "Energy": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "Energy Sector": {
+        "icon_url": "https://api.iconify.design/lucide/package-open.svg"
+      },
+      "Establish Accounts": {
+        "icon_url": "https://api.iconify.design/lucide/chevron-down.svg"
+      },
+      "EternalBlue": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Event Triggered Execution": {
+        "icon_url": "https://api.iconify.design/lucide/heart.svg"
+      },
+      "Evernote": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-cw.svg"
+      },
+      "EvilAI": {
+        "icon_url": "https://api.iconify.design/lucide/tags.svg"
+      },
+      "EvilProxy": {
+        "icon_url": "https://api.iconify.design/lucide/camera.svg"
+      },
+      "EvilTeamViewer": {
+        "icon_url": "https://api.iconify.design/lucide/terminal.svg"
+      },
+      "Evilginx": {
+        "icon_url": "https://api.iconify.design/lucide/code.svg"
+      },
+      "Exchange Server": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "Execution Guardrails": {
+        "icon_url": "https://api.iconify.design/lucide/tag.svg"
+      },
+      "External Remote Services": {
+        "icon_url": "https://api.iconify.design/lucide/phone.svg"
+      },
+      "Eyewell": {
+        "icon_url": "https://api.iconify.design/lucide/shield.svg"
+      },
+      "Eyewell.Waterway": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "F5 BIG IP (iControl REST)": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "F5 BIG IP TMUI": {
+        "icon_url": "https://api.iconify.design/lucide/unlink.svg"
+      },
+      "F5 BIG-IP": {
+        "icon_url": "https://api.iconify.design/lucide/tag.svg"
+      },
+      "FAKEUPDATES": {
+        "icon_url": "https://api.iconify.design/lucide/server.svg"
+      },
+      "FBI": {
+        "icon_url": "https://api.iconify.design/lucide/link-2.svg"
+      },
+      "FBI CP-000169-TT": {
+        "icon_url": "https://api.iconify.design/lucide/bus.svg"
+      },
+      "FBI Cyber": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "FIN12": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "FIN4": {
+        "icon_url": "https://api.iconify.design/lucide/building.svg"
+      },
+      "FLORAHOX": {
+        "icon_url": "https://api.iconify.design/lucide/check.svg"
+      },
+      "FLOWERWATER": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-cw.svg"
+      },
+      "FSB": {
+        "icon_url": "https://api.iconify.design/lucide/lock.svg"
+      },
+      "FSB 16th Center": {
+        "icon_url": "https://api.iconify.design/lucide/calendar.svg"
+      },
+      "FakeBat": {
+        "icon_url": "https://api.iconify.design/lucide/shield.svg"
+      },
+      "Fallback Channels": {
+        "icon_url": "https://api.iconify.design/lucide/truck.svg"
+      },
+      "Famous Chollima": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "Fancy Bear": {
+        "icon_url": "https://api.iconify.design/lucide/plus.svg"
+      },
+      "Federal Government Partner": {
+        "icon_url": "https://api.iconify.design/lucide/pin.svg"
+      },
+      "File and Directory Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "File and Directory Permissions Modification": {
+        "icon_url": "https://api.iconify.design/lucide/image.svg"
+      },
+      "FileZilla": {
+        "icon_url": "https://api.iconify.design/lucide/package.svg"
+      },
+      "Financial": {
+        "icon_url": "https://api.iconify.design/lucide/flag.svg"
+      },
+      "Financial Services": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "Flagpole": {
+        "icon_url": "https://api.iconify.design/lucide/camera.svg"
+      },
+      "Flawedammyy": {
+        "icon_url": "https://api.iconify.design/lucide/circle.svg"
+      },
+      "Flawedgrace": {
+        "icon_url": "https://api.iconify.design/lucide/bell.svg"
+      },
+      "Flax Typhoon": {
+        "icon_url": "https://api.iconify.design/lucide/message-square.svg"
+      },
+      "Flyhigh": {
+        "icon_url": "https://api.iconify.design/lucide/shield.svg"
+      },
+      "Food and Agriculture": {
+        "icon_url": "https://api.iconify.design/lucide/inbox.svg"
+      },
+      "FormBook": {
+        "icon_url": "https://api.iconify.design/lucide/hash.svg"
+      },
+      "Fortinet FortiOS / FortiGate": {
+        "icon_url": "https://api.iconify.design/lucide/alert-octagon.svg"
+      },
+      "Fortinet FortiOS / FortiProxy": {
+        "icon_url": "https://api.iconify.design/lucide/shield-x.svg"
+      },
+      "Fortinet FortiOS SSL-VPN": {
+        "icon_url": "https://api.iconify.design/lucide/file-lock.svg"
+      },
+      "Fortra GoAnywhere MFT": {
+        "icon_url": "https://api.iconify.design/lucide/building.svg"
+      },
+      "Fowlgaze": {
+        "icon_url": "https://api.iconify.design/lucide/file.svg"
+      },
+      "Friendspeak": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-in.svg"
+      },
+      "Frontshell": {
+        "icon_url": "https://api.iconify.design/lucide/image.svg"
+      },
+      "GCMAN": {
+        "icon_url": "https://api.iconify.design/lucide/folder-lock.svg"
+      },
+      "GLASSTOKEN": {
+        "icon_url": "https://api.iconify.design/lucide/box.svg"
+      },
+      "GRU": {
+        "icon_url": "https://api.iconify.design/lucide/code.svg"
+      },
+      "Gafgyt": {
+        "icon_url": "https://api.iconify.design/lucide/shield-x.svg"
+      },
+      "GammaStager": {
+        "icon_url": "https://api.iconify.design/lucide/image.svg"
+      },
+      "Gammasteel": {
+        "icon_url": "https://api.iconify.design/lucide/radar.svg"
+      },
+      "Gather Victim Identity Information": {
+        "icon_url": "https://api.iconify.design/lucide/list.svg"
+      },
+      "Geminiduke": {
+        "icon_url": "https://api.iconify.design/lucide/truck.svg"
+      },
+      "Get2": {
+        "icon_url": "https://api.iconify.design/lucide/flag.svg"
+      },
+      "Ggldr": {
+        "icon_url": "https://api.iconify.design/lucide/star.svg"
+      },
+      "Gh0St": {
+        "icon_url": "https://api.iconify.design/lucide/virus.svg"
+      },
+      "GhostLocker": {
+        "icon_url": "https://api.iconify.design/lucide/hash.svg"
+      },
+      "GhostPulse": {
+        "icon_url": "https://api.iconify.design/lucide/flag.svg"
+      },
+      "Ghostsec": {
+        "icon_url": "https://api.iconify.design/lucide/plus.svg"
+      },
+      "Ghostwriter": {
+        "icon_url": "https://api.iconify.design/lucide/folder-lock.svg"
+      },
+      "GitLab CE / EE": {
+        "icon_url": "https://api.iconify.design/lucide/trash-2.svg"
+      },
+      "Global Protect Vulnerability": {
+        "icon_url": "https://api.iconify.design/lucide/book.svg"
+      },
+      "Globeimposter": {
+        "icon_url": "https://api.iconify.design/lucide/pin.svg"
+      },
+      "Golfcart": {
+        "icon_url": "https://api.iconify.design/lucide/user.svg"
+      },
+      "Goodtimes": {
+        "icon_url": "https://api.iconify.design/lucide/plug.svg"
+      },
+      "Goofex": {
+        "icon_url": "https://api.iconify.design/lucide/chevron-down.svg"
+      },
+      "Google Chrome / Skia": {
+        "icon_url": "https://api.iconify.design/lucide/unlink.svg"
+      },
+      "GootKit": {
+        "icon_url": "https://api.iconify.design/lucide/plus.svg"
+      },
+      "Government Facilities Sector": {
+        "icon_url": "https://api.iconify.design/lucide/menu.svg"
+      },
+      "Government Sector": {
+        "icon_url": "https://api.iconify.design/lucide/link.svg"
+      },
+      "Graceful Spider": {
+        "icon_url": "https://api.iconify.design/lucide/tree-pine.svg"
+      },
+      "Gracewire": {
+        "icon_url": "https://api.iconify.design/lucide/truck.svg"
+      },
+      "Grayling": {
+        "icon_url": "https://api.iconify.design/lucide/layers.svg"
+      },
+      "Greatness": {
+        "icon_url": "https://api.iconify.design/lucide/info.svg"
+      },
+      "Griffon": {
+        "icon_url": "https://api.iconify.design/lucide/folder-lock.svg"
+      },
+      "Grizzly Steppe": {
+        "icon_url": "https://api.iconify.design/lucide/shield-question.svg"
+      },
+      "HTOC-Intel": {
+        "icon_url": "https://api.iconify.design/lucide/check-circle.svg"
+      },
+      "Hacking-as-a-Service (HaaS)": {
+        "icon_url": "https://api.iconify.design/lucide/image.svg"
+      },
+      "Hacktivism": {
+        "icon_url": "https://api.iconify.design/lucide/refresh-cw.svg"
+      },
+      "Hades": {
+        "icon_url": "https://api.iconify.design/lucide/radar.svg"
+      },
+      "Halfbaked": {
+        "icon_url": "https://api.iconify.design/lucide/chart-line.svg"
+      },
+      "HammerSwing": {
+        "icon_url": "https://api.iconify.design/lucide/chart-bar.svg"
+      },
+      "Hammerduke": {
+        "icon_url": "https://api.iconify.design/lucide/download.svg"
+      },
+      "Hammertoss": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-up.svg"
+      },
+      "Hancitor": {
+        "icon_url": "https://api.iconify.design/lucide/folder-lock.svg"
+      },
+      "Handyman": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "Hardflex": {
+        "icon_url": "https://api.iconify.design/lucide/shield.svg"
+      },
+      "Havoc Framework": {
+        "icon_url": "https://api.iconify.design/lucide/alert-circle.svg"
+      },
+      "Haywire Kitten": {
+        "icon_url": "https://api.iconify.design/lucide/radar.svg"
+      },
+      "Health": {
+        "icon_url": "https://api.iconify.design/lucide/info.svg"
+      },
+      "Health-ISAC": {
+        "icon_url": "https://api.iconify.design/lucide/infinity.svg"
+      },
+      "Helix Kitten": {
+        "icon_url": "https://api.iconify.design/lucide/mail.svg"
+      },
+      "HiatusRAT": {
+        "icon_url": "https://api.iconify.design/lucide/wifi-off.svg"
+      },
+      "Hide Artifacts": {
+        "icon_url": "https://api.iconify.design/lucide/info.svg"
+      },
+      "Hijack Execution Flow": {
+        "icon_url": "https://api.iconify.design/lucide/inbox.svg"
+      },
+      "Hookbot": {
+        "icon_url": "https://api.iconify.design/lucide/chart-line.svg"
+      },
+      "Horabot": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-right.svg"
+      },
+      "Htran": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "Huawei HG532 / SOHO routers": {
+        "icon_url": "https://api.iconify.design/lucide/sword.svg"
+      },
+      "I-Soon": {
+        "icon_url": "https://api.iconify.design/lucide/hash.svg"
+      },
+      "INDICATOR NOTICE 25168.1": {
+        "icon_url": "https://api.iconify.design/lucide/wrench.svg"
+      },
+      "INDICATOR NOTICE 25178.1": {
+        "icon_url": "https://api.iconify.design/lucide/file-lock.svg"
+      },
+      "INDICATOR NOTICE 25183.1": {
+        "icon_url": "https://api.iconify.design/lucide/shield-off.svg"
+      },
+      "IRGC": {
+        "icon_url": "https://api.iconify.design/lucide/binary.svg"
+      },
+      "IRGC EWCD": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "IceID": {
+        "icon_url": "https://api.iconify.design/lucide/link.svg"
+      },
+      "Icebot": {
+        "icon_url": "https://api.iconify.design/lucide/building.svg"
+      },
+      "IcedID": {
+        "icon_url": "https://api.iconify.design/lucide/lock-keyhole.svg"
+      },
+      "Impacket (Wmiexec)": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Impair Defenses": {
+        "icon_url": "https://api.iconify.design/lucide/link.svg"
+      },
+      "Imperial Kitten": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "Impersonation": {
+        "icon_url": "https://api.iconify.design/lucide/alert-octagon.svg"
+      },
+      "India": {
+        "icon_url": "https://api.iconify.design/lucide/inbox.svg"
+      },
+      "Indicator Removal": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Indrik Spider": {
+        "icon_url": "https://api.iconify.design/lucide/circle.svg"
+      },
+      "Infamous Chisel": {
+        "icon_url": "https://api.iconify.design/lucide/eye.svg"
+      },
+      "Inferno VPS": {
+        "icon_url": "https://api.iconify.design/lucide/activity.svg"
+      },
+      "Information Technology Sector": {
+        "icon_url": "https://api.iconify.design/lucide/eye.svg"
+      },
+      "Ingress Tool Transfer": {
+        "icon_url": "https://api.iconify.design/lucide/bot.svg"
+      },
+      "Initial Access": {
+        "icon_url": "https://api.iconify.design/lucide/target.svg"
+      },
+      "Initial Access Broker": {
+        "icon_url": "https://api.iconify.design/lucide/box.svg"
+      },
+      "InkBox": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "Inter-Process Communication": {
+        "icon_url": "https://api.iconify.design/lucide/circle.svg"
+      },
+      "Interlock": {
+        "icon_url": "https://api.iconify.design/lucide/archive.svg"
+      },
+      "InvisibleFerret": {
+        "icon_url": "https://api.iconify.design/lucide/link-2.svg"
+      },
+      "Iran": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Ivanti Connect Secure / Policy Secure": {
+        "icon_url": "https://api.iconify.design/lucide/chart-line.svg"
+      },
+      "Ivanti Connect Secure, Policy Secure, Neurons for ZTA": {
+        "icon_url": "https://api.iconify.design/lucide/tablet.svg"
+      },
+      "Ivanti EPM": {
+        "icon_url": "https://api.iconify.design/lucide/file-warning.svg"
+      },
+      "Javascript": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "JetBrains TeamCity": {
+        "icon_url": "https://api.iconify.design/lucide/settings-2.svg"
+      },
+      "Judgment Panda": {
+        "icon_url": "https://api.iconify.design/lucide/server.svg"
+      },
+      "JumpCloud": {
+        "icon_url": "https://api.iconify.design/lucide/key-round.svg"
+      },
+      "KEYPLUG": {
+        "icon_url": "https://api.iconify.design/lucide/circle.svg"
+      },
+      "Kaba": {
+        "icon_url": "https://api.iconify.design/lucide/file-warning.svg"
+      },
+      "Karakurt": {
+        "icon_url": "https://api.iconify.design/lucide/building.svg"
+      },
+      "Katana": {
+        "icon_url": "https://api.iconify.design/lucide/check-circle.svg"
+      },
+      "Kepavll": {
+        "icon_url": "https://api.iconify.design/lucide/infinity.svg"
+      },
+      "Keyframe": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "Kneeslide": {
+        "icon_url": "https://api.iconify.design/lucide/wifi-off.svg"
+      },
+      "Kryptonite Panda": {
+        "icon_url": "https://api.iconify.design/lucide/filter.svg"
+      },
+      "LABRAT": {
+        "icon_url": "https://api.iconify.design/lucide/home.svg"
+      },
+      "LAZYRIVER": {
+        "icon_url": "https://api.iconify.design/lucide/database.svg"
+      },
+      "LIGHTWIRE": {
+        "icon_url": "https://api.iconify.design/lucide/chart-bar.svg"
+      },
+      "Lace Tempest": {
+        "icon_url": "https://api.iconify.design/lucide/globe.svg"
+      },
+      "Lateral Tool Transfer": {
+        "icon_url": "https://api.iconify.design/lucide/mail-warning.svg"
+      },
+      "Latrodectus": {
+        "icon_url": "https://api.iconify.design/lucide/tree-pine.svg"
+      },
+      "Lemurloot": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-right.svg"
+      },
+      "Lightlesscan": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "LilacSquid": {
+        "icon_url": "https://api.iconify.design/lucide/alert-triangle.svg"
+      },
+      "Line Dancer": {
+        "icon_url": "https://api.iconify.design/lucide/camera.svg"
+      },
+      "Line Runner": {
+        "icon_url": "https://api.iconify.design/lucide/monitor.svg"
+      },
+      "Linux kernel (netfilter/x_tables)": {
+        "icon_url": "https://api.iconify.design/lucide/mail.svg"
+      },
+      "Liteduke": {
+        "icon_url": "https://api.iconify.design/lucide/shield.svg"
+      },
+      "Living off the Land": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "Lizar": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Loadout": {
+        "icon_url": "https://api.iconify.design/lucide/shield.svg"
+      },
+      "LockBit": {
+        "icon_url": "https://api.iconify.design/lucide/tree-pine.svg"
+      },
+      "LockBit Black": {
+        "icon_url": "https://api.iconify.design/lucide/circle.svg"
+      },
+      "Locky": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "Logshell": {
+        "icon_url": "https://api.iconify.design/lucide/image.svg"
+      },
+      "LummaC": {
+        "icon_url": "https://api.iconify.design/lucide/terminal.svg"
+      },
+      "MOIS": {
+        "icon_url": "https://api.iconify.design/lucide/file-warning.svg"
+      },
+      "MS 365": {
+        "icon_url": "https://api.iconify.design/lucide/shield-alert.svg"
+      },
+      "MSS": {
+        "icon_url": "https://api.iconify.design/lucide/shield-off.svg"
+      },
+      "MaaS": {
+        "icon_url": "https://api.iconify.design/lucide/image.svg"
+      },
+      "Macro": {
+        "icon_url": "https://api.iconify.design/lucide/smartphone.svg"
+      },
+      "Makop": {
+        "icon_url": "https://api.iconify.design/lucide/menu.svg"
+      },
+      "Mallard Spider": {
+        "icon_url": "https://api.iconify.design/lucide/home.svg"
+      },
+      "Manufacturing": {
+        "icon_url": "https://api.iconify.design/lucide/settings.svg"
+      },
+      "Marai": {
+        "icon_url": "https://api.iconify.design/lucide/menu.svg"
+      },
+      "Masquerading": {
+        "icon_url": "https://api.iconify.design/lucide/lock.svg"
+      },
+      "Maze": {
+        "icon_url": "https://api.iconify.design/lucide/box.svg"
+      },
+      "Medical": {
+        "icon_url": "https://api.iconify.design/lucide/binary.svg"
+      },
+      "Medtronic Paceart Optima (Messaging Queuing Service)": {
+        "icon_url": "https://api.iconify.design/lucide/globe.svg"
+      },
+      "Medusa": {
+        "icon_url": "https://api.iconify.design/lucide/chart-bar.svg"
+      },
+      "MedusaLocker": {
+        "icon_url": "https://api.iconify.design/lucide/bus.svg"
+      },
+      "MeshAgent": {
+        "icon_url": "https://api.iconify.design/lucide/pin.svg"
+      },
+      "Meta recruiter": {
+        "icon_url": "https://api.iconify.design/lucide/mail.svg"
+      },
+      "Meterpreter": {
+        "icon_url": "https://api.iconify.design/lucide/camera.svg"
+      },
+      "Microsoft 365 Defender": {
+        "icon_url": "https://api.iconify.design/lucide/search.svg"
+      },
+      "Microsoft Exchange Server": {
+        "icon_url": "https://api.iconify.design/lucide/package-open.svg"
+      },
+      "Microsoft Internet Explorer": {
+        "icon_url": "https://api.iconify.design/lucide/chart-line.svg"
+      },
+      "Microsoft Office (ActiveX / MSCOMCTL)": {
+        "icon_url": "https://api.iconify.design/lucide/wrench.svg"
+      },
+      "Microsoft Office (Equation Editor)": {
+        "icon_url": "https://api.iconify.design/lucide/activity.svg"
+      },
+      "Microsoft Office / Word": {
+        "icon_url": "https://api.iconify.design/lucide/chevron-down.svg"
+      },
+      "Microsoft Outlook": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Microsoft Outlook / Office": {
+        "icon_url": "https://api.iconify.design/lucide/code.svg"
+      },
+      "Microsoft SQL Server Reporting Services (SSRS)": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-down.svg"
+      },
+      "Microsoft SharePoint": {
+        "icon_url": "https://api.iconify.design/lucide/code.svg"
+      },
+      "Microsoft SharePoint Server": {
+        "icon_url": "https://api.iconify.design/lucide/package.svg"
+      },
+      "Microsoft Windows / kernel": {
+        "icon_url": "https://api.iconify.design/lucide/link.svg"
+      },
+      "MidnightEclipse": {
+        "icon_url": "https://api.iconify.design/lucide/chart-line.svg"
+      },
+      "Mimikatz": {
+        "icon_url": "https://api.iconify.design/lucide/settings.svg"
+      },
+      "Minedoor": {
+        "icon_url": "https://api.iconify.design/lucide/shield-off.svg"
+      },
+      "Miniduke": {
+        "icon_url": "https://api.iconify.design/lucide/microchip.svg"
+      },
+      "Mirai": {
+        "icon_url": "https://api.iconify.design/lucide/cloud.svg"
+      },
+      "MitM Attacks": {
+        "icon_url": "https://api.iconify.design/lucide/inbox.svg"
+      },
+      "Mixlabel": {
+        "icon_url": "https://api.iconify.design/lucide/link.svg"
+      },
+      "Modify Authentication Process": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "Modify Cloud Compute Infrastructure": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-ccw.svg"
+      },
+      "Modify Registry": {
+        "icon_url": "https://api.iconify.design/lucide/home.svg"
+      },
+      "Mr Hamza Group": {
+        "icon_url": "https://api.iconify.design/lucide/plus.svg"
+      },
+      "Mummy Spider": {
+        "icon_url": "https://api.iconify.design/lucide/chart-pie.svg"
+      },
+      "Murlock": {
+        "icon_url": "https://api.iconify.design/lucide/activity.svg"
+      },
+      "Mustang Panda": {
+        "icon_url": "https://api.iconify.design/lucide/bell.svg"
+      },
+      "Mustard Tempest": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "Mythicplane": {
+        "icon_url": "https://api.iconify.design/lucide/message-square.svg"
+      },
+      "NASA": {
+        "icon_url": "https://api.iconify.design/lucide/key-round.svg"
+      },
+      "NETSUPPORT": {
+        "icon_url": "https://api.iconify.design/lucide/package-open.svg"
+      },
+      "NTLM Relay Attack": {
+        "icon_url": "https://api.iconify.design/lucide/fingerprint.svg"
+      },
+      "NUMOZYLOD": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Necurs": {
+        "icon_url": "https://api.iconify.design/lucide/tree-pine.svg"
+      },
+      "NetSpy": {
+        "icon_url": "https://api.iconify.design/lucide/ban.svg"
+      },
+      "Netherlands": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Network Service Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/menu.svg"
+      },
+      "Network Sniffing": {
+        "icon_url": "https://api.iconify.design/lucide/target.svg"
+      },
+      "Netwrix Auditor (User Activity Video Recording)": {
+        "icon_url": "https://api.iconify.design/lucide/inbox.svg"
+      },
+      "NewBot": {
+        "icon_url": "https://api.iconify.design/lucide/eye-off.svg"
+      },
+      "Ngrok": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-in.svg"
+      },
+      "NightSpire": {
+        "icon_url": "https://api.iconify.design/lucide/database.svg"
+      },
+      "NineRAT": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-ccw.svg"
+      },
+      "Nitrogen": {
+        "icon_url": "https://api.iconify.design/lucide/bot.svg"
+      },
+      "Nokoyawa": {
+        "icon_url": "https://api.iconify.design/lucide/plus.svg"
+      },
+      "Nomadic Octopus": {
+        "icon_url": "https://api.iconify.design/lucide/shield-check.svg"
+      },
+      "Non-Application Layer Protocol": {
+        "icon_url": "https://api.iconify.design/lucide/cpu.svg"
+      },
+      "Non-Standard Port": {
+        "icon_url": "https://api.iconify.design/lucide/axe.svg"
+      },
+      "North Korea": {
+        "icon_url": "https://api.iconify.design/lucide/database.svg"
+      },
+      "Nucao": {
+        "icon_url": "https://api.iconify.design/lucide/shield.svg"
+      },
+      "Obfuscated Files or Information": {
+        "icon_url": "https://api.iconify.design/lucide/map-pin.svg"
+      },
+      "Obtain Capabilities": {
+        "icon_url": "https://api.iconify.design/lucide/usb.svg"
+      },
+      "OceanLotus": {
+        "icon_url": "https://api.iconify.design/lucide/refresh-cw.svg"
+      },
+      "Offtrack": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-in.svg"
+      },
+      "Okta": {
+        "icon_url": "https://api.iconify.design/lucide/map-pin.svg"
+      },
+      "Onionduke": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "Onyx Sleet": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-out.svg"
+      },
+      "OpenSSH (sshd)": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Operation Aurora": {
+        "icon_url": "https://api.iconify.design/lucide/cpu.svg"
+      },
+      "Operation Dream Job": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-right.svg"
+      },
+      "Operation Ephemeral Hydra": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Operation Phantom Net Voxel": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "Operational Relay Box": {
+        "icon_url": "https://api.iconify.design/lucide/package-open.svg"
+      },
+      "Optum/Change Healthcare": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-out.svg"
+      },
+      "Oracle Weblogic": {
+        "icon_url": "https://api.iconify.design/lucide/chart-pie.svg"
+      },
+      "OtterCookie": {
+        "icon_url": "https://api.iconify.design/lucide/tree-pine.svg"
+      },
+      "Oyster": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "P2P RAT": {
+        "icon_url": "https://api.iconify.design/lucide/bus.svg"
+      },
+      "P2PInfect": {
+        "icon_url": "https://api.iconify.design/lucide/package-open.svg"
+      },
+      "PETALTOWER Tunneler": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-up.svg"
+      },
+      "PHP Address (php_address)": {
+        "icon_url": "https://api.iconify.design/lucide/inbox.svg"
+      },
+      "PHPUnit": {
+        "icon_url": "https://api.iconify.design/lucide/settings.svg"
+      },
+      "PLA": {
+        "icon_url": "https://api.iconify.design/lucide/shield-off.svg"
+      },
+      "PLA CSF": {
+        "icon_url": "https://api.iconify.design/lucide/package.svg"
+      },
+      "PLA Navy": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-in.svg"
+      },
+      "PLA SSF": {
+        "icon_url": "https://api.iconify.design/lucide/pin.svg"
+      },
+      "PRC": {
+        "icon_url": "https://api.iconify.design/lucide/eye.svg"
+      },
+      "PUPYRAT": {
+        "icon_url": "https://api.iconify.design/lucide/mic.svg"
+      },
+      "PUTTY": {
+        "icon_url": "https://api.iconify.design/lucide/shield-alert.svg"
+      },
+      "PaaS": {
+        "icon_url": "https://api.iconify.design/lucide/camera.svg"
+      },
+      "Paceback": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Palo Alto Networks PAN OS (GlobalProtect)": {
+        "icon_url": "https://api.iconify.design/lucide/server.svg"
+      },
+      "Pandobox": {
+        "icon_url": "https://api.iconify.design/lucide/plus.svg"
+      },
+      "Pandobox.Injector": {
+        "icon_url": "https://api.iconify.design/lucide/map-pin.svg"
+      },
+      "Pandobox.Missyou": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-left.svg"
+      },
+      "Pandobox.Regpayload": {
+        "icon_url": "https://api.iconify.design/lucide/mail.svg"
+      },
+      "Pandobox.Standard": {
+        "icon_url": "https://api.iconify.design/lucide/home.svg"
+      },
+      "Pantegana": {
+        "icon_url": "https://api.iconify.design/lucide/sun.svg"
+      },
+      "PaperCut NG/MF": {
+        "icon_url": "https://api.iconify.design/lucide/folder-lock.svg"
+      },
+      "Pay-Per-Install Service": {
+        "icon_url": "https://api.iconify.design/lucide/unlink-2.svg"
+      },
+      "Permission Groups Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/check-circle.svg"
+      },
+      "Persistence": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Petya": {
+        "icon_url": "https://api.iconify.design/lucide/database.svg"
+      },
+      "PhaaS": {
+        "icon_url": "https://api.iconify.design/lucide/play.svg"
+      },
+      "Pharmaceutical": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-cw.svg"
+      },
+      "Philadelphia": {
+        "icon_url": "https://api.iconify.design/lucide/terminal.svg"
+      },
+      "Phobos": {
+        "icon_url": "https://api.iconify.design/lucide/file-warning.svg"
+      },
+      "Phorpiex": {
+        "icon_url": "https://api.iconify.design/lucide/plug.svg"
+      },
+      "PikaBot": {
+        "icon_url": "https://api.iconify.design/lucide/server.svg"
+      },
+      "PikeSwing": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "Pillowmint": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "Pinchduke": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-in.svg"
+      },
+      "Pitty Panda": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-right.svg"
+      },
+      "Play": {
+        "icon_url": "https://api.iconify.design/lucide/bot.svg"
+      },
+      "PlugX": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Poemgate": {
+        "icon_url": "https://api.iconify.design/lucide/plus.svg"
+      },
+      "Poisonivy": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Poland": {
+        "icon_url": "https://api.iconify.design/lucide/shield-alert.svg"
+      },
+      "Polyglotduke": {
+        "icon_url": "https://api.iconify.design/lucide/chart-pie.svg"
+      },
+      "Portpass": {
+        "icon_url": "https://api.iconify.design/lucide/book.svg"
+      },
+      "Poseidon": {
+        "icon_url": "https://api.iconify.design/lucide/pin.svg"
+      },
+      "PowerShell": {
+        "icon_url": "https://api.iconify.design/lucide/phone.svg"
+      },
+      "PowerTrash": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Powerplant": {
+        "icon_url": "https://api.iconify.design/lucide/package.svg"
+      },
+      "Powersource": {
+        "icon_url": "https://api.iconify.design/lucide/sword.svg"
+      },
+      "Powertrash": {
+        "icon_url": "https://api.iconify.design/lucide/chevron-down.svg"
+      },
+      "Primitive Bear": {
+        "icon_url": "https://api.iconify.design/lucide/layers.svg"
+      },
+      "Prism": {
+        "icon_url": "https://api.iconify.design/lucide/bell.svg"
+      },
+      "Privilege Escalation": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "Process Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/shield.svg"
+      },
+      "Process Injection": {
+        "icon_url": "https://api.iconify.design/lucide/plug.svg"
+      },
+      "Progress MOVEit Transfer": {
+        "icon_url": "https://api.iconify.design/lucide/shield-x.svg"
+      },
+      "Progress WS_FTP Server": {
+        "icon_url": "https://api.iconify.design/lucide/flag.svg"
+      },
+      "Prometei": {
+        "icon_url": "https://api.iconify.design/lucide/mail-warning.svg"
+      },
+      "Prophet Spider": {
+        "icon_url": "https://api.iconify.design/lucide/trash.svg"
+      },
+      "Protocol Tunneling": {
+        "icon_url": "https://api.iconify.design/lucide/home.svg"
+      },
+      "Proxy": {
+        "icon_url": "https://api.iconify.design/lucide/tags.svg"
+      },
+      "ProxyNotShell/MSExchange (2022)": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-ccw.svg"
+      },
+      "PteroLNK": {
+        "icon_url": "https://api.iconify.design/lucide/folder.svg"
+      },
+      "Pulse Connect Secure (Ivanti)": {
+        "icon_url": "https://api.iconify.design/lucide/building.svg"
+      },
+      "Pulse Secure Invanti": {
+        "icon_url": "https://api.iconify.design/lucide/globe.svg"
+      },
+      "Purpleink": {
+        "icon_url": "https://api.iconify.design/lucide/eye.svg"
+      },
+      "Python": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-out.svg"
+      },
+      "Python Backdoor": {
+        "icon_url": "https://api.iconify.design/lucide/trash-2.svg"
+      },
+      "Python/Aiohttp": {
+        "icon_url": "https://api.iconify.design/lucide/map-pin.svg"
+      },
+      "QBOT": {
+        "icon_url": "https://api.iconify.design/lucide/pin.svg"
+      },
+      "Qakbot": {
+        "icon_url": "https://api.iconify.design/lucide/cpu.svg"
+      },
+      "Qualcomm": {
+        "icon_url": "https://api.iconify.design/lucide/unlink.svg"
+      },
+      "Quantum": {
+        "icon_url": "https://api.iconify.design/lucide/monitor.svg"
+      },
+      "Quasar": {
+        "icon_url": "https://api.iconify.design/lucide/bell.svg"
+      },
+      "Query Registry": {
+        "icon_url": "https://api.iconify.design/lucide/map-pin.svg"
+      },
+      "QuiteRAT": {
+        "icon_url": "https://api.iconify.design/lucide/eye.svg"
+      },
+      "RAT": {
+        "icon_url": "https://api.iconify.design/lucide/shield-alert.svg"
+      },
+      "RCE": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "RDP": {
+        "icon_url": "https://api.iconify.design/lucide/file-lock.svg"
+      },
+      "REDCap": {
+        "icon_url": "https://api.iconify.design/lucide/plus.svg"
+      },
+      "RESHELL": {
+        "icon_url": "https://api.iconify.design/lucide/refresh-cw.svg"
+      },
+      "REvil": {
+        "icon_url": "https://api.iconify.design/lucide/home.svg"
+      },
+      "RGB": {
+        "icon_url": "https://api.iconify.design/lucide/chevron-down.svg"
+      },
+      "RaaS": {
+        "icon_url": "https://api.iconify.design/lucide/ban.svg"
+      },
+      "Racyraft": {
+        "icon_url": "https://api.iconify.design/lucide/code.svg"
+      },
+      "Ragnar locker": {
+        "icon_url": "https://api.iconify.design/lucide/file.svg"
+      },
+      "Rdfsniffer": {
+        "icon_url": "https://api.iconify.design/lucide/axe.svg"
+      },
+      "Realtek / miniigd (SOHO routers)": {
+        "icon_url": "https://api.iconify.design/lucide/bus.svg"
+      },
+      "RedNovember": {
+        "icon_url": "https://api.iconify.design/lucide/chevron-down.svg"
+      },
+      "Redis (Debian/Ubuntu packages)": {
+        "icon_url": "https://api.iconify.design/lucide/tree-pine.svg"
+      },
+      "Refined Kitten": {
+        "icon_url": "https://api.iconify.design/lucide/file-lock.svg"
+      },
+      "Reflective Code Loading": {
+        "icon_url": "https://api.iconify.design/lucide/heart.svg"
+      },
+      "Regduke": {
+        "icon_url": "https://api.iconify.design/lucide/wifi-off.svg"
+      },
+      "Rekoobe": {
+        "icon_url": "https://api.iconify.design/lucide/hard-drive.svg"
+      },
+      "Remcos": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-right.svg"
+      },
+      "Remote Access Tools": {
+        "icon_url": "https://api.iconify.design/lucide/binary.svg"
+      },
+      "Remote Code Execution": {
+        "icon_url": "https://api.iconify.design/lucide/filter.svg"
+      },
+      "Remote Code Execution (RCE)": {
+        "icon_url": "https://api.iconify.design/lucide/hard-drive.svg"
+      },
+      "Remote Code Execution Vulnerability": {
+        "icon_url": "https://api.iconify.design/lucide/unlink-2.svg"
+      },
+      "Remote Desktop Protocol": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "Remote Service Session Hijacking": {
+        "icon_url": "https://api.iconify.design/lucide/ban.svg"
+      },
+      "Remote Services": {
+        "icon_url": "https://api.iconify.design/lucide/server.svg"
+      },
+      "Remote System Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/shield-alert.svg"
+      },
+      "Replication Through Removable Media": {
+        "icon_url": "https://api.iconify.design/lucide/filter.svg"
+      },
+      "Resource Hijacking": {
+        "icon_url": "https://api.iconify.design/lucide/wifi-off.svg"
+      },
+      "Resurge": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Revolver Rabbit": {
+        "icon_url": "https://api.iconify.design/lucide/usb.svg"
+      },
+      "Rhysida": {
+        "icon_url": "https://api.iconify.design/lucide/inbox.svg"
+      },
+      "Richochet Chollima": {
+        "icon_url": "https://api.iconify.design/lucide/search.svg"
+      },
+      "Rocket Kitten": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-up.svg"
+      },
+      "RomCom": {
+        "icon_url": "https://api.iconify.design/lucide/tablet.svg"
+      },
+      "Roundcube Webmail": {
+        "icon_url": "https://api.iconify.design/lucide/folder.svg"
+      },
+      "Royal": {
+        "icon_url": "https://api.iconify.design/lucide/building.svg"
+      },
+      "Russia": {
+        "icon_url": "https://api.iconify.design/lucide/tablet.svg"
+      },
+      "SALTWATER": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "SAP NetWeaver": {
+        "icon_url": "https://api.iconify.design/lucide/phone.svg"
+      },
+      "SEASPY": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "SHIMMERPICK Tunneler": {
+        "icon_url": "https://api.iconify.design/lucide/alert-triangle.svg"
+      },
+      "SPACEHOP ORB": {
+        "icon_url": "https://api.iconify.design/lucide/flag.svg"
+      },
+      "SPACEPIZZA": {
+        "icon_url": "https://api.iconify.design/lucide/message-square.svg"
+      },
+      "SQLShell": {
+        "icon_url": "https://api.iconify.design/lucide/settings.svg"
+      },
+      "SSH": {
+        "icon_url": "https://api.iconify.design/lucide/package-open.svg"
+      },
+      "SSL-VPN": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "STAC4663": {
+        "icon_url": "https://api.iconify.design/lucide/sword.svg"
+      },
+      "STOWAWAY": {
+        "icon_url": "https://api.iconify.design/lucide/folder.svg"
+      },
+      "Salt Typhoon": {
+        "icon_url": "https://api.iconify.design/lucide/sword.svg"
+      },
+      "Sambaverso": {
+        "icon_url": "https://api.iconify.design/lucide/phone.svg"
+      },
+      "Scattered Spider": {
+        "icon_url": "https://api.iconify.design/lucide/star.svg"
+      },
+      "Scheduled Task/Job": {
+        "icon_url": "https://api.iconify.design/lucide/check-circle.svg"
+      },
+      "ScreenConnect": {
+        "icon_url": "https://api.iconify.design/lucide/mail-warning.svg"
+      },
+      "Sdbbot": {
+        "icon_url": "https://api.iconify.design/lucide/list.svg"
+      },
+      "Seaduke": {
+        "icon_url": "https://api.iconify.design/lucide/axe.svg"
+      },
+      "Seashell Blizzard": {
+        "icon_url": "https://api.iconify.design/lucide/target.svg"
+      },
+      "SectopRAT": {
+        "icon_url": "https://api.iconify.design/lucide/wifi-off.svg"
+      },
+      "Server Software Component": {
+        "icon_url": "https://api.iconify.design/lucide/tag.svg"
+      },
+      "Servhelper": {
+        "icon_url": "https://api.iconify.design/lucide/target.svg"
+      },
+      "Service Stop": {
+        "icon_url": "https://api.iconify.design/lucide/tags.svg"
+      },
+      "ShadowSyndicate": {
+        "icon_url": "https://api.iconify.design/lucide/infinity.svg"
+      },
+      "ShadowV2": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-cw.svg"
+      },
+      "Shadowladder": {
+        "icon_url": "https://api.iconify.design/lucide/plug.svg"
+      },
+      "SharePoint ZeroDay/WordPress": {
+        "icon_url": "https://api.iconify.design/lucide/infinity.svg"
+      },
+      "Shared Modules": {
+        "icon_url": "https://api.iconify.design/lucide/search.svg"
+      },
+      "Sharp Panda": {
+        "icon_url": "https://api.iconify.design/lucide/image.svg"
+      },
+      "Shipyard": {
+        "icon_url": "https://api.iconify.design/lucide/moon.svg"
+      },
+      "Showstop": {
+        "icon_url": "https://api.iconify.design/lucide/download.svg"
+      },
+      "Sign1": {
+        "icon_url": "https://api.iconify.design/lucide/folder.svg"
+      },
+      "Silk Typhoon": {
+        "icon_url": "https://api.iconify.design/lucide/file-lock.svg"
+      },
+      "Silver": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "Skidmap": {
+        "icon_url": "https://api.iconify.design/lucide/binary.svg"
+      },
+      "SlimAgent": {
+        "icon_url": "https://api.iconify.design/lucide/shield-x.svg"
+      },
+      "Slowpeek": {
+        "icon_url": "https://api.iconify.design/lucide/mail-warning.svg"
+      },
+      "Snowflake": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "SocGholish": {
+        "icon_url": "https://api.iconify.design/lucide/phone.svg"
+      },
+      "Software Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/infinity.svg"
+      },
+      "Sogu": {
+        "icon_url": "https://api.iconify.design/lucide/settings.svg"
+      },
+      "SolarMarker": {
+        "icon_url": "https://api.iconify.design/lucide/phone.svg"
+      },
+      "SolarWinds Serv-U": {
+        "icon_url": "https://api.iconify.design/lucide/infinity.svg"
+      },
+      "Soloship": {
+        "icon_url": "https://api.iconify.design/lucide/target.svg"
+      },
+      "Source: CAL Automated Threat Library": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "Spark": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "SparkRAT": {
+        "icon_url": "https://api.iconify.design/lucide/file-lock.svg"
+      },
+      "Sparrow": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-left.svg"
+      },
+      "Spawnchimera": {
+        "icon_url": "https://api.iconify.design/lucide/tree-pine.svg"
+      },
+      "Spectral Kitten": {
+        "icon_url": "https://api.iconify.design/lucide/triangle-alert.svg"
+      },
+      "Spicy Panda": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "SpiderRAT": {
+        "icon_url": "https://api.iconify.design/lucide/truck.svg"
+      },
+      "Sponsor": {
+        "icon_url": "https://api.iconify.design/lucide/alert-circle.svg"
+      },
+      "SpyBoy": {
+        "icon_url": "https://api.iconify.design/lucide/trash-2.svg"
+      },
+      "SqlRAT": {
+        "icon_url": "https://api.iconify.design/lucide/monitor.svg"
+      },
+      "Stage Capabilities": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "Star Blizzard": {
+        "icon_url": "https://api.iconify.design/lucide/tags.svg"
+      },
+      "Stardust Chollima": {
+        "icon_url": "https://api.iconify.design/lucide/check-circle.svg"
+      },
+      "Static Kitten": {
+        "icon_url": "https://api.iconify.design/lucide/refresh-cw.svg"
+      },
+      "Steal Application Access Token": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Steal Web Session Cookie": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-ccw.svg"
+      },
+      "Steal or Forge Kerberos Tickets": {
+        "icon_url": "https://api.iconify.design/lucide/binary.svg"
+      },
+      "Storm-0494": {
+        "icon_url": "https://api.iconify.design/lucide/flag.svg"
+      },
+      "Storm-0558": {
+        "icon_url": "https://api.iconify.design/lucide/fingerprint.svg"
+      },
+      "Storm-0866": {
+        "icon_url": "https://api.iconify.design/lucide/plug.svg"
+      },
+      "Storm-1113": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Storm-1849": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "Storm-2077": {
+        "icon_url": "https://api.iconify.design/lucide/axe.svg"
+      },
+      "Stormous X": {
+        "icon_url": "https://api.iconify.design/lucide/unlink-2.svg"
+      },
+      "Strawberry Tempest": {
+        "icon_url": "https://api.iconify.design/lucide/book.svg"
+      },
+      "Subvert Trust Controls": {
+        "icon_url": "https://api.iconify.design/lucide/zap.svg"
+      },
+      "Supermicro": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "Supersoft": {
+        "icon_url": "https://api.iconify.design/lucide/unlink.svg"
+      },
+      "Supply Chain Attack": {
+        "icon_url": "https://api.iconify.design/lucide/file.svg"
+      },
+      "Supply Chain Compromise": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Swimlane": {
+        "icon_url": "https://api.iconify.design/lucide/shield.svg"
+      },
+      "System Binary Proxy Execution": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "System Information Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/binary.svg"
+      },
+      "System Location Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-cw.svg"
+      },
+      "System Network Configuration Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/infinity.svg"
+      },
+      "System Network Connections Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/layers.svg"
+      },
+      "System Owner/User Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/triangle-alert.svg"
+      },
+      "System Service Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/wrench.svg"
+      },
+      "System Services": {
+        "icon_url": "https://api.iconify.design/lucide/bot.svg"
+      },
+      "System Shutdown/Reboot": {
+        "icon_url": "https://api.iconify.design/lucide/truck.svg"
+      },
+      "System Time Discovery": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "SystemBC": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-up.svg"
+      },
+      "T-Suite": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "TA577": {
+        "icon_url": "https://api.iconify.design/lucide/chart-pie.svg"
+      },
+      "TA578": {
+        "icon_url": "https://api.iconify.design/lucide/database.svg"
+      },
+      "TA582": {
+        "icon_url": "https://api.iconify.design/lucide/lock.svg"
+      },
+      "TAG-100": {
+        "icon_url": "https://api.iconify.design/lucide/archive.svg"
+      },
+      "TAG-124": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "TP Link Archer AX21 (AX1800)": {
+        "icon_url": "https://api.iconify.design/lucide/radar.svg"
+      },
+      "Tablemate": {
+        "icon_url": "https://api.iconify.design/lucide/cpu.svg"
+      },
+      "Taidoor": {
+        "icon_url": "https://api.iconify.design/lucide/unlink-2.svg"
+      },
+      "Takeout": {
+        "icon_url": "https://api.iconify.design/lucide/chart-line.svg"
+      },
+      "Task Scheduler": {
+        "icon_url": "https://api.iconify.design/lucide/bus.svg"
+      },
+      "Tdiscover": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Telerik UI for ASP.NET AJAX": {
+        "icon_url": "https://api.iconify.design/lucide/file.svg"
+      },
+      "Telerik UI for ASP.NET AJAX (RadAsyncUpload)": {
+        "icon_url": "https://api.iconify.design/lucide/target.svg"
+      },
+      "Temp.Hermit": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "Textmate": {
+        "icon_url": "https://api.iconify.design/lucide/archive.svg"
+      },
+      "The Netherlands": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "Threatscape: Cyber Crime": {
+        "icon_url": "https://api.iconify.design/lucide/heart.svg"
+      },
+      "Threatscape: Cyber Espionage": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Tinymet": {
+        "icon_url": "https://api.iconify.design/lucide/sun.svg"
+      },
+      "Tirion": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "Tool: 7ZIP": {
+        "icon_url": "https://api.iconify.design/lucide/monitor.svg"
+      },
+      "Tool: ANYDESK": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Tool: AZCopy": {
+        "icon_url": "https://api.iconify.design/lucide/shield-question.svg"
+      },
+      "Tool: AdFind": {
+        "icon_url": "https://api.iconify.design/lucide/settings-2.svg"
+      },
+      "Tool: BITVISE": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "Tool: BloodHound": {
+        "icon_url": "https://api.iconify.design/lucide/hash.svg"
+      },
+      "Tool: CELLARDOOR": {
+        "icon_url": "https://api.iconify.design/lucide/code.svg"
+      },
+      "Tool: COBALTSTRIKE": {
+        "icon_url": "https://api.iconify.design/lucide/plug.svg"
+      },
+      "Tool: CrackMapExec": {
+        "icon_url": "https://api.iconify.design/lucide/plane.svg"
+      },
+      "Tool: DSQUERY": {
+        "icon_url": "https://api.iconify.design/lucide/alert-circle.svg"
+      },
+      "Tool: EVENTGRAB": {
+        "icon_url": "https://api.iconify.design/lucide/info.svg"
+      },
+      "Tool: GO Simple Tunnel": {
+        "icon_url": "https://api.iconify.design/lucide/chart-bar.svg"
+      },
+      "Tool: GOST": {
+        "icon_url": "https://api.iconify.design/lucide/shield-alert.svg"
+      },
+      "Tool: HFS": {
+        "icon_url": "https://api.iconify.design/lucide/lock-keyhole.svg"
+      },
+      "Tool: Mega": {
+        "icon_url": "https://api.iconify.design/lucide/menu.svg"
+      },
+      "Tool: Meterpreter": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Tool: Mimikatz": {
+        "icon_url": "https://api.iconify.design/lucide/activity.svg"
+      },
+      "Tool: NBTSCAN": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-right.svg"
+      },
+      "Tool: NLTEST": {
+        "icon_url": "https://api.iconify.design/lucide/info.svg"
+      },
+      "Tool: Net": {
+        "icon_url": "https://api.iconify.design/lucide/file-warning.svg"
+      },
+      "Tool: Ngrok": {
+        "icon_url": "https://api.iconify.design/lucide/sword.svg"
+      },
+      "Tool: OpenSSH": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "Tool: PHANT0M": {
+        "icon_url": "https://api.iconify.design/lucide/user.svg"
+      },
+      "Tool: PIPESHELL": {
+        "icon_url": "https://api.iconify.design/lucide/heart.svg"
+      },
+      "Tool: PUTTY": {
+        "icon_url": "https://api.iconify.design/lucide/tag.svg"
+      },
+      "Tool: PowerShell": {
+        "icon_url": "https://api.iconify.design/lucide/bell.svg"
+      },
+      "Tool: PowerSploit": {
+        "icon_url": "https://api.iconify.design/lucide/pin.svg"
+      },
+      "Tool: PsExec": {
+        "icon_url": "https://api.iconify.design/lucide/server.svg"
+      },
+      "Tool: RAR": {
+        "icon_url": "https://api.iconify.design/lucide/phone.svg"
+      },
+      "Tool: RMS": {
+        "icon_url": "https://api.iconify.design/lucide/mail.svg"
+      },
+      "Tool: SDelete": {
+        "icon_url": "https://api.iconify.design/lucide/tree-pine.svg"
+      },
+      "Tool: TEAMVIEWER": {
+        "icon_url": "https://api.iconify.design/lucide/mail.svg"
+      },
+      "Tool: TRUFFLEHOG": {
+        "icon_url": "https://api.iconify.design/lucide/cloud.svg"
+      },
+      "Tool: TacticalRMM": {
+        "icon_url": "https://api.iconify.design/lucide/infinity.svg"
+      },
+      "Tool: WCE": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-right.svg"
+      },
+      "Tool: WINSCP": {
+        "icon_url": "https://api.iconify.design/lucide/zap.svg"
+      },
+      "Tool: net.exe": {
+        "icon_url": "https://api.iconify.design/lucide/alert-octagon.svg"
+      },
+      "Tool: plink": {
+        "icon_url": "https://api.iconify.design/lucide/trash.svg"
+      },
+      "ToolShell": {
+        "icon_url": "https://api.iconify.design/lucide/radar.svg"
+      },
+      "Tor": {
+        "icon_url": "https://api.iconify.design/lucide/fingerprint.svg"
+      },
+      "Tor Exit Node": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Tor Node": {
+        "icon_url": "https://api.iconify.design/lucide/unlink.svg"
+      },
+      "Torchwood": {
+        "icon_url": "https://api.iconify.design/lucide/settings.svg"
+      },
+      "TraderTraitor": {
+        "icon_url": "https://api.iconify.design/lucide/hash.svg"
+      },
+      "Traffic Direction System": {
+        "icon_url": "https://api.iconify.design/lucide/hash.svg"
+      },
+      "Traffic Distribution System (TDS)": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "Transportation Systems Sector": {
+        "icon_url": "https://api.iconify.design/lucide/mail.svg"
+      },
+      "Trickbot": {
+        "icon_url": "https://api.iconify.design/lucide/terminal.svg"
+      },
+      "TrueBot": {
+        "icon_url": "https://api.iconify.design/lucide/plus.svg"
+      },
+      "Truecore": {
+        "icon_url": "https://api.iconify.design/lucide/package-open.svg"
+      },
+      "Trusted Relationship": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-left.svg"
+      },
+      "Tscookie": {
+        "icon_url": "https://api.iconify.design/lucide/calendar.svg"
+      },
+      "Tscookie.Freebsd": {
+        "icon_url": "https://api.iconify.design/lucide/pin.svg"
+      },
+      "Tscookie.Linux": {
+        "icon_url": "https://api.iconify.design/lucide/plus.svg"
+      },
+      "Tycoon": {
+        "icon_url": "https://api.iconify.design/lucide/activity.svg"
+      },
+      "U.S. Government": {
+        "icon_url": "https://api.iconify.design/lucide/package-open.svg"
+      },
+      "UAC-0173": {
+        "icon_url": "https://api.iconify.design/lucide/database.svg"
+      },
+      "UNC1151": {
+        "icon_url": "https://api.iconify.design/lucide/zap.svg"
+      },
+      "UNC1664": {
+        "icon_url": "https://api.iconify.design/lucide/flame.svg"
+      },
+      "UNC1714": {
+        "icon_url": "https://api.iconify.design/lucide/skull.svg"
+      },
+      "UNC3594": {
+        "icon_url": "https://api.iconify.design/lucide/smartphone.svg"
+      },
+      "UNC3953": {
+        "icon_url": "https://api.iconify.design/lucide/terminal.svg"
+      },
+      "UNC3973": {
+        "icon_url": "https://api.iconify.design/lucide/bot.svg"
+      },
+      "UNC4221": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "UNC4487": {
+        "icon_url": "https://api.iconify.design/lucide/image.svg"
+      },
+      "UNC4509": {
+        "icon_url": "https://api.iconify.design/lucide/globe.svg"
+      },
+      "UNC4536": {
+        "icon_url": "https://api.iconify.design/lucide/list.svg"
+      },
+      "UNC4698": {
+        "icon_url": "https://api.iconify.design/lucide/circle.svg"
+      },
+      "UNC4841": {
+        "icon_url": "https://api.iconify.design/lucide/activity.svg"
+      },
+      "UNC4899": {
+        "icon_url": "https://api.iconify.design/lucide/chart-line.svg"
+      },
+      "UNC4936": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-left.svg"
+      },
+      "UNC5112": {
+        "icon_url": "https://api.iconify.design/lucide/map-pin.svg"
+      },
+      "UNC5148": {
+        "icon_url": "https://api.iconify.design/lucide/binary.svg"
+      },
+      "UNC5174": {
+        "icon_url": "https://api.iconify.design/lucide/tag.svg"
+      },
+      "UNC5221": {
+        "icon_url": "https://api.iconify.design/lucide/bell.svg"
+      },
+      "UNC5266": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-out.svg"
+      },
+      "UNC5439": {
+        "icon_url": "https://api.iconify.design/lucide/binary.svg"
+      },
+      "UNC5537": {
+        "icon_url": "https://api.iconify.design/lucide/tree-pine.svg"
+      },
+      "UNC5792": {
+        "icon_url": "https://api.iconify.design/lucide/map-pin.svg"
+      },
+      "UNC5807": {
+        "icon_url": "https://api.iconify.design/lucide/shield-check.svg"
+      },
+      "UNC5837": {
+        "icon_url": "https://api.iconify.design/lucide/triangle-alert.svg"
+      },
+      "UNC5952": {
+        "icon_url": "https://api.iconify.design/lucide/smartphone.svg"
+      },
+      "UNC5986": {
+        "icon_url": "https://api.iconify.design/lucide/circle.svg"
+      },
+      "UNC6068": {
+        "icon_url": "https://api.iconify.design/lucide/bus.svg"
+      },
+      "UNC6096": {
+        "icon_url": "https://api.iconify.design/lucide/bug.svg"
+      },
+      "UNC6310": {
+        "icon_url": "https://api.iconify.design/lucide/activity.svg"
+      },
+      "UNC6322": {
+        "icon_url": "https://api.iconify.design/lucide/pin.svg"
+      },
+      "UNC6337/STORM-2603": {
+        "icon_url": "https://api.iconify.design/lucide/eye-off.svg"
+      },
+      "UNC6395": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "UNC6468": {
+        "icon_url": "https://api.iconify.design/lucide/target.svg"
+      },
+      "UPSTYLE": {
+        "icon_url": "https://api.iconify.design/lucide/link.svg"
+      },
+      "US Defense Sector": {
+        "icon_url": "https://api.iconify.design/lucide/rotate-ccw.svg"
+      },
+      "USB": {
+        "icon_url": "https://api.iconify.design/lucide/wrench.svg"
+      },
+      "Ukraine": {
+        "icon_url": "https://api.iconify.design/lucide/chart-pie.svg"
+      },
+      "Unauthorized access": {
+        "icon_url": "https://api.iconify.design/lucide/map-pin.svg"
+      },
+      "Unfurling Hemlock": {
+        "icon_url": "https://api.iconify.design/lucide/hard-drive.svg"
+      },
+      "United Kingdom": {
+        "icon_url": "https://api.iconify.design/lucide/settings.svg"
+      },
+      "United States": {
+        "icon_url": "https://api.iconify.design/lucide/menu.svg"
+      },
+      "Ursnif": {
+        "icon_url": "https://api.iconify.design/lucide/plug.svg"
+      },
+      "User Execution": {
+        "icon_url": "https://api.iconify.design/lucide/image.svg"
+      },
+      "VA CTI report": {
+        "icon_url": "https://api.iconify.design/lucide/hard-drive.svg"
+      },
+      "VA SAR": {
+        "icon_url": "https://api.iconify.design/lucide/radio.svg"
+      },
+      "VA Situation Awareness Report": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "VA TIR IOC": {
+        "icon_url": "https://api.iconify.design/lucide/target.svg"
+      },
+      "VBScript": {
+        "icon_url": "https://api.iconify.design/lucide/code.svg"
+      },
+      "VMware Aria Operations for Networks (vRealize Network Insight)": {
+        "icon_url": "https://api.iconify.design/lucide/database.svg"
+      },
+      "VMware Workspace ONE / Identity Manager": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "VMware Workspace ONE Access / Identity Manager": {
+        "icon_url": "https://api.iconify.design/lucide/lock-keyhole.svg"
+      },
+      "VOLTRIGGER": {
+        "icon_url": "https://api.iconify.design/lucide/image.svg"
+      },
+      "Valid Accounts": {
+        "icon_url": "https://api.iconify.design/lucide/eye-off.svg"
+      },
+      "Veeam Backup & Replication": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-right.svg"
+      },
+      "Veeamp": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "Velvet Chollima": {
+        "icon_url": "https://api.iconify.design/lucide/mail.svg"
+      },
+      "Venomous Bear": {
+        "icon_url": "https://api.iconify.design/lucide/alert-circle.svg"
+      },
+      "Vermin": {
+        "icon_url": "https://api.iconify.design/lucide/list.svg"
+      },
+      "Vidar": {
+        "icon_url": "https://api.iconify.design/lucide/box.svg"
+      },
+      "Virtualization/Sandbox Evasion": {
+        "icon_url": "https://api.iconify.design/lucide/bell.svg"
+      },
+      "Void Blizzard": {
+        "icon_url": "https://api.iconify.design/lucide/search.svg"
+      },
+      "Volt Typhoon": {
+        "icon_url": "https://api.iconify.design/lucide/sword.svg"
+      },
+      "WAVESIGN": {
+        "icon_url": "https://api.iconify.design/lucide/ban.svg"
+      },
+      "WIREFIRE": {
+        "icon_url": "https://api.iconify.design/lucide/trash.svg"
+      },
+      "WannaCry": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "WarmCookie": {
+        "icon_url": "https://api.iconify.design/lucide/camera.svg"
+      },
+      "Warpwire": {
+        "icon_url": "https://api.iconify.design/lucide/chart-line.svg"
+      },
+      "Water Sigbin": {
+        "icon_url": "https://api.iconify.design/lucide/message-square.svg"
+      },
+      "Web Injections": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "Web Scanner": {
+        "icon_url": "https://api.iconify.design/lucide/trophy.svg"
+      },
+      "Web Service": {
+        "icon_url": "https://api.iconify.design/lucide/sword.svg"
+      },
+      "Webshell Attack": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "Whaling Attack": {
+        "icon_url": "https://api.iconify.design/lucide/eye-off.svg"
+      },
+      "Whitesnake": {
+        "icon_url": "https://api.iconify.design/lucide/monitor.svg"
+      },
+      "Wicked Panda": {
+        "icon_url": "https://api.iconify.design/lucide/terminal.svg"
+      },
+      "WinRAR": {
+        "icon_url": "https://api.iconify.design/lucide/wifi.svg"
+      },
+      "Windows Management Instrumentation": {
+        "icon_url": "https://api.iconify.design/lucide/brain.svg"
+      },
+      "Wingnight": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "Wingtip": {
+        "icon_url": "https://api.iconify.design/lucide/cloud-lightning.svg"
+      },
+      "Wizard Spider": {
+        "icon_url": "https://api.iconify.design/lucide/map-pin.svg"
+      },
+      "WordPress /Elementor": {
+        "icon_url": "https://api.iconify.design/lucide/menu.svg"
+      },
+      "WordPress/Forminator": {
+        "icon_url": "https://api.iconify.design/lucide/flag.svg"
+      },
+      "WordPress/LayerSlider": {
+        "icon_url": "https://api.iconify.design/lucide/package-open.svg"
+      },
+      "Workmate": {
+        "icon_url": "https://api.iconify.design/lucide/folder.svg"
+      },
+      "WyrmSpy": {
+        "icon_url": "https://api.iconify.design/lucide/list.svg"
+      },
+      "XE Group": {
+        "icon_url": "https://api.iconify.design/lucide/search.svg"
+      },
+      "Xdealer": {
+        "icon_url": "https://api.iconify.design/lucide/map-pin.svg"
+      },
+      "Yanluowang": {
+        "icon_url": "https://api.iconify.design/lucide/key-round.svg"
+      },
+      "Zero Day": {
+        "icon_url": "https://api.iconify.design/lucide/folder.svg"
+      },
+      "ZeroLogon/Active Diectory": {
+        "icon_url": "https://api.iconify.design/lucide/circle.svg"
+      },
+      "Zerowipe": {
+        "icon_url": "https://api.iconify.design/lucide/chevron-down.svg"
+      },
+      "Zimbra Collaboration": {
+        "icon_url": "https://api.iconify.design/lucide/inbox.svg"
+      },
+      "ZuoRAT": {
+        "icon_url": "https://api.iconify.design/lucide/circle.svg"
+      },
+      "Zyxel firewall / VPN appliances": {
+        "icon_url": "https://api.iconify.design/lucide/archive.svg"
+      },
+      "adobe": {
+        "icon_url": "https://api.iconify.design/lucide/package.svg"
+      },
+      "babuk": {
+        "icon_url": "https://api.iconify.design/lucide/mail-warning.svg"
+      },
+      "cuba": {
+        "icon_url": "https://api.iconify.design/lucide/monitor.svg"
+      },
+      "curl / libcurl": {
+        "icon_url": "https://api.iconify.design/lucide/box.svg"
+      },
+      "dhs cisa": {
+        "icon_url": "https://api.iconify.design/lucide/upload.svg"
+      },
+      "fgdump": {
+        "icon_url": "https://api.iconify.design/lucide/trash-2.svg"
+      },
+      "fs-isac": {
+        "icon_url": "https://api.iconify.design/lucide/tag.svg"
+      },
+      "fsisac": {
+        "icon_url": "https://api.iconify.design/lucide/settings-2.svg"
+      },
+      "ghostloot": {
+        "icon_url": "https://api.iconify.design/lucide/zoom-out.svg"
+      },
+      "glibc": {
+        "icon_url": "https://api.iconify.design/lucide/target.svg"
+      },
+      "govwhitepapers": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-down.svg"
+      },
+      "h-isac": {
+        "icon_url": "https://api.iconify.design/lucide/users.svg"
+      },
+      "hVNC": {
+        "icon_url": "https://api.iconify.design/lucide/hash.svg"
+      },
+      "hailbot": {
+        "icon_url": "https://api.iconify.design/lucide/user.svg"
+      },
+      "hiraibot": {
+        "icon_url": "https://api.iconify.design/lucide/arrow-down.svg"
+      },
+      "karaibot": {
+        "icon_url": "https://api.iconify.design/lucide/radar.svg"
+      },
+      "kiraibot": {
+        "icon_url": "https://api.iconify.design/lucide/cpu.svg"
+      },
+      "miniBlindingCan": {
+        "icon_url": "https://api.iconify.design/lucide/radar.svg"
+      },
+      "ms-isac": {
+        "icon_url": "https://api.iconify.design/lucide/virus.svg"
+      },
+      "njRAT": {
+        "icon_url": "https://api.iconify.design/lucide/mail.svg"
+      },
+      "noname(057)16": {
+        "icon_url": "https://api.iconify.design/lucide/truck.svg"
+      },
+      "nukesped": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "polkit pkexec (PwnKit)": {
+        "icon_url": "https://api.iconify.design/lucide/info.svg"
+      },
+      "shadowpad backdoor": {
+        "icon_url": "https://api.iconify.design/lucide/badge.svg"
+      },
+      "snowydrive": {
+        "icon_url": "https://api.iconify.design/lucide/lock.svg"
+      },
+      "spininstall0.aspx": {
+        "icon_url": "https://api.iconify.design/lucide/shield-off.svg"
+      },
+      "storm-0335": {
+        "icon_url": "https://api.iconify.design/lucide/network.svg"
+      },
+      "trigona": {
+        "icon_url": "https://api.iconify.design/lucide/search.svg"
+      }
+    }
+  },
+  "icon_format": "svg_url",
+  "icon_cdn": "iconify",
+  "icon_url_template": "https://api.iconify.design/lucide/{icon}.svg",
+  "icon_overrides": {},
+  "categories": {
+    "phishing": {
+      "label": "Phishing",
+      "icon": "mail-warning",
+      "includes": [
+        "spear phishing",
+        "callback phish",
+        "phishing for information",
+        "phishing",
+        "phish"
+      ],
+      "tags": [
+        "Domain Masquerading / Phishing",
+        "Phishing",
+        "Phishing for Information",
+        "Phishing-as-a-Service",
+        "phishing as a service"
+      ]
+    },
+    "ransomware": {
+      "label": "Ransomware & extortion",
+      "icon": "skull",
+      "includes": [
+        "ransomware",
+        "ransom",
+        "blackcat",
+        "black suit",
+        "blacksuit"
+      ],
+      "tags": [
+        "BlackCat",
+        "BlackSuit",
+        "Cuba Ransomware Gang",
+        "Play Ransomware Group",
+        "Ransomhub",
+        "Ransomware",
+        "Ransomware-as-a-Service",
+        "Stormous Ransomware Group"
+      ]
+    },
+    "malware": {
+      "label": "Malware",
+      "icon": "bug",
+      "includes": [
+        "malware",
+        "trojan",
+        "worm",
+        "botnet",
+        "dropper",
+        "stealer",
+        "loader"
+      ],
+      "tags": [
+        "AsukaStealer",
+        "Atomic Stealer",
+        "BatLoader",
+        "Botnet",
+        "Botnet C&C",
+        "Credential Stealer",
+        "D3F@ck Loader",
+        "Diceloader",
+        "Downloader",
+        "Dropper",
+        "EarthWorm Tunneler",
+        "Gootloader",
+        "Grapeloader",
+        "Grixba Stealer",
+        "Guloader",
+        "Information Stealer",
+        "Infostealer",
+        "InkLoader",
+        "Jssloader",
+        "Jupyter Stealer",
+        "Kutaki Stealer",
+        "LegionLoader",
+        "Loader",
+        "Loki Password Stealer (PWS)",
+        "Lumma Stealer",
+        "Malware-as-a-Service",
+        "Mints Loader",
+        "Mystic Stealer",
+        "NickelLoader",
+        "Orangeworm",
+        "Password Stealer",
+        "PureLogsStealer",
+        "Racoon Stealer",
+        "Redline Stealer",
+        "Remote Access Trojan",
+        "SmokeLoader",
+        "Tool: JSS Loader",
+        "Trojan Dropper",
+        "Trojanized Installer",
+        "VBS Dropper",
+        "Wineloader",
+        "Worm",
+        "XLoader",
+        "XWORM",
+        "banking trojan"
+      ]
+    },
+    "virus": {
+      "label": "Virus & cryptojacking",
+      "icon": "virus",
+      "includes": [
+        "virus",
+        "cryptojack"
+      ],
+      "tags": []
+    },
+    "threat_actor": {
+      "label": "Threat actors & groups",
+      "icon": "users",
+      "includes": [
+        "threat actor",
+        "apt",
+        "nation-state",
+        "nation state",
+        "svr",
+        "gang"
+      ],
+      "tags": [
+        "8220 Gang",
+        "Cisco Adaptive Security Appliances",
+        "Fake CAPTCHA",
+        "Input Capture",
+        "Raptor Train",
+        "SVR",
+        "Screen Capture",
+        "Video Capture"
+      ]
+    },
+    "intel_api": {
+      "label": "Intel / API / Splunk",
+      "icon": "server",
+      "includes": [
+        "splunk",
+        " api",
+        "api "
+      ],
+      "tags": [
+        "Native API"
+      ]
+    },
+    "ddos": {
+      "label": "DDoS / DoS",
+      "icon": "zap",
+      "includes": [
+        "ddos",
+        "dos attack",
+        "denial of service"
+      ],
+      "tags": [
+        "Network Denial of Service"
+      ]
+    },
+    "scanning": {
+      "label": "Scanning",
+      "icon": "scan-search",
+      "includes": [
+        "scanning",
+        " active scan",
+        "scan "
+      ],
+      "tags": [
+        "Active Scanning",
+        "Network Scanning"
+      ]
+    },
+    "credentials": {
+      "label": "Credentials & access",
+      "icon": "key-round",
+      "includes": [
+        "credential",
+        "stuffing",
+        "password",
+        "brute force"
+      ],
+      "tags": [
+        "Brute Force",
+        "Brute Force Attack",
+        "Credential Harvesting/Theft",
+        "Credentials from Password Stores",
+        "Exploitation for Credential Access",
+        "OS Credential Dumping",
+        "Unsecured Credentials"
+      ]
+    },
+    "web_attack": {
+      "label": "Web attacks",
+      "icon": "code-xml",
+      "includes": [
+        "sql injection",
+        "xss",
+        "cross site",
+        "cross-site"
+      ],
+      "tags": [
+        "SQL Injection"
+      ]
+    },
+    "exfiltration": {
+      "label": "Exfiltration",
+      "icon": "cloud-upload",
+      "includes": [
+        "exfil",
+        "exfiltration",
+        "data theft"
+      ],
+      "tags": [
+        "Data Exfiltration",
+        "Exfiltration Over Alternative Protocol",
+        "Exfiltration Over C2 Channel",
+        "Exfiltration Over Web Service"
+      ]
+    },
+    "reconnaissance": {
+      "label": "Reconnaissance",
+      "icon": "binoculars",
+      "includes": [
+        "reconnaissance",
+        "recon ",
+        " recon"
+      ],
+      "tags": [
+        "Reconnaissance"
+      ]
+    },
+    "exploitation": {
+      "label": "Exploitation",
+      "icon": "shield-alert",
+      "includes": [
+        "exploit",
+        "zero-day",
+        "0-day",
+        "ransom"
+      ],
+      "tags": [
+        "Active Exploitation",
+        "Exploit Public-Facing Application",
+        "Exploitation for Client Execution",
+        "Exploitation for Privilege Escalation",
+        "Exploitation of Remote Services"
+      ]
+    },
+    "wipers": {
+      "label": "Wipers & destruction",
+      "icon": "flame",
+      "includes": [
+        "wiper",
+        "destruct"
+      ],
+      "tags": [
+        "BFG Agonizer wiper",
+        "Caddywiper",
+        "Data Destruction",
+        "Data Wiper"
+      ]
+    },
+    "c2": {
+      "label": "C2 & beacons",
+      "icon": "radio",
+      "includes": [
+        "c2",
+        "command and control",
+        "beacon"
+      ],
+      "tags": [
+        "Beacon",
+        "C2",
+        "Cobeacon",
+        "Command and Control",
+        "UNC2447",
+        "UNC2546",
+        "UNC2565",
+        "UNC2582",
+        "UNC2835",
+        "UNC2900"
+      ]
+    },
+    "spam_malware": {
+      "label": "Spam & malspam",
+      "icon": "mail",
+      "includes": [
+        "malspam",
+        "spam"
+      ],
+      "tags": [
+        "Malspam",
+        "Spam Campaign"
+      ]
+    },
+    "mobile": {
+      "label": "Mobile",
+      "icon": "monitor-smartphone",
+      "includes": [
+        "mobile",
+        "android",
+        "ios malware"
+      ],
+      "tags": [
+        "Google / Android (Bluetooth module)",
+        "Ivanti EPMM / MobileIron Core"
+      ]
+    },
+    "dns_domains": {
+      "label": "DNS & domains",
+      "icon": "globe",
+      "includes": [
+        "dns",
+        "domain"
+      ],
+      "tags": [
+        "Domain Trust Discovery",
+        "Search Open Websites/Domains"
+      ]
+    },
+    "other": {
+      "label": "Other / uncategorized",
+      "icon": "tags",
+      "includes": [],
+      "tags": [
+        ".NET Framework",
+        "3AM",
+        "3CX",
+        "3PLA",
+        "7ZIP",
+        "AIRDRY.V2",
+        "ANYDESK",
+        "AWS",
+        "Abuse Elevation Control Mechanism",
+        "Accellion FTA",
+        "Access Token Manipulation",
+        "Account Discovery",
+        "Account Manipulation",
+        "Acquire Infrastructure",
+        "AdFind",
+        "Adobe Acrobat / Reader",
+        "Adobe ColdFusion",
+        "Adobe Flash / Reader",
+        "Adobe Flash Player",
+        "Adversary-in-the-Middle",
+        "Aerospace",
+        "Agent Tesla",
+        "Aitopia",
+        "Akira",
+        "Alphv",
+        "Amadey",
+        "AmadeyBot",
+        "Anchor Panda",
+        "Andariel Group",
+        "Anubis Backdoor",
+        "Apache HTTP Server",
+        "Apache Log4j",
+        "Apache Tapestry",
+        "Apothecary Spider",
+        "AppleJeus",
+        "Application Layer Protocol",
+        "Application Window Discovery",
+        "ArcaneDoor",
+        "Archive Collected Data",
+        "Arcmaze",
+        "Artificial Intelligence",
+        "Aspxspy",
+        "Asylum Ambuscade",
+        "AsyncRAT",
+        "Atlassian Confluence Server/Data Center",
+        "Aukill",
+        "Aurora",
+        "Aurora Panda",
+        "Ave Maria",
+        "Avneutralizer",
+        "Azorult",
+        "BEC",
+        "BIG-IP",
+        "BROOMSTICK",
+        "Backdoor",
+        "BadPilot",
+        "BadSpace",
+        "Balada Injector",
+        "Banished Kitten",
+        "Barbwire",
+        "Barracuda",
+        "Bashlite",
+        "Bateleur",
+        "Beakdrop",
+        "Beardshell",
+        "Beavertail",
+        "Beesknees",
+        "Beeswing",
+        "Belarus",
+        "Beserk Bear",
+        "BeyondTrust",
+        "Bianlian",
+        "Bifrost",
+        "Birdwatch",
+        "Bitcoin",
+        "Black Basta",
+        "Black Shadow",
+        "BlackByte",
+        "Blackmatter",
+        "Blindfix",
+        "Blindingcan",
+        "Blockhead",
+        "Bluetooth BR/EDR devices",
+        "Bluetooth stacks / chipset vendors",
+        "Boatlaunch",
+        "Boostwrite",
+        "Boot or Logon Autostart Execution",
+        "Boot or Logon Initialization Scripts",
+        "Brickstorm",
+        "Bronze Vinewood",
+        "Brute Ratel",
+        "Bughatch",
+        "Bugsleep",
+        "Buhti",
+        "Bulgaria",
+        "BumbleBee",
+        "Burntcigar",
+        "Business Email Compromise",
+        "CCP",
+        "CDN",
+        "CHAINLINE",
+        "CLOP",
+        "CNE",
+        "Cactus",
+        "Cadet Blizzard",
+        "Calisto",
+        "Carbanak",
+        "Carbon Spider",
+        "Carrierpigeon",
+        "Casbaneiro",
+        "Caveman",
+        "Charming Kitten",
+        "ChatGPT",
+        "Chile Locker",
+        "China",
+        "Choziosi",
+        "Cigril",
+        "Circuit Panda",
+        "Circular 179",
+        "Circular 186",
+        "Circular 196",
+        "Circular 197",
+        "Cisco ASA / FTD (Remote Access VPN)",
+        "Cisco IOS / IOS XE (Smart Install)",
+        "Cisco IOS XE",
+        "Cisco IOS XE (Web UI)",
+        "Cisco Nexus 9000 (ACI Multi Site CloudSec)",
+        "Citrix ADC / Gateway",
+        "Citrix Bleed",
+        "Citrix NetScaler / ADC",
+        "Citrix NetScaler / ADC / Gateway",
+        "Citrix ShareFile Storage Zones Controller",
+        "Cl0P",
+        "Cleo Harmony/VLTrader/LexiCom",
+        "Clipboard Data",
+        "Cloud Attacks",
+        "Cloud Infrastructure Discovery",
+        "Cloud Service Discovery",
+        "Cloud Storage Object Discovery",
+        "Cloudduke",
+        "Cobalt Strike",
+        "ColdFusion",
+        "CollectionRAT",
+        "Colordrop",
+        "Command Injection",
+        "Command and Scripting Interpreter",
+        "Comment Panda",
+        "Compromise Accounts",
+        "Compromise Infrastructure",
+        "Confluence",
+        "ConnectWise ScreenConnect",
+        "ConnectWise ScreenConnect / Screen Sharing software",
+        "Contagious Interview",
+        "Content Delivery Network",
+        "Conti",
+        "Cosmicduke",
+        "Covenant Grunt",
+        "Cozy Bear",
+        "Cozyduke",
+        "Crabpot",
+        "Create Account",
+        "Create or Modify System Process",
+        "Crimson Collective",
+        "Crimson Sandstorm",
+        "CrowdStrike",
+        "Crowview",
+        "CrushFTP",
+        "Cryptocurrency",
+        "Crystalray",
+        "Cyber Espionage",
+        "Cyber Intelligence Network (CIN)",
+        "DESKPIRATE",
+        "DHS",
+        "DLRAT",
+        "DanaBot",
+        "Dark Frost",
+        "Dark Pink",
+        "DarkGate",
+        "Darkness",
+        "Darkside",
+        "Data Encoding",
+        "Data Encrypted for Impact",
+        "Data Manipulation",
+        "Data Obfuscation",
+        "Data Staged",
+        "Data from Cloud Storage",
+        "Data from Information Repositories",
+        "Data from Local System",
+        "Dawncat",
+        "Deadglyph",
+        "Debugger Evasion",
+        "Decoy Dog",
+        "Deep Panda",
+        "DeepBlueMagic",
+        "Defacement",
+        "Defense Evasion",
+        "Deobfuscate/Decode Files or Information",
+        "Department of Management (DOM)",
+        "Department of the Treasury",
+        "Detection Evasion",
+        "Develop Capabilities",
+        "Dewmode",
+        "Diamond Sleet",
+        "Direct Volume Access",
+        "Directory Traversal",
+        "Doomhost",
+        "Double Extortion",
+        "DragonEgg",
+        "DragonForce",
+        "Drawdown",
+        "Dridex",
+        "Driftpin",
+        "Drive-by Compromise",
+        "Drupal core",
+        "Drupalgeddon2",
+        "Dtrack",
+        "Dynamic Resolution",
+        "Dynamite Panda",
+        "Dyre",
+        "Earth Lamia",
+        "Easylook",
+        "Education",
+        "Elephant Beetle",
+        "Elfplead.Linux",
+        "Elfplead.Windows",
+        "Email Collection",
+        "Email Security Gateway Vulnerability",
+        "Emennet Pasargad",
+        "Emerald Sleet",
+        "Emissary Panda",
+        "Emotet",
+        "Emufarm",
+        "Encrypted Channel",
+        "Energy",
+        "Energy Sector",
+        "Establish Accounts",
+        "EternalBlue",
+        "Event Triggered Execution",
+        "Evernote",
+        "EvilAI",
+        "EvilProxy",
+        "EvilTeamViewer",
+        "Evilginx",
+        "Exchange Server",
+        "Execution Guardrails",
+        "External Remote Services",
+        "Eyewell",
+        "Eyewell.Waterway",
+        "F5 BIG IP (iControl REST)",
+        "F5 BIG IP TMUI",
+        "F5 BIG-IP",
+        "FAKEUPDATES",
+        "FBI",
+        "FBI CP-000169-TT",
+        "FBI Cyber",
+        "FIN12",
+        "FIN4",
+        "FLORAHOX",
+        "FLOWERWATER",
+        "FSB",
+        "FSB 16th Center",
+        "FakeBat",
+        "Fallback Channels",
+        "Famous Chollima",
+        "Fancy Bear",
+        "Federal Government Partner",
+        "File and Directory Discovery",
+        "File and Directory Permissions Modification",
+        "FileZilla",
+        "Financial",
+        "Financial Services",
+        "Flagpole",
+        "Flawedammyy",
+        "Flawedgrace",
+        "Flax Typhoon",
+        "Flyhigh",
+        "Food and Agriculture",
+        "FormBook",
+        "Fortinet FortiOS / FortiGate",
+        "Fortinet FortiOS / FortiProxy",
+        "Fortinet FortiOS SSL-VPN",
+        "Fortra GoAnywhere MFT",
+        "Fowlgaze",
+        "Friendspeak",
+        "Frontshell",
+        "GCMAN",
+        "GLASSTOKEN",
+        "GRU",
+        "Gafgyt",
+        "GammaStager",
+        "Gammasteel",
+        "Gather Victim Identity Information",
+        "Geminiduke",
+        "Get2",
+        "Ggldr",
+        "Gh0St",
+        "GhostLocker",
+        "GhostPulse",
+        "Ghostsec",
+        "Ghostwriter",
+        "GitLab CE / EE",
+        "Global Protect Vulnerability",
+        "Globeimposter",
+        "Golfcart",
+        "Goodtimes",
+        "Goofex",
+        "Google Chrome / Skia",
+        "GootKit",
+        "Government Facilities Sector",
+        "Government Sector",
+        "Graceful Spider",
+        "Gracewire",
+        "Grayling",
+        "Greatness",
+        "Griffon",
+        "Grizzly Steppe",
+        "HTOC-Intel",
+        "Hacking-as-a-Service (HaaS)",
+        "Hacktivism",
+        "Hades",
+        "Halfbaked",
+        "HammerSwing",
+        "Hammerduke",
+        "Hammertoss",
+        "Hancitor",
+        "Handyman",
+        "Hardflex",
+        "Havoc Framework",
+        "Haywire Kitten",
+        "Health",
+        "Health-ISAC",
+        "Helix Kitten",
+        "HiatusRAT",
+        "Hide Artifacts",
+        "Hijack Execution Flow",
+        "Hookbot",
+        "Horabot",
+        "Htran",
+        "Huawei HG532 / SOHO routers",
+        "I-Soon",
+        "INDICATOR NOTICE 25168.1",
+        "INDICATOR NOTICE 25178.1",
+        "INDICATOR NOTICE 25183.1",
+        "IRGC",
+        "IRGC EWCD",
+        "IceID",
+        "Icebot",
+        "IcedID",
+        "Impacket (Wmiexec)",
+        "Impair Defenses",
+        "Imperial Kitten",
+        "Impersonation",
+        "India",
+        "Indicator Removal",
+        "Indrik Spider",
+        "Infamous Chisel",
+        "Inferno VPS",
+        "Information Technology Sector",
+        "Ingress Tool Transfer",
+        "Initial Access",
+        "Initial Access Broker",
+        "InkBox",
+        "Inter-Process Communication",
+        "Interlock",
+        "InvisibleFerret",
+        "Iran",
+        "Ivanti Connect Secure / Policy Secure",
+        "Ivanti Connect Secure, Policy Secure, Neurons for ZTA",
+        "Ivanti EPM",
+        "Javascript",
+        "JetBrains TeamCity",
+        "Judgment Panda",
+        "JumpCloud",
+        "KEYPLUG",
+        "Kaba",
+        "Karakurt",
+        "Katana",
+        "Kepavll",
+        "Keyframe",
+        "Kneeslide",
+        "Kryptonite Panda",
+        "LABRAT",
+        "LAZYRIVER",
+        "LIGHTWIRE",
+        "Lace Tempest",
+        "Lateral Tool Transfer",
+        "Latrodectus",
+        "Lemurloot",
+        "Lightlesscan",
+        "LilacSquid",
+        "Line Dancer",
+        "Line Runner",
+        "Linux kernel (netfilter/x_tables)",
+        "Liteduke",
+        "Living off the Land",
+        "Lizar",
+        "Loadout",
+        "LockBit",
+        "LockBit Black",
+        "Locky",
+        "Logshell",
+        "LummaC",
+        "MOIS",
+        "MS 365",
+        "MSS",
+        "MaaS",
+        "Macro",
+        "Makop",
+        "Mallard Spider",
+        "Manufacturing",
+        "Marai",
+        "Masquerading",
+        "Maze",
+        "Medical",
+        "Medtronic Paceart Optima (Messaging Queuing Service)",
+        "Medusa",
+        "MedusaLocker",
+        "MeshAgent",
+        "Meta recruiter",
+        "Meterpreter",
+        "Microsoft 365 Defender",
+        "Microsoft Exchange Server",
+        "Microsoft Internet Explorer",
+        "Microsoft Office (ActiveX / MSCOMCTL)",
+        "Microsoft Office (Equation Editor)",
+        "Microsoft Office / Word",
+        "Microsoft Outlook",
+        "Microsoft Outlook / Office",
+        "Microsoft SQL Server Reporting Services (SSRS)",
+        "Microsoft SharePoint",
+        "Microsoft SharePoint Server",
+        "Microsoft Windows / kernel",
+        "MidnightEclipse",
+        "Mimikatz",
+        "Minedoor",
+        "Miniduke",
+        "Mirai",
+        "MitM Attacks",
+        "Mixlabel",
+        "Modify Authentication Process",
+        "Modify Cloud Compute Infrastructure",
+        "Modify Registry",
+        "Mr Hamza Group",
+        "Mummy Spider",
+        "Murlock",
+        "Mustang Panda",
+        "Mustard Tempest",
+        "Mythicplane",
+        "NASA",
+        "NETSUPPORT",
+        "NTLM Relay Attack",
+        "NUMOZYLOD",
+        "Necurs",
+        "NetSpy",
+        "Netherlands",
+        "Network Service Discovery",
+        "Network Sniffing",
+        "Netwrix Auditor (User Activity Video Recording)",
+        "NewBot",
+        "Ngrok",
+        "NightSpire",
+        "NineRAT",
+        "Nitrogen",
+        "Nokoyawa",
+        "Nomadic Octopus",
+        "Non-Application Layer Protocol",
+        "Non-Standard Port",
+        "North Korea",
+        "Nucao",
+        "Obfuscated Files or Information",
+        "Obtain Capabilities",
+        "OceanLotus",
+        "Offtrack",
+        "Okta",
+        "Onionduke",
+        "Onyx Sleet",
+        "OpenSSH (sshd)",
+        "Operation Aurora",
+        "Operation Dream Job",
+        "Operation Ephemeral Hydra",
+        "Operation Phantom Net Voxel",
+        "Operational Relay Box",
+        "Optum/Change Healthcare",
+        "Oracle Weblogic",
+        "OtterCookie",
+        "Oyster",
+        "P2P RAT",
+        "P2PInfect",
+        "PETALTOWER Tunneler",
+        "PHP Address (php_address)",
+        "PHPUnit",
+        "PLA",
+        "PLA CSF",
+        "PLA Navy",
+        "PLA SSF",
+        "PRC",
+        "PUPYRAT",
+        "PUTTY",
+        "PaaS",
+        "Paceback",
+        "Palo Alto Networks PAN OS (GlobalProtect)",
+        "Pandobox",
+        "Pandobox.Injector",
+        "Pandobox.Missyou",
+        "Pandobox.Regpayload",
+        "Pandobox.Standard",
+        "Pantegana",
+        "PaperCut NG/MF",
+        "Pay-Per-Install Service",
+        "Permission Groups Discovery",
+        "Persistence",
+        "Petya",
+        "PhaaS",
+        "Pharmaceutical",
+        "Philadelphia",
+        "Phobos",
+        "Phorpiex",
+        "PikaBot",
+        "PikeSwing",
+        "Pillowmint",
+        "Pinchduke",
+        "Pitty Panda",
+        "Play",
+        "PlugX",
+        "Poemgate",
+        "Poisonivy",
+        "Poland",
+        "Polyglotduke",
+        "Portpass",
+        "Poseidon",
+        "PowerShell",
+        "PowerTrash",
+        "Powerplant",
+        "Powersource",
+        "Powertrash",
+        "Primitive Bear",
+        "Prism",
+        "Privilege Escalation",
+        "Process Discovery",
+        "Process Injection",
+        "Progress MOVEit Transfer",
+        "Progress WS_FTP Server",
+        "Prometei",
+        "Prophet Spider",
+        "Protocol Tunneling",
+        "Proxy",
+        "ProxyNotShell/MSExchange (2022)",
+        "PteroLNK",
+        "Pulse Connect Secure (Ivanti)",
+        "Pulse Secure Invanti",
+        "Purpleink",
+        "Python",
+        "Python Backdoor",
+        "Python/Aiohttp",
+        "QBOT",
+        "Qakbot",
+        "Qualcomm",
+        "Quantum",
+        "Quasar",
+        "Query Registry",
+        "QuiteRAT",
+        "RAT",
+        "RCE",
+        "RDP",
+        "REDCap",
+        "RESHELL",
+        "REvil",
+        "RGB",
+        "RaaS",
+        "Racyraft",
+        "Ragnar locker",
+        "Rdfsniffer",
+        "Realtek / miniigd (SOHO routers)",
+        "RedNovember",
+        "Redis (Debian/Ubuntu packages)",
+        "Refined Kitten",
+        "Reflective Code Loading",
+        "Regduke",
+        "Rekoobe",
+        "Remcos",
+        "Remote Access Tools",
+        "Remote Code Execution",
+        "Remote Code Execution (RCE)",
+        "Remote Code Execution Vulnerability",
+        "Remote Desktop Protocol",
+        "Remote Service Session Hijacking",
+        "Remote Services",
+        "Remote System Discovery",
+        "Replication Through Removable Media",
+        "Resource Hijacking",
+        "Resurge",
+        "Revolver Rabbit",
+        "Rhysida",
+        "Richochet Chollima",
+        "Rocket Kitten",
+        "RomCom",
+        "Roundcube Webmail",
+        "Royal",
+        "Russia",
+        "SALTWATER",
+        "SAP NetWeaver",
+        "SEASPY",
+        "SHIMMERPICK Tunneler",
+        "SPACEHOP ORB",
+        "SPACEPIZZA",
+        "SQLShell",
+        "SSH",
+        "SSL-VPN",
+        "STAC4663",
+        "STOWAWAY",
+        "Salt Typhoon",
+        "Sambaverso",
+        "Scattered Spider",
+        "Scheduled Task/Job",
+        "ScreenConnect",
+        "Sdbbot",
+        "Seaduke",
+        "Seashell Blizzard",
+        "SectopRAT",
+        "Server Software Component",
+        "Servhelper",
+        "Service Stop",
+        "ShadowSyndicate",
+        "ShadowV2",
+        "Shadowladder",
+        "SharePoint ZeroDay/WordPress",
+        "Shared Modules",
+        "Sharp Panda",
+        "Shipyard",
+        "Showstop",
+        "Sign1",
+        "Silk Typhoon",
+        "Silver",
+        "Skidmap",
+        "SlimAgent",
+        "Slowpeek",
+        "Snowflake",
+        "SocGholish",
+        "Software Discovery",
+        "Sogu",
+        "SolarMarker",
+        "SolarWinds Serv-U",
+        "Soloship",
+        "Source: CAL Automated Threat Library",
+        "Spark",
+        "SparkRAT",
+        "Sparrow",
+        "Spawnchimera",
+        "Spectral Kitten",
+        "Spicy Panda",
+        "SpiderRAT",
+        "Sponsor",
+        "SpyBoy",
+        "SqlRAT",
+        "Stage Capabilities",
+        "Star Blizzard",
+        "Stardust Chollima",
+        "Static Kitten",
+        "Steal Application Access Token",
+        "Steal Web Session Cookie",
+        "Steal or Forge Kerberos Tickets",
+        "Storm-0494",
+        "Storm-0558",
+        "Storm-0866",
+        "Storm-1113",
+        "Storm-1849",
+        "Storm-2077",
+        "Stormous X",
+        "Strawberry Tempest",
+        "Subvert Trust Controls",
+        "Supermicro",
+        "Supersoft",
+        "Supply Chain Attack",
+        "Supply Chain Compromise",
+        "Swimlane",
+        "System Binary Proxy Execution",
+        "System Information Discovery",
+        "System Location Discovery",
+        "System Network Configuration Discovery",
+        "System Network Connections Discovery",
+        "System Owner/User Discovery",
+        "System Service Discovery",
+        "System Services",
+        "System Shutdown/Reboot",
+        "System Time Discovery",
+        "SystemBC",
+        "T-Suite",
+        "TA577",
+        "TA578",
+        "TA582",
+        "TAG-100",
+        "TAG-124",
+        "TP Link Archer AX21 (AX1800)",
+        "Tablemate",
+        "Taidoor",
+        "Takeout",
+        "Task Scheduler",
+        "Tdiscover",
+        "Telerik UI for ASP.NET AJAX",
+        "Telerik UI for ASP.NET AJAX (RadAsyncUpload)",
+        "Temp.Hermit",
+        "Textmate",
+        "The Netherlands",
+        "Threatscape: Cyber Crime",
+        "Threatscape: Cyber Espionage",
+        "Tinymet",
+        "Tirion",
+        "Tool: 7ZIP",
+        "Tool: ANYDESK",
+        "Tool: AZCopy",
+        "Tool: AdFind",
+        "Tool: BITVISE",
+        "Tool: BloodHound",
+        "Tool: CELLARDOOR",
+        "Tool: COBALTSTRIKE",
+        "Tool: CrackMapExec",
+        "Tool: DSQUERY",
+        "Tool: EVENTGRAB",
+        "Tool: GO Simple Tunnel",
+        "Tool: GOST",
+        "Tool: HFS",
+        "Tool: Mega",
+        "Tool: Meterpreter",
+        "Tool: Mimikatz",
+        "Tool: NBTSCAN",
+        "Tool: NLTEST",
+        "Tool: Net",
+        "Tool: Ngrok",
+        "Tool: OpenSSH",
+        "Tool: PHANT0M",
+        "Tool: PIPESHELL",
+        "Tool: PUTTY",
+        "Tool: PowerShell",
+        "Tool: PowerSploit",
+        "Tool: PsExec",
+        "Tool: RAR",
+        "Tool: RMS",
+        "Tool: SDelete",
+        "Tool: TEAMVIEWER",
+        "Tool: TRUFFLEHOG",
+        "Tool: TacticalRMM",
+        "Tool: WCE",
+        "Tool: WINSCP",
+        "Tool: net.exe",
+        "Tool: plink",
+        "ToolShell",
+        "Tor",
+        "Tor Exit Node",
+        "Tor Node",
+        "Torchwood",
+        "TraderTraitor",
+        "Traffic Direction System",
+        "Traffic Distribution System (TDS)",
+        "Transportation Systems Sector",
+        "Trickbot",
+        "TrueBot",
+        "Truecore",
+        "Trusted Relationship",
+        "Tscookie",
+        "Tscookie.Freebsd",
+        "Tscookie.Linux",
+        "Tycoon",
+        "U.S. Government",
+        "UAC-0173",
+        "UNC1151",
+        "UNC1664",
+        "UNC1714",
+        "UNC3594",
+        "UNC3953",
+        "UNC3973",
+        "UNC4221",
+        "UNC4487",
+        "UNC4509",
+        "UNC4536",
+        "UNC4698",
+        "UNC4841",
+        "UNC4899",
+        "UNC4936",
+        "UNC5112",
+        "UNC5148",
+        "UNC5174",
+        "UNC5221",
+        "UNC5266",
+        "UNC5439",
+        "UNC5537",
+        "UNC5792",
+        "UNC5807",
+        "UNC5837",
+        "UNC5952",
+        "UNC5986",
+        "UNC6068",
+        "UNC6096",
+        "UNC6310",
+        "UNC6322",
+        "UNC6337/STORM-2603",
+        "UNC6395",
+        "UNC6468",
+        "UPSTYLE",
+        "US Defense Sector",
+        "USB",
+        "Ukraine",
+        "Unauthorized access",
+        "Unfurling Hemlock",
+        "United Kingdom",
+        "United States",
+        "Ursnif",
+        "User Execution",
+        "VA CTI report",
+        "VA SAR",
+        "VA Situation Awareness Report",
+        "VA TIR IOC",
+        "VBScript",
+        "VMware Aria Operations for Networks (vRealize Network Insight)",
+        "VMware Workspace ONE / Identity Manager",
+        "VMware Workspace ONE Access / Identity Manager",
+        "VOLTRIGGER",
+        "Valid Accounts",
+        "Veeam Backup & Replication",
+        "Veeamp",
+        "Velvet Chollima",
+        "Venomous Bear",
+        "Vermin",
+        "Vidar",
+        "Virtualization/Sandbox Evasion",
+        "Void Blizzard",
+        "Volt Typhoon",
+        "WAVESIGN",
+        "WIREFIRE",
+        "WannaCry",
+        "WarmCookie",
+        "Warpwire",
+        "Water Sigbin",
+        "Web Injections",
+        "Web Scanner",
+        "Web Service",
+        "Webshell Attack",
+        "Whaling Attack",
+        "Whitesnake",
+        "Wicked Panda",
+        "WinRAR",
+        "Windows Management Instrumentation",
+        "Wingnight",
+        "Wingtip",
+        "Wizard Spider",
+        "WordPress /Elementor",
+        "WordPress/Forminator",
+        "WordPress/LayerSlider",
+        "Workmate",
+        "WyrmSpy",
+        "XE Group",
+        "Xdealer",
+        "Yanluowang",
+        "Zero Day",
+        "ZeroLogon/Active Diectory",
+        "Zerowipe",
+        "Zimbra Collaboration",
+        "ZuoRAT",
+        "Zyxel firewall / VPN appliances",
+        "adobe",
+        "babuk",
+        "cuba",
+        "curl / libcurl",
+        "dhs cisa",
+        "fgdump",
+        "fs-isac",
+        "fsisac",
+        "ghostloot",
+        "glibc",
+        "govwhitepapers",
+        "h-isac",
+        "hVNC",
+        "hailbot",
+        "hiraibot",
+        "karaibot",
+        "kiraibot",
+        "miniBlindingCan",
+        "ms-isac",
+        "njRAT",
+        "noname(057)16",
+        "nukesped",
+        "polkit pkexec (PwnKit)",
+        "shadowpad backdoor",
+        "snowydrive",
+        "spininstall0.aspx",
+        "storm-0335",
+        "trigona"
+      ]
+    }
+  }
+}
