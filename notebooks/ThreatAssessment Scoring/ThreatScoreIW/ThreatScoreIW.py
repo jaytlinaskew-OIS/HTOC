@@ -627,6 +627,47 @@ final_indicators = final_indicators.drop(columns=['Reported I&W?_raw'])
 final_indicators
 
 # %% [code cell 12]
+import pandas as pd
+
+# Load external tags data
+tags_path = r"Z:\HTOC\Data_Analytics\Data\Observed_Tags\htoc_observed_indicator_tags.csv"
+tags_df = pd.read_csv(tags_path)
+
+# Find indicator column (case-insensitive)
+tags_indicator_col = None
+for col in tags_df.columns:
+    if str(col).lower() == 'indicator':
+        tags_indicator_col = col
+        break
+if tags_indicator_col is None:
+    raise ValueError("Could not find an 'Indicator' column in the tags CSV.")
+
+# Find tags column — check both 'tag' (singular) and 'tags' (plural)
+tags_value_col = None
+for col in tags_df.columns:
+    if str(col).lower() in ('tags', 'tag'):
+        tags_value_col = col
+        break
+if tags_value_col is None:
+    raise ValueError(
+        f"Could not find a 'Tag' or 'Tags' column in the tags CSV. "
+        f"Available columns: {list(tags_df.columns)}"
+    )
+
+# Build indicator -> tags lookup and map onto final_indicators
+indicator_to_tags = tags_df.set_index(tags_indicator_col)[tags_value_col].to_dict()
+final_tags = final_indicators['Indicator'].map(indicator_to_tags)
+
+# Insert 'Tags' as the second-to-last column
+final_cols = list(final_indicators.columns)
+if 'Tags' in final_cols:
+    final_cols.remove('Tags')
+new_cols = final_cols[:-1] + ['Tags'] + final_cols[-1:]
+
+final_indicators['Tags'] = final_tags
+final_indicators = final_indicators[new_cols]
+
+# %% [code cell 13]
 from datetime import datetime
 
 # Build dated output path
