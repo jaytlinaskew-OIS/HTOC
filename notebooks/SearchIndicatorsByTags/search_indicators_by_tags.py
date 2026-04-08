@@ -15,7 +15,7 @@ Typical usage:
   py search_indicators_by_tags.py --interactive
   py -m pip install tabulate   # nicer ASCII tables (--output-format table, default)
 
-  py search_indicators_by_tags.py --search malspam --display-columns "Indicator,Severity,HTOC Threat Score"
+  py search_indicators_by_tags.py --search malspam --display-columns "Indicator,Severity,PRISM Score"
   py search_indicators_by_tags.py --search malspam --output-format csv > out.csv
 
 Dependencies (pip): wheels under Z:\\HTOC\\JA\\wheelhouse — run
@@ -50,7 +50,7 @@ DEFAULT_SCORES_CONSOLE_COLUMNS: list[str] = [
     "Indicator",
     "Last Observed",
     "Indicator Type",
-    "HTOC Threat Score",
+    "PRISM Score",
     "Severity",
     "Partners",
 ]
@@ -80,11 +80,14 @@ def _column_name_ci(df: pd.DataFrame, want: str) -> str | None:
     return None
 
 
-def sort_scores_by_htoc_threat_desc(df: pd.DataFrame) -> pd.DataFrame:
-    """Sort rows by HTOC Threat Score descending (highest first)."""
+def sort_scores_by_prism_desc(df: pd.DataFrame) -> pd.DataFrame:
+    """Sort rows by PRISM Score descending (highest first)."""
     if df.empty:
         return df
-    col = _column_name_ci(df, "HTOC Threat Score")
+    # Backward compatibility: support legacy score column if present.
+    col = _column_name_ci(df, "PRISM Score") or _column_name_ci(
+        df, "HTOC Threat Score"
+    )
     if not col:
         return df
     tmp = df.copy()
@@ -668,7 +671,7 @@ def main() -> int:
                 title="Observed tag rows (matched)",
             )
 
-        scores_filtered = sort_scores_by_htoc_threat_desc(
+        scores_filtered = sort_scores_by_prism_desc(
             filter_scores_by_indicators_sorted(
                 scores_df=scores_df,
                 indicator_order=indicators,
