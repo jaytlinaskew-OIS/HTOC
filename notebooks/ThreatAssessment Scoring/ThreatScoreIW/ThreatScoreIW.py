@@ -85,8 +85,8 @@ from datetime import datetime, timedelta
 import pytz
 import urllib.parse
 
-# Configuration for ThreatConnect indicator query
-QUERY_LOOKBACK_DAYS = 1  # days of lastObserved activity to include
+# Configuration for ThreatConnect indicator query (rolling window for lastObserved in TQL)
+INSIGHT_LOOKBACK_HOURS = 48
 INDICATOR_TYPE_NAMES = [
     "Address", "EmailAddress", "File", "Host", "URL", "ASN", "CIDR",
     "Email Subject", "Hashtag", "Mutex", "Registry Key", "User Agent",
@@ -103,10 +103,9 @@ OWNER_NAMES = [
 ]
 RESULT_PAGE_SIZE = 500  # keep this smaller; same fields, just paged
 
-# Setup
-cutoff = pd.Timestamp.utcnow()
-start_date = (datetime.now(pytz.UTC) - timedelta(days=QUERY_LOOKBACK_DAYS)).date()
-start = f"{start_date}T00:00:00Z"
+# Setup: rolling 48-hour window for lastObserved (aligned with downstream insight window)
+start_dt = datetime.now(pytz.UTC) - timedelta(hours=INSIGHT_LOOKBACK_HOURS)
+start = start_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 type_names = INDICATOR_TYPE_NAMES
 type_name_condition = ", ".join([f'"{t}"' for t in type_names])
@@ -125,7 +124,7 @@ tql_raw = (
 tql_encoded = urllib.parse.quote(tql_raw)
 
 final_results = []
-logger.info("Querying indicators (lookback_days=%s) starting %s", QUERY_LOOKBACK_DAYS, start)
+logger.info("Querying indicators (lookback_hours=%s) starting %s", INSIGHT_LOOKBACK_HOURS, start)
 logger.debug("TQL (raw): %s", tql_raw)
 
 # Query indicators (paginate so you don't 502 with heavy fields)
@@ -197,6 +196,24 @@ if normalized_data:
     observed_src = observed_src.merge(sources_per_indicator, on='indicator', how='left')
     # Filter to keep only records where ownerName is 'HTOC Org'
     observed_src = observed_src[observed_src['ownerName'] == 'HTOC Org'].copy()
+    # Exclude indicators below threatAssessRating 3 or threatAssessConfidence 50 (from threatAssess field)
+    _ta = pd.Series(float('nan'), index=observed_src.index)
+    _tc = pd.Series(float('nan'), index=observed_src.index)
+    for c in ('threatAssessRating', 'threatAssess.threatAssessRating', 'threatAssess.rating', 'rating'):
+        if c in observed_src.columns:
+            _ta = pd.to_numeric(observed_src[c], errors='coerce')
+            break
+    for c in ('threatAssessConfidence', 'threatAssess.threatAssessConfidence', 'threatAssess.confidence', 'confidence'):
+        if c in observed_src.columns:
+            _tc = pd.to_numeric(observed_src[c], errors='coerce')
+            break
+    _pre_ta = len(observed_src)
+    observed_src = observed_src[(_ta >= 3) & (_tc >= 50)].copy()
+    logger.info(
+        "Threat assess filter (rating>=3, confidence>=50): %s -> %s rows.",
+        _pre_ta,
+        len(observed_src),
+    )
     logger.info("observed_src ready (rows=%s, cols=%s).", len(observed_src), len(observed_src.columns))
 else:
     logger.warning("No valid indicator data found.")
@@ -307,50 +324,50 @@ import pandas as pd
 # Ensure Last Observed is datetime
 df['Last Observed'] = pd.to_datetime(df['Last Observed'])
 
-# Get last 24 hours relative to latest observation
+# Get last 48 hours relative to latest observation
 max_obs = df['Last Observed'].max()
-cutoff = max_obs - pd.Timedelta(days=1)
-last_24h_from_max = df[df['Last Observed'] >= cutoff]
-logger.info("Last 24h window from max obs (%s): %s rows.", max_obs, len(last_24h_from_max))
+cutoff = max_obs - pd.Timedelta(hours=48)
+last_48h_from_max = df[df['Last Observed'] >= cutoff]
+logger.info("Last 48h window from max obs (%s): %s rows.", max_obs, len(last_48h_from_max))
 
-last_24h_from_max
+last_48h_from_max
 
 # %% [code cell 4]
-# Filter last 24h results to indicators seen at more than one partner
-last_24h_multiple_partners = last_24h_from_max[last_24h_from_max['Partners'].str.contains(',', na=False)]
-logger.info("Multi-partner indicators in window: %s rows.", len(last_24h_multiple_partners))
+# Filter last 48h results to indicators seen at more than one partner
+last_48h_multiple_partners = last_48h_from_max[last_48h_from_max['Partners'].str.contains(',', na=False)]
+logger.info("Multi-partner indicators in window: %s rows.", len(last_48h_multiple_partners))
 
-last_24h_multiple_partners
+last_48h_multiple_partners
 
 # %% [code cell 5]
-# Filter multi-partner, last-24h indicators to VT score >= 10 based on Explanation text
-vt_scores = last_24h_multiple_partners['Explanation'].str.extract(r'VT score:\s*(\d+)', expand=False)
+# Filter multi-partner, last-48h indicators to VT score >= 10 based on Explanation text
+vt_scores = last_48h_multiple_partners['Explanation'].str.extract(r'VT score:\s*(\d+)', expand=False)
 vt_scores = pd.to_numeric(vt_scores, errors='coerce')
 
-last_24h_multi_partners_vt10 = last_24h_multiple_partners[vt_scores >= 10]
-logger.info("Multi-partner with VT>=10: %s rows.", len(last_24h_multi_partners_vt10))
+last_48h_multi_partners_vt10 = last_48h_multiple_partners[vt_scores >= 10]
+logger.info("Multi-partner with VT>=10: %s rows.", len(last_48h_multi_partners_vt10))
 
-last_24h_multi_partners_vt10
+last_48h_multi_partners_vt10
 
 # %% [code cell 6]
-# Keep only high or critical indicators from the VT>=10, multi-partner, last-24h set
-high_critical_last_24h = last_24h_multi_partners_vt10[last_24h_multi_partners_vt10['Severity'].isin(['high', 'critical'])]
-logger.info("High/Critical in set: %s rows.", len(high_critical_last_24h))
+# Keep only high or critical indicators from the VT>=10, multi-partner, last-48h set
+high_critical_last_48h = last_48h_multi_partners_vt10[last_48h_multi_partners_vt10['Severity'].isin(['high', 'critical'])]
+logger.info("High/Critical in set: %s rows.", len(high_critical_last_48h))
 
-high_critical_last_24h
+high_critical_last_48h
 
 # %% [code cell 7]
-high_critical_last_24h[high_critical_last_24h['Indicator'] == '45.148.10.141']
+high_critical_last_48h[high_critical_last_48h['Indicator'] == '45.148.10.141']
 
 # %% [code cell 8]
-# Extract VT scores for high/critical last-24h indicators
-vt_scores_hc = high_critical_last_24h['Explanation'].str.extract(r'VT score:\s*(\d+)', expand=False)
+# Extract VT scores for high/critical last-48h indicators
+vt_scores_hc = high_critical_last_48h['Explanation'].str.extract(r'VT score:\s*(\d+)', expand=False)
 
-# VT-based selection only: keep high/critical last-24h indicators with VT score > 15
+# VT-based selection only: keep high/critical last-48h indicators with VT score > 15
 vt = pd.to_numeric(vt_scores_hc, errors='coerce')
 mask_vt = vt >= 15
 
-final_indicators = high_critical_last_24h[mask_vt]
+final_indicators = high_critical_last_48h[mask_vt]
 logger.info("Final indicators (VT>=15): %s rows.", len(final_indicators))
 final_indicators
 

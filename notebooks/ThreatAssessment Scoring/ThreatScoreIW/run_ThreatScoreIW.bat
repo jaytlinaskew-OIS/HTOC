@@ -22,7 +22,7 @@ REM ── Set log directory ─────────────────
 set "LOG_DIR=%WORK_DIR%logs"
 
 REM ── Optional offline wheelhouse folder (create once) ───────────────────────
-set "WHEELHOUSE=Z:\HTOC\JA\wheelhouse"
+if not defined WHEELHOUSE set "WHEELHOUSE=Z:\HTOC\JA\wheelhouse"
 
 REM ── Expected Excel output directory (from script) ──────────────────────────
 set "OUTPUT_DIR=Z:\HTOC\Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W"
