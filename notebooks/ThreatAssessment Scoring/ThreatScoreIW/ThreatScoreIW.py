@@ -5,6 +5,7 @@ import sys
 import os
 import urllib3
 import logging
+import json
 from configparser import ConfigParser
 
 logging.basicConfig(
@@ -31,15 +32,62 @@ from ThreatConnect import ThreatConnect
 from RequestObject import RequestObject
 from Owners import Owners
 
-# Add your project repo to path
-project_root = r"C:\Users\jaskew\Documents\project_repository\scripts\Data Movement\ThrearConnect-api-pull"
+# Resolve a valid project root for shared utils imports.
+def _resolve_project_root() -> str:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root_from_script = os.path.abspath(os.path.join(script_dir, "..", "..", ".."))
+    candidates = [
+        os.environ.get("HTOC_PROJECT_ROOT"),
+        repo_root_from_script,
+        r"H:\HTOC",
+        r"C:\Users\jaskew\Documents\project_repository\scripts\Data Movement\ThrearConnect-api-pull",
+    ]
+    for candidate in candidates:
+        if not candidate:
+            continue
+        if os.path.exists(os.path.join(candidate, "utils", "config_loader.py")):
+            return candidate
+    raise FileNotFoundError("Could not locate project root containing utils/config_loader.py")
+
+project_root = _resolve_project_root()
 if project_root not in sys.path:
-    sys.path.append(project_root)
+    # Insert first so local project modules win over site-packages names.
+    sys.path.insert(0, project_root)
 
 from utils.config_loader import load_config
 
+# Resolve a usable config path (prefer real credentials over template placeholders).
+def _resolve_config_path(root: str) -> str:
+    candidates = [
+        os.environ.get("HTOC_CONFIG_PATH"),
+        os.path.join(root, "utils", "config.json"),
+        r"H:\HTOC\scripts\Data Movement\ThrearConnect-api-pull\utils\config.json",
+        r"H:\HTOC\notebooks\HTOCThreatConnect\HTOCThreatConnect\utils\config.json",
+        r"H:\HTOC\notebooks\HTOCThreatConnect\build\lib\AlynThreatConnect\utils\config.json",
+        r"H:\HTOC\utils\config.json",
+    ]
+    placeholder_values = {"YOUR_SECRET_KEY", "YOUR_ACCESS_ID", "Your Organization Name"}
+
+    for path in candidates:
+        if not path or not os.path.exists(path):
+            continue
+        try:
+            with open(path, "r", encoding="utf-8") as fh:
+                cfg = json.load(fh)
+            values = {
+                cfg.get("api_secret_key"),
+                cfg.get("api_access_id"),
+                cfg.get("api_default_org"),
+            }
+            if not any(v in placeholder_values for v in values):
+                return path
+        except Exception:
+            continue
+
+    raise FileNotFoundError("No non-placeholder ThreatConnect config.json found.")
+
 # Load API config
-config_path = os.path.join(project_root, "utils", "config.json")
+config_path = _resolve_config_path(project_root)
 try:
     api_secret_key, api_access_id, api_base_url, api_default_org = load_config(config_path)
     logger.info("Loaded config from: %s", config_path)
@@ -85,8 +133,16 @@ from datetime import datetime, timedelta
 import pytz
 import urllib.parse
 
-# Configuration for ThreatConnect indicator query (rolling window for lastObserved in TQL)
-INSIGHT_LOOKBACK_HOURS = 48
+def _ensure_observed_schema(df: pd.DataFrame) -> pd.DataFrame:
+    """Ensure downstream-required columns exist even when API returns no rows."""
+    required_cols = ["indicator", "lastObserved", "associatedGroups.data", "tags.data"]
+    for col in required_cols:
+        if col not in df.columns:
+            df[col] = pd.Series(dtype="object")
+    return df
+
+# Configuration for ThreatConnect indicator query (aligned with ThreatScoreIW.ipynb)
+QUERY_LOOKBACK_DAYS = 2  # days of lastObserved activity to include
 INDICATOR_TYPE_NAMES = [
     "Address", "EmailAddress", "File", "Host", "URL", "ASN", "CIDR",
     "Email Subject", "Hashtag", "Mutex", "Registry Key", "User Agent",
@@ -103,9 +159,10 @@ OWNER_NAMES = [
 ]
 RESULT_PAGE_SIZE = 500  # keep this smaller; same fields, just paged
 
-# Setup: rolling 48-hour window for lastObserved (aligned with downstream insight window)
-start_dt = datetime.now(pytz.UTC) - timedelta(hours=INSIGHT_LOOKBACK_HOURS)
-start = start_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+# Setup (calendar-day lookback for TQL — same as notebook)
+cutoff = pd.Timestamp.utcnow()
+start_date = (datetime.now(pytz.UTC) - timedelta(days=QUERY_LOOKBACK_DAYS)).date()
+start = f"{start_date}T00:00:00Z"
 
 type_names = INDICATOR_TYPE_NAMES
 type_name_condition = ", ".join([f'"{t}"' for t in type_names])
@@ -124,7 +181,7 @@ tql_raw = (
 tql_encoded = urllib.parse.quote(tql_raw)
 
 final_results = []
-logger.info("Querying indicators (lookback_hours=%s) starting %s", INSIGHT_LOOKBACK_HOURS, start)
+logger.info("Querying indicators (QUERY_LOOKBACK_DAYS=%s) starting %s", QUERY_LOOKBACK_DAYS, start)
 logger.debug("TQL (raw): %s", tql_raw)
 
 # Query indicators (paginate so you don't 502 with heavy fields)
@@ -196,28 +253,52 @@ if normalized_data:
     observed_src = observed_src.merge(sources_per_indicator, on='indicator', how='left')
     # Filter to keep only records where ownerName is 'HTOC Org'
     observed_src = observed_src[observed_src['ownerName'] == 'HTOC Org'].copy()
-    # Exclude indicators below threatAssessRating 3 or threatAssessConfidence 50 (from threatAssess field)
-    _ta = pd.Series(float('nan'), index=observed_src.index)
-    _tc = pd.Series(float('nan'), index=observed_src.index)
-    for c in ('threatAssessRating', 'threatAssess.threatAssessRating', 'threatAssess.rating', 'rating'):
-        if c in observed_src.columns:
-            _ta = pd.to_numeric(observed_src[c], errors='coerce')
-            break
-    for c in ('threatAssessConfidence', 'threatAssess.threatAssessConfidence', 'threatAssess.confidence', 'confidence'):
-        if c in observed_src.columns:
-            _tc = pd.to_numeric(observed_src[c], errors='coerce')
-            break
+    # Exclude indicators below threatAssessRating 3 and threatAssessConfidence < 50.
+    # Rating: 1–5 scale (never threatAssess.rating — that is 0–1 normalized).
+    # Confidence: 0–100 threatAssess fields only (not bare legacy 'confidence').
+    # Coalesce flat vs nested columns per row so we do not drop rows where only one is populated.
+    _rating_cols = ("threatAssessRating", "threatAssess.threatAssessRating")
+    _confidence_cols = ("threatAssessConfidence", "threatAssess.threatAssessConfidence")
+
+    def _first_non_null_numeric(df, ordered_cols):
+        present = [c for c in ordered_cols if c in df.columns]
+        if not present:
+            return None
+        out = pd.to_numeric(df[present[0]], errors="coerce")
+        for c in present[1:]:
+            s = pd.to_numeric(df[c], errors="coerce")
+            out = out.mask(out.isna(), s)
+        return out
+
+    _ta = _first_non_null_numeric(observed_src, _rating_cols)
+    _tc = _first_non_null_numeric(observed_src, _confidence_cols)
+    if _ta is None or _tc is None:
+        raise KeyError(
+            f"Could not resolve Threat Assess columns. Tried rating={_rating_cols}, "
+            f"confidence={_confidence_cols}. Columns: {list(observed_src.columns)}"
+        )
+    # Some rows store 0–1 normalized threat in threatAssessRating (e.g. 0.75) while the
+    # top-level `rating` column holds the 1–5 band (e.g. 3.0).
+    if "rating" in observed_src.columns:
+        _r = pd.to_numeric(observed_src["rating"], errors="coerce")
+        _use_band = _ta.notna() & (_ta < 1.0) & _r.notna() & (_r >= 1) & (_r <= 5)
+        _ta = _ta.where(~_use_band, _r)
     _pre_ta = len(observed_src)
+    # Use >= 50 so a boundary value of 50.0 is included (strict > 50 dropped those rows).
     observed_src = observed_src[(_ta >= 3) & (_tc >= 50)].copy()
     logger.info(
-        "Threat assess filter (rating>=3, confidence>=50): %s -> %s rows.",
+        "Threat assess filter (1–5 rating>=3, confidence>=50) coalescing %s / %s "
+        "(+ `rating` when TA value is 0–1 normalized): %s -> %s rows.",
+        _rating_cols,
+        _confidence_cols,
         _pre_ta,
         len(observed_src),
     )
+    observed_src = _ensure_observed_schema(observed_src)
     logger.info("observed_src ready (rows=%s, cols=%s).", len(observed_src), len(observed_src.columns))
 else:
     logger.warning("No valid indicator data found.")
-    observed_src = pd.DataFrame()
+    observed_src = _ensure_observed_schema(pd.DataFrame())
 
 # %% [code cell 2]
 import pandas as pd
@@ -238,7 +319,7 @@ _pre = len(df)
 df = df[df[_indicator_col].astype(str).isin(_observed_indicators)].copy()
 logger.info("Filtered df by observed_src indicators: %s -> %s rows.", _pre, len(df))
 
-# Update df's Last Observed from observed_src.lastObserved
+# Last Observed column: values come only from observed_src (ThreatConnect), not the workbook
 _last_observed_col = next(
     (
         c
@@ -304,10 +385,23 @@ _observed_latest = (
 _last_obs_by_indicator = _observed_latest.set_index("indicator")["lastObserved"]
 _assoc_groups_by_indicator = _observed_latest.set_index("indicator")[_assoc_groups_src_col].map(_extract_group_ids)
 
-# Ensure df's last observed column is datetime-like, then overwrite for matches
+# Last Observed: only from ThreatConnect (observed_src); do not fall back to Excel dates
 _df_ind = df[_indicator_col].astype(str)
-df[_last_observed_col] = pd.to_datetime(df[_last_observed_col], utc=True, errors="coerce")
-df[_last_observed_col] = _df_ind.map(_last_obs_by_indicator).combine_first(df[_last_observed_col])
+df[_last_observed_col] = pd.to_datetime(_df_ind.map(_last_obs_by_indicator), utc=True, errors="coerce")
+_qd = QUERY_LOOKBACK_DAYS if "QUERY_LOOKBACK_DAYS" in globals() else 1
+_last_obs_cutoff = pd.to_datetime(
+    f"{(datetime.now(pytz.UTC) - timedelta(days=_qd)).date()}T00:00:00Z", utc=True
+)
+_pre_lo = len(df)
+df = df[df[_last_observed_col].notna() & (df[_last_observed_col] >= _last_obs_cutoff)].copy()
+logger.info(
+    "Last Observed filter (ThreatConnect only, >= %s): %s -> %s rows.",
+    _last_obs_cutoff,
+    _pre_lo,
+    len(df),
+)
+
+_df_ind = df[_indicator_col].astype(str)
 
 # Add associatedGroups.data ids from observed_src by indicator, stored as 'Associated Groups'
 if _assoc_groups_target_col in df.columns:
@@ -316,353 +410,98 @@ else:
     df[_assoc_groups_target_col] = _df_ind.map(_assoc_groups_by_indicator)
 logger.info("Updated '%s' from observed_src.lastObserved (unique indicators=%s).", _last_observed_col, df[_indicator_col].nunique(dropna=True))
 
-df
-
 # %% [code cell 3]
 import pandas as pd
+from datetime import datetime, timedelta
 
-# Ensure Last Observed is datetime
-df['Last Observed'] = pd.to_datetime(df['Last Observed'])
+# OpDiv observation files (same as ThreatScoreIW.ipynb)
+base_path = r"Z:/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d{date}.csv"
+date_format = "%Y%m%d"
 
-# Get last 48 hours relative to latest observation
-max_obs = df['Last Observed'].max()
-cutoff = max_obs - pd.Timedelta(hours=48)
-last_48h_from_max = df[df['Last Observed'] >= cutoff]
-logger.info("Last 48h window from max obs (%s): %s rows.", max_obs, len(last_48h_from_max))
 
-last_48h_from_max
+def get_file_paths(base_path, days=2):
+    today = datetime.utcnow()
+    dates_to_pull = [(today - timedelta(days=i)).strftime(date_format) for i in range(days)]
+    file_paths = [base_path.format(date=dt) for dt in dates_to_pull]
+    existing_files = [fp for fp in file_paths if os.path.exists(fp)]
+    if not existing_files:
+        logger.warning("No OpDiv observation files found for the date range.")
+    else:
+        logger.info("OpDiv files to load: %s", existing_files)
+    return existing_files
+
+
+def load_observed_data(file_paths):
+    frames = []
+    for fp in file_paths:
+        try:
+            frames.append(pd.read_csv(fp))
+        except Exception:
+            logger.exception("Error reading OpDiv file %s", fp)
+    if frames:
+        out = pd.concat(frames, ignore_index=True)
+        logger.info("Loaded OpDiv observations from %s file(s), %s rows.", len(frames), len(out))
+    else:
+        out = pd.DataFrame()
+    return out
+
+
+file_paths = get_file_paths(base_path, days=2)
+observed_data_df = load_observed_data(file_paths)
 
 # %% [code cell 4]
-# Filter last 48h results to indicators seen at more than one partner
-last_48h_multiple_partners = last_48h_from_max[last_48h_from_max['Partners'].str.contains(',', na=False)]
-logger.info("Multi-partner indicators in window: %s rows.", len(last_48h_multiple_partners))
+_indicator_col_df = next((c for c in ["indicator", "Indicator", "INDICATOR"] if c in df.columns), None)
+_indicator_col_obs = next((c for c in ["indicator", "Indicator", "INDICATOR"] if c in observed_data_df.columns), None)
+_opdiv_col = next((c for c in ["OpDiv", "opdiv", "OPDIV"] if c in observed_data_df.columns), None)
+if _indicator_col_df is None:
+    raise KeyError(f"Could not find indicator column in df. Columns: {list(df.columns)}")
+if _indicator_col_obs is None:
+    raise KeyError(
+        f"Could not find indicator column in observed_data_df. Columns: {list(observed_data_df.columns)}"
+    )
+if _opdiv_col is None:
+    raise KeyError(f"Could not find OpDiv column in observed_data_df. Columns: {list(observed_data_df.columns)}")
 
-last_48h_multiple_partners
+obs = observed_data_df.dropna(subset=[_indicator_col_obs, _opdiv_col]).copy()
+obs[_indicator_col_obs] = obs[_indicator_col_obs].astype(str).str.strip()
+obs[_opdiv_col] = obs[_opdiv_col].astype(str).str.strip()
+
+partners_by_indicator = obs.groupby(_indicator_col_obs)[_opdiv_col].apply(lambda s: sorted(set(x for x in s if x)))
+eligible_partners = partners_by_indicator[partners_by_indicator.str.len() >= 2]
+opdiv_map = eligible_partners.apply(lambda vals: ", ".join(vals))
+
+last_24h_multiple_partners = df[df[_indicator_col_df].astype(str).str.strip().isin(eligible_partners.index)].copy()
+last_24h_multiple_partners["OpDiv"] = last_24h_multiple_partners[_indicator_col_df].astype(str).str.strip().map(
+    opdiv_map
+)
+last_24h_multiple_partners["Partners"] = last_24h_multiple_partners["OpDiv"]
+logger.info("Multi-partner (2+ OpDiv) rows: %s", len(last_24h_multiple_partners))
 
 # %% [code cell 5]
-# Filter multi-partner, last-48h indicators to VT score >= 10 based on Explanation text
-vt_scores = last_48h_multiple_partners['Explanation'].str.extract(r'VT score:\s*(\d+)', expand=False)
-vt_scores = pd.to_numeric(vt_scores, errors='coerce')
-
-last_48h_multi_partners_vt10 = last_48h_multiple_partners[vt_scores >= 10]
-logger.info("Multi-partner with VT>=10: %s rows.", len(last_48h_multi_partners_vt10))
-
-last_48h_multi_partners_vt10
+vt_scores = last_24h_multiple_partners["Explanation"].str.extract(r"VT score:\s*(\d+)", expand=False)
+vt_scores = pd.to_numeric(vt_scores, errors="coerce")
+last_24h_multi_partners_vt15 = last_24h_multiple_partners[vt_scores >= 14]
+logger.info("VT>=14 filter: %s rows.", len(last_24h_multi_partners_vt15))
 
 # %% [code cell 6]
-# Keep only high or critical indicators from the VT>=10, multi-partner, last-48h set
-high_critical_last_48h = last_48h_multi_partners_vt10[last_48h_multi_partners_vt10['Severity'].isin(['high', 'critical'])]
-logger.info("High/Critical in set: %s rows.", len(high_critical_last_48h))
-
-high_critical_last_48h
+final_indicators = last_24h_multi_partners_vt15[
+    last_24h_multi_partners_vt15["Severity"].isin(["high", "critical"])
+].copy()
+logger.info("final_indicators (high/critical): %s rows.", len(final_indicators))
 
 # %% [code cell 7]
-high_critical_last_48h[high_critical_last_48h['Indicator'] == '45.148.10.141']
-
-# %% [code cell 8]
-# Extract VT scores for high/critical last-48h indicators
-vt_scores_hc = high_critical_last_48h['Explanation'].str.extract(r'VT score:\s*(\d+)', expand=False)
-
-# VT-based selection only: keep high/critical last-48h indicators with VT score > 15
-vt = pd.to_numeric(vt_scores_hc, errors='coerce')
-mask_vt = vt >= 15
-
-final_indicators = high_critical_last_48h[mask_vt]
-logger.info("Final indicators (VT>=15): %s rows.", len(final_indicators))
-final_indicators
-
-# %% [code cell 9]
-import sys
-import os
-import urllib3
-from configparser import ConfigParser
-
-# Add your local ThreatConnect SDK to path
-sys.path.append(r"Z:\HTOC\Data_Analytics\threatconnect")
-from ThreatConnect import ThreatConnect
-from RequestObject import RequestObject
-from Owners import Owners
-
-# Add your project repo to path
-project_root = r"C:\Users\jaskew\Documents\project_repository\scripts\Data Movement\ThrearConnect-api-pull"
-if project_root not in sys.path:
-    sys.path.append(project_root)
-
-from utils.config_loader import load_config
-
-# Load API config
-config_path = os.path.join(project_root, "utils", "config.json")
-try:
-    api_secret_key, api_access_id, api_base_url, api_default_org = load_config(config_path)
-    logger.info("Loaded config from: %s", config_path)
-    logger.info("Base URL: %s", api_base_url)
-    logger.info("Access ID: %s", _mask(api_access_id))
-    logger.info("Default Org: %s", api_default_org)
-except Exception as e:
-    logger.exception("Failed to load configuration from %s", config_path)
-    sys.exit(1)
-
-# Disable SSL verification warnings (use cautiously)
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-verify_ssl = False
-
-# Initialize ThreatConnect session
-try:
-    tc = ThreatConnect(api_access_id, api_secret_key, api_default_org, api_base_url)
-    logger.info("ThreatConnect initialized.")
-except Exception as e:
-    logger.exception("Failed to initialize ThreatConnect.")
-    sys.exit(1)
-
-# Define the owner (organization scope)
-owner = 'HTOC Org'
-
-# Create a request object to fetch indicators (or other data)
-try:
-    ro = RequestObject()
-    ro.set_http_method('GET')
-    ro.set_owner(owner)
-    ro.set_owner_allowed(True)
-    # ro.set_resource_pagination(True)  # Uncomment if needed
-    logger.info("RequestObject successfully created (owner=%s).", owner)
-except Exception as e:
-    logger.exception("Failed to initialize RequestObject.")
-    sys.exit(1)
-
-# %% [code cell 10]
-import pandas as pd
-from datetime import datetime, timedelta
-import pytz
-import urllib.parse
-
-# Configuration for ThreatConnect indicator query
-QUERY_LOOKBACK_DAYS = 30  # days of lastObserved activity to include
-INDICATOR_TYPE_NAMES = [
-    "Address", "EmailAddress", "File", "Host", "URL", "ASN", "CIDR",
-    "Email Subject", "Hashtag", "Mutex", "Registry Key", "User Agent",
-]
-OWNER_NAMES = [
-    'HTOC Org',
-    'CISA Federal Feed',
-    'CMS_CTI',
-    'Crowdstrike Falcon Intelligence',
-    'DHS CISCP',
-    'Intel471',
-    'Mandiant Advantage Threat Intelligence',
-    'VA_TIP Data',
-]
-RESULT_PAGE_SIZE = 500  # keep this smaller; same fields, just paged
-INDICATOR_CHUNK_SIZE = 100  # limit size of summary IN (...) clauses
-
-# Setup
-cutoff = pd.Timestamp.utcnow()
-start_date = (datetime.now(pytz.UTC) - timedelta(days=QUERY_LOOKBACK_DAYS)).date()
-start = f"{start_date}T00:00:00Z"
-
-type_names = INDICATOR_TYPE_NAMES
-type_name_condition = ", ".join([f'"{t}"' for t in type_names])
-
-list_of_owners = OWNER_NAMES
-
-# Build owner IN (...) clause
-owner_condition = ", ".join([f'"{o}"' for o in list_of_owners])
-
-# Build indicator list from final_indicators (must already exist)
-if 'final_indicators' not in globals():
-    raise RuntimeError("final_indicators is not defined. Run the scoring cell first.")
-
-if 'Indicator' not in final_indicators.columns:
-    raise RuntimeError("final_indicators must have an 'Indicator' column.")
-
-indicator_values = (
-    final_indicators['Indicator']
-    .astype(str)
-    .str.strip()
-    .unique()
-    .tolist()
-)
-
-if not indicator_values:
-    raise RuntimeError("final_indicators has no Indicator values to query.")
-
-# Chunk indicators so the TQL summary IN (...) clause and URL don't get too large
-indicator_chunks = [
-    indicator_values[i:i + INDICATOR_CHUNK_SIZE]
-    for i in range(0, len(indicator_values), INDICATOR_CHUNK_SIZE)
-]
-
-final_results = []
-
-# Query indicators (paginate so you don't 502 with heavy fields)
-# Create a NEW RequestObject WITHOUT owner restriction to query across all owners
-ro_multi = RequestObject()
-ro_multi.set_http_method('GET')
-
-for chunk in indicator_chunks:
-    # Build summary IN ("x","y",...) clause for this chunk
-    summary_condition = ", ".join([f'"{v}"' for v in chunk])
-
-    tql_raw = (
-        f'ownerName IN ({owner_condition}) AND '
-        f'typeName IN ({type_name_condition}) AND '
-        f'lastObserved >= "{start}" AND '
-        f'summary IN ({summary_condition})'
-    )
-
-    tql_encoded = urllib.parse.quote(tql_raw)
-
-    result_start = 0
-    result_limit = RESULT_PAGE_SIZE
-
-    while True:
-        try:
-            # NOTE: same fields list you requested (tags,observations,associatedGroups,falsePositives,threatAssess)
-            ro_multi.set_request_uri(
-                f'/v3/indicators?tql={tql_encoded}'
-                f'&fields=tags,observations,associatedGroups,falsePositives,threatAssess'
-                f'&resultStart={result_start}&resultLimit={result_limit}'
-            )
-
-            response = tc.api_request(ro_multi)
-
-            ct = response.headers.get('content-type', '')
-            if not ct.startswith('application/json'):
-                raise RuntimeError(f"Non-JSON response ({ct}): {response.content[:200]}")
-
-            results = response.json()
-            data_items = results.get('data', []) or []
-
-            # stop when no more results
-            if not data_items:
-                break
-
-            final_results.append(results)
-            logger.info("Fetched %s indicators (chunk=%s, resultStart=%s).", len(data_items), len(chunk), result_start)
-            result_start += result_limit
-
-        except Exception as e:
-            logger.exception("Failed to query indicators (chunk=%s, resultStart=%s).", len(chunk), result_start)
-            break
-
-# Normalize results
-normalized_data = []
-for result in final_results:
-    data_items = result.get('data', [])
-    if not data_items:
-        display("No data returned in API response:", result)
-    for item in data_items:
-        if isinstance(item, dict) and 'summary' in item:
-            normalized_data.append(item)
-
-if normalized_data:
-    observed_src = pd.json_normalize(normalized_data)
-    observed_src['indicator'] = observed_src['summary'].astype(str).str.split().str[0].str.strip()
-    observed_src['lastObserved'] = pd.to_datetime(observed_src['lastObserved'], utc=True, errors='coerce')
-    observed_src = observed_src[observed_src['lastObserved'] >= pd.to_datetime(start, utc=True)]
-
-    # Create a 'sources' column by aggregating ownerName values per indicator
-    sources_per_indicator = (
-        observed_src.groupby('indicator')['ownerName']
-        .apply(lambda x: ', '.join(sorted(set(x))))
-        .reset_index()
-        .rename(columns={'ownerName': 'sources'})
-    )
-
-    # Merge sources back into observed_src
-    observed_src = observed_src.merge(sources_per_indicator, on='indicator', how='left')
-    # Filter to keep only records where ownerName is 'HTOC Org'
-    observed_src = observed_src[observed_src['ownerName'] == 'HTOC Org'].copy()
-else:
-    logger.warning("No valid indicator data found.")
-    observed_src = pd.DataFrame()
-
-logger.info("observed_src (final query) rows=%s cols=%s", len(observed_src), len(observed_src.columns))
-
-# %% [code cell 11]
-import pandas as pd
-
-# Helper to see if an indicator has an I&W tag
-def has_iw(tags_value):
-    """
-    tags_value is typically a list of dicts from ThreatConnect, e.g.:
-    [{'name': 'I&W'}, {'name': 'something else'}, ...]
-    """
-    if tags_value is None or (isinstance(tags_value, float) and pd.isna(tags_value)):
-        return False
-
-    if not isinstance(tags_value, (list, tuple)):
-        return False
-
-    for t in tags_value:
-        try:
-            if isinstance(t, dict):
-                name = str(t.get('name', '')).strip()
-            else:
-                name = str(t).strip()
-
-            if name.lower() in {"i&w", "i & w", "iw"}:
-                return True
-        except Exception:
-            continue
-    return False
-
-# 1) Add has_iw flag to observed_src if tags.data exists
-if 'tags.data' in observed_src.columns:
-    observed_src['has_iw'] = observed_src['tags.data'].apply(has_iw)
-else:
-    observed_src['has_iw'] = False
-
-# 2) Collapse to one flag per indicator
-iw_per_indicator = (
-    observed_src.groupby('indicator', dropna=False)['has_iw']
-    .max()  # any True -> True
-    .reset_index()
-    .rename(columns={'indicator': 'Indicator', 'has_iw': 'Reported I&W?_raw'})
-)
-
-# 3) Drop ANY existing Reported I&W? variants (_x, _y, etc.)
-cols_to_drop = [c for c in final_indicators.columns if c.startswith('Reported I&W?')]
-final_indicators = final_indicators.drop(columns=cols_to_drop, errors='ignore')
-
-# 4) Merge once, with a temporary raw boolean column
-final_indicators = final_indicators.merge(
-    iw_per_indicator,
-    on='Indicator',
-    how='left'
-)
-
-# 5) Convert to Yes/No, defaulting missing to 'No'
-final_indicators['Reported I&W?'] = (
-    final_indicators['Reported I&W?_raw']
-    .fillna(False)
-    .map({True: 'Yes', False: 'No'})
-)
-
-# 6) Drop the temporary raw column
-final_indicators = final_indicators.drop(columns=['Reported I&W?_raw'])
-
-final_indicators
-
-# %% [code cell 12]
-import pandas as pd
-
-# Load external tags data
 tags_path = r"Z:\HTOC\Data_Analytics\Data\Observed_Tags\htoc_observed_indicator_tags.csv"
 tags_df = pd.read_csv(tags_path)
-
-# Find indicator column (case-insensitive)
 tags_indicator_col = None
 for col in tags_df.columns:
-    if str(col).lower() == 'indicator':
+    if str(col).lower() == "indicator":
         tags_indicator_col = col
         break
 if tags_indicator_col is None:
     raise ValueError("Could not find an 'Indicator' column in the tags CSV.")
-
-# Find tags column — check both 'tag' (singular) and 'tags' (plural)
 tags_value_col = None
 for col in tags_df.columns:
-    if str(col).lower() in ('tags', 'tag'):
+    if str(col).lower() in ("tags", "tag"):
         tags_value_col = col
         break
 if tags_value_col is None:
@@ -670,21 +509,62 @@ if tags_value_col is None:
         f"Could not find a 'Tag' or 'Tags' column in the tags CSV. "
         f"Available columns: {list(tags_df.columns)}"
     )
-
-# Build indicator -> tags lookup and map onto final_indicators
 indicator_to_tags = tags_df.set_index(tags_indicator_col)[tags_value_col].to_dict()
-final_tags = final_indicators['Indicator'].map(indicator_to_tags)
-
-# Insert 'Tags' as the second-to-last column
+final_tags = final_indicators["Indicator"].map(indicator_to_tags)
 final_cols = list(final_indicators.columns)
-if 'Tags' in final_cols:
-    final_cols.remove('Tags')
-new_cols = final_cols[:-1] + ['Tags'] + final_cols[-1:]
-
-final_indicators['Tags'] = final_tags
+if "Tags" in final_cols:
+    final_cols.remove("Tags")
+new_cols = final_cols[:-1] + ["Tags"] + final_cols[-1:]
+final_indicators["Tags"] = final_tags
 final_indicators = final_indicators[new_cols]
 
-# %% [code cell 13]
+# %% [code cell 8]
+
+
+def has_iw(tags_value):
+    if tags_value is None or (isinstance(tags_value, float) and pd.isna(tags_value)):
+        return False
+    if not isinstance(tags_value, (list, tuple)):
+        return False
+    for t in tags_value:
+        try:
+            if isinstance(t, dict):
+                name = str(t.get("name", "")).strip()
+            else:
+                name = str(t).strip()
+            if name.lower() in {"i&w", "i & w", "iw"}:
+                return True
+        except Exception:
+            continue
+    return False
+
+
+if "tags.data" in observed_src.columns:
+    observed_src["has_iw"] = observed_src["tags.data"].apply(has_iw)
+else:
+    observed_src["has_iw"] = False
+
+if observed_src.empty:
+    iw_per_indicator = pd.DataFrame(columns=["Indicator", "Reported I&W?_raw"])
+else:
+    iw_per_indicator = (
+        observed_src.groupby("indicator", dropna=False)["has_iw"]
+        .max()
+        .reset_index()
+        .rename(columns={"indicator": "Indicator", "has_iw": "Reported I&W?_raw"})
+    )
+
+cols_to_drop = [c for c in final_indicators.columns if c.startswith("Reported I&W?")]
+final_indicators = final_indicators.drop(columns=cols_to_drop, errors="ignore")
+final_indicators = final_indicators.merge(iw_per_indicator, on="Indicator", how="left")
+final_indicators["Reported I&W?"] = (
+    final_indicators["Reported I&W?_raw"].fillna(False).map({True: "Yes", False: "No"})
+)
+final_indicators = final_indicators.drop(columns=["Reported I&W?_raw"])
+if "HTOC Threat Score" in final_indicators.columns:
+    final_indicators = final_indicators.rename(columns={"HTOC Threat Score": "PRISM Score"})
+
+# %% [code cell 9]
 from datetime import datetime
 
 # Build dated output path

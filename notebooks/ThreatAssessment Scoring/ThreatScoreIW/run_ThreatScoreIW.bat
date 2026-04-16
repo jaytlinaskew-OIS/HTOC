@@ -280,9 +280,12 @@ if "!SCRIPT_EXIT_CODE!"=="0" (
     echo [%date% %time%] Batch script completed with errors>> "%LOG_FILE%" 2>nul
 )
 
-REM Keep window open (interactive runs)
-pause
-
 popd >nul
-exit /b %SCRIPT_EXIT_CODE%
+if "!SCRIPT_EXIT_CODE!"=="0" (
+    REM Success: exit without pause so the console window can close (e.g. double-click runs).
+    exit 0
+) else (
+    pause
+    exit /b !SCRIPT_EXIT_CODE!
+)
 
