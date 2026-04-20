@@ -142,7 +142,7 @@ def _ensure_observed_schema(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 # Configuration for ThreatConnect indicator query (aligned with ThreatScoreIW.ipynb)
-QUERY_LOOKBACK_DAYS = 2  # days of lastObserved activity to include
+QUERY_LOOKBACK_HOURS = 48  # rolling wall-clock window in UTC (not calendar midnights)
 INDICATOR_TYPE_NAMES = [
     "Address", "EmailAddress", "File", "Host", "URL", "ASN", "CIDR",
     "Email Subject", "Hashtag", "Mutex", "Registry Key", "User Agent",
@@ -159,10 +159,11 @@ OWNER_NAMES = [
 ]
 RESULT_PAGE_SIZE = 500  # keep this smaller; same fields, just paged
 
-# Setup (calendar-day lookback for TQL — same as notebook)
-cutoff = pd.Timestamp.utcnow()
-start_date = (datetime.now(pytz.UTC) - timedelta(days=QUERY_LOOKBACK_DAYS)).date()
-start = f"{start_date}T00:00:00Z"
+# Single cutoff instant for TQL, observed_src filter, and workbook filter
+_now_utc = datetime.now(pytz.UTC)
+_last_observed_cutoff_dt = _now_utc - timedelta(hours=QUERY_LOOKBACK_HOURS)
+start = _last_observed_cutoff_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+LAST_OBSERVED_CUTOFF_TS = pd.Timestamp(_last_observed_cutoff_dt)
 
 type_names = INDICATOR_TYPE_NAMES
 type_name_condition = ", ".join([f'"{t}"' for t in type_names])
@@ -181,7 +182,12 @@ tql_raw = (
 tql_encoded = urllib.parse.quote(tql_raw)
 
 final_results = []
-logger.info("Querying indicators (QUERY_LOOKBACK_DAYS=%s) starting %s", QUERY_LOOKBACK_DAYS, start)
+logger.info(
+    "Querying indicators (QUERY_LOOKBACK_HOURS=%s) cutoff=%s TQL lastObserved>=%s",
+    QUERY_LOOKBACK_HOURS,
+    LAST_OBSERVED_CUTOFF_TS,
+    start,
+)
 logger.debug("TQL (raw): %s", tql_raw)
 
 # Query indicators (paginate so you don't 502 with heavy fields)
@@ -239,7 +245,7 @@ if normalized_data:
     observed_src = pd.json_normalize(normalized_data)
     observed_src['indicator'] = observed_src['summary'].astype(str).str.split().str[0].str.strip()
     observed_src['lastObserved'] = pd.to_datetime(observed_src['lastObserved'], utc=True, errors='coerce')
-    observed_src = observed_src[observed_src['lastObserved'] >= pd.to_datetime(start, utc=True)]
+    observed_src = observed_src[observed_src["lastObserved"] >= LAST_OBSERVED_CUTOFF_TS]
     
     # Create a 'sources' column by aggregating ownerName values per indicator
     sources_per_indicator = (
@@ -345,6 +351,7 @@ if _assoc_groups_src_col not in observed_src.columns:
     )
 
 def _extract_group_ids(value):
+    # Handle scalar nulls safely; avoid pd.isna on list-like values.
     if value is None:
         return pd.NA
 
@@ -388,9 +395,11 @@ _assoc_groups_by_indicator = _observed_latest.set_index("indicator")[_assoc_grou
 # Last Observed: only from ThreatConnect (observed_src); do not fall back to Excel dates
 _df_ind = df[_indicator_col].astype(str)
 df[_last_observed_col] = pd.to_datetime(_df_ind.map(_last_obs_by_indicator), utc=True, errors="coerce")
-_qd = QUERY_LOOKBACK_DAYS if "QUERY_LOOKBACK_DAYS" in globals() else 1
-_last_obs_cutoff = pd.to_datetime(
-    f"{(datetime.now(pytz.UTC) - timedelta(days=_qd)).date()}T00:00:00Z", utc=True
+_qh = QUERY_LOOKBACK_HOURS if "QUERY_LOOKBACK_HOURS" in globals() else 48
+_last_obs_cutoff = (
+    LAST_OBSERVED_CUTOFF_TS
+    if "LAST_OBSERVED_CUTOFF_TS" in globals()
+    else pd.Timestamp(datetime.now(pytz.UTC) - timedelta(hours=_qh), tz="UTC")
 )
 _pre_lo = len(df)
 df = df[df[_last_observed_col].notna() & (df[_last_observed_col] >= _last_obs_cutoff)].copy()
