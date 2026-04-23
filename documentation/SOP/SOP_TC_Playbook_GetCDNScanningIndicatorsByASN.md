@@ -10,6 +10,10 @@
 | **Last Auto-Saved** | April 6, 2026 |
 | **Owner** | HTOC Data Analytics |
 | **Last Reviewed** | April 2026 |
+| **Input** | ThreatConnect Playbook on `hvs.threatconnect.com` querying `HTOC Org` Address indicators for ASN `63949` |
+| **Output** | `CDN PB` tag assignments, Local DataStore records, playbook logs, and failure notification emails |
+| **Current Schedule** | Executed every 12 hours at **6:00 AM** and **6:00 PM** via Timer trigger (`0 0 6,18 * * ?`) |
+| **Associated Batch Files** | None (ThreatConnect-native playbook process) |
 
 ---
 

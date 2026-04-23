@@ -259,10 +259,8 @@ if normalized_data:
     observed_src = observed_src.merge(sources_per_indicator, on='indicator', how='left')
     # Filter to keep only records where ownerName is 'HTOC Org'
     observed_src = observed_src[observed_src['ownerName'] == 'HTOC Org'].copy()
-    # Exclude indicators below threatAssessRating 3 and threatAssessConfidence < 50.
-    # Rating: 1–5 scale (never threatAssess.rating — that is 0–1 normalized).
-    # Confidence: 0–100 threatAssess fields only (not bare legacy 'confidence').
-    # Coalesce flat vs nested columns per row so we do not drop rows where only one is populated.
+    # Keep rows where top-level rating >= 3 OR coalesced threatAssessRating >= 3, and confidence >= 50.
+    # Coalesce flat vs nested threatAssess columns per row.
     _rating_cols = ("threatAssessRating", "threatAssess.threatAssessRating")
     _confidence_cols = ("threatAssessConfidence", "threatAssess.threatAssessConfidence")
 
@@ -276,25 +274,24 @@ if normalized_data:
             out = out.mask(out.isna(), s)
         return out
 
-    _ta = _first_non_null_numeric(observed_src, _rating_cols)
+    _tar = _first_non_null_numeric(observed_src, _rating_cols)
     _tc = _first_non_null_numeric(observed_src, _confidence_cols)
-    if _ta is None or _tc is None:
+    if _tar is None or _tc is None:
         raise KeyError(
             f"Could not resolve Threat Assess columns. Tried rating={_rating_cols}, "
             f"confidence={_confidence_cols}. Columns: {list(observed_src.columns)}"
         )
-    # Some rows store 0–1 normalized threat in threatAssessRating (e.g. 0.75) while the
-    # top-level `rating` column holds the 1–5 band (e.g. 3.0).
     if "rating" in observed_src.columns:
         _r = pd.to_numeric(observed_src["rating"], errors="coerce")
-        _use_band = _ta.notna() & (_ta < 1.0) & _r.notna() & (_r >= 1) & (_r <= 5)
-        _ta = _ta.where(~_use_band, _r)
+    else:
+        _r = pd.Series(float("nan"), index=observed_src.index, dtype=float)
     _pre_ta = len(observed_src)
     # Use >= 50 so a boundary value of 50.0 is included (strict > 50 dropped those rows).
-    observed_src = observed_src[(_ta >= 3) & (_tc >= 50)].copy()
+    _pass_rating_band = (_tar >= 3) | (_r >= 3)
+    observed_src = observed_src[_pass_rating_band & (_tc >= 50)].copy()
     logger.info(
-        "Threat assess filter (1–5 rating>=3, confidence>=50) coalescing %s / %s "
-        "(+ `rating` when TA value is 0–1 normalized): %s -> %s rows.",
+        "Threat assess filter ((rating>=3 OR threatAssessRating>=3), confidence>=50) "
+        "coalescing %s / %s: %s -> %s rows.",
         _rating_cols,
         _confidence_cols,
         _pre_ta,

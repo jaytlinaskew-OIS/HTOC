@@ -4,10 +4,14 @@
 | Field | Detail |
 |---|---|
 | **SOP Title** | PRISM Threat Assessment Scoring |
-| **Notebook** | `notebooks/ThreatAssessment Scoring/ThreatAssessScoringV4.ipynb` |
+| **Notebook** | GitHub: [`notebooks/ThreatAssessment Scoring/ThreatAssessScoringV4.ipynb`](https://github.com/jaytlinaskew-OIS/HTOC/blob/main/notebooks/ThreatAssessment%20Scoring/ThreatAssessScoringV4.ipynb) |
 | **Version** | 4 |
 | **Owner** | HTOC Data Analytics |
 | **Last Reviewed** | April 2026 |
+| **Input** | `H:\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV4.ipynb` (PRISM threat scoring process using ThreatConnect API + local CSV feeds on `Z:\HTOC\Data_Analytics\Data`) |
+| **Output** | Excel workbook `Z:\HTOC\Data_Analytics\Data\Threat Assessment Scores\Prioritized_Risk_Indicator_Severity_Model_Scores.xlsx` |
+| **Current Schedule** | On demand (manual notebook execution) |
+| **Associated Batch Files** | None documented |
 
 ---
 
@@ -36,6 +40,11 @@ This procedure applies to HTOC analysts and data engineers who run, maintain, or
 | Network access to ThreatConnect API | SSL verification is disabled in the notebook |
 | Access to `Z:\HTOC\Data_Analytics\` | All input CSVs and Excel output live here |
 | ThreatConnect SDK | Located at `Z:\HTOC\Data_Analytics\threatconnect` |
+
+Example dependency install command:
+```powershell
+pip install scikit-learn
+```
 
 ### 3.2 Configuration File
 
@@ -411,7 +420,21 @@ This notebook is intended to be run **manually** on an as-needed or recurring ba
 
 ---
 
-## 11. Related Documents
+## 11. Appendix - Standalone Python Script
+
+The complete standalone script extracted from the notebook is attached at:
+
+`H:\HTOC\documentation\SOP\Appendix Scripts\ThreatAssessScoringV4_standalone.py`
+
+Run with:
+
+```powershell
+&"C:\Program Files\Python313\python.exe" "H:\HTOC\documentation\SOP\Appendix Scripts\ThreatAssessScoringV4_standalone.py"
+```
+
+---
+
+## 12. Related Documents
 
 - ThreatConnect API documentation
 - HTOC OpDiv Observation Feed runbook

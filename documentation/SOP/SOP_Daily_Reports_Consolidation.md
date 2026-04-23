@@ -4,10 +4,14 @@
 | Field | Detail |
 |---|---|
 | **SOP Title** | Daily Partner Prediction Report Consolidation |
-| **Notebook** | `notebooks/observationEventForecasting/daily_reports.ipynb` |
-| **Batch Script** | `scripts/batch-processing-script/Next_Obs_Daily/src/main.py` |
+| **Notebook** | GitHub: [`notebooks/observationEventForecasting/daily_reports.ipynb`](https://github.com/jaytlinaskew-OIS/HTOC/blob/main/notebooks/observationEventForecasting/daily_reports.ipynb) |
+| **Batch Script** | GitHub: [`scripts/batch-processing-script/Next_Obs_Daily/src/main.py`](https://github.com/jaytlinaskew-OIS/HTOC/blob/main/scripts/batch-processing-script/Next_Obs_Daily/src/main.py) |
 | **Owner** | HTOC Data Analytics |
 | **Last Reviewed** | April 2026 |
+| **Input** | Partner prediction CSVs `Z:\HTOC\Data_Analytics\Data\OpDiv_Predictions\{PartnerName}\{YYYYMMDD}.csv` |
+| **Output** | Consolidated CSV `Z:\HTOC\Data_Analytics\Data\OpDiv_Predictions\Full Daily Reports\full_daily_report_{YYYYMMDD}.csv` |
+| **Current Schedule** | Executed daily at **8:15 AM** via Windows Task Scheduler on **F.R.E.D** |
+| **Associated Batch Files** | None documented; automated path executes `scripts/batch-processing-script/Next_Obs_Daily/src/main.py` directly |
 
 ---
 
@@ -40,6 +44,11 @@ This procedure applies to HTOC analysts and data engineers who run, monitor, or 
 | pandas | CSV loading and concatenation |
 | numpy | Indirect dependency |
 | Access to `Z:\HTOC\Data_Analytics\` | All input and output paths are on this share |
+
+Example dependency install command:
+```powershell
+pip install pandas
+```
 
 ### 3.2 Input Data
 
@@ -195,23 +204,31 @@ The output file contains all prediction columns from the upstream NOI forecastin
 
 This process sits **downstream** of the NOI forecasting pipeline and **upstream** of any reporting or distribution that consumes the consolidated daily file.
 
-```
-NextObservedIndicatorV3.0.ipynb (or batch equivalent)
-        ↓  writes per-partner {YYYYMMDD}.csv files
-Z:\...\OpDiv_Predictions\{PartnerName}\
-        ↓
-daily_reports consolidation (main.py or notebook)
-        ↓  writes consolidated report
-Z:\...\OpDiv_Predictions\Full Daily Reports\full_daily_report_{YYYYMMDD}.csv
-        ↓
-Downstream reporting / distribution
-```
+| Step | Process | Output |
+|---|---|---|
+| 1 | NOI forecasting pipeline (`NextObservedIndicatorV3.0.ipynb` or batch equivalent) runs first | Partner-level daily files: `Z:\HTOC\Data_Analytics\Data\OpDiv_Predictions\{PartnerName}\{YYYYMMDD}.csv` |
+| 2 | Daily reports consolidation process (`main.py` or `daily_reports.ipynb`) runs second | Consolidated daily file: `Z:\HTOC\Data_Analytics\Data\OpDiv_Predictions\Full Daily Reports\full_daily_report_{YYYYMMDD}.csv` |
+| 3 | Downstream reporting/distribution jobs consume the consolidated file | Partner distribution products and operational reports |
 
 If the daily report is missing or incomplete, check the NOI forecasting step first before rerunning this process.
 
 ---
 
-## 11. Related Documents
+## 11. Appendix - Standalone Python Script
+
+The complete standalone script extracted from the notebook is attached at:
+
+`H:\HTOC\documentation\SOP\Appendix Scripts\daily_reports_standalone.py`
+
+Run with:
+
+```powershell
+&"C:\Program Files\Python313\python.exe" "H:\HTOC\documentation\SOP\Appendix Scripts\daily_reports_standalone.py"
+```
+
+---
+
+## 12. Related Documents
 
 - `SOP_NextObservedIndicator_Forecasting.md` — upstream process that generates the per-partner input CSVs
 - `Z:\HTOC\Data_Analytics\Data\OpDiv_Predictions\` (input data location)

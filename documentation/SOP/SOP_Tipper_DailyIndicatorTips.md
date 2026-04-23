@@ -4,11 +4,15 @@
 | Field | Detail |
 |---|---|
 | **SOP Title** | Tipper — Daily Partner Indicator Tips |
-| **Script** | `scripts/batch-processing-script/Tipper/main.py` |
-| **Batch Launcher** | `scripts/batch-processing-script/Tipper/run_tipper.bat` |
+| **Script** | GitHub: [`scripts/batch-processing-script/Tipper/main.py`](https://github.com/jaytlinaskew-OIS/HTOC/blob/main/scripts/batch-processing-script/Tipper/main.py) |
+| **Batch Launcher** | GitHub: [`scripts/batch-processing-script/Tipper/run_tipper.bat`](https://github.com/jaytlinaskew-OIS/HTOC/blob/main/scripts/batch-processing-script/Tipper/run_tipper.bat) |
 | **Version** | 1.0 |
 | **Owner** | HTOC Data Analytics |
 | **Last Reviewed** | April 2026 |
+| **Input** | ThreatConnect indicators + OpDiv observation CSVs `\\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Observations\htoc_opdiv_obs_d{YYYYMMDD}.csv` |
+| **Output** | Excel workbook `\\10.1.4.22\data\HTOC\HTOC Reports\Tippers\tippers_by_partner_{YYYYMMDD}.xlsx` |
+| **Current Schedule** | Executed daily at **7:00 AM** via Windows Task Scheduler on **F.R.E.D** |
+| **Associated Batch Files** | `scripts/batch-processing-script/Tipper/run_tipper.bat` |
 
 ---
 
@@ -37,6 +41,11 @@ This procedure applies to HTOC analysts and data engineers who run, monitor, or 
 | ThreatConnect SDK | Located at `\\10.1.4.22\data\HTOC\Data_Analytics\threatconnect` |
 | Access to `\\10.1.4.22\data\HTOC\` | Input OpDiv CSVs and output Tippers folder are on this UNC path |
 | ThreatConnect API credentials | Stored in `utils\config.json` (see Section 4) |
+
+Example dependency install command:
+```powershell
+pip install pandas
+```
 
 > **Note:** The script accesses `\\10.1.4.22\` via UNC path directly, so the `Z:\` drive does not need to be mapped for the automated run.
 

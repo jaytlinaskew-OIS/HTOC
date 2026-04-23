@@ -4,12 +4,16 @@
 | Field | Detail |
 |---|---|
 | **SOP Title** | HTOCThreatConnect Python Package |
-| **Location** | `notebooks/HTOCThreatConnect/` |
+| **Location** | GitHub: [`notebooks/HTOCThreatConnect/`](https://github.com/jaytlinaskew-OIS/HTOC/tree/main/notebooks/HTOCThreatConnect) |
 | **PyPI-style name** | `HTOC-threatconnect` (see `pyproject.toml`) |
 | **Python import** | `HTOCThreatConnect` |
 | **Current version** | 0.1.10 |
 | **Owner** | HTOC Data Analytics |
 | **Last Reviewed** | April 2026 |
+| **Input** | ThreatConnect API data from host defined in `HTOCThreatConnect/utils/config.json` (typically `https://hvs.threatconnect.com/api`) |
+| **Output** | pandas DataFrames returned by `get_v3_threatconnect_data()` and `get_v2_threatconnect_data()` |
+| **Current Schedule** | On demand (library is executed only when imported by notebook/script/job) |
+| **Associated Batch Files** | None documented |
 
 ---
 
@@ -53,6 +57,11 @@ This procedure applies to developers and analysts who install, configure, upgrad
 | Network | Reachability to the ThreatConnect API host defined in `api_base_url` |
 | Credentials | Valid `api_access_id` and `api_secret_key` in `config.json` |
 | Optional | `Z:\` access if installing from a pre-built wheel under `Z:\wheels\` |
+
+Example dependency install command:
+```powershell
+pip install requests
+```
 
 ---
 

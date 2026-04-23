@@ -4,10 +4,14 @@
 | Field | Detail |
 |---|---|
 | **SOP Title** | Next Observed Indicator Forecasting |
-| **Notebook** | `notebooks/observationEventForecasting/NextObservedIndicatorV3.0.ipynb` |
+| **Notebook** | GitHub: [`notebooks/observationEventForecasting/NextObservedIndicatorV3.0.ipynb`](https://github.com/jaytlinaskew-OIS/HTOC/blob/main/notebooks/observationEventForecasting/NextObservedIndicatorV3.0.ipynb) |
 | **Version** | 3.0 |
 | **Owner** | HTOC Data Analytics |
 | **Last Reviewed** | April 2026 |
+| **Input** | Daily OpDiv observation files `Z:\HTOC\Data_Analytics\Data\OpDiv_Observations\htoc_opdiv_obs_d{YYYYMMDD}.csv` loaded by `NextObservedIndicatorV3.0.ipynb` |
+| **Output** | Forecast output table in-session; optional per-OpDiv CSVs under `C:\Users\jaskew\Documents\NOI Logs\Predictions\` when save block is enabled |
+| **Current Schedule** | Executed daily at **7:00 AM** via Windows Task Scheduler on **F.R.E.D** |
+| **Associated Batch Files** | No `.bat` file documented for this notebook process |
 
 ---
 
@@ -224,10 +228,6 @@ Uncomment the CSV save block inside `main()` if persistent file output is needed
 
 > **Note:** `label_45` uses `series[-45]` (a single index) rather than a slice `series[-45:]`. This means the 45-day label reflects only whether the indicator was seen on that specific day, not whether it was seen at all in the 45-day window. Be aware of this when interpreting 45-day probabilities.
 
-### 7.3 Rule-Based Features (used in ensemble logistic layer)
-
-`last_seen`, `freq_1`, `freq_7`, `freq_30`, `avg_gap`, `burstiness`
-
 ---
 
 ## 8. Forecasting Models
@@ -436,7 +436,21 @@ High `burstiness` combined with a high probability score indicates an indicator 
 
 ---
 
-## 16. Related Documents
+## 16. Appendix - Standalone Python Script
+
+The complete standalone script extracted from the notebook is attached at:
+
+`H:\HTOC\documentation\SOP\Appendix Scripts\NextObservedIndicatorV3.0_standalone.py`
+
+Run with:
+
+```powershell
+&"C:\Program Files\Python313\python.exe" "H:\HTOC\documentation\SOP\Appendix Scripts\NextObservedIndicatorV3.0_standalone.py"
+```
+
+---
+
+## 17. Related Documents
 
 - HTOC OpDiv Observation Feed runbook
 - `SOP_PRISM_ThreatAssessmentScoring.md` — companion SOP for indicator risk scoring
