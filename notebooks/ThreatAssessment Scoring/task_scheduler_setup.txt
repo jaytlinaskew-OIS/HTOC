@@ -1,0 +1,44 @@
+HTOC Threat Assessment Scoring Daily - Task Scheduler Setup
+============================================================
+
+GENERAL TAB
+-----------
+Name:               HTOC Threat Assessment Scoring Daily
+Run as:             CSCSO\jaskew
+                    [ ] Run only when user is logged on
+                    [X] Run whether user is logged on or not
+                    [X] Run with highest privileges
+
+
+TRIGGERS TAB -> New
+-------------------
+Begin the task:     On a schedule
+Daily at:           7:15 AM
+
+
+ACTIONS TAB -> New
+------------------
+Action:             Start a program
+Program/script:     C:\Windows\System32\cmd.exe
+Add arguments:      /c "C:\Users\jaskew\Documents\HTOC\notebooks\ThreatAssessment Scoring\run_threat_assessment_daily.bat"
+Start in:           C:\Users\jaskew\Documents\HTOC\notebooks\ThreatAssessment Scoring
+
+NOTE: Files must be at C:\HTOC\PRISM_Daily\ on the machine running the task.
+      Mapped drives (Z:) are unavailable in non-interactive Task Scheduler sessions.
+
+C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\NextObserved
+/c "C:\Users\jaskew\Documents\project_repository\scripts\batch-processing-script\NextObserved\NextObserved.bat"
+
+
+"C:\Users\jaskew\Documents\HTOC\threatconnect"
+
+SETTINGS TAB
+------------
+[X] Run task as soon as possible after a scheduled start is missed
+If the task is already running:   Do not start a new instance
+Stop the task if it runs longer than:   2 hours
+
+
+LOG FILE LOCATION (for monitoring)
+-----------------------------------
+\\10.1.4.22\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\PRISM Daily\logs\
