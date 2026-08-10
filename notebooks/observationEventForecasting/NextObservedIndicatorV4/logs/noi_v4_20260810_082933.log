@@ -1,0 +1,46 @@
+[20260810 08:29:34] START   NextObservedIndicatorV4.0
+[20260810 08:29:34] CONFIG  Python: C:\Program Files\Python313\python.exe
+[20260810 08:29:34] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4.0.py
+[20260810 08:29:34] CONFIG  Save:   \\10.1.4.22\data\HTOC\JA\NextObserveV4Test
+[20260810 08:29:34] CONFIG  Log:    \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\logs_v4\noi_v4_20260810_082933.log
+[20260810 08:29:34] RUN     Installing packages...
+Looking in links: \\10.1.4.22\data\HTOC\JA\wheelhouse
+Requirement already satisfied: pandas in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.0)
+Requirement already satisfied: numpy in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.1)
+Requirement already satisfied: scikit-learn in c:\users\jaskew\appdata\roaming\python\python313\site-packages (1.7.0)
+Requirement already satisfied: python-dateutil>=2.8.2 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2025.2)
+Requirement already satisfied: tzdata>=2022.7 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2025.2)
+Requirement already satisfied: scipy>=1.8.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (1.16.0)
+Requirement already satisfied: joblib>=1.2.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (1.5.1)
+Requirement already satisfied: threadpoolctl>=3.1.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (3.6.0)
+Requirement already satisfied: six>=1.5 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)
+[20260810 08:29:37] CHECK   Packages OK
+[20260810 08:29:37] RUN     Launching NextObservedIndicatorV4.0.py...
+ 
+---- script output ---- 
+panel: 838,533 rows | 25,208 (opdiv,indicator) | 2026-01-02 -> 2026-08-10
+training rows: 149,777 (fit 118,158 / held-out 31,619) from 11 cutoffs (2026-04-12 -> 2026-06-21)
+trained verification model (fit cutoffs) + production model (all cutoffs)
+scoring 16,973 indicators as-of 2026-08-10
+OpDivs: ['CDC', 'CMS', 'DHA', 'FDA', 'HHS', 'HRSA', 'IHS', 'NIH', 'OS', 'VA']
+        Indicator  Observed Today  ...  Probability: 45-Day       Confidence: 45-Day
+0  198.235.24.115               0  ...                1.16%   45-Day: Low confidence
+1    64.62.156.12               0  ...                 1.1%   45-Day: Low confidence
+2  74.208.236.241               0  ...               60.17%  45-Day: Possibly active
+3    onestart.ai/               0  ...               76.84%  45-Day: Possibly active
+4  198.235.24.126               0  ...                 1.1%   45-Day: Low confidence
+5   198.235.24.74               0  ...                1.16%   45-Day: Low confidence
+6   64.62.156.113               1  ...               77.08%  45-Day: Possibly active
+7  205.210.31.160               0  ...                 1.1%   45-Day: Low confidence
+8   64.62.156.108               0  ...               35.35%  45-Day: Possibly active
+9     65.49.1.148               0  ...                 1.1%   45-Day: Low confidence
+
+[10 rows x 15 columns]
+saved to \\10.1.4.22\data\HTOC\JA\NextObserveV4Test
+Wrote 10 OpDiv files under \\10.1.4.22\data\HTOC\JA\NextObserveV4Test
+PIPELINE_OK
+---- end output ---- 
+ 
+[20260810 08:31:48] SUCCESS Script completed successfully
+[20260810 08:31:48] OUTPUT  Fresh CSV files: 10

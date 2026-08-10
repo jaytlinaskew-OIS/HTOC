@@ -1,0 +1,324 @@
+[20260810 07:42:49] START   ThreatAssessScoringV5
+[20260810 07:42:49] CONFIG  Python: py -3.13
+[20260810 07:42:49] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5.py
+[20260810 07:42:49] CONFIG  Log:    \\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\logs\threatassess_v5_20260810_074249.log
+[20260810 07:42:49] CHECK   Verifying Python executable...
+[20260810 07:42:49] CHECK   Python OK (C:\Program Files\Python313\python.exe)
+[20260810 07:42:49] CHECK   Verifying script...
+[20260810 07:42:49] CHECK   Script OK
+[20260810 07:42:49] RUN     Launching ThreatAssessScoringV5.py...
+[20260810 07:48:12] RUN     Script exited with code 
+ 
+---- script output ---- 
+Loaded config from: \\cscso1fsappv01\home\jaskew\HTOC\scripts\Data Movement\ThrearConnect-api-pull\utils\config.json
+Base URL: https://hvs.threatconnect.com/api
+Access ID: 09783848890162390382
+Default Org: HTOC Org
+ThreatConnect initialized.
+RequestObject successfully created.
+                     id  ...                                 sources
+1      5629499556005864  ...                                HTOC Org
+2      5629499542036638  ...  CISA Federal Feed, DHS CISCP, HTOC Org
+7     15762598695797810  ...                       CMS_CTI, HTOC Org
+9     10133099162008433  ...                       CMS_CTI, HTOC Org
+11    21392098231023932  ...                                HTOC Org
+...                 ...  ...                                     ...
+4066            4303591  ...                                HTOC Org
+4067            4476331  ...                                HTOC Org
+4068            4598575  ...                                HTOC Org
+4069            4442727  ...                                HTOC Org
+4070            4517160  ...                                HTOC Org
+
+[2027 rows x 37 columns]
+Loaded 4542 THREAT ACTOR rows from \\10.1.4.22\data\HTOC\Data_Analytics\Data\Observed_Tags\htoc_observed_indicator_tags.csv
+Condensed to 1767 unique indicators
+                                   indicator     type  ... MALWARE CLASS CVE_NBR
+0                            1-you.njalla.no     Host  ...          None    None
+1                                1.20.169.90  Address  ...          None    None
+2                                 1.4.195.14  Address  ...          None    None
+3                               1.54.101.176  Address  ...          None    None
+4                                      1.zip     Host  ...          None    None
+...                                      ...      ...  ...           ...     ...
+1762               www.thetruthaboutguns.com     Host  ...          None    None
+1763                          www.totem.tech     Host  ...          None    None
+1764  www.ultrasound-guided-injections.co.uk     Host  ...          None    None
+1765                             zerocap.com     Host  ...          None    None
+1766                             zerogov.com     Host  ...          None    None
+
+[1767 rows x 9 columns]
+Added threat actor context columns to observed_src
+observed_src columns after merge: ['id', 'dateAdded', 'ownerId', 'ownerName', 'webLink', 'type', 'lastModified', 'confidence', 'threatAssessRating', 'threatAssessConfidence', 'threatAssessScore', 'threatAssessScoreObserved', 'threatAssessScoreFalsePositive', 'calScore', 'source', 'description', 'summary', 'observations', 'lastObserved', 'falsePositives', 'falsePositiveReportedByUser', 'privateFlag', 'active', 'activeLocked', 'ip', 'legacyLink', 'tags.data', 'rating', 'associatedGroups.data', 'hostName', 'dnsActive', 'whoisActive', 'address', 'url', 'text', 'indicator', 'sources', 'threat_actor', 'threat_actor_orig_tag', 'threat_actor_category', 'threat_nation_state', 'threat_security_org', 'threat_malware_class', 'threat_cve_nbr']
+                              indicator  ... threat_cve_nbr
+0                         64.62.156.171  ...            NaN
+1                       193.163.125.149  ...            NaN
+2                       195.178.110.102  ...            NaN
+3                       104.234.140.171  ...            NaN
+4                        192.42.116.114  ...            NaN
+...                                 ...  ...            ...
+2022                      aka.ms/o0ukef  ...            NaN
+2023  selligenttier.naylorcampaigns.com  ...            NaN
+2024                     172.67.156.141  ...           None
+2025                             google  ...            NaN
+2026          realinvestmentadvice.com/  ...            NaN
+
+[2027 rows x 6 columns]
+Annotated incidents/events for 2027 indicators; found 320 with matches.
+                              indicator  ...           incidents/events
+4                        192.42.116.114  ...  Incident:3377699724000644
+6                         144.86.173.43  ...        Incident:INC9480324
+10                       165.154.10.165  ...        Incident:INC9203759
+24                        123.58.207.81  ...        Incident:INC9185304
+66                      183.224.237.233  ...            Incident:547382
+...                                 ...  ...                        ...
+2019                       onestart.ai/  ...  Incident:6755399442001347
+2020            careersinpsychology.org  ...               Event:546895
+2022                      aka.ms/o0ukef  ...            Incident:148157
+2023  selligenttier.naylorcampaigns.com  ...            Incident:287536
+2024                     172.67.156.141  ...            Incident:335586
+
+[320 rows x 3 columns]
+
+DEBUG: Sample indicator_to_tags mapping (first 5):
+64.62.156.171: ['SOAR Indicator PB', 'DHA Splunk API', 'OS Splunk API', 'FDA Splunk API', 'CMS Splunk API', 'VA CSOC CTS Splunk', 'HRSA Splunk API', 'NIH Splunk API', 'IHS Splunk API', 'HHS Splunk API', 'Observed', 'CDC Splunk API', 'malicious']
+193.163.125.149: ['SOAR Indicator PB', 'DHA Splunk API', 'OS Splunk API', 'FDA Splunk API', 'CMS Splunk API', 'VA CSOC CTS Splunk', 'HRSA Splunk API', 'NIH Splunk API', 'IHS Splunk API', 'HHS Splunk API', 'Observed', 'CDC Splunk API', 'malicious']
+195.178.110.102: ['SIR0055306', 'ccic_block_palo_ip', 'ccic_block_akamai_ip', 'soar_import', 'ccic_block_zscaler_ip', 'cmssoc', 'ccic-bip', 'socsir', 'SOCINC', 'CMS_CTI_PB', 'VA OIT CSOC CTS Splunk', 'Web Scanner', 'cms-soc', 'OS Splunk API', 'HRSA Splunk API', 'NIH Splunk API', 'IHS Splunk API', 'Observed']
+104.234.140.171: ['SIR0056941', 'ccic_block_palo_ip', 'ccic_block_akamai_ip', 'soar_import', 'ccic_block_zscaler_ip', 'cmssoc', 'ccic-bip', 'socsir', 'SOCINC', 'CMS_CTI_PB', 'VA OIT CSOC CTS Splunk', 'cms-soc', 'Observed']
+192.42.116.114: ['SOAR Indicator PB', 'Web Scanner', 'OS Splunk API', 'CMS Splunk API', 'HRSA Splunk API', 'Observed', 'malicious']
+
+DEBUG: Sample observed_src['tag_list'] (first 5 non-empty):
+         indicator                                           tag_list
+0    64.62.156.171  [SOAR Indicator PB, DHA Splunk API, OS Splunk ...
+1  193.163.125.149  [SOAR Indicator PB, DHA Splunk API, OS Splunk ...
+2  195.178.110.102  [SIR0055306, ccic_block_palo_ip, ccic_block_ak...
+3  104.234.140.171  [SIR0056941, ccic_block_palo_ip, ccic_block_ak...
+4   192.42.116.114  [SOAR Indicator PB, Web Scanner, OS Splunk API...
+
+DEBUG: Number of indicators with PB tags: 1006
+
+DEBUG: Sample indicators with PB tags:
+         indicator  ...                     pb_lower_tags
+0    64.62.156.171  ...               [SOAR Indicator PB]
+1  193.163.125.149  ...               [SOAR Indicator PB]
+2  195.178.110.102  ...                     [Web Scanner]
+4   192.42.116.114  ...  [SOAR Indicator PB, Web Scanner]
+6    144.86.173.43  ...               [SOAR Indicator PB]
+
+[5 rows x 3 columns]
+
+DEBUG: Sample pb_lower_reason (first 5 non-null):
+         indicator           pb_lower_reason
+0    64.62.156.171  pb_tag:SOAR Indicator PB
+1  193.163.125.149  pb_tag:SOAR Indicator PB
+2  195.178.110.102        pb_tag:Web Scanner
+4   192.42.116.114  pb_tag:SOAR Indicator PB
+6    144.86.173.43  pb_tag:SOAR Indicator PB
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5.py:492: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Files to be loaded: ['\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260810.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260809.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260808.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260807.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260806.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260805.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260804.csv']
+Loaded data from 7 files.
+Mass scanner Tier 1 (moderate penalty): 56 indicators (10,000–100,000 obs, 5+ OpDivs)
+Mass scanner Tier 2 (heavy penalty):  355 indicators (>= 100,000 obs, 5+ OpDivs)
+           indicator  total_obs_7d  unique_opdivs_7d  unique_days_7d
+2576  78.128.114.166      11152539                 6               6
+1885   45.148.10.230       8730195                 9               7
+1842    43.228.157.9       6510215                 6               7
+2687    88.210.63.69       3942436                 5               7
+967    185.107.80.93       3729949                 8               7
+...              ...           ...               ...             ...
+2695  91.196.152.104        102665                 6               7
+2700   91.196.152.23        102360                 7               7
+2706   91.196.152.88        101642                 6               7
+2301  66.240.236.109        100419                 8               4
+2708   91.196.152.93        100139                 6               7
+
+[355 rows x 4 columns]
+Starting enhanced partner extraction pipeline...
+Identifying ALL indicators with partners from observed_data_df...
+Found 2934 indicators with partners from observation data
+Extracting partners from ThreatConnect tags...
+Processed tags for 1972 indicators
+Performing core aggregation...
+Combining partners from all sources...
+Cleaning up list columns...
+Processing complete! Final dataset has 2023 indicators
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5.py:868: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  agg_df['mass_scanner_tier1'] = agg_df['mass_scanner_tier1'].fillna(False).astype(bool)
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5.py:869: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  agg_df['mass_scanner_tier2'] = agg_df['mass_scanner_tier2'].fillna(False).astype(bool)
+Mass scanner flags merged — Tier 1: 53 | Tier 2: 307
+                          indicator  ...  mass_scanner_tier2
+0                   1-you.njalla.no  ...               False
+1                       1.32.57.245  ...               False
+2                       102.0.22.10  ...               False
+3                    102.222.90.243  ...               False
+4                    102.222.90.244  ...               False
+...                             ...  ...                 ...
+2018  www.detroitseniorsolution.org  ...               False
+2019               www.shorturl.at/  ...               False
+2020        www.tampabayhearing.com  ...               False
+2021                    wyofile.com  ...               False
+2022         yourmissourijudges.org  ...               False
+
+[2023 rows x 45 columns]
+Enriching 1910 indicators (VT; Shodan for IP types only)...
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL http://117.72.159.215:8080/jquery-3.7.2.min.js cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL https://security.netapp.com/advisory/NTAP-20240419-0005 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File 02C146EC5BCCFB7C70733BC6383F1619 : 2A13CDE19868C7022394D9EC088C3669D5925521 : 51495145C7DAEB45D590039D4E3F142145489D96267B6BF632854B9BD2DD8231 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL tcp://portbuddy.dev:40517/ cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 404
+Failed API Response: b'{"errCode":"0x1004","message":"Indicator could not be found.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File 7C2A6AF2C4D039A813FE9DD9D05E20C8 : 2ED6525BCC6F129FF609D609D83E9C1E916AF33C : 040681D5B9C844CA0E0401AF5A81618352135F9C9C3515A3A06B22EA5FECF03F cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL http://psstechnical.com/xmlrpc.php cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File 6B6DE2A113B46D899AFCD6CA1D3FD0F7 : 4A4012BFD85D646584991632043D3A834508DC57 : D36F8769BED2371984D907A06B39B9C18A7E79A041D9BABA186728B5EE657949 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 404
+Failed API Response: b'{"errCode":"0x1004","message":"Indicator could not be found.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host xgenize.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File 7EC3F6F4C23EA824C824EF8076322416 : DE5F53B41DF061561922C1377A774BDD9BC3EBAA : 697F2DC81FF46BE8C20D961F3BCAC9B2C6CF5D0525AE959E3244EF2D1B342599 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File 94F67819C0F7E200ABF4B39FAD2FD6FEF227DA15D939F21A657D1717CA2B3014 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL http://117.72.159.215:8080/jquery-3.7.2.min.js cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File CE65EF46C3F2E22E90AE9B93CF7AC75D : F134863978D06FE25391581CF4DA6F5C806462E5 : CEDDF52507062D5124A1BAE6DEDB77229C11A08ACAC0E7635D0ECEC3D367250F cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL tcp://12.tcp.cpolar.top:12019/ cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress vaxhanta@gmail.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File 02739A7E682CBA9C69CCBB3699441AE4 : 3CE4BEEE48647EA1EA29B60A20D012BDAA351776 : 1740B4B08EDBD9C83694605562E5F59F744CAD4B7B75E47F9B1BA4293B3ACB01 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL tcp://bradarwhat-34159.portmap.host:1194/ cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host xgenize.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Stripped URL url4480.huntermarshall.ae/wf/open?upn=u001.yrdski0lgkxretczl4jxhufwma3jbyex0ci2sxx8-2b5cxg1oy4kpi5ya69mv33-2bqlxtgvydrhywduz4xmikv8iuqwfj-2b1o5mpzunkoblhodtzumhhv6bihb-2bahji6b6nqdb81t49rfb9i-2bph0negjw0sxmvuvj-2bi-2fsnc-2fumxuvlqrqnp2p8xu-2b9p4lsdjp-2bkgc4g-2fs8myzf3cgbukxjmogq-3d-3d cannot be enriched with VirusTotal because the indicator type isn\'t supported.","status":"Error"}'
+Enrichment complete for 2023 indicators.
+20 indicators failed enrichment (showing up to 10):
+        indicator     type                                              error
+0  102.91.102.239  Address  b'{"errCode":"0x1001","message":"The URL http:...
+1   112.46.240.47  Address  b'{"errCode":"0x1001","message":"The URL https...
+2    146.70.83.71  Address  b'{"errCode":"0x1001","message":"The File 02C1...
+3   147.90.236.41  Address  b'{"errCode":"0x1001","message":"The URL tcp:/...
+4  149.102.240.73  Address  b'{"errCode":"0x1004","message":"Indicator cou...
+5   150.251.225.4  Address  b'{"errCode":"0x1001","message":"The File 7C2A...
+6  158.173.67.100  Address  b'{"errCode":"0x1001","message":"The URL http:...
+7   167.71.64.167  Address  b'{"errCode":"0x1001","message":"The File 6B6D...
+8    194.146.92.2  Address  b'{"errCode":"0x1004","message":"Indicator cou...
+9    194.5.82.125  Address  b'{"errCode":"0x1001","message":"The Host xgen...
+                          indicator  ... enrich_vtMaliciousCount
+0                   1-you.njalla.no  ...                     NaN
+1                       1.32.57.245  ...                     8.0
+2                       102.0.22.10  ...                     1.0
+3                    102.222.90.243  ...                     0.0
+4                    102.222.90.244  ...                     0.0
+...                             ...  ...                     ...
+2018  www.detroitseniorsolution.org  ...                     NaN
+2019               www.shorturl.at/  ...                     NaN
+2020        www.tampabayhearing.com  ...                     NaN
+2021                    wyofile.com  ...                     NaN
+2022         yourmissourijudges.org  ...                     NaN
+
+[2023 rows x 5 columns]
+Column 'enrich_domains' does not exist in the provided DataFrame. Skipping domain association count.
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5.py:492: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Files to be loaded: ['\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260810.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260809.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260808.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260807.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260806.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260805.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260804.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260803.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260802.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260801.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260731.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260730.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260729.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260728.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260727.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260726.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260725.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260724.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260723.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260722.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260721.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260720.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260719.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260718.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260717.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260716.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260715.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260714.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260713.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260712.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260711.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260710.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260709.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260708.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260707.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260706.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260705.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260704.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260703.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260702.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260701.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260630.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260629.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260628.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260627.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260626.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260625.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260624.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260623.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260622.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260621.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260620.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260619.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260618.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260617.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260616.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260615.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260614.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260613.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260612.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260611.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260610.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260609.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260608.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260607.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260606.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260605.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260604.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260603.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260602.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260601.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260531.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260530.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260529.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260528.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260527.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260526.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260525.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260524.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260523.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260522.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260521.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260520.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260519.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260518.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260517.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260516.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260515.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260514.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260513.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260512.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260511.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260510.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260509.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260508.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260507.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260506.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260505.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260504.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260503.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260502.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260501.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260430.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260429.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260428.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260427.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260426.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260425.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260424.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260423.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260422.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260421.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260420.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260419.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260418.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260417.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260416.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260415.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260414.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260413.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260412.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260411.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260410.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260409.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260408.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260407.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260406.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260405.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260404.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260403.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260402.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260401.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260331.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260330.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260329.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260328.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260327.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260326.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260325.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260324.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260323.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260322.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260321.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260320.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260319.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260318.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260317.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260316.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260315.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260314.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260313.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260312.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260311.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260310.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260309.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260308.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260307.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260306.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260305.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260304.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260303.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260302.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260301.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260228.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260227.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260226.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260225.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260224.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260223.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260222.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260221.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260220.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260219.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260218.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260217.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260216.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260215.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260214.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260213.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260212.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260211.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260210.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260209.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260208.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260207.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260206.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260205.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260204.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260203.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260202.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260201.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260131.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260130.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260129.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260128.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260127.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260126.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260125.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260124.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260123.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260122.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260121.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260120.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260119.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260118.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260117.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260116.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260115.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260114.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260113.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260112.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260111.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260110.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260109.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260108.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260107.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260106.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260105.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260104.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260103.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260102.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20260101.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251231.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251230.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251229.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251228.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251227.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251226.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251225.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251224.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251223.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251222.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251221.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251220.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251219.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251218.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251217.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251216.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251215.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251214.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251213.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251212.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251211.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251210.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251209.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251208.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251207.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251206.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251205.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251204.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251203.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251202.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251201.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251130.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251129.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251128.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251127.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251126.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251125.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251124.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251123.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251122.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251121.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251120.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251119.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251118.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251117.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251116.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251115.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251114.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251113.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251112.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251111.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251110.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251109.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251108.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251107.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251106.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251105.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251104.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251103.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251102.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251101.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251031.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251030.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251029.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251028.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251027.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251026.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251025.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251024.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251023.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251022.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251021.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251020.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251019.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251018.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251017.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251016.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251015.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251014.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251013.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251012.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251011.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251010.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251009.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251008.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251007.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251006.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251005.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251004.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251003.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251002.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20251001.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250930.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250929.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250928.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250927.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250926.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250925.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250924.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250923.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250922.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250921.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250920.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250919.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250918.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250917.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250916.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250915.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250914.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250913.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250912.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250911.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250910.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250909.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250908.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250907.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250906.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250905.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250904.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250903.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250902.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250901.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250831.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250830.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250829.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250828.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250827.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250826.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250825.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250824.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250823.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250822.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250821.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250820.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250819.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250818.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250817.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250816.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250815.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250814.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250813.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250812.csv', '\\\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d20250811.csv']
+Loaded data from 365 files.
+                           indicator  obs_days_count
+1                    1-you.njalla.no              38
+14                       1.32.57.245               3
+47                       102.0.22.10              16
+74                    102.222.90.243              25
+75                    102.222.90.244              27
+...                              ...             ...
+12017  www.detroitseniorsolution.org               5
+12034               www.shorturl.at/             121
+12037        www.tampabayhearing.com               9
+12040                    wyofile.com              31
+12045         yourmissourijudges.org               3
+
+[2022 rows x 2 columns]
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5.py:1769: FutureWarning: Setting an item of incompatible dtype is deprecated and will raise an error in a future version of pandas. Value '[577.07317073 568.7804878  560.         563.41463415 592.80487805
+ 567.31707317 575.97560976 590.85365854 576.70731707 563.65853659
+ 568.65853659 578.29268293 575.97560976 578.7804878  620.
+ 561.46341463 577.56097561 620.         577.68292683 620.
+ 620.         620.         615.         601.46341463 620.
+ 578.17073171 585.85365854 566.09756098 577.19512195 578.29268293
+ 569.75609756 578.53658537 620.         575.97560976 577.92682927
+ 575.97560976 577.07317073 576.70731707 577.56097561 586.70731707
+ 620.         591.2195122  568.7804878  567.19512195 568.7804878
+ 587.19512195 575.97560976 586.2195122  578.65853659 620.
+ 620.         581.2195122  577.07317073 562.19512195 577.31707317
+ 567.80487805 575.         586.95121951 567.80487805 584.51219512
+ 569.14634146 576.34146341]' has dtype incompatible with int64, please explicitly cast to a compatible dtype first.
+  df_scored.loc[below_floor_mask, 'PRISM_Score'] = (
+                          Indicator  ... AI_Adjustment
+0                   1-you.njalla.no  ...             0
+1                       1.32.57.245  ...             0
+2                       102.0.22.10  ...             0
+3                    102.222.90.243  ...             0
+4                    102.222.90.244  ...             0
+...                             ...  ...           ...
+2018  www.detroitseniorsolution.org  ...             0
+2019               www.shorturl.at/  ...             0
+2020        www.tampabayhearing.com  ...             0
+2021                    wyofile.com  ...             0
+2022         yourmissourijudges.org  ...             0
+
+[2023 rows x 29 columns]
+Average relative importance of rule components (across all indicators):
+malicious_raw_score       0.532906
+sources_raw_score         0.091935
+tor_activity_score        0.083908
+partner_raw_score         0.080076
+continuity_raw_score      0.064041
+incidents_events_score    0.046051
+cal_raw_score             0.034871
+tc_threat_raw_score       0.023123
+threat_actor_score        0.019939
+tc_raw_confidence         0.013451
+first_obs_raw_score       0.007815
+tc_raw_rating             0.001884
+dtype: float64
+
+Top rule drivers for index 0 (absolute contribution):
+threat_actor_score        10.000000
+continuity_raw_score       1.800000
+partner_raw_score          1.455609
+cal_raw_score              0.825000
+tc_raw_confidence          0.000000
+tc_raw_rating              0.000000
+malicious_raw_score        0.000000
+tor_activity_score         0.000000
+sources_raw_score          0.000000
+incidents_events_score     0.000000
+tc_threat_raw_score        0.000000
+first_obs_raw_score        0.000000
+Name: 0, dtype: float64
+Existing indicators in new data: 2023
+Added (new) indicators: 0
+Updated existing indicators: 1735
+Total indicators in sheet: 6148
+Preserving existing Complete History with 85356 records
+Saved 6148 total indicators with PRISM scoring results to \\10.1.4.22\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\Threat_Assessment_Scores.xlsx
+Traceback (most recent call last):
+  File "\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5.py", line 2338, in <module>
+    print(f"\u2713 Scoring history updated in: {history_file}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2713' in position 0: character maps to <undefined>
+---- end output ---- 
+ 
+[20260810 07:48:12] ERROR   Script failed with exit code 1 - see log for details
+[20260810 07:48:12] END     Batch complete

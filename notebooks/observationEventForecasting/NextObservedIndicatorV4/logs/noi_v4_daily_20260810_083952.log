@@ -1,0 +1,24 @@
+[20260810 08:39:52] START   Next Observed Daily Reports V4
+[20260810 08:39:52] CONFIG  Python: C:\Program Files\Python313\python.exe
+[20260810 08:39:52] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\next_observed_daily_reports_v4.py
+[20260810 08:39:52] CONFIG  Data:   \\10.1.4.22\data\HTOC\JA\NextObserveV4Test
+[20260810 08:39:54] RUN     Launching next_observed_daily_reports_v4.py...
+ 
+---- script output ---- 
+DATA_PATH=\\10.1.4.22\data\HTOC\JA\NextObserveV4Test
+SAVE_PATH=\\10.1.4.22\data\HTOC\JA\NextObserveV4Test\Full Daily Reports
+today=20260810
+loaded \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\CDC\CDC_output_20260810.csv (221 rows)
+loaded \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\CMS\CMS_output_20260810.csv (1151 rows)
+loaded \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\DHA\DHA_output_20260810.csv (757 rows)
+loaded \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\FDA\FDA_output_20260810.csv (480 rows)
+loaded \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\HHS\HHS_output_20260810.csv (1516 rows)
+loaded \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\HRSA\HRSA_output_20260810.csv (4508 rows)
+loaded \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\IHS\IHS_output_20260810.csv (1126 rows)
+loaded \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\NIH\NIH_output_20260810.csv (3557 rows)
+loaded \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\OS\OS_output_20260810.csv (1434 rows)
+loaded \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\VA\VA_output_20260810.csv (2223 rows)
+Saved to \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260810.csv (16973 rows)
+PIPELINE_OK
+---- end output ---- 
+[20260810 08:39:57] SUCCESS Report confirmed: \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260810.csv

@@ -1,0 +1,40 @@
+observationEventForecasting — folder map
+========================================
+Updated: 2026-08-10
+
+production (scheduled)
+----------------------
+NextObservedIndicatorV4\
+  NextObservedIndicatorV4.0.ipynb / .py
+  run_NextObservedIndicatorV4.bat / _hidden.vbs
+  next_observed_daily_reports_v4.py
+  run_NextObservedDailyReportsV4.bat / _hidden.vbs
+  logs\
+
+  Tasks:
+    \Jaytlin Scripts\NextObservedIndicatorV4           (daily 7:30 AM)
+      forecast -> NextObserveV4Test\{OpDiv}\
+    \Jaytlin Scripts\Next Observed Daily Reports V4    (daily 8:00 AM)
+      consolidate -> NextObserveV4Test\Full Daily Reports\
+
+  Outputs:
+    \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\{OpDiv}\{OpDiv}_output_YYYYMMDD.csv
+    \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_YYYYMMDD.csv
+
+supporting
+----------
+analysis\                 Active analysis notebooks
+data\                     CSV / XLSX / JSON artifacts
+docs\                     Model report / notes
+DataPreprocessing\        Preprocessing notebooks + large matrices
+
+archive
+-------
+archive\notebooks\        Older NOI versions (V1–V3) and superseded notebooks
+
+Left untouched (production)
+---------------------------
+\Next Observed Daily Reports
+\Jaytlin Scripts\Next Observed Daily Reports   (8:15 AM)
+  partner consolidation under project_repository\...\Next_Obs_Daily
+  (Z:\...\OpDiv_Predictions) — separate from V4 test path

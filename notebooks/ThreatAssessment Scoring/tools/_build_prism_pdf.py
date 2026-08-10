@@ -7,7 +7,7 @@ from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether
 )
 
-OUT = r"h:\HTOC\notebooks\ThreatAssessment Scoring\PRISM_Scoring_Rules.pdf"
+OUT = r"h:\HTOC\notebooks\ThreatAssessment Scoring\docs\PRISM_Scoring_Rules.pdf"
 
 styles = getSampleStyleSheet()
 H1 = ParagraphStyle("H1", parent=styles["Heading1"], fontName="Helvetica-Bold",

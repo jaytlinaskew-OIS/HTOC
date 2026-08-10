@@ -1,29 +1,30 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 REM ============================================================================
-REM ThreatScoreIW - Task Scheduler launcher (strict exit codes, headless-safe)
+REM ThreatAssessScoringV5 - Task Scheduler launcher (strict exit codes)
 REM ============================================================================
 
 if not exist "C:\Temp" mkdir "C:\Temp" >nul 2>&1
-echo [%date% %time%] bat started from: %~dp0 > "C:\Temp\threatscoreiw_debug.txt" 2>&1
+echo [%date% %time%] bat started from: %~dp0 > "C:\Temp\threatassess_v5_debug.txt" 2>&1
 
 if not defined HTOC_SHARE_ROOT set "HTOC_SHARE_ROOT=\\10.1.4.22\data\HTOC"
 
-REM Prefer local Python 3.13; fall back to share Python.
-if not defined PYTHON_EXE (
+if not defined PYTHON_CMD (
     py -3.13 --version >nul 2>&1
     if "!ERRORLEVEL!"=="0" (
+        set "PYTHON_CMD=py -3.13"
         for /f "delims=" %%p in ('py -3.13 -c "import sys; print(sys.executable)"') do set "PYTHON_EXE=%%p"
     ) else (
         set "PYTHON_EXE=%HTOC_SHARE_ROOT%\JA\Python313\python.exe"
+        set "PYTHON_CMD=%HTOC_SHARE_ROOT%\JA\Python313\python.exe"
     )
 )
 
 set "WORK_DIR=%~dp0"
-set "SCRIPT_PATH=%WORK_DIR%ThreatScoreIW.py"
+set "SCRIPT_PATH=%WORK_DIR%ThreatAssessScoringV5.py"
 set "LOG_DIR=%WORK_DIR%logs"
-set "OUTPUT_DIR=%HTOC_SHARE_ROOT%\Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W"
-set "WHEELHOUSE=%HTOC_SHARE_ROOT%\JA\wheelhouse"
+set "OUTPUT_DIR=%HTOC_SHARE_ROOT%\Data_Analytics\Data\Threat Assessment Scores"
+set "EXPECTED_FILE=%OUTPUT_DIR%\Threat_Assessment_Scores.xlsx"
 set "SUCCESS_MARKER=PIPELINE_OK"
 
 if not exist "%LOG_DIR%" mkdir "%LOG_DIR%"
@@ -33,26 +34,31 @@ for /f %%i in ('powershell -NoProfile -Command "Get-Date -Format yyyyMMdd"') do 
 set "_TS_RAW=%TIME: =0%"
 set "NOW_STR=%_TS_RAW:~0,2%%_TS_RAW:~3,2%%_TS_RAW:~6,2%"
 set "TS=%TODAY_STR%_%NOW_STR%"
-set "LOG_FILE=%LOG_DIR%\threatscoreiw_%TS%.log"
+set "LOG_FILE=%LOG_DIR%\threatassess_v5_%TS%.log"
 set "TEMP_OUT=%LOG_DIR%\temp_output_%TS%.log"
-set "EXPECTED_FILE=%OUTPUT_DIR%\ThreatAssessI_W_%TODAY_STR%.xlsx"
 
 for /f %%i in ('powershell -NoProfile -Command "[int][double]::Parse((Get-Date -UFormat %%s))"') do set "RUN_START_EPOCH=%%i"
 
-call :log START   ThreatScoreIW
-call :log CONFIG  Python: %PYTHON_EXE%
+call :log START   ThreatAssessScoringV5
+call :log CONFIG  Python: %PYTHON_CMD%
 call :log CONFIG  Script: %SCRIPT_PATH%
 call :log CONFIG  Log:    %LOG_FILE%
-call :log CONFIG  Expect: %EXPECTED_FILE%
 
+if not defined PYTHON_EXE (
+    call :log ERROR   PYTHON_EXE not resolved
+    exit /b 1
+)
 if not exist "%PYTHON_EXE%" (
     call :log ERROR   Python not found: %PYTHON_EXE%
     exit /b 1
 )
+call :log CHECK   Python OK (%PYTHON_EXE%)
+
 if not exist "%SCRIPT_PATH%" (
     call :log ERROR   Script not found: %SCRIPT_PATH%
     exit /b 1
 )
+call :log CHECK   Script OK
 
 set "PYTHONUSERBASE=C:\Users\jaskew\AppData\Roaming\Python"
 set "PYTHONIOENCODING=utf-8"
@@ -60,44 +66,22 @@ set "PYTHONUTF8=1"
 set "TMP=C:\Temp"
 set "TEMP=C:\Temp"
 if not exist "%TMP%" mkdir "%TMP%" >nul 2>&1
-if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%" >nul 2>&1
 
+call :log RUN     Launching ThreatAssessScoringV5.py...
 pushd "%WORK_DIR%" >nul 2>&1
 if errorlevel 1 (
     call :log ERROR   Failed to pushd WORK_DIR: %WORK_DIR%
     exit /b 1
 )
 
-REM ── Dependencies (wheelhouse first, then PyPI) ─────────────────────────────
-set "PKGS=pandas openpyxl xlsxwriter requests urllib3 pytz"
-set "PIP_FLAGS=--user --disable-pip-version-check --no-warn-script-location --no-cache-dir --timeout 120 --retries 10"
-set "PIP_TRUST=--trusted-host pypi.org --trusted-host files.pythonhosted.org --trusted-host pypi.python.org"
-set "PIP_OK=0"
-
-call :log RUN     Installing packages...
-if exist "%WHEELHOUSE%" (
-    "%PYTHON_EXE%" -m pip install --user --no-index --find-links="%WHEELHOUSE%" %PKGS% > "%TEMP_OUT%" 2>&1
-    if "!ERRORLEVEL!"=="0" set "PIP_OK=1"
-)
-if "!PIP_OK!"=="0" (
-    "%PYTHON_EXE%" -m pip install %PIP_FLAGS% %PIP_TRUST% %PKGS% > "%TEMP_OUT%" 2>&1
-    if "!ERRORLEVEL!"=="0" set "PIP_OK=1"
-)
-type "%TEMP_OUT%" >> "%LOG_FILE%" 2>nul
-if not "!PIP_OK!"=="1" (
-    call :log ERROR   Package install failed from wheelhouse and PyPI
-    popd >nul
-    exit /b 1
-)
-call :log CHECK   Packages OK
-
-REM ── Run script ─────────────────────────────────────────────────────────────
-call :log RUN     Launching ThreatScoreIW.py...
 "%PYTHON_EXE%" -u "%SCRIPT_PATH%" > "%TEMP_OUT%" 2>&1
 set "SCRIPT_EXIT_CODE=!ERRORLEVEL!"
 popd >nul 2>&1
 
-if not defined SCRIPT_EXIT_CODE set "SCRIPT_EXIT_CODE=1"
+if not defined SCRIPT_EXIT_CODE (
+    set "SCRIPT_EXIT_CODE=1"
+    call :log ERROR   SCRIPT_EXIT_CODE was empty after Python run; treating as failure
+)
 call :log RUN     Script exited with code !SCRIPT_EXIT_CODE!
 
 echo. >> "%LOG_FILE%"
@@ -115,12 +99,12 @@ if not "!SCRIPT_EXIT_CODE!"=="0" (
 
 findstr /C:"%SUCCESS_MARKER%" "%TEMP_OUT%" >nul 2>&1
 if not "!ERRORLEVEL!"=="0" (
-    call :log ERROR   Python exit 0 but missing success marker %SUCCESS_MARKER%
+    call :log ERROR   Python exit 0 but missing success marker %SUCCESS_MARKER% in output
     goto :finish
 )
 
 if not exist "!EXPECTED_FILE!" (
-    call :log ERROR   Expected Excel missing: !EXPECTED_FILE!
+    call :log ERROR   Python exit 0 but Excel output missing: !EXPECTED_FILE!
     goto :finish
 )
 
@@ -132,7 +116,8 @@ if not defined EXCEL_MTIME_EPOCH (
 if !EXCEL_MTIME_EPOCH! LSS !RUN_START_EPOCH! (
     set /a SKEW=!RUN_START_EPOCH!-!EXCEL_MTIME_EPOCH!
     if !SKEW! GTR 60 (
-        call :log ERROR   Excel file is stale ^(mtime before run start by !SKEW!s^)
+        call :log ERROR   Excel file is stale ^(mtime before run start by !SKEW!s^). Script claimed success but did not rewrite output.
+        call :log ERROR   RUN_START_EPOCH=!RUN_START_EPOCH! EXCEL_MTIME_EPOCH=!EXCEL_MTIME_EPOCH!
         goto :finish
     ) else (
         call :log WARN    Excel mtime !SKEW!s before run start ^(within 60s grace^)
