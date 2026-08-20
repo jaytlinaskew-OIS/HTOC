@@ -1,0 +1,49 @@
+[20260818 07:30:04] START   NextObservedIndicatorV4.0
+[20260818 07:30:04] CONFIG  Python: C:\Program Files\Python313\python.exe
+[20260818 07:30:04] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\NextObservedIndicatorV4.0.py
+[20260818 07:30:04] CONFIG  Save:   \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test
+[20260818 07:30:04] CONFIG  Log:    \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\logs\noi_v4_20260818_073003.log
+[20260818 07:30:04] RUN     Connecting data share...
+SHARE_OK \\cscso1fsappv01\data\HTOC
+[20260818 07:30:04] CHECK   Data share OK (\\cscso1fsappv01\data\HTOC)
+[20260818 07:30:04] RUN     Installing packages...
+Looking in links: \\cscso1fsappv01\data\HTOC\JA\wheelhouse
+Requirement already satisfied: pandas in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.0)
+Requirement already satisfied: numpy in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.1)
+Requirement already satisfied: scikit-learn in c:\users\jaskew\appdata\roaming\python\python313\site-packages (1.7.0)
+Requirement already satisfied: python-dateutil>=2.8.2 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2025.2)
+Requirement already satisfied: tzdata>=2022.7 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2025.2)
+Requirement already satisfied: scipy>=1.8.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (1.16.0)
+Requirement already satisfied: joblib>=1.2.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (1.5.1)
+Requirement already satisfied: threadpoolctl>=3.1.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (3.6.0)
+Requirement already satisfied: six>=1.5 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)
+[20260818 07:30:06] CHECK   Packages OK
+[20260818 07:30:06] RUN     Launching NextObservedIndicatorV4.0.py...
+ 
+---- script output ---- 
+panel: 834,882 rows | 25,502 (opdiv,indicator) | 2026-01-10 -> 2026-08-18
+training rows: 153,855 from 11 cutoffs (2026-04-20 -> 2026-06-29)
+trained production model (all cutoffs)
+scoring 17,265 indicators as-of 2026-08-18
+OpDivs: ['CDC', 'CMS', 'DHA', 'FDA', 'HHS', 'HRSA', 'IHS', 'NIH', 'OS', 'VA']
+          Indicator  ...       Confidence: 45-Day
+0      64.62.156.15  ...    45-Day: Highly likely
+1      64.62.156.82  ...  45-Day: Possibly active
+2    144.86.173.226  ...   45-Day: Low confidence
+3     64.62.156.117  ...    45-Day: Highly likely
+4     64.62.156.159  ...  45-Day: Possibly active
+5       65.49.1.241  ...  45-Day: Possibly active
+6       71.6.232.29  ...  45-Day: Possibly active
+7    74.208.236.241  ...    45-Day: Highly likely
+8      onestart.ai/  ...  45-Day: Possibly active
+9  www.shorturl.at/  ...    45-Day: Highly likely
+
+[10 rows x 15 columns]
+saved to \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test
+Wrote 10 OpDiv files under \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test
+PIPELINE_OK
+---- end output ---- 
+ 
+[20260818 07:31:38] SUCCESS Script completed successfully
+[20260818 07:31:38] OUTPUT  Fresh CSV files: 10

@@ -3,7 +3,7 @@ ThreatAssessScoringV5Daily — scheduled daily runner.
 
 Source notebook: ThreatAssessScoringV5Daily.ipynb
 Hardened for Task Scheduler (UNC share roots, no Z:/H: drive letters, print instead of display).
-Writes: \\10.1.4.22\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\Threat_Assessment_Scores.xlsx
+Writes: \\cscso1fsappv01\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\Threat_Assessment_Scores.xlsx
 
 Exit contract for the .bat launcher:
   - print PIPELINE_OK and exit 0 on full success (Excel rewritten)
@@ -39,7 +39,7 @@ except Exception:
     pass
 
 # ── Paths & constants ─────────────────────────────────────────────────────────
-HTOC_SHARE_ROOT = r"\\10.1.4.22\data\HTOC"
+HTOC_SHARE_ROOT = os.environ.get("HTOC_SHARE_ROOT", r"\\cscso1fsappv01\data\HTOC")
 
 # Look for TC SDK relative to this script (checks up to 3 parent levels),
 # then fall back to the network share location.

@@ -3,7 +3,7 @@ ThreatAssessScoringV5 — scheduled runner.
 
 Source notebook: ThreatAssessScoringV5.ipynb
 Hardened for Task Scheduler (UNC share roots, no Z:/H: drive letters, print instead of display).
-Writes: \\10.1.4.22\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\Threat_Assessment_Scores.xlsx
+Writes: \\cscso1fsappv01\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\Threat_Assessment_Scores.xlsx
 
 Note: Full 7-day lastObserved window scorer (QUERY_LOOKBACK_DAYS),
 not the "first seen today" subset (ThreatAssessScoringV5Daily).
@@ -25,8 +25,11 @@ try:
 except Exception:
     pass
 
-# Add your local ThreatConnect SDK to path
-sys.path.append(r"\\10.1.4.22\data\HTOC\Data_Analytics\threatconnect")
+# Hostname UNC (not \\10.1.4.22) — IP/NTLM fails in logged-off Task Scheduler.
+HTOC_SHARE_ROOT = os.environ.get("HTOC_SHARE_ROOT", r"\\cscso1fsappv01\data\HTOC")
+_TC_SDK = os.path.join(HTOC_SHARE_ROOT, "Data_Analytics", "threatconnect")
+if _TC_SDK not in sys.path:
+    sys.path.insert(0, _TC_SDK)
 from ThreatConnect import ThreatConnect
 from RequestObject import RequestObject
 from Owners import Owners
@@ -205,7 +208,7 @@ print(observed_src)
 import pandas as pd
 
 # Configuration for observed tags
-TAGS_FILE_PATH = r"\\10.1.4.22\data\HTOC\Data_Analytics\Data\Observed_Tags\htoc_observed_indicator_tags.csv"
+TAGS_FILE_PATH = os.path.join(HTOC_SHARE_ROOT, r"Data_Analytics\Data\Observed_Tags\htoc_observed_indicator_tags.csv")
 THREAT_CATEGORY_FILTER = 'THREAT ACTOR'
 
 # Load the observed tags data from the CSV file
@@ -255,7 +258,7 @@ print(observed_src[['indicator', 'type', 'threat_actor', 'threat_nation_state', 
 import pandas as pd
 
 # Configuration for observed indicators file and first-seen window
-OBSERVED_INDICATORS_CSV_PATH = r"\\10.1.4.22\data\HTOC\Data_Analytics\Data\Observed_Indicators\htoc_observed_indicators.csv"
+OBSERVED_INDICATORS_CSV_PATH = os.path.join(HTOC_SHARE_ROOT, r"Data_Analytics\Data\Observed_Indicators\htoc_observed_indicators.csv")
 FIRSTSEEN_LOOKBACK_DAYS = 7
 
 csv_path = OBSERVED_INDICATORS_CSV_PATH
@@ -492,7 +495,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 # Configuration for OpDiv observation files
-OPDIV_BASE_PATH = r"\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d{date}.csv"
+OPDIV_BASE_PATH = os.path.join(HTOC_SHARE_ROOT, r"Data_Analytics\Data\OpDiv_Observations\htoc_opdiv_obs_d{date}.csv")
 #OPDIV_BASE_PATH = r"C:\Users\jaskew\Documents\project_repository\data\raw\ObservationDataFiles\htoc_opdiv_obs_d{date}.csv"
 OPDIV_DATE_FORMAT = "%Y%m%d"
 OPDIV_LOOKBACK_DAYS = 7
@@ -2024,7 +2027,7 @@ import pandas as pd
 from datetime import datetime
 from openpyxl.styles import PatternFill
 
-output_dir = r"\\10.1.4.22\data\HTOC\Data_Analytics\Data\Threat Assessment Scores"
+output_dir = os.path.join(HTOC_SHARE_ROOT, r"Data_Analytics\Data\Threat Assessment Scores")
 os.makedirs(output_dir, exist_ok=True)
 
 # Create filename
@@ -2203,7 +2206,7 @@ from openpyxl import load_workbook
 # ============================================================================
 
 # Define history file path - using the same file as main Prioritized Risk and Indicator Severity Model scores
-history_dir = r"\\10.1.4.22\data\HTOC\Data_Analytics\Data\Threat Assessment Scores"
+history_dir = os.path.join(HTOC_SHARE_ROOT, r"Data_Analytics\Data\Threat Assessment Scores")
 os.makedirs(history_dir, exist_ok=True)
 
 # Use the main Threat_Assessment_Scores.xlsx file instead of separate file

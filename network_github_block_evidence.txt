@@ -1,0 +1,102 @@
+﻿=== GitHub git connectivity evidence ===
+Collected: 2026-08-10 09:31:58 -04:00
+Host: CSCSO1LTFORP16
+User: jaskew
+
+--- DNS ---
+github.com -> 140.82.114.4
+
+--- What WORKS (HTTPS API GET) ---
+GET https://api.github.com/zen -> 200
+GET .../info/refs?service=git-upload-pack -> 200 (len=444)
+
+--- What FAILS (git smart HTTP / SSH) ---
+1) git fetch (uses POST /git-upload-pack after GET info/refs):
+09:32:00.305240 http.c:902              == Info: schannel: disabled automatic use of client certificate
+09:32:00.358712 http.c:902              == Info: Connected to github.com (140.82.114.4) port 443
+09:32:00.359712 http.c:861              => Send header: GET
+09:32:00.359712 http.c:861              => Send header: Host: github.com
+09:32:00.359712 http.c:861              => Send header: User-Agent: git/2.49.0.windows.1
+09:32:00.359712 http.c:861              => Send header: Accept: */*
+09:32:00.359712 http.c:861              => Send header: Accept-Encoding: deflate, gzip, br, zstd
+09:32:00.359712 http.c:861              => Send header: Pragma: no-cache
+09:32:00.359712 http.c:861              => Send header: Git-Protocol: version=2
+09:32:00.359712 http.c:861              => Send header:
+09:32:00.361813 http.c:902              == Info: schannel: remote party requests renegotiation
+09:32:00.361813 http.c:902              == Info: schannel: renegotiating SSL/TLS connection
+09:32:00.361813 http.c:902              == Info: schannel: SSL/TLS connection renegotiated
+09:32:00.397545 http.c:861              <= Recv header: HTTP/1.1 200 OK
+09:32:00.397545 http.c:861              <= Recv header: Server: GitHub-Babel/3.0
+09:32:00.397545 http.c:861              <= Recv header: Content-Type: application/x-git-upload-pack-advertisement
+09:32:00.397545 http.c:861              <= Recv header: Content-Security-Policy: default-src 'none'; sandbox
+09:32:00.397545 http.c:861              <= Recv header: expires: Fri, 01 Jan 1980 00:00:00 GMT
+09:32:00.397545 http.c:861              <= Recv header: pragma: no-cache
+09:32:00.397545 http.c:861              <= Recv header: Cache-Control: no-cache, max-age=0, must-revalidate
+09:32:00.397545 http.c:861              <= Recv header: Vary: Accept-Encoding
+09:32:00.397545 http.c:861              <= Recv header: Strict-Transport-Security: max-age=31536000
+09:32:00.397545 http.c:861              <= Recv header: Transfer-Encoding: chunked
+09:32:00.397545 http.c:861              <= Recv header: Date: Mon, 10 Aug 2026 13:32:00 GMT
+09:32:00.397545 http.c:861              <= Recv header: X-GitHub-Request-Id: 48E3:2596A6:397AE6:507311:6A79D2D0
+09:32:00.397545 http.c:861              <= Recv header: x-github-edge-region: iad
+09:32:00.397545 http.c:861              <= Recv header: X-Frame-Options: DENY
+09:32:00.397545 http.c:861              <= Recv header:
+09:32:00.398573 http.c:861              => Send header: POST /jaytlinaskew-OIS/HTOC.git/git-upload-pack HTTP/1.1
+09:32:00.398573 http.c:861              => Send header: Host: github.com
+09:32:00.398573 http.c:861              => Send header: User-Agent: git/2.49.0.windows.1
+09:32:00.398573 http.c:861              => Send header: Accept-Encoding: deflate, gzip, br, zstd
+09:32:00.398573 http.c:861              => Send header: Content-Type: application/x-git-upload-pack-request
+09:32:00.398573 http.c:861              => Send header: Accept: application/x-git-upload-pack-result
+09:32:00.398573 http.c:861              => Send header: Git-Protocol: version=2
+09:32:00.398573 http.c:861              => Send header: Content-Length: 323
+09:32:00.398573 http.c:861              => Send header:
+09:32:00.401096 http.c:861              <= Recv header: HTTP/1.1 503 Service Unavailable
+09:32:00.401096 http.c:861              <= Recv header: Content-Type: text/html; charset=UTF-8
+09:32:00.401096 http.c:861              <= Recv header: Content-Length: 1052
+09:32:00.401096 http.c:861              <= Recv header: Connection: close
+09:32:00.401096 http.c:861              <= Recv header: P3P: CP="CAO PSA OUR"
+09:32:00.401096 http.c:861              <= Recv header: Expires: Thu, 01 Jan 1970 00:00:00 GMT
+09:32:00.401096 http.c:861              <= Recv header: Cache-Control: no-store, no-cache, must-revalidate,
+09:32:00.401096 http.c:861              <= Recv header: Pragma: no-cache
+09:32:00.401096 http.c:861              <= Recv header:
+09:32:00.401096 http.c:902              == Info: schannel: shutting down SSL/TLS connection with github.com port 443
+09:32:00.406344 http.c:902              == Info: schannel: server closed abruptly (missing close_notify)
+error: RPC failed; HTTP 503 curl 22 The requested URL returned error: 503
+fatal: expected flush after ref listing
+
+2) Control: public tiny repo (same failure = not repo-specific):
+git : error: RPC failed; HTTP 503 curl 22 The requested URL returned error: 503
+At C:\Users\jaskew\AppData\Local\Temp\ps-script-c37ae8ce-5bc3-4742-ac26-0b9ddb6cd1fa.ps1:129 char:9
++ $ctrl = git ls-remote https://github.com/octocat/Hello-World.git HEAD ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (error: RPC fail...rned error: 503:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+3) SSH port 22:
+ssh : Connection reset by 140.82.114.4 port 22
+At C:\Users\jaskew\AppData\Local\Temp\ps-script-c37ae8ce-5bc3-4742-ac26-0b9ddb6cd1fa.ps1:134 char:10
++ $ssh22 = ssh -o BatchMode=yes -o ConnectTimeout=10 -T git@github.com  ...
++          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Connection reset by 140.82.114.4 port 22:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+4) SSH over 443 (ssh.github.com) — GitHub's firewall bypass path:
+ssh : Connection timed out during banner exchange
+At C:\Users\jaskew\AppData\Local\Temp\ps-script-c37ae8ce-5bc3-4742-ac26-0b9ddb6cd1fa.ps1:139 char:11
++ $ssh443 = ssh -o BatchMode=yes -o ConnectTimeout=12 -T -p 443 git@ssh ...
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Connection time...banner exchange:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Connection to 140.82.112.36 port 443 timed out
+
+--- Summary for firewall / proxy allowlisting ---
+Allow outbound:
+  - TCP 443 to github.com (and GitHub IP ranges) for:
+      GET  /<org>/<repo>.git/info/refs?service=git-upload-pack
+      POST /<org>/<repo>.git/git-upload-pack
+      POST /<org>/<repo>.git/git-receive-pack
+  - TCP 22 to github.com OR TCP 443 to ssh.github.com (SSH git)
+  - Docs: https://docs.github.com/en/authentication/troubleshooting-ssh/using-ssh-over-the-https-port
+  - GitHub meta IPs: https://api.github.com/meta
+Note: Browser/API GETs can succeed while git POST /git-upload-pack returns HTTP 503
+      if a proxy/WAF inspects or blocks the git smart-HTTP body.

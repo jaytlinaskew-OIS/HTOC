@@ -1,0 +1,18 @@
+[20260812 06:50:03] START   ThreatAssessScoringV5
+[20260812 06:50:03] CONFIG  Python: py -3.13
+[20260812 06:50:03] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5\ThreatAssessScoringV5.py
+[20260812 06:50:03] CONFIG  Log:    \\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5\logs\threatassess_v5_20260812_065002.log
+[20260812 06:50:03] CHECK   Python OK (C:\Program Files\Python313\python.exe)
+[20260812 06:50:03] CHECK   Script OK
+[20260812 06:50:03] RUN     Launching ThreatAssessScoringV5.py...
+[20260812 06:50:06] RUN     Script exited with code 
+ 
+---- script output ---- 
+Traceback (most recent call last):
+  File "\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5\ThreatAssessScoringV5.py", line 30, in <module>
+    from ThreatConnect import ThreatConnect
+ModuleNotFoundError: No module named 'ThreatConnect'
+---- end output ---- 
+ 
+[20260812 06:50:06] ERROR   Script failed with exit code 
+[20260812 06:50:06] END     Batch complete with exit 

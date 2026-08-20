@@ -1,0 +1,66 @@
+[20260820 07:15:03] START   ThreatScoreIW
+[20260820 07:15:03] CONFIG  Python: C:\Program Files\Python313\python.exe
+[20260820 07:15:03] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatScoreIW\ThreatScoreIW.py
+[20260820 07:15:03] CONFIG  Log:    \\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatScoreIW\logs\threatscoreiw_20260820_071502.log
+[20260820 07:15:03] CONFIG  Expect: \\cscso1fsappv01\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W\ThreatAssessI_W_20260820.xlsx
+[20260820 07:15:03] RUN     Connecting data share...
+SHARE_OK \\cscso1fsappv01\data\HTOC
+[20260820 07:15:03] CHECK   Data share OK (\\cscso1fsappv01\data\HTOC)
+[20260820 07:15:03] RUN     Installing packages...
+Looking in links: \\cscso1fsappv01\data\HTOC\JA\wheelhouse
+Requirement already satisfied: pandas in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.0)
+Requirement already satisfied: openpyxl in c:\users\jaskew\appdata\roaming\python\python313\site-packages (3.1.5)
+Requirement already satisfied: xlsxwriter in c:\users\jaskew\appdata\roaming\python\python313\site-packages (3.2.5)
+Requirement already satisfied: requests in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.32.4)
+Requirement already satisfied: urllib3 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.5.0)
+Requirement already satisfied: pytz in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2025.2)
+Requirement already satisfied: numpy>=1.26.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2.3.1)
+Requirement already satisfied: python-dateutil>=2.8.2 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2.9.0.post0)
+Requirement already satisfied: tzdata>=2022.7 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2025.2)
+Requirement already satisfied: et-xmlfile in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from openpyxl) (2.0.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from requests) (3.4.2)
+Requirement already satisfied: idna<4,>=2.5 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from requests) (3.10)
+Requirement already satisfied: certifi>=2017.4.17 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from requests) (2025.6.15)
+Requirement already satisfied: six>=1.5 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)
+[20260820 07:15:06] CHECK   Packages OK
+[20260820 07:15:06] RUN     Launching ThreatScoreIW.py...
+ 
+---- script output ---- 
+Loaded config from: \\cscso1fsappv01\home\jaskew\HTOC\scripts\Data Movement\ThrearConnect-api-pull\utils\config.json
+Base URL: https://hvs.threatconnect.com/api
+Access ID: 09783848890162390382
+Default Org: HTOC Org
+ThreatConnect initialized.
+RequestObject successfully created.
+Threat assess filter ((rating>=3 OR threatAssessRating>=3), confidence>=50) coalescing ('threatAssessRating', 'threatAssess.threatAssessRating', 'rating') / ('threatAssessConfidence', 'threatAssess.threatAssessConfidence'): 1415 -> 1095 rows.
+                     id  ...            sources
+0     15762598695798452  ...  CMS_CTI, HTOC Org
+1     15762598695798449  ...  CMS_CTI, HTOC Org
+2     15762598695798448  ...  CMS_CTI, HTOC Org
+3     15762598695798445  ...  CMS_CTI, HTOC Org
+4     15762598695798435  ...  CMS_CTI, HTOC Org
+...                 ...  ...                ...
+2803   6755399443001625  ...           HTOC Org
+2804            4883044  ...           HTOC Org
+2805            4476331  ...           HTOC Org
+2806            4503719  ...           HTOC Org
+2807            4442727  ...           HTOC Org
+
+[1095 rows x 37 columns]
+Last Observed filter (ThreatConnect only, >= 2026-08-18 11:15:08.355082+00:00): 1095 -> 1095 rows.
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatScoreIW\ThreatScoreIW.py:376: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Files to be loaded: ['\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260820.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260819.csv']
+Loaded data from 2 files.
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatScoreIW\ThreatScoreIW.py:514: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  final_indicators['Tags'] = final_tags
+Subnet condensation: 6 -> 6 rows (min_hosts=5)
+PIPELINE_OK
+---- end output ---- 
+ 
+[20260820 07:15:21] SUCCESS Script completed successfully
+[20260820 07:15:21] OUTPUT  Excel confirmed - 8 KB (fresh)

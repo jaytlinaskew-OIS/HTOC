@@ -1,0 +1,27 @@
+[20260819 08:00:02] START   Next Observed Daily Reports V4
+[20260819 08:00:02] CONFIG  Python: C:\Program Files\Python313\python.exe
+[20260819 08:00:02] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\next_observed_daily_reports_v4.py
+[20260819 08:00:02] CONFIG  Data:   \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test
+[20260819 08:00:02] RUN     Connecting data share...
+SHARE_OK \\cscso1fsappv01\data\HTOC
+[20260819 08:00:02] CHECK   Data share OK (\\cscso1fsappv01\data\HTOC)
+[20260819 08:00:05] RUN     Launching next_observed_daily_reports_v4.py...
+ 
+---- script output ---- 
+DATA_PATH=\\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test
+SAVE_PATH=\\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports
+today=20260819
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\CDC\CDC_output_20260819.csv (220 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\CMS\CMS_output_20260819.csv (1202 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\DHA\DHA_output_20260819.csv (753 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\FDA\FDA_output_20260819.csv (471 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\HHS\HHS_output_20260819.csv (1488 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\HRSA\HRSA_output_20260819.csv (4630 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\IHS\IHS_output_20260819.csv (1101 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\NIH\NIH_output_20260819.csv (3608 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\OS\OS_output_20260819.csv (1432 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\VA\VA_output_20260819.csv (2261 rows)
+Saved to \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260819.csv (17166 rows)
+PIPELINE_OK
+---- end output ---- 
+[20260819 08:00:07] SUCCESS Report confirmed: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260819.csv

@@ -8,7 +8,7 @@ REM ============================================================================
 if not exist "C:\Temp" mkdir "C:\Temp" >nul 2>&1
 echo [%date% %time%] bat started from: %~dp0 > "C:\Temp\noi_v4_daily_reports_debug.txt" 2>&1
 
-if not defined HTOC_SHARE_ROOT set "HTOC_SHARE_ROOT=\\10.1.4.22\data\HTOC"
+if not defined HTOC_SHARE_ROOT set "HTOC_SHARE_ROOT=\\cscso1fsappv01\data\HTOC"
 if not defined NOI_V4_SAVE_DIR set "NOI_V4_SAVE_DIR=%HTOC_SHARE_ROOT%\JA\NextObserveV4Test"
 
 if not defined PYTHON_EXE (
@@ -40,6 +40,13 @@ call :log START   Next Observed Daily Reports V4
 call :log CONFIG  Python: %PYTHON_EXE%
 call :log CONFIG  Script: %SCRIPT_PATH%
 call :log CONFIG  Data:   %NOI_V4_SAVE_DIR%
+call :log RUN     Connecting data share...
+call "%~dp0..\..\ensure_htoc_data_share.bat" >> "%LOG_FILE%" 2>&1
+if errorlevel 1 (
+    call :log ERROR   Cannot reach HTOC data share %HTOC_SHARE_ROOT%
+    exit /b 3
+)
+call :log CHECK   Data share OK (%HTOC_SHARE_ROOT%)
 
 if not exist "%PYTHON_EXE%" (
     call :log ERROR   Python not found: %PYTHON_EXE%
@@ -63,7 +70,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-"%PYTHON_EXE%" -m pip install --user --disable-pip-version-check --quiet pandas >nul 2>&1
+"%PYTHON_EXE%" -m pip install --user --disable-pip-version-check --quiet pandas openpyxl >nul 2>&1
 
 call :log RUN     Launching next_observed_daily_reports_v4.py...
 "%PYTHON_EXE%" -u "%SCRIPT_PATH%" > "%TEMP_OUT%" 2>&1

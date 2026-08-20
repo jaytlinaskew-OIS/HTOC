@@ -3,7 +3,7 @@ NextObservedIndicatorV4.0 — scheduled runner (test outputs).
 
 Source notebook: NextObservedIndicatorV4.0.ipynb
 Writes per-OpDiv CSVs under:
-  \\10.1.4.22\data\HTOC\JA\NextObserveV4Test\{OpDiv}\{OpDiv}_output_YYYYMMDD.csv
+  \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\{OpDiv}\{OpDiv}_output_YYYYMMDD.csv
 
 Does NOT replace the existing Next Observed Daily Reports scheduled tasks.
 
@@ -30,9 +30,10 @@ from sklearn.ensemble import HistGradientBoostingClassifier
 warnings.filterwarnings("ignore")
 
 # ------------------------------- CONFIG -------------------------------
+HTOC_SHARE_ROOT = os.environ.get("HTOC_SHARE_ROOT", r"\\cscso1fsappv01\data\HTOC")
 OBS_TEMPLATE = os.environ.get(
     "HTOC_OBS_TEMPLATE",
-    r"\\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Observations\htoc_opdiv_obs_d{date}.csv",
+    os.path.join(HTOC_SHARE_ROOT, r"Data_Analytics\Data\OpDiv_Observations\htoc_opdiv_obs_d{date}.csv"),
 )
 DATE_FMT = "%Y%m%d"
 
@@ -276,7 +277,7 @@ if not opdiv_outputs:
 
 SAVE_DIR = os.environ.get(
     "NOI_V4_SAVE_DIR",
-    r"\\10.1.4.22\data\HTOC\JA\NextObserveV4Test",
+    os.path.join(HTOC_SHARE_ROOT, r"JA\NextObserveV4Test"),
 )
 stamp = _to_ts(infer_t).strftime("%Y%m%d")
 os.makedirs(SAVE_DIR, exist_ok=True)
@@ -298,5 +299,15 @@ if missing:
     sys.exit(4)
 
 print(f"Wrote {len(opdiv_outputs)} OpDiv files under {SAVE_DIR}")
+
+# Performance evaluation (non-fatal — forecast outputs already saved)
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+if _script_dir not in sys.path:
+    sys.path.insert(0, _script_dir)
+from noi_v4_performance_eval import run_eval_after_forecast  # noqa: E402
+
+if not run_eval_after_forecast(stamp, SAVE_DIR, HTOC_SHARE_ROOT):
+    print("PERF: evaluation completed with errors (see Performance/Logs on share)")
+
 print("PIPELINE_OK")
 sys.exit(0)

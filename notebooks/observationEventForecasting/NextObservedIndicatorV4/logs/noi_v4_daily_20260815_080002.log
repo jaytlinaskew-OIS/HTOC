@@ -1,0 +1,13 @@
+[20260815 08:00:02] START   Next Observed Daily Reports V4
+[20260815 08:00:02] CONFIG  Python: C:\Program Files\Python313\python.exe
+[20260815 08:00:02] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\next_observed_daily_reports_v4.py
+[20260815 08:00:02] CONFIG  Data:   \\10.1.4.22\data\HTOC\JA\NextObserveV4Test
+[20260815 08:00:04] RUN     Launching next_observed_daily_reports_v4.py...
+ 
+---- script output ---- 
+DATA_PATH=\\10.1.4.22\data\HTOC\JA\NextObserveV4Test
+SAVE_PATH=\\10.1.4.22\data\HTOC\JA\NextObserveV4Test\Full Daily Reports
+today=20260815
+FATAL: data root does not exist: \\10.1.4.22\data\HTOC\JA\NextObserveV4Test
+---- end output ---- 
+[20260815 08:00:08] END     Batch complete with exit 

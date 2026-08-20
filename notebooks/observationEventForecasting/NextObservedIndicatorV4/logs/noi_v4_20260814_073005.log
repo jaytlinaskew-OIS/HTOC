@@ -1,0 +1,24 @@
+[20260814 07:30:06] START   NextObservedIndicatorV4.0
+[20260814 07:30:06] CONFIG  Python: C:\Program Files\Python313\python.exe
+[20260814 07:30:06] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\NextObservedIndicatorV4.0.py
+[20260814 07:30:06] CONFIG  Save:   \\10.1.4.22\data\HTOC\JA\NextObserveV4Test
+[20260814 07:30:06] CONFIG  Log:    \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\logs\noi_v4_20260814_073005.log
+[20260814 07:30:06] RUN     Installing packages...
+Requirement already satisfied: pandas in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.0)
+Requirement already satisfied: numpy in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.1)
+Requirement already satisfied: scikit-learn in c:\users\jaskew\appdata\roaming\python\python313\site-packages (1.7.0)
+Requirement already satisfied: python-dateutil>=2.8.2 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2025.2)
+Requirement already satisfied: tzdata>=2022.7 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2025.2)
+Requirement already satisfied: scipy>=1.8.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (1.16.0)
+Requirement already satisfied: joblib>=1.2.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (1.5.1)
+Requirement already satisfied: threadpoolctl>=3.1.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (3.6.0)
+Requirement already satisfied: six>=1.5 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)
+[20260814 07:30:08] CHECK   Packages OK
+[20260814 07:30:08] RUN     Launching NextObservedIndicatorV4.0.py...
+ 
+---- script output ---- 
+FATAL: No observation files loaded for 2026-01-06 -> 2026-08-14 (template=\\10.1.4.22\data\HTOC\Data_Analytics\Data\OpDiv_Observations\htoc_opdiv_obs_d{date}.csv). Check share path / date coverage.
+---- end output ---- 
+ 
+[20260814 07:30:13] END     Batch complete with exit 

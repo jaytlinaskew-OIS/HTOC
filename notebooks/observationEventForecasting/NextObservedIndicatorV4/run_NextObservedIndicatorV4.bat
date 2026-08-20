@@ -8,7 +8,7 @@ REM ============================================================================
 if not exist "C:\Temp" mkdir "C:\Temp" >nul 2>&1
 echo [%date% %time%] bat started from: %~dp0 > "C:\Temp\noi_v4_debug.txt" 2>&1
 
-if not defined HTOC_SHARE_ROOT set "HTOC_SHARE_ROOT=\\10.1.4.22\data\HTOC"
+if not defined HTOC_SHARE_ROOT set "HTOC_SHARE_ROOT=\\cscso1fsappv01\data\HTOC"
 if not defined NOI_V4_SAVE_DIR set "NOI_V4_SAVE_DIR=%HTOC_SHARE_ROOT%\JA\NextObserveV4Test"
 
 if not defined PYTHON_EXE (
@@ -27,7 +27,6 @@ set "WHEELHOUSE=%HTOC_SHARE_ROOT%\JA\wheelhouse"
 set "SUCCESS_MARKER=PIPELINE_OK"
 
 if not exist "%LOG_DIR%" mkdir "%LOG_DIR%"
-if not exist "%NOI_V4_SAVE_DIR%" mkdir "%NOI_V4_SAVE_DIR%"
 forfiles /p "%LOG_DIR%" /m "*.log" /d -14 /c "cmd /c del /q @path" >nul 2>&1
 
 for /f %%i in ('powershell -NoProfile -Command "Get-Date -Format yyyyMMdd"') do set "TODAY_STR=%%i"
@@ -44,6 +43,14 @@ call :log CONFIG  Python: %PYTHON_EXE%
 call :log CONFIG  Script: %SCRIPT_PATH%
 call :log CONFIG  Save:   %NOI_V4_SAVE_DIR%
 call :log CONFIG  Log:    %LOG_FILE%
+call :log RUN     Connecting data share...
+call "%~dp0..\..\ensure_htoc_data_share.bat" >> "%LOG_FILE%" 2>&1
+if errorlevel 1 (
+    call :log ERROR   Cannot reach HTOC data share %HTOC_SHARE_ROOT%
+    exit /b 3
+)
+call :log CHECK   Data share OK (%HTOC_SHARE_ROOT%)
+if not exist "%NOI_V4_SAVE_DIR%" mkdir "%NOI_V4_SAVE_DIR%"
 
 if not exist "%PYTHON_EXE%" (
     call :log ERROR   Python not found: %PYTHON_EXE%
@@ -67,7 +74,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-set "PKGS=pandas numpy scikit-learn"
+set "PKGS=pandas numpy scikit-learn openpyxl"
 set "PIP_FLAGS=--user --disable-pip-version-check --no-warn-script-location --no-cache-dir --timeout 120 --retries 10"
 set "PIP_TRUST=--trusted-host pypi.org --trusted-host files.pythonhosted.org --trusted-host pypi.python.org"
 set "PIP_OK=0"

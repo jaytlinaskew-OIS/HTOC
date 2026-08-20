@@ -5,7 +5,7 @@ Source notebook: ThreatScoreIW.ipynb
 Hardened for Task Scheduler (UNC share roots, UTF-8 logs, strict exit contract).
 
 Writes daily workbook under:
-  \\10.1.4.22\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W\
+  \\cscso1fsappv01\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W\
 
 Exit contract for the .bat launcher:
   - print PIPELINE_OK and exit 0 on full success
@@ -27,7 +27,7 @@ import urllib3
 from configparser import ConfigParser
 
 # Add your local ThreatConnect SDK to path
-HTOC_SHARE_ROOT = os.environ.get('HTOC_SHARE_ROOT', r'\\10.1.4.22\data\HTOC')
+HTOC_SHARE_ROOT = os.environ.get('HTOC_SHARE_ROOT', r'\\cscso1fsappv01\data\HTOC')
 TC_SDK = os.path.join(HTOC_SHARE_ROOT, 'Data_Analytics', 'threatconnect')
 if TC_SDK not in sys.path:
     sys.path.insert(0, TC_SDK)
@@ -254,7 +254,7 @@ from datetime import datetime, timedelta
 import pytz
 
 # Load the Excel file
-file_path = r"\\10.1.4.22\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\Threat_Assessment_Scores.xlsx"
+file_path = os.path.join(HTOC_SHARE_ROOT, r"Data_Analytics\Data\Threat Assessment Scores\Threat_Assessment_Scores.xlsx")
 df = pd.read_excel(file_path)
 
 
@@ -367,7 +367,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 # Base file path with placeholder for date
-base_path = r"\\10.1.4.22/data/HTOC/Data_Analytics/Data/OpDiv_Observations/htoc_opdiv_obs_d{date}.csv"
+base_path = os.path.join(HTOC_SHARE_ROOT, r"Data_Analytics\Data\OpDiv_Observations\htoc_opdiv_obs_d{date}.csv")
 #base_path = r"C:\Users\jaskew\Documents\project_repository\data\raw\ObservationDataFiles\htoc_opdiv_obs_d{date}.csv"
 date_format = "%Y%m%d"
 
@@ -474,7 +474,7 @@ final_indicators
 import pandas as pd
 
 # Load external tags data
-tags_path = r"\\10.1.4.22\data\HTOC\Data_Analytics\Data\Observed_Tags\htoc_observed_indicator_tags.csv"
+tags_path = os.path.join(HTOC_SHARE_ROOT, r"Data_Analytics\Data\Observed_Tags\htoc_observed_indicator_tags.csv")
 tags_df = pd.read_csv(tags_path)
 
 # The indicator column in the tags CSV could be e.g. 'Indicator' or 'indicator'
@@ -729,7 +729,7 @@ from xlsxwriter.utility import xl_rowcol_to_cell
 
 # Build dated output path
 today_str = datetime.today().strftime('%Y%m%d')  # e.g. 20260316
-output_path = rf"\\10.1.4.22\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W\ThreatAssessI_W_{today_str}.xlsx"
+output_path = os.path.join(HTOC_SHARE_ROOT, r"Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W", f"ThreatAssessI_W_{today_str}.xlsx")
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
 # Excel can't write timezone-aware datetimes; strip tz info before export

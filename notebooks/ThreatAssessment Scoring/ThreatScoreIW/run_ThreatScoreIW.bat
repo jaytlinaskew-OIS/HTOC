@@ -7,7 +7,7 @@ REM ============================================================================
 if not exist "C:\Temp" mkdir "C:\Temp" >nul 2>&1
 echo [%date% %time%] bat started from: %~dp0 > "C:\Temp\threatscoreiw_debug.txt" 2>&1
 
-if not defined HTOC_SHARE_ROOT set "HTOC_SHARE_ROOT=\\10.1.4.22\data\HTOC"
+if not defined HTOC_SHARE_ROOT set "HTOC_SHARE_ROOT=\\cscso1fsappv01\data\HTOC"
 
 REM Prefer local Python 3.13; fall back to share Python.
 if not defined PYTHON_EXE (
@@ -44,6 +44,14 @@ call :log CONFIG  Python: %PYTHON_EXE%
 call :log CONFIG  Script: %SCRIPT_PATH%
 call :log CONFIG  Log:    %LOG_FILE%
 call :log CONFIG  Expect: %EXPECTED_FILE%
+call :log RUN     Connecting data share...
+call "%~dp0..\..\ensure_htoc_data_share.bat" >> "%LOG_FILE%" 2>&1
+if errorlevel 1 (
+    call :log ERROR   Cannot reach HTOC data share %HTOC_SHARE_ROOT%
+    exit /b 3
+)
+call :log CHECK   Data share OK (%HTOC_SHARE_ROOT%)
+set "PYTHONPATH=%HTOC_SHARE_ROOT%\Data_Analytics\threatconnect;%PYTHONPATH%"
 
 if not exist "%PYTHON_EXE%" (
     call :log ERROR   Python not found: %PYTHON_EXE%
