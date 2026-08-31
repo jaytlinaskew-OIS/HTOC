@@ -1,0 +1,82 @@
+[20260825 07:30:03] START   NextObservedIndicatorV4.0
+[20260825 07:30:03] CONFIG  Python: C:\Program Files\Python313\python.exe
+[20260825 07:30:03] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\NextObservedIndicatorV4.0.py
+[20260825 07:30:03] CONFIG  Save:   \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test
+[20260825 07:30:03] CONFIG  Log:    \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\logs\noi_v4_20260825_073003.log
+[20260825 07:30:03] RUN     Connecting data share...
+SHARE_OK \\cscso1fsappv01\data\HTOC
+[20260825 07:30:03] CHECK   Data share OK (\\cscso1fsappv01\data\HTOC)
+[20260825 07:30:03] RUN     Installing packages...
+Looking in links: \\cscso1fsappv01\data\HTOC\JA\wheelhouse
+Requirement already satisfied: pandas in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.0)
+Requirement already satisfied: numpy in c:\users\jaskew\appdata\roaming\python\python313\site-packages (2.3.1)
+Requirement already satisfied: scikit-learn in c:\users\jaskew\appdata\roaming\python\python313\site-packages (1.7.0)
+Requirement already satisfied: openpyxl in c:\users\jaskew\appdata\roaming\python\python313\site-packages (3.1.5)
+Requirement already satisfied: python-dateutil>=2.8.2 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2025.2)
+Requirement already satisfied: tzdata>=2022.7 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from pandas) (2025.2)
+Requirement already satisfied: scipy>=1.8.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (1.16.0)
+Requirement already satisfied: joblib>=1.2.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (1.5.1)
+Requirement already satisfied: threadpoolctl>=3.1.0 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from scikit-learn) (3.6.0)
+Requirement already satisfied: et-xmlfile in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from openpyxl) (2.0.0)
+Requirement already satisfied: six>=1.5 in c:\users\jaskew\appdata\roaming\python\python313\site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)
+[20260825 07:30:06] CHECK   Packages OK
+[20260825 07:30:06] RUN     Launching NextObservedIndicatorV4.0.py...
+ 
+---- script output ---- 
+panel: 831,780 rows | 25,775 (opdiv,indicator) | 2026-01-17 -> 2026-08-25
+feed health: issues over the last 30 days
+  DHA: outage=0 degraded=1 missing=0 | 20260823:unsettled; 20260824:unsettled; 20260825:unsettled
+  HHS: outage=1 degraded=0 missing=0 | 20260822:outage; 20260823:unsettled; 20260824:unsettled; 20260825:unsettled
+  NIH: outage=1 degraded=1 missing=0 | 20260730:outage; 20260823:unsettled; 20260824:unsettled; 20260825:unsettled
+training rows: 157,665 from 11 cutoffs (2026-04-27 -> 2026-07-06)
+feed-health mask withheld 43,665 of 788,325 training labels (5.54%) -- windows containing a feed outage
+trained production model (all cutoffs)
+scoring 17,374 indicators as-of 2026-08-25
+OpDivs: ['CDC', 'CMS', 'DHA', 'FDA', 'HHS', 'HRSA', 'IHS', 'NIH', 'OS', 'VA']
+        Indicator  Observed Today  ...  Probability: 45-Day       Confidence: 45-Day
+0   64.62.156.108               0  ...               91.61%    45-Day: Highly likely
+1      65.49.1.61               0  ...               28.86%  45-Day: Possibly active
+2     65.49.1.108               0  ...               85.47%    45-Day: Highly likely
+3     65.49.1.202               0  ...               14.36%   45-Day: Low confidence
+4      65.49.1.10               0  ...               23.83%  45-Day: Possibly active
+5   64.62.156.117               0  ...               66.26%  45-Day: Possibly active
+6    64.62.156.82               0  ...               90.86%    45-Day: Highly likely
+7     71.6.232.29               0  ...               89.86%    45-Day: Highly likely
+8  74.208.236.241               0  ...               87.46%    45-Day: Highly likely
+9   45.153.34.149               0  ...               61.61%  45-Day: Possibly active
+
+[10 rows x 15 columns]
+saved to \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test
+Wrote 10 OpDiv files under \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test
+[PERF 2026-08-25 07:31:27] INFO: starting post-forecast evaluation (stamp=20260825)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\CDC\CDC_output_20260825.csv (251 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\CMS\CMS_output_20260825.csv (1220 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\DHA\DHA_output_20260825.csv (749 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\FDA\FDA_output_20260825.csv (474 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\HHS\HHS_output_20260825.csv (1497 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\HRSA\HRSA_output_20260825.csv (4653 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\IHS\IHS_output_20260825.csv (1123 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\NIH\NIH_output_20260825.csv (3620 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\OS\OS_output_20260825.csv (1449 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\VA\VA_output_20260825.csv (2338 rows)
+Saved to \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260825.csv (17374 rows)
+[PERF 2026-08-25 07:31:28] INFO: consolidated daily report: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260825.csv
+[PERF 2026-08-25 07:31:28] INFO: starting performance evaluation
+[PERF 2026-08-25 07:31:28] INFO: scoring settled eval date 20260822 (today - 3d settle window)
+[PERF 2026-08-25 07:31:32] WARNING: H=1 eval=20260822: excluding HHS -- incomplete label window (20260822 outage)
+PERF SUMMARY  Horizon=1-Day  Eval=20260822  Forecast=20260821  UniqueIndicators=7784  Pairs=15740  Decided=13673  Coverage=86.87%
+  Accuracy=95.38%  Precision=97.89%  Recall(decided)=82.17%  Recall(all)=61.76%  F1=89.34%
+  HIGH band: TP=2649/2706  FP=57  FN=575
+  LOW  band: TN=10392/10967  FP=575  Neg Precision=94.76%
+  POSS band: n=2067  EndedHigh=1065  EndedLow=1002  EndedHighRate=51.52%  AvgProb=43.72%  (EndedHighAvg=48.96%, EndedLowAvg=38.15%)
+[PERF 2026-08-25 07:31:33] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260815.csv
+[PERF 2026-08-25 07:31:33] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260808.csv
+[PERF 2026-08-25 07:31:33] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260723.csv
+[PERF 2026-08-25 07:31:33] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260708.csv
+[PERF 2026-08-25 07:31:33] INFO: evaluation finished successfully
+PIPELINE_OK
+---- end output ---- 
+ 
+[20260825 07:31:34] SUCCESS Script completed successfully
+[20260825 07:31:34] OUTPUT  Fresh CSV files: 11

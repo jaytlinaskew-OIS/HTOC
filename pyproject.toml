@@ -45,3 +45,13 @@ dependencies = [
 
 [tool.uv]
 package = false
+
+[tool.pyright]
+extraPaths = [
+  "notebooks/observationEventForecasting/NextObservedIndicatorV4",
+]
+
+[tool.basedpyright]
+extraPaths = [
+  "notebooks/observationEventForecasting/NextObservedIndicatorV4",
+]

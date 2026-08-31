@@ -1,0 +1,40 @@
+[20260822 08:00:02] START   Next Observed Daily Reports V4
+[20260822 08:00:02] CONFIG  Python: C:\Program Files\Python313\python.exe
+[20260822 08:00:02] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\next_observed_daily_reports_v4.py
+[20260822 08:00:03] RUN     Connecting data share...
+SHARE_OK \\cscso1fsappv01\data\HTOC
+[20260822 08:00:03] CHECK   Data share OK (\\cscso1fsappv01\data\HTOC)
+[20260822 08:00:05] RUN     Launching next_observed_daily_reports_v4.py...
+ 
+---- script output ---- 
+DATA_PATH=\\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test
+SAVE_PATH=\\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports
+today=20260822
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\CDC\CDC_output_20260822.csv (228 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\CMS\CMS_output_20260822.csv (1213 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\DHA\DHA_output_20260822.csv (753 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\FDA\FDA_output_20260822.csv (473 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\HHS\HHS_output_20260822.csv (1485 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\HRSA\HRSA_output_20260822.csv (4643 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\IHS\IHS_output_20260822.csv (1115 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\NIH\NIH_output_20260822.csv (3609 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\OS\OS_output_20260822.csv (1442 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\VA\VA_output_20260822.csv (2306 rows)
+Saved to \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260822.csv (17267 rows)
+PIPELINE_OK
+[PERF 2026-08-22 08:00:07] INFO: starting performance evaluation
+PERF SUMMARY  Horizon=1-Day  Eval=20260822  Forecast=20260821  UniqueIndicators=7848  Pairs=17229  Decided=14996  Coverage=87.04%
+  Accuracy=94.25%  Precision=82.98%  Recall(decided)=88.03%  Recall(all)=70.75%  F1=85.43%
+  HIGH band: TP=2530/3049  FP=519  FN=344
+  LOW  band: TN=11603/11947  FP=344  Neg Precision=97.12%
+  POSS band: n=2233  EndedHigh=702  EndedLow=1531  EndedHighRate=31.44%  AvgProb=44.23%  (EndedHighAvg=51.44%, EndedLowAvg=40.93%)
+PERFORMANCE_ALERT (1-Day): Precision dropped to 82.98% (minimum standard: 85.00%, n=14996)
+PERFORMANCE_ALERT (1-Day): Precision 82.98% fell below 14-day rolling average 92.91% by more than 5pp (n=14996)
+[PERF 2026-08-22 08:00:08] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260815.csv
+[PERF 2026-08-22 08:00:08] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260808.csv
+[PERF 2026-08-22 08:00:08] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260723.csv
+[PERF 2026-08-22 08:00:08] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260708.csv
+[PERF 2026-08-22 08:00:08] INFO: wrote metric alerts to \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Performance\Alerts\alert_20260822.txt
+[PERF 2026-08-22 08:00:08] INFO: evaluation finished successfully
+---- end output ---- 
+[20260822 08:00:08] SUCCESS Report confirmed: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260822.csv

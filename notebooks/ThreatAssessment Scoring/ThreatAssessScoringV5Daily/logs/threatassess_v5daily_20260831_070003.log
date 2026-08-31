@@ -1,0 +1,42 @@
+[20260831 07:00:03] START   ThreatAssessScoringV5Daily
+[20260831 07:00:03] CONFIG  Python: py -3.13
+[20260831 07:00:03] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5Daily\ThreatAssessScoringV5Daily.py
+[20260831 07:00:03] CONFIG  Log:    \\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5Daily\logs\threatassess_v5daily_20260831_070003.log
+[20260831 07:00:03] RUN     Connecting data share...
+SHARE_OK \\cscso1fsappv01\data\HTOC
+[20260831 07:00:03] CHECK   Data share OK (\\cscso1fsappv01\data\HTOC)
+[20260831 07:00:03] CHECK   Python OK (C:\Program Files\Python313\python.exe)
+[20260831 07:00:03] CHECK   Script OK
+[20260831 07:00:03] RUN     Launching ThreatAssessScoringV5Daily.py...
+ 
+---- script output ---- 
+Loaded config — Base URL: https://hvs.threatconnect.com/api | Access ID: 09783848890162390382
+ThreatConnect initialized.
+Loaded 17,490 rows and 24 columns from observed indicators
+Records first seen today (2026-08-31): 15
+Distinct indicators from today's observed data: 15
+observed_src: 3 rows x 31 cols
+Loaded 4594 THREAT ACTOR rows, condensed to 1780 unique indicators
+Threat actor matches: 0 indicators
+Annotated incidents/events for 3 indicators; found 1 with matches.
+Found 365 of 365 OpDiv files to load
+Loaded 1,470,308 rows from 365 files
+Mass scanner — Tier 1: 129 indicators | Tier 2: 395 indicators
+Starting partner extraction pipeline...
+Found 6349 indicators with partners from observation data
+Processed tags for 3 indicators
+Processing complete — 3 indicators
+agg_df: 3 rows x 42 cols
+Enriching 3 indicators (VT; Shodan for IP types only)...
+Enrichment complete for 3 indicators.
+obs_count merged: 3 indicators
+recent_tags: 3 rows x 48 cols
+Scoring complete — 3 indicators scored
+Updated: 3 | Added: 0 | Total: 6444
+Saved 6444 indicators to \\cscso1fsappv01\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\Threat_Assessment_Scores.xlsx
+Scoring history updated — 123786 total records, 6444 unique indicators
+PIPELINE_OK
+---- end output ---- 
+ 
+[20260831 07:01:52] SUCCESS Script completed successfully
+[20260831 07:01:52] OUTPUT  Excel confirmed - 5813 KB (fresh)

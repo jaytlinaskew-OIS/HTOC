@@ -1,0 +1,40 @@
+[20260826 08:00:03] START   Next Observed Daily Reports V4
+[20260826 08:00:03] CONFIG  Python: C:\Program Files\Python313\python.exe
+[20260826 08:00:03] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\next_observed_daily_reports_v4.py
+[20260826 08:00:03] RUN     Connecting data share...
+SHARE_OK \\cscso1fsappv01\data\HTOC
+[20260826 08:00:03] CHECK   Data share OK (\\cscso1fsappv01\data\HTOC)
+[20260826 08:00:05] RUN     Launching next_observed_daily_reports_v4.py...
+ 
+---- script output ---- 
+DATA_PATH=\\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test
+SAVE_PATH=\\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports
+today=20260826
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\CDC\CDC_output_20260826.csv (261 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\CMS\CMS_output_20260826.csv (1225 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\DHA\DHA_output_20260826.csv (747 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\FDA\FDA_output_20260826.csv (475 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\HHS\HHS_output_20260826.csv (1506 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\HRSA\HRSA_output_20260826.csv (4673 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\IHS\IHS_output_20260826.csv (1126 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\NIH\NIH_output_20260826.csv (3634 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\OS\OS_output_20260826.csv (1404 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\VA\VA_output_20260826.csv (2283 rows)
+Saved to \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260826.csv (17334 rows)
+PIPELINE_OK
+[PERF 2026-08-26 08:00:08] INFO: starting performance evaluation
+[PERF 2026-08-26 08:00:08] INFO: scoring settled eval date 20260823 (today - 3d settle window)
+[PERF 2026-08-26 08:00:11] WARNING: H=1 eval=20260823: excluding HHS -- incomplete label window (20260823 outage)
+PERF SUMMARY  Horizon=1-Day  Eval=20260823  Forecast=20260822  UniqueIndicators=7796  Pairs=15782  Decided=13706  Coverage=86.85%
+  Accuracy=95.6%  Precision=97.22%  Recall(decided)=83.05%  Recall(all)=61.06%  F1=89.58%
+  HIGH band: TP=2592/2666  FP=74  FN=529
+  LOW  band: TN=10511/11040  FP=529  Neg Precision=95.21%
+  POSS band: n=2076  EndedHigh=1124  EndedLow=952  EndedHighRate=54.14%  AvgProb=39.63%  (EndedHighAvg=44.59%, EndedLowAvg=33.78%)
+[PERF 2026-08-26 08:00:12] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260816.csv
+[PERF 2026-08-26 08:00:12] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260809.csv
+[PERF 2026-08-26 08:00:12] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260724.csv
+[PERF 2026-08-26 08:00:12] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260709.csv
+[PERF 2026-08-26 08:00:12] WARNING: forecast coverage: 10/15 days present; missing 20260812, 20260813, 20260814, 20260815, 20260816
+[PERF 2026-08-26 08:00:12] INFO: evaluation finished successfully
+---- end output ---- 
+[20260826 08:00:13] SUCCESS Report confirmed: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260826.csv

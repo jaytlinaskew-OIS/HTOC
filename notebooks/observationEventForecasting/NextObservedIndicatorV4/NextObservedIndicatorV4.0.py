@@ -26,6 +26,18 @@ import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
 from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.calibration import CalibratedClassifierCV
+
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+if _script_dir not in sys.path:
+    sys.path.insert(0, _script_dir)
+from noi_v4_bands import PROBNAME, band  # noqa: E402
+from noi_v4_feed_health import FeedHealth  # noqa: E402
+from noi_v4_outage_impute import (  # noqa: E402
+    OutageImputer,
+    format_findings,
+    format_report,
+)
 
 warnings.filterwarnings("ignore")
 
@@ -40,18 +52,50 @@ DATE_FMT = "%Y%m%d"
 L = 100
 HORIZONS = [1, 7, 14, 30, 45]
 TRAIN_DAYS = 220
-CUTOFF_STEP = 7
+CUTOFF_STEP = 5  # must be coprime with 7 (see guard below)
+VAL_TAIL_FRAC = 0.25  # later cutoffs used to recalibrate after class reweighting
 
-BAND_HIGH_P = 0.80
-BAND_LOW_P = 0.20
-BAND_LABELS = {"H": "Highly likely", "W": "Possibly active", "L": "Low confidence"}
+# Catch-the-sightings: default High 0.80, per-OpDiv cuts only where Precision
+# still holds 90%. Policy lives in noi_v4_bands. 0.50 globally flooded FPs.
 
 INFER_DATE = None
 SAVE_OUTPUT = True
 
+# Historical replay. NOI_V4_AS_OF=YYYYMMDD reruns the pipeline as it would have
+# run that morning, to fill a day the scheduled job missed.
+#
+# The leakage control is that everything downstream keys off the panel's last
+# day: truncating the panel at the as-of date pulls DAY_MAX back with it, and
+# train_cutoffs stops at DAY_MAX - maxH, so the model is fit only on label
+# windows that had already closed by then. Nothing is trained on the future it
+# is about to be scored against.
+#
+# One honest caveat remains. The observation files are read as they exist now,
+# fully settled, whereas the real run that morning would have seen the last few
+# days still filling. Features at the cutoff are therefore slightly better than
+# they were in life, so a replayed day scores a little optimistically and is not
+# strictly comparable to a live one. That is why replays are recorded in
+# BACKFILL_MARKER and tagged in the performance sheets rather than passed off as
+# ordinary rows.
+AS_OF = os.environ.get("NOI_V4_AS_OF", "").strip()
+AS_OF_DATE = datetime.strptime(AS_OF, "%Y%m%d").date() if AS_OF else None
+if AS_OF_DATE:
+    INFER_DATE = AS_OF_DATE.strftime("%Y-%m-%d")
+    print(f"AS-OF REPLAY: rebuilding {AS_OF_DATE} using only data available then")
+
 # cnt(k) features are computed inside an L-day window; keep horizons inside that window.
 if max(HORIZONS) > L:
     print(f"FATAL: max(HORIZONS)={max(HORIZONS)} exceeds lookback L={L}; cnt(k) would undercount.")
+    sys.exit(2)
+
+# Cutoffs spaced a multiple of 7 apart all land on the same weekday, which makes the
+# `dow` feature a constant the trees can never split on -- and hands inference a value
+# it never saw in training. Any step coprime with 7 walks all seven weekdays.
+if CUTOFF_STEP % 7 == 0:
+    print(
+        f"FATAL: CUTOFF_STEP={CUTOFF_STEP} is a multiple of 7; every training cutoff "
+        f"would share one weekday and `dow` would carry no signal."
+    )
     sys.exit(2)
 
 EPOCH = np.datetime64("2020-01-01")
@@ -65,9 +109,13 @@ def _to_ts(i):
     return pd.Timestamp(EPOCH + np.timedelta64(int(i), "D"))
 
 
-def load_panel(days):
-    """Load the daily 'seen' panel (indicator, opdiv, date) over the last `days` days."""
-    today = datetime.today().date()
+def load_panel(days, end_date=None):
+    """Load the daily 'seen' panel (indicator, opdiv, date) over the last `days` days.
+
+    `end_date` truncates the panel for an as-of replay; it is the single lever
+    that keeps the rest of the pipeline from seeing past that day.
+    """
+    today = end_date or datetime.today().date()
     start = today - timedelta(days=days)
     frames, d = [], start
     while d <= today:
@@ -98,7 +146,7 @@ def load_panel(days):
     return p
 
 
-panel = load_panel(TRAIN_DAYS)
+panel = load_panel(TRAIN_DAYS, end_date=AS_OF_DATE)
 lookup = {}
 for (opd, ind), g in panel.groupby(["opdiv", "indicator"], sort=False):
     lookup[(opd, ind)] = np.sort(g["d"].to_numpy())
@@ -108,10 +156,53 @@ print(
     f"{_to_ts(DAY_MIN).date()} -> {_to_ts(DAY_MAX).date()}"
 )
 
+# Built from the panel already in memory, so no observation file is read twice.
+FEED_HEALTH = FeedHealth.from_panel(panel, today=AS_OF_DATE)
+_health = FEED_HEALTH.summarize(
+    sorted(panel["opdiv"].unique()), _to_ts(DAY_MAX - 30).date(), _to_ts(DAY_MAX).date()
+)
+_unhealthy = _health[(_health["outage"] > 0) | (_health["missing"] > 0) | (_health["degraded"] > 0)]
+if _unhealthy.empty:
+    print("feed health: all OpDivs nominal over the last 30 days")
+else:
+    print("feed health: issues over the last 30 days")
+    for _, r in _unhealthy.iterrows():
+        print(
+            f"  {r['OpDiv']}: outage={r['outage']} degraded={r['degraded']} "
+            f"missing={r['missing']} | {r['unusable_days']}"
+        )
+
+# A dark feed drags every one of its indicators toward "gone quiet", so an OpDiv
+# mid-outage emits a confident all-clear rather than an obvious gap. Refilling
+# its near-certain regulars keeps the forecast standing. LOOKUP_FEAT is for
+# features only -- labels stay on `lookup`, because a label built from an
+# assumption is the poisoning the health mask exists to stop.
+IMPUTER = OutageImputer(panel, FEED_HEALTH)
+LOOKUP_FEAT, _impute_report = IMPUTER.build(lookup)
+if _impute_report:
+    print("outage imputation:")
+    for _line in format_report(_impute_report):
+        print(_line)
+else:
+    print("outage imputation: no outages in the panel window")
+
+# Retrospective, and deliberately so: while a feed is dark there is nothing to
+# check it against. This fires on the first day back and catches the case where
+# a feed returns at full volume having silently dropped part of its content.
+_findings = IMPUTER.verify_recovery()
+if _findings:
+    print("WARNING: feed composition changed across an outage")
+    for _line in format_findings(_findings):
+        print(_line)
+
 FEATS = [
     "last_seen", "freq_1", "freq_7", "freq_14", "freq_30", "freq_45", "freq_100",
     "avg_gap", "burstiness", "active_frac", "dow",
     "overdue", "mom", "tenure",
+    # Skip-day ranking inside Possibly Active. Not a High cut -- 1-day High stays
+    # at the 90% precision floor. weekday_hit = how often this indicator appears
+    # on tomorrow's weekday; skip_gap_frac = share of gaps that are exactly 2 days.
+    "weekday_hit", "skip_gap_frac",
 ]
 
 
@@ -123,7 +214,7 @@ def featurize(dates, t):
     win = dates[lo:hi]
     tenure = int(t - prior[0]) if prior.size else L
     if win.size == 0:
-        return [L, 0, 0, 0, 0, 0, 0, L, 0.0, 0.0, t % 7, 1.0, 0.0, tenure]
+        return [L, 0, 0, 0, 0, 0, 0, L, 0.0, 0.0, t % 7, 1.0, 0.0, tenure, 0.0, 0.0]
 
     def cnt(k):
         return int(win.size - np.searchsorted(win, t - k + 1, side="left"))
@@ -133,15 +224,21 @@ def featurize(dates, t):
         ag = float(gaps.mean())
         sd = float(gaps.std())
         bu = (sd - ag) / (sd + ag) if (sd + ag) > 0 else 0.0
+        skip_gap_frac = float((gaps == 2).mean())
     else:
-        ag, bu = float(L), 0.0
+        ag, bu, skip_gap_frac = float(L), 0.0, 0.0
     last_seen = int(t - win[-1])
     overdue = last_seen / ag if ag > 0 else 0.0
     mom = cnt(7) / 7.0 - cnt(30) / 30.0
+    # Fraction of tenure-weeks with a sighting on weekday (t+1) -- tomorrow from
+    # the cutoff. Helps rank skip-day regulars inside Possibly Active; does not
+    # change the High band.
+    n_weeks = max(1, int(np.ceil((tenure + 1) / 7.0)))
+    weekday_hit = float(np.sum(np.mod(prior.astype(np.int64), 7) == ((int(t) + 1) % 7))) / n_weeks
     return [
         last_seen, 1 if win[-1] == t else 0,
         cnt(7), cnt(14), cnt(30), cnt(45), win.size, ag, bu, win.size / L, t % 7,
-        overdue, mom, tenure,
+        overdue, mom, tenure, weekday_hit, skip_gap_frac,
     ]
 
 
@@ -150,20 +247,54 @@ def seen_next(dates, t, H):
     return 1 if np.searchsorted(dates, t + H, side="right") > np.searchsorted(dates, t + 1, side="left") else 0
 
 
+def build_label_mask(cutoffs, opdivs):
+    """Which (opdiv, cutoff, horizon) label windows rest on trustworthy data.
+
+    seen_next() cannot tell "this indicator went quiet" from "the feed that
+    would have reported it was down", so a label drawn from a window with an
+    outage in it is not a negative -- it is a fabrication. Emitting those
+    teaches the model that a whole OpDiv stopped recurring. The check is per
+    OpDiv rather than per indicator, so it costs |opdivs| x |cutoffs| x
+    |horizons| lookups regardless of panel size.
+    """
+    usable: dict[tuple[str, int, int], bool] = {}
+    for opd in opdivs:
+        for t in cutoffs:
+            start = _to_ts(t).date()
+            for H in HORIZONS:
+                ok, _ = FEED_HEALTH.window_usable(opd, start, _to_ts(t + H).date())
+                usable[(opd, t, H)] = ok
+    return usable
+
+
 def build_rows(cutoffs, need_label=True):
-    """One row per (opdiv, indicator, cutoff) for indicators active within the lookback window."""
+    """One row per (opdiv, indicator, cutoff) for indicators active within the lookback window.
+
+    Two lookups, and the split is the point: features read LOOKUP_FEAT, which may
+    contain imputed outage days, while labels read `lookup`, which never does.
+    Keeping them separate structurally is what stops the pipeline from scoring
+    itself against its own assumptions.
+    """
+    label_mask = build_label_mask(cutoffs, sorted({o for o, _ in lookup})) if need_label else {}
     recs = []
     for t in cutoffs:
         for (opd, ind), dates in lookup.items():
-            hi = np.searchsorted(dates, t, side="right")
-            lo = np.searchsorted(dates, t - L + 1, side="left")
+            feat_dates = LOOKUP_FEAT.get((opd, ind), dates)
+            hi = np.searchsorted(feat_dates, t, side="right")
+            lo = np.searchsorted(feat_dates, t - L + 1, side="left")
             if hi - lo == 0:
                 continue
-            rec = dict(zip(FEATS, featurize(dates, t)))
+            rec = dict(zip(FEATS, featurize(feat_dates, t)))
             rec["opdiv"], rec["indicator"], rec["t"] = opd, ind, t
             if need_label:
                 for H in HORIZONS:
-                    rec[f"y_{H}"] = seen_next(dates, t, H)
+                    # NaN marks "no trustworthy ground truth"; stack() drops
+                    # these per horizon so they never reach the model.
+                    rec[f"y_{H}"] = (
+                        float(seen_next(dates, t, H))
+                        if label_mask.get((opd, t, H), True)
+                        else np.nan
+                    )
             recs.append(rec)
     return pd.DataFrame(recs)
 
@@ -187,32 +318,111 @@ print(
 )
 
 
-def stack(df, with_label=True):
-    """Stack once per horizon, appending horizon as a feature -> ONE model for all horizons."""
+def stack(df, with_label=True, with_weights=False):
+    """Stack once per horizon, appending horizon as a feature -> ONE model for all horizons.
+
+    Rows whose label was withheld by the feed-health mask carry NaN and are
+    dropped for that horizon only; the same row can still train the horizons
+    whose windows were clean.
+
+    `with_weights` balances positives and negatives inside each OpDiv, per
+    horizon slice. Global class_weight='balanced' is too weak: stacked labels
+    sit near one-in-three positive, while DHA at 1-day is one-in-twenty-five.
+    """
     base = df[FEATS].to_numpy(float)
-    Xs, ys = [], []
+    Xs, ys, ws = [], [], []
+    dropped = 0
     for H in HORIZONS:
-        Xs.append(np.hstack([base, np.full((len(df), 1), H, float)]))
-        if with_label:
-            ys.append(df[f"y_{H}"].to_numpy())
-    return np.vstack(Xs), (np.concatenate(ys) if with_label else None)
+        Xh = np.hstack([base, np.full((len(df), 1), H, float)])
+        if not with_label:
+            Xs.append(Xh)
+            continue
+        yh = df[f"y_{H}"].to_numpy(float)
+        keep = ~np.isnan(yh)
+        dropped += int((~keep).sum())
+        y = yh[keep].astype(int)
+        Xs.append(Xh[keep])
+        ys.append(y)
+        if with_weights:
+            ws.append(_balanced_group_weights(df["opdiv"].to_numpy()[keep], y))
+    if with_label and dropped:
+        total = len(df) * len(HORIZONS)
+        print(
+            f"feed-health mask withheld {dropped:,} of {total:,} training labels "
+            f"({dropped / total * 100:.2f}%) -- windows containing a feed outage"
+        )
+    X = np.vstack(Xs)
+    y = np.concatenate(ys) if with_label else None
+    if with_label and with_weights:
+        w = np.concatenate(ws)
+        if y is not None and y.size:
+            print(
+                f"OpDiv-balanced sample weights: mean w(y=1)={w[y == 1].mean():.2f}  "
+                f"mean w(y=0)={w[y == 0].mean():.2f}  "
+                f"(unweighted pos rate {y.mean() * 100:.1f}%)"
+            )
+        return X, y, w
+    return X, y
+
+
+def _balanced_group_weights(opdivs, y):
+    """n / (2 * n_class) inside each OpDiv so a 4% positive rate is not ignored."""
+    opdivs = np.asarray(opdivs)
+    y = np.asarray(y).astype(int)
+    w = np.ones(len(y), dtype=float)
+    for g in np.unique(opdivs):
+        m = opdivs == g
+        n = int(m.sum())
+        n_pos = int(y[m].sum())
+        n_neg = n - n_pos
+        if n_pos == 0 or n_neg == 0:
+            continue
+        w[m & (y == 1)] = n / (2.0 * n_pos)
+        w[m & (y == 0)] = n / (2.0 * n_neg)
+    return w
 
 
 mono = [0] * len(FEATS) + [1]
 
 
+# early_stopping is OFF deliberately. sklearn's default ('auto') turns it on above
+# 10k rows and holds out a RANDOM 10%, but stack() emits each (opdiv, indicator, t)
+# once per horizon and cutoffs are only CUTOFF_STEP days apart, so a row's own
+# near-duplicates end up on the training side of that split. The internal score is
+# then optimistic and the stopping point is meaningless. Capacity is bounded by
+# max_iter / max_depth / l2 instead, which also makes the tree count reproducible.
 def new_model():
     return HistGradientBoostingClassifier(
         max_depth=4, learning_rate=0.08, max_iter=400, l2_regularization=1.0,
-        monotonic_cst=mono, random_state=0,
+        monotonic_cst=mono, early_stopping=False, random_state=0,
     )
 
 
-# Scheduled runner: train production model only.
-# Notebook diagnostics (model_val / held-out band checks) are skipped here.
-Xtr, ytr = stack(train_df)
-model = new_model().fit(Xtr, ytr)
-print("trained production model (all cutoffs)")
+# Weighted training so rare-OpDiv positives are not ignored, then isotonic
+# calibration on a later time split so p = 0.80 still means 80%. Random CV
+# calibration is off-limits for the same reason early_stopping is: stacked
+# near-duplicate rows would leak. Weights go on the earlier cutoffs only;
+# the calibrator sees real unweighted frequencies.
+n_val = max(1, int(len(train_cutoffs) * VAL_TAIL_FRAC))
+val_cutoffs = set(train_cutoffs[-n_val:]) if len(train_cutoffs) > n_val else set()
+fit_df = train_df[~train_df["t"].isin(val_cutoffs)]
+val_df = train_df[train_df["t"].isin(val_cutoffs)]
+if fit_df.empty or val_df.empty:
+    print("WARN: val split empty; fitting weighted model on all cutoffs, no recalibration")
+    Xtr, ytr, wtr = stack(train_df, with_weights=True)
+    model = new_model().fit(Xtr, ytr, sample_weight=wtr)
+else:
+    Xf, yf, wf = stack(fit_df, with_weights=True)
+    base = new_model().fit(Xf, yf, sample_weight=wf)
+    Xv, yv = stack(val_df)
+    model = CalibratedClassifierCV(base, method="isotonic", cv="prefit")
+    model.fit(Xv, yv)
+    print(
+        f"trained OpDiv-balanced model on {len(fit_df):,} rows, "
+        f"isotonic-calibrated on {len(val_df):,} later rows "
+        f"(val pos rate {yv.mean() * 100:.1f}%, "
+        f"mean predicted p {model.predict_proba(Xv)[:, 1].mean() * 100:.1f}%)"
+    )
 
 infer_t = DAY_MAX if INFER_DATE is None else int(_to_int(np.datetime64(pd.Timestamp(INFER_DATE).date())))
 infer_df = build_rows([infer_t], need_label=False)
@@ -226,29 +436,43 @@ P = model.predict_proba(Xinf)[:, 1].reshape(len(HORIZONS), len(infer_df)).T
 P = np.maximum.accumulate(P, axis=1)
 
 
-def band(p, H):
-    if p >= BAND_HIGH_P:
-        return BAND_LABELS["H"]
-    if p <= BAND_LOW_P:
-        return BAND_LABELS["L"]
-    return BAND_LABELS["W"]
-
-
 out = infer_df[["opdiv", "indicator", "freq_1", "freq_7", "freq_30"]].copy()
 for j, H in enumerate(HORIZONS):
     out[f"prob_{H}"] = P[:, j]
-    out[f"band_{H}"] = [band(p, H) for p in P[:, j]]
+    out[f"band_{H}"] = [band(p, H, opd) for p, opd in zip(P[:, j], out["opdiv"])]
 
-PROBNAME = {
-    1: "Probability: 1-Day", 7: "Probability: 7-Day", 14: "Probability: 14-Day",
-    30: "Probability: 30-Day", 45: "Probability: 45-Day",
-}
 
+def _really_seen(opd, ind, t):
+    """Was this actually observed on `t`, ignoring anything imputed.
+
+    freq_1 is a model input and may rest on a filled day; "Observed Today" is a
+    statement of fact on a report someone reads, so it comes off the raw panel.
+    """
+    dates = lookup.get((opd, ind))
+    if dates is None or not dates.size:
+        return False
+    i = np.searchsorted(dates, t, side="left")
+    return bool(i < dates.size and dates[i] == t)
+
+
+_imputed_pairs = IMPUTER.imputed_indicators(lookup, upto_di=infer_t)
+out["observed_today"] = [
+    _really_seen(o, i, infer_t) for o, i in zip(out["opdiv"], out["indicator"])
+]
+out["basis"] = [
+    "est" if (o, i) in _imputed_pairs else ""
+    for o, i in zip(out["opdiv"], out["indicator"])
+]
+if _imputed_pairs:
+    print(
+        f"forecast rests on imputed days for {int((out['basis'] == 'est').sum()):,} "
+        f"indicators (marked 'est' in the Basis column)"
+    )
 
 def to_production(g):
     d = pd.DataFrame({
         "Indicator": g["indicator"].values,
-        "Observed Today": (g["freq_1"].values > 0).astype(int),
+        "Observed Today": g["observed_today"].values.astype(int),
         "Frequency (1d)": g["freq_1"].values,
         "Frequency (7d)": g["freq_7"].values,
         "Frequency (30d)": g["freq_30"].values,
@@ -256,10 +480,11 @@ def to_production(g):
     for H in HORIZONS:
         d[PROBNAME[H]] = (g[f"prob_{H}"].values * 100).round(2).astype(str) + "%"
         d[f"Confidence: {H}-Day"] = [f"{H}-Day: {b}" for b in g[f"band_{H}"].values]
+    d["Basis"] = g["basis"].values
     cols = ["Indicator", "Observed Today", "Frequency (1d)", "Frequency (7d)", "Frequency (30d)"]
     for H in [1, 7, 14, 30]:
         cols += [f"Probability: {H}-Day", f"Confidence: {H}-Day"]
-    cols += ["Probability: 45-Day", "Confidence: 45-Day"]
+    cols += ["Probability: 45-Day", "Confidence: 45-Day", "Basis"]
     return d[cols]
 
 
@@ -300,13 +525,32 @@ if missing:
 
 print(f"Wrote {len(opdiv_outputs)} OpDiv files under {SAVE_DIR}")
 
+# A replayed day is indistinguishable from a live one once written, so record it
+# here and let the eval tag the rows it produces. Without this the sheets would
+# imply the scheduled job ran on days it did not.
+BACKFILL_MARKER = os.path.join(SAVE_DIR, "backfilled_forecasts.txt")
+if AS_OF_DATE:
+    try:
+        seen = set()
+        if os.path.exists(BACKFILL_MARKER):
+            with open(BACKFILL_MARKER, encoding="utf-8") as fh:
+                seen = {ln.strip() for ln in fh if ln.strip()}
+        if stamp not in seen:
+            with open(BACKFILL_MARKER, "a", encoding="utf-8") as fh:
+                fh.write(f"{stamp}\n")
+        print(f"AS-OF REPLAY: recorded {stamp} in {BACKFILL_MARKER}")
+    except Exception as e:
+        print(f"WARN: could not record backfill marker: {e}")
+
 # Performance evaluation (non-fatal — forecast outputs already saved)
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 if _script_dir not in sys.path:
     sys.path.insert(0, _script_dir)
 from noi_v4_performance_eval import run_eval_after_forecast  # noqa: E402
 
-if not run_eval_after_forecast(stamp, SAVE_DIR, HTOC_SHARE_ROOT):
+if not run_eval_after_forecast(
+    stamp, SAVE_DIR, HTOC_SHARE_ROOT, consolidate_only=bool(AS_OF_DATE)
+):
     print("PERF: evaluation completed with errors (see Performance/Logs on share)")
 
 print("PIPELINE_OK")

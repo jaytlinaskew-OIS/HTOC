@@ -1,0 +1,351 @@
+[20260823 06:50:03] START   ThreatAssessScoringV5
+[20260823 06:50:03] CONFIG  Python: py -3.13
+[20260823 06:50:03] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5\ThreatAssessScoringV5.py
+[20260823 06:50:03] CONFIG  Log:    \\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5\logs\threatassess_v5_20260823_065002.log
+[20260823 06:50:03] RUN     Connecting data share...
+SHARE_OK \\cscso1fsappv01\data\HTOC
+[20260823 06:50:03] CHECK   Data share OK (\\cscso1fsappv01\data\HTOC)
+[20260823 06:50:03] CHECK   Python OK (C:\Program Files\Python313\python.exe)
+[20260823 06:50:03] CHECK   Script OK
+[20260823 06:50:03] RUN     Launching ThreatAssessScoringV5.py...
+ 
+---- script output ---- 
+Loaded config from: \\cscso1fsappv01\home\jaskew\HTOC\scripts\Data Movement\ThrearConnect-api-pull\utils\config.json
+Base URL: https://hvs.threatconnect.com/api
+Access ID: 09783848890162390382
+Default Org: HTOC Org
+ThreatConnect initialized.
+RequestObject successfully created.
+                    id  ...                      sources
+3     6755399459078667  ...  CISA Federal Feed, HTOC Org
+4     6755399459078597  ...                     HTOC Org
+5     6755399458556988  ...  CISA Federal Feed, HTOC Org
+6     6755399447111158  ...  CISA Federal Feed, HTOC Org
+9     5629499565000892  ...                     HTOC Org
+...                ...  ...                          ...
+4315           4303591  ...                     HTOC Org
+4316           4476331  ...                     HTOC Org
+4317           4503719  ...                     HTOC Org
+4318           4598575  ...                     HTOC Org
+4319           4442727  ...                     HTOC Org
+
+[2152 rows x 38 columns]
+Loaded 4591 THREAT ACTOR rows from \\cscso1fsappv01\data\HTOC\Data_Analytics\Data\Observed_Tags\htoc_observed_indicator_tags.csv
+Condensed to 1780 unique indicators
+                                   indicator     type  ... MALWARE CLASS CVE_NBR
+0                            1-you.njalla.no     Host  ...          None    None
+1                                1.20.169.90  Address  ...          None    None
+2                                 1.4.195.14  Address  ...          None    None
+3                               1.54.101.176  Address  ...          None    None
+4                                      1.zip     Host  ...          None    None
+...                                      ...      ...  ...           ...     ...
+1775               www.thetruthaboutguns.com     Host  ...          None    None
+1776                          www.totem.tech     Host  ...          None    None
+1777  www.ultrasound-guided-injections.co.uk     Host  ...          None    None
+1778                             zerocap.com     Host  ...          None    None
+1779                             zerogov.com     Host  ...          None    None
+
+[1780 rows x 9 columns]
+Added threat actor context columns to observed_src
+observed_src columns after merge: ['id', 'dateAdded', 'ownerId', 'ownerName', 'webLink', 'type', 'lastModified', 'threatAssessRating', 'threatAssessConfidence', 'threatAssessScore', 'threatAssessScoreObserved', 'threatAssessScoreFalsePositive', 'calScore', 'source', 'description', 'summary', 'observations', 'lastObserved', 'falsePositives', 'falsePositiveReportedByUser', 'privateFlag', 'active', 'activeLocked', 'ip', 'legacyLink', 'confidence', 'tags.data', 'rating', 'associatedGroups.data', 'hostName', 'dnsActive', 'whoisActive', 'url', 'text', 'address', 'lastFalsePositive', 'indicator', 'sources', 'threat_actor', 'threat_actor_orig_tag', 'threat_actor_category', 'threat_nation_state', 'threat_security_org', 'threat_malware_class', 'threat_cve_nbr']
+                                  indicator  ... threat_cve_nbr
+0                           193.163.125.119  ...            NaN
+1                             64.62.156.197  ...            NaN
+2                           193.163.125.132  ...            NaN
+3                           193.163.125.103  ...            NaN
+4                                65.49.1.93  ...            NaN
+...                                     ...  ...            ...
+2147                          aka.ms/o0ukef  ...            NaN
+2148      selligenttier.naylorcampaigns.com  ...            NaN
+2149  aka.ms/learnaboutsenderidentification  ...            NaN
+2150                         172.67.156.141  ...           None
+2151                                 google  ...            NaN
+
+[2152 rows x 6 columns]
+Annotated incidents/events for 2152 indicators; found 317 with matches.
+                              indicator  ...                         incidents/events
+9                       216.180.246.195  ...  Incident:INC9604450;Incident:INC9604362
+18                       87.236.176.163  ...                      Incident:INC9464932
+19                           45.33.14.5  ...                      Incident:INC9366814
+20                      172.236.228.222  ...                      Incident:INC9366814
+36                        123.58.207.81  ...                      Incident:INC9185304
+...                                 ...  ...                                      ...
+2144                       umd-cssa.org  ...                             Event:546895
+2145            careersinpsychology.org  ...                             Event:546895
+2147                      aka.ms/o0ukef  ...                          Incident:148157
+2148  selligenttier.naylorcampaigns.com  ...                          Incident:287536
+2150                     172.67.156.141  ...                          Incident:335586
+
+[317 rows x 3 columns]
+
+DEBUG: Sample indicator_to_tags mapping (first 5):
+193.163.125.119: ['SOAR Indicator PB', 'DHA Splunk API', 'OS Splunk API', 'FDA Splunk API', 'CMS Splunk API', 'VA CSOC CTS Splunk', 'HRSA Splunk API', 'NIH Splunk API', 'IHS Splunk API', 'HHS Splunk API', 'Observed', 'malicious']
+64.62.156.197: ['SOAR Indicator PB', 'DHA Splunk API', 'OS Splunk API', 'FDA Splunk API', 'CMS Splunk API', 'VA CSOC CTS Splunk', 'HRSA Splunk API', 'NIH Splunk API', 'IHS Splunk API', 'HHS Splunk API', 'Observed', 'CDC Splunk API', 'malicious']
+193.163.125.132: ['SOAR Indicator PB', 'DHA Splunk API', 'OS Splunk API', 'FDA Splunk API', 'CMS Splunk API', 'hrsa_wl', 'VA CSOC CTS Splunk', 'HRSA Splunk API', 'NIH Splunk API', 'IHS Splunk API', 'HHS Splunk API', 'Observed', 'CDC Splunk API', 'malicious']
+193.163.125.103: ['SOAR Indicator PB', 'DHA Splunk API', 'OS Splunk API', 'VA OIS CSOC CTS Splunk', 'FDA Splunk API', 'CMS Splunk API', 'VA CSOC CTS Splunk', 'HRSA Splunk API', 'NIH Splunk API', 'IHS Splunk API', 'HHS Splunk API', 'Observed', 'CDC Splunk API', 'malicious']
+65.49.1.93: ['SOAR Indicator PB', 'VA OIT CSOC CTS Splunk', 'DHA Splunk API', 'OS Splunk API', 'FDA Splunk API', 'suspicious', 'CMS Splunk API', 'VA CSOC CTS Splunk', 'HRSA Splunk API', 'NIH Splunk API', 'IHS Splunk API', 'HHS Splunk API', 'Observed', 'CDC Splunk API']
+
+DEBUG: Sample observed_src['tag_list'] (first 5 non-empty):
+         indicator                                           tag_list
+0  193.163.125.119  [SOAR Indicator PB, DHA Splunk API, OS Splunk ...
+1    64.62.156.197  [SOAR Indicator PB, DHA Splunk API, OS Splunk ...
+2  193.163.125.132  [SOAR Indicator PB, DHA Splunk API, OS Splunk ...
+3  193.163.125.103  [SOAR Indicator PB, DHA Splunk API, OS Splunk ...
+4       65.49.1.93  [SOAR Indicator PB, VA OIT CSOC CTS Splunk, DH...
+
+DEBUG: Number of indicators with PB tags: 1039
+
+DEBUG: Sample indicators with PB tags:
+         indicator  ...        pb_lower_tags
+0  193.163.125.119  ...  [SOAR Indicator PB]
+1    64.62.156.197  ...  [SOAR Indicator PB]
+2  193.163.125.132  ...  [SOAR Indicator PB]
+3  193.163.125.103  ...  [SOAR Indicator PB]
+4       65.49.1.93  ...  [SOAR Indicator PB]
+
+[5 rows x 3 columns]
+
+DEBUG: Sample pb_lower_reason (first 5 non-null):
+         indicator           pb_lower_reason
+0  193.163.125.119  pb_tag:SOAR Indicator PB
+1    64.62.156.197  pb_tag:SOAR Indicator PB
+2  193.163.125.132  pb_tag:SOAR Indicator PB
+3  193.163.125.103  pb_tag:SOAR Indicator PB
+4       65.49.1.93  pb_tag:SOAR Indicator PB
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5\ThreatAssessScoringV5.py:508: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Files to be loaded: ['\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260823.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260822.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260821.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260820.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260819.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260818.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260817.csv']
+Loaded data from 7 files.
+Mass scanner Tier 1 (moderate penalty): 154 indicators (10,000–100,000 obs, 5+ OpDivs)
+Mass scanner Tier 2 (heavy penalty):  398 indicators (>= 100,000 obs, 5+ OpDivs)
+           indicator  total_obs_7d  unique_opdivs_7d  unique_days_7d
+2710  78.128.114.166      13975515                 6               7
+2013   45.148.10.230      10055870                 9               7
+1942    43.228.157.9       7717489                 5               7
+2004  45.142.193.164       6007191                 8               7
+803    160.79.104.10       3842743                 8               7
+...              ...           ...               ...             ...
+1853    31.14.254.94        103711                 7               7
+1270  193.176.31.148        103045                 5               6
+1763   31.14.254.126        101971                 7               7
+1832    31.14.254.75        101856                 7               7
+1834    31.14.254.77        100863                 7               7
+
+[398 rows x 4 columns]
+Starting enhanced partner extraction pipeline...
+Identifying ALL indicators with partners from observed_data_df...
+Found 3139 indicators with partners from observation data
+Extracting partners from ThreatConnect tags...
+Processed tags for 2097 indicators
+Performing core aggregation...
+Combining partners from all sources...
+Cleaning up list columns...
+Processing complete! Final dataset has 2148 indicators
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5\ThreatAssessScoringV5.py:884: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  agg_df['mass_scanner_tier1'] = agg_df['mass_scanner_tier1'].fillna(False).astype(bool)
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5\ThreatAssessScoringV5.py:885: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  agg_df['mass_scanner_tier2'] = agg_df['mass_scanner_tier2'].fillna(False).astype(bool)
+Mass scanner flags merged — Tier 1: 151 | Tier 2: 351
+                    indicator  ...  mass_scanner_tier2
+0             1-you.njalla.no  ...               False
+1                 1.32.57.245  ...               False
+2                 102.0.22.10  ...               False
+3               102.217.23.35  ...               False
+4              102.222.90.243  ...               False
+...                       ...  ...                 ...
+2143          wvmetronews.com  ...               False
+2144         www.deepseek.com  ...               False
+2145         www.shorturl.at/  ...               False
+2146  www.tampabayhearing.com  ...               False
+2147              wyofile.com  ...               False
+
+[2148 rows x 45 columns]
+Enriching 2039 indicators (VT; Shodan for IP types only)...
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL http://117.72.159.215:8080/jquery-3.7.2.min.js cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL https://security.netapp.com/advisory/NTAP-20240419-0005 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host ridgewoodcarecenter.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host gootloader.vipviet.net cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File 171CB92D872F3C9839FB9E1B036765F5 : 9E0224A547E49A6E139EB302D4CBEF389FD58FB9 : 8729EBA32B0F6B351F7EC890B285B49404F2EB9E3754023C051B395336B32768 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File 7C2A6AF2C4D039A813FE9DD9D05E20C8 : 2ED6525BCC6F129FF609D609D83E9C1E916AF33C : 040681D5B9C844CA0E0401AF5A81618352135F9C9C3515A3A06B22EA5FECF03F cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL http://psstechnical.com/xmlrpc.php cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL http://psstechnical.com/xmlrpc.php cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File EA8281646E2A93D0F10FB9E132DEC588 : 2EAE1D17C7164402E341DDB51EAEB52D5A6F44B2 : 34E80ED6D3A779D765B2542876B248839261CE2E673DE3159365990B5288A135 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host xgenize.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File 7EC3F6F4C23EA824C824EF8076322416 : DE5F53B41DF061561922C1377A774BDD9BC3EBAA : 697F2DC81FF46BE8C20D961F3BCAC9B2C6CF5D0525AE959E3244EF2D1B342599 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File CE65EF46C3F2E22E90AE9B93CF7AC75D : F134863978D06FE25391581CF4DA6F5C806462E5 : CEDDF52507062D5124A1BAE6DEDB77229C11A08ACAC0E7635D0ECEC3D367250F cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL tcp://12.tcp.cpolar.top:12019/ cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The EmailAddress vaxhanta@gmail.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL http://207.56.226.75/update cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host adarty-34251.portmap.host cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File 02739A7E682CBA9C69CCBB3699441AE4 : 3CE4BEEE48647EA1EA29B60A20D012BDAA351776 : 1740B4B08EDBD9C83694605562E5F59F744CAD4B7B75E47F9B1BA4293B3ACB01 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File C19DED65E822BB43AD0381C58ABF33B7C8890F7BCC7125058A0C849C7E1A6054 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host preview.moorebrotherslandscaping.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL tcp://bradarwhat-34159.portmap.host:1194/ cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host xgenize.com cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The Host l1l-55862.portmap.host cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The URL tcp://revil.memephimsexhay.com:2087 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Status Code: 400
+Failed API Response: b'{"errCode":"0x1001","message":"The File 97A8FCBBB01601AD7B6D754F6FB1C077 : 84F90E6253DB3897101D0902B35569B6796F9326 : C686E9D277411BEE3F43666FE898CDDB7CDF55971B576EB1C30B45F820CD67F3 cannot be enriched with Shodan because the indicator type isn\'t supported.","status":"Error"}'
+Enrichment complete for 2148 indicators.
+24 indicators failed enrichment (showing up to 10):
+        indicator     type                                              error
+0  102.91.102.239  Address  b'{"errCode":"0x1001","message":"The URL http:...
+1   112.46.240.47  Address  b'{"errCode":"0x1001","message":"The URL https...
+2  138.199.15.150  Address  b'{"errCode":"0x1001","message":"The Host ridg...
+3   141.136.63.91  Address  b'{"errCode":"0x1001","message":"The Host goot...
+4   149.22.91.137  Address  b'{"errCode":"0x1001","message":"The File 171C...
+5   150.251.225.4  Address  b'{"errCode":"0x1001","message":"The File 7C2A...
+6  158.173.67.100  Address  b'{"errCode":"0x1001","message":"The URL http:...
+7    158.173.67.8  Address  b'{"errCode":"0x1001","message":"The URL http:...
+8   161.35.40.111  Address  b'{"errCode":"0x1001","message":"The File EA82...
+9    194.5.82.125  Address  b'{"errCode":"0x1001","message":"The Host xgen...
+                    indicator  ... enrich_vtMaliciousCount
+0             1-you.njalla.no  ...                     3.0
+1                 1.32.57.245  ...                     5.0
+2                 102.0.22.10  ...                     1.0
+3               102.217.23.35  ...                     0.0
+4              102.222.90.243  ...                     0.0
+...                       ...  ...                     ...
+2143          wvmetronews.com  ...                     NaN
+2144         www.deepseek.com  ...                     0.0
+2145         www.shorturl.at/  ...                     NaN
+2146  www.tampabayhearing.com  ...                    24.0
+2147              wyofile.com  ...                     NaN
+
+[2148 rows x 5 columns]
+Column 'enrich_domains' does not exist in the provided DataFrame. Skipping domain association count.
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5\ThreatAssessScoringV5.py:508: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  today = datetime.utcnow()
+Files to be loaded: ['\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260823.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260822.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260821.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260820.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260819.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260818.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260817.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260816.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260815.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260814.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260813.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260812.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260811.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260810.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260809.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260808.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260807.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260806.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260805.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260804.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260803.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260802.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260801.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260731.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260730.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260729.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260728.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260727.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260726.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260725.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260724.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260723.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260722.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260721.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260720.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260719.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260718.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260717.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260716.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260715.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260714.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260713.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260712.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260711.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260710.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260709.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260708.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260707.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260706.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260705.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260704.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260703.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260702.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260701.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260630.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260629.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260628.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260627.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260626.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260625.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260624.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260623.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260622.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260621.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260620.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260619.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260618.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260617.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260616.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260615.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260614.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260613.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260612.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260611.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260610.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260609.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260608.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260607.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260606.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260605.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260604.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260603.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260602.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260601.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260531.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260530.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260529.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260528.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260527.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260526.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260525.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260524.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260523.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260522.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260521.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260520.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260519.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260518.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260517.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260516.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260515.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260514.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260513.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260512.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260511.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260510.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260509.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260508.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260507.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260506.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260505.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260504.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260503.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260502.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260501.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260430.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260429.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260428.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260427.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260426.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260425.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260424.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260423.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260422.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260421.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260420.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260419.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260418.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260417.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260416.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260415.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260414.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260413.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260412.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260411.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260410.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260409.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260408.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260407.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260406.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260405.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260404.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260403.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260402.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260401.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260331.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260330.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260329.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260328.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260327.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260326.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260325.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260324.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260323.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260322.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260321.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260320.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260319.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260318.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260317.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260316.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260315.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260314.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260313.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260312.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260311.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260310.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260309.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260308.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260307.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260306.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260305.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260304.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260303.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260302.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260301.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260228.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260227.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260226.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260225.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260224.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260223.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260222.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260221.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260220.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260219.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260218.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260217.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260216.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260215.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260214.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260213.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260212.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260211.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260210.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260209.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260208.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260207.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260206.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260205.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260204.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260203.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260202.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260201.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260131.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260130.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260129.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260128.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260127.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260126.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260125.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260124.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260123.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260122.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260121.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260120.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260119.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260118.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260117.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260116.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260115.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260114.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260113.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260112.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260111.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260110.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260109.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260108.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260107.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260106.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260105.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260104.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260103.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260102.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20260101.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251231.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251230.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251229.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251228.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251227.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251226.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251225.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251224.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251223.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251222.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251221.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251220.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251219.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251218.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251217.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251216.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251215.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251214.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251213.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251212.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251211.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251210.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251209.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251208.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251207.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251206.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251205.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251204.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251203.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251202.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251201.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251130.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251129.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251128.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251127.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251126.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251125.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251124.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251123.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251122.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251121.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251120.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251119.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251118.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251117.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251116.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251115.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251114.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251113.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251112.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251111.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251110.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251109.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251108.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251107.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251106.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251105.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251104.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251103.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251102.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251101.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251031.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251030.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251029.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251028.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251027.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251026.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251025.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251024.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251023.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251022.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251021.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251020.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251019.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251018.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251017.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251016.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251015.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251014.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251013.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251012.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251011.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251010.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251009.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251008.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251007.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251006.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251005.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251004.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251003.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251002.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20251001.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250930.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250929.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250928.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250927.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250926.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250925.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250924.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250923.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250922.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250921.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250920.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250919.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250918.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250917.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250916.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250915.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250914.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250913.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250912.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250911.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250910.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250909.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250908.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250907.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250906.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250905.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250904.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250903.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250902.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250901.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250831.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250830.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250829.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250828.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250827.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250826.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250825.csv', '\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\OpDiv_Observations\\htoc_opdiv_obs_d20250824.csv']
+Loaded data from 365 files.
+                     indicator  obs_days_count
+1              1-you.njalla.no              36
+14                 1.32.57.245              10
+47                 102.0.22.10              23
+73               102.217.23.35              11
+78              102.222.90.243              32
+...                        ...             ...
+12418          wvmetronews.com             198
+12425         www.deepseek.com             318
+12442         www.shorturl.at/             124
+12444  www.tampabayhearing.com              17
+12447              wyofile.com              41
+
+[2147 rows x 2 columns]
+\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5\ThreatAssessScoringV5.py:1785: FutureWarning: Setting an item of incompatible dtype is deprecated and will raise an error in a future version of pandas. Value '[576.89795918 562.57142857 592.69387755 567.10204082 600.53061224
+ 574.57142857 569.42857143 562.69387755 568.44897959 575.67346939
+ 560.         620.         577.51020408 560.         620.
+ 620.         615.34693878 601.75510204 561.59183673 561.59183673
+ 561.59183673 561.59183673 561.59183673 585.71428571 577.02040816
+ 577.87755102 576.89795918 569.55102041 569.55102041 569.55102041
+ 569.55102041 578.12244898 576.53061224 576.53061224 578.
+ 575.79591837 576.89795918 577.63265306 577.75510204 602.
+ 577.26530612 586.57142857 620.         568.57142857 575.79591837
+ 569.67346939 576.53061224 584.         586.08163265 578.48979592
+ 583.87755102 577.02040816 575.79591837 620.         620.
+ 561.95918367 577.63265306 567.59183673 574.81632653 567.59183673
+ 584.36734694 568.93877551 576.16326531]' has dtype incompatible with int64, please explicitly cast to a compatible dtype first.
+  df_scored.loc[below_floor_mask, 'PRISM_Score'] = (
+                    Indicator Indicator Type  ... Severity (Final) AI_Adjustment
+0             1-you.njalla.no           Host  ...             high             0
+1                 1.32.57.245        Address  ...           medium             0
+2                 102.0.22.10        Address  ...              low             0
+3               102.217.23.35        Address  ...              low             0
+4              102.222.90.243        Address  ...              low             0
+...                       ...            ...  ...              ...           ...
+2143          wvmetronews.com   Stripped URL  ...              low             0
+2144         www.deepseek.com           Host  ...              low             0
+2145         www.shorturl.at/   Stripped URL  ...              low             0
+2146  www.tampabayhearing.com           Host  ...             high             0
+2147              wyofile.com   Stripped URL  ...              low             0
+
+[2148 rows x 29 columns]
+Average relative importance of rule components (across all indicators):
+malicious_raw_score       0.533025
+sources_raw_score         0.095946
+partner_raw_score         0.084041
+tor_activity_score        0.080867
+continuity_raw_score      0.064696
+incidents_events_score    0.038311
+cal_raw_score             0.037562
+tc_threat_raw_score       0.023858
+threat_actor_score        0.016164
+tc_raw_confidence         0.013824
+first_obs_raw_score       0.009789
+tc_raw_rating             0.001918
+dtype: float64
+
+Top rule drivers for index 0 (absolute contribution):
+threat_actor_score        10.000000
+continuity_raw_score       1.800000
+partner_raw_score          1.455609
+cal_raw_score              0.935000
+tc_raw_confidence          0.000000
+tc_raw_rating              0.000000
+malicious_raw_score        0.000000
+tor_activity_score         0.000000
+sources_raw_score          0.000000
+incidents_events_score     0.000000
+tc_threat_raw_score        0.000000
+first_obs_raw_score        0.000000
+Name: 0, dtype: float64
+Existing indicators in new data: 2123
+Added (new) indicators: 25
+Updated existing indicators: 2123
+Total indicators in sheet: 6394
+Preserving existing Complete History with 106384 records
+Saved 6394 total indicators with PRISM scoring results to \\cscso1fsappv01\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\Threat_Assessment_Scores.xlsx
+[OK] Scoring history updated in: \\cscso1fsappv01\data\HTOC\Data_Analytics\Data\Threat Assessment Scores\Threat_Assessment_Scores.xlsx
+[OK] Excel file now contains:
+  - PRISM Scores (current scores with all details and severity formatting)
+  - Score Comparison (PRISM vs ThreatConnect)
+  - Complete History (time-series of all historical scores)
+[OK] Total indicators in history: 6394
+[OK] Total scoring records: 108532
+
+======================================================================
+SCORING HISTORY SUMMARY
+======================================================================
+Indicators with multiple scoring records: 6034
+
+Example - Scoring history for 1-you.njalla.no:
+               Scoring Date  ...                                        Explanation
+106384  2026-08-23 10:53:09  ...  [2026-08-23] Severity: high. VT score: 3. Cont...
+5       2026-08-22 10:53:09  ...  [2026-08-22] Severity: high. VT score: 3. Cont...
+6       2026-08-21 10:53:41  ...  [2026-08-21] Severity: high. VT score: 3. Cont...
+7       2026-08-20 10:53:30  ...  [2026-08-20] Severity: high. VT score: 3. Cont...
+8       2026-08-19 10:53:14  ...  [2026-08-19] Severity: high. VT score: 3. Cont...
+
+[5 rows x 4 columns]
+
+[OK] History functions available:
+  - get_indicator_score_history(indicator)  # Get full history for one indicator
+  - get_score_changes_since(days_ago=7)      # Find indicators with score changes
+PIPELINE_OK
+---- end output ---- 
+ 
+[20260823 06:53:44] SUCCESS Script completed successfully
+[20260823 06:53:44] OUTPUT  Excel confirmed - 5162 KB (fresh)

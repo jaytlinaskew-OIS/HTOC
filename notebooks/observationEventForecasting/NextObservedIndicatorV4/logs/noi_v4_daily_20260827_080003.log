@@ -1,0 +1,99 @@
+[20260827 08:00:03] START   Next Observed Daily Reports V4
+[20260827 08:00:03] CONFIG  Python: C:\Program Files\Python313\python.exe
+[20260827 08:00:03] CONFIG  Script: \\cscso1fsappv01\home\jaskew\HTOC\notebooks\observationEventForecasting\NextObservedIndicatorV4\next_observed_daily_reports_v4.py
+[20260827 08:00:03] RUN     Connecting data share...
+SHARE_OK \\cscso1fsappv01\data\HTOC
+[20260827 08:00:03] CHECK   Data share OK (\\cscso1fsappv01\data\HTOC)
+[20260827 08:00:05] RUN     Launching next_observed_daily_reports_v4.py...
+ 
+---- script output ---- 
+DATA_PATH=\\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test
+SAVE_PATH=\\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports
+today=20260827
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\CDC\CDC_output_20260827.csv (270 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\CMS\CMS_output_20260827.csv (1229 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\DHA\DHA_output_20260827.csv (749 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\FDA\FDA_output_20260827.csv (476 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\HHS\HHS_output_20260827.csv (1506 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\HRSA\HRSA_output_20260827.csv (4652 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\IHS\IHS_output_20260827.csv (1129 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\NIH\NIH_output_20260827.csv (3636 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\OS\OS_output_20260827.csv (1407 rows)
+loaded \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\VA\VA_output_20260827.csv (2283 rows)
+Saved to \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260827.csv (17337 rows)
+PIPELINE_OK
+[PERF 2026-08-27 08:00:08] INFO: starting performance evaluation
+[PERF 2026-08-27 08:00:08] INFO: scoring 20260824 (settled) plus 2 provisional date(s) up to 20260826
+PERF SUMMARY  Horizon=1-Day  Eval=20260824  Forecast=20260823  UniqueIndicators=7878  Pairs=17292  Decided=15757  Coverage=91.12%
+  Accuracy=93.15%  Precision=96.31%  Recall(decided)=72.07%  Recall(all)=58.81%  F1=82.45%
+  HIGH band: TP=2534/2631  FP=97  FN=982
+  LOW  band: TN=12144/13126  FP=982  Neg Precision=92.52%
+  POSS band: n=1535  EndedHigh=793  EndedLow=742  EndedHighRate=51.66%  AvgProb=41.6%  (EndedHighAvg=45.99%, EndedLowAvg=36.91%)
+[PERF 2026-08-27 08:00:14] WARNING: H=7 eval=20260824: excluding HHS -- incomplete label window (20260822 outage; 20260823 outage)
+PERF SUMMARY  Horizon=7-Day  Eval=20260824  Forecast=20260817  UniqueIndicators=7705  Pairs=15757  Decided=12886  Coverage=81.78%
+  Accuracy=93.35%  Precision=97.97%  Recall(decided)=83.96%  Recall(all)=63.38%  F1=90.42%
+  HIGH band: TP=4046/4130  FP=84  FN=773
+  LOW  band: TN=7983/8756  FP=773  Neg Precision=91.17%
+  POSS band: n=2871  EndedHigh=1565  EndedLow=1306  EndedHighRate=54.51%  AvgProb=47.31%  (EndedHighAvg=53.68%, EndedLowAvg=39.68%)
+[PERF 2026-08-27 08:00:16] WARNING: H=14 eval=20260824: excluding HHS -- incomplete label window (20260822 outage; 20260823 outage)
+PERF SUMMARY  Horizon=14-Day  Eval=20260824  Forecast=20260810  UniqueIndicators=7573  Pairs=15457  Decided=11890  Coverage=76.92%
+  Accuracy=91.1%  Precision=97.59%  Recall(decided)=81.38%  Recall(all)=59.23%  F1=88.75%
+  HIGH band: TP=4173/4276  FP=103  FN=955
+  LOW  band: TN=6659/7614  FP=955  Neg Precision=87.46%
+  POSS band: n=3567  EndedHigh=1918  EndedLow=1649  EndedHighRate=53.77%  AvgProb=42.89%  (EndedHighAvg=47.68%, EndedLowAvg=37.32%)
+[PERF 2026-08-27 08:00:17] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260725.csv
+[PERF 2026-08-27 08:00:17] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260710.csv
+[PERF 2026-08-27 08:00:17] WARNING: H=1 eval=20260825: excluding VA -- incomplete label window (20260825 outage)
+[PERF 2026-08-27 08:00:17] INFO: H=1 eval=20260825: scoring CDC, CMS, DHA, FDA, HHS, HRSA, IHS, NIH, OS on days that have delivered but not formally settled; rows are marked provisional with their completeness and will be rewritten once those days settle
+PERF SUMMARY  Horizon=1-Day  Eval=20260825  Forecast=20260824  UniqueIndicators=7359  Pairs=14988  Decided=12955  Coverage=86.44%
+  Accuracy=94.43%  Precision=96.39%  Recall(decided)=77.63%  Recall(all)=57.33%  F1=86.0%
+  HIGH band: TP=2218/2301  FP=83  FN=639
+  LOW  band: TN=10015/10654  FP=639  Neg Precision=94.0%
+  POSS band: n=2033  EndedHigh=1012  EndedLow=1021  EndedHighRate=49.78%  AvgProb=45.61%  (EndedHighAvg=50.65%, EndedLowAvg=40.61%)
+[PERF 2026-08-27 08:00:19] WARNING: H=7 eval=20260825: excluding HHS -- incomplete label window (20260822 outage; 20260823 outage)
+[PERF 2026-08-27 08:00:19] WARNING: H=7 eval=20260825: excluding VA -- incomplete label window (20260825 outage)
+[PERF 2026-08-27 08:00:19] INFO: H=7 eval=20260825: scoring CDC, CMS, DHA, FDA, HRSA, IHS, NIH, OS on days that have delivered but not formally settled; rows are marked provisional with their completeness and will be rewritten once those days settle
+PERF SUMMARY  Horizon=7-Day  Eval=20260825  Forecast=20260818  UniqueIndicators=7223  Pairs=13461  Decided=11101  Coverage=82.47%
+  Accuracy=92.81%  Precision=97.99%  Recall(decided)=81.18%  Recall(all)=61.17%  F1=88.8%
+  HIGH band: TP=3162/3227  FP=65  FN=733
+  LOW  band: TN=7141/7874  FP=733  Neg Precision=90.69%
+  POSS band: n=2360  EndedHigh=1274  EndedLow=1086  EndedHighRate=53.98%  AvgProb=47.31%  (EndedHighAvg=54.87%, EndedLowAvg=38.43%)
+[PERF 2026-08-27 08:00:21] WARNING: H=14 eval=20260825: excluding HHS -- incomplete label window (20260822 outage; 20260823 outage)
+[PERF 2026-08-27 08:00:21] WARNING: H=14 eval=20260825: excluding VA -- incomplete label window (20260825 outage)
+[PERF 2026-08-27 08:00:21] INFO: H=14 eval=20260825: scoring CDC, CMS, DHA, FDA, HRSA, IHS, NIH, OS on days that have delivered but not formally settled; rows are marked provisional with their completeness and will be rewritten once those days settle
+PERF SUMMARY  Horizon=14-Day  Eval=20260825  Forecast=20260811  UniqueIndicators=7145  Pairs=13320  Decided=10429  Coverage=78.3%
+  Accuracy=91.97%  Precision=97.31%  Recall(decided)=82.92%  Recall(all)=62.5%  F1=89.54%
+  HIGH band: TP=3584/3683  FP=99  FN=738
+  LOW  band: TN=6008/6746  FP=738  Neg Precision=89.06%
+  POSS band: n=2891  EndedHigh=1412  EndedLow=1479  EndedHighRate=48.84%  AvgProb=43.44%  (EndedHighAvg=48.63%, EndedLowAvg=38.48%)
+[PERF 2026-08-27 08:00:22] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260726.csv
+[PERF 2026-08-27 08:00:22] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260711.csv
+[PERF 2026-08-27 08:00:22] WARNING: H=1 eval=20260826: excluding VA -- incomplete label window (20260826 outage)
+[PERF 2026-08-27 08:00:22] INFO: H=1 eval=20260826: scoring CDC, CMS, DHA, FDA, HHS, HRSA, IHS, NIH, OS on days that have delivered but not formally settled; rows are marked provisional with their completeness and will be rewritten once those days settle
+PERF SUMMARY  Horizon=1-Day  Eval=20260826  Forecast=20260825  UniqueIndicators=7361  Pairs=15036  Decided=12971  Coverage=86.27%
+  Accuracy=96.08%  Precision=94.8%  Recall(decided)=85.74%  Recall(all)=62.8%  F1=90.04%
+  HIGH band: TP=2296/2422  FP=126  FN=382
+  LOW  band: TN=10167/10549  FP=382  Neg Precision=96.38%
+  POSS band: n=2065  EndedHigh=978  EndedLow=1087  EndedHighRate=47.36%  AvgProb=42.98%  (EndedHighAvg=50.36%, EndedLowAvg=36.34%)
+[PERF 2026-08-27 08:00:24] WARNING: H=7 eval=20260826: excluding HHS -- incomplete label window (20260822 outage; 20260823 outage)
+[PERF 2026-08-27 08:00:24] WARNING: H=7 eval=20260826: excluding VA -- incomplete label window (20260825 outage; 20260826 outage)
+[PERF 2026-08-27 08:00:24] INFO: H=7 eval=20260826: scoring CDC, CMS, DHA, FDA, HRSA, IHS, NIH, OS on days that have delivered but not formally settled; rows are marked provisional with their completeness and will be rewritten once those days settle
+PERF SUMMARY  Horizon=7-Day  Eval=20260826  Forecast=20260819  UniqueIndicators=7268  Pairs=13417  Decided=11223  Coverage=83.65%
+  Accuracy=93.29%  Precision=97.37%  Recall(decided)=83.73%  Recall(all)=65.42%  F1=90.04%
+  HIGH band: TP=3402/3494  FP=92  FN=661
+  LOW  band: TN=7068/7729  FP=661  Neg Precision=91.45%
+  POSS band: n=2194  EndedHigh=1137  EndedLow=1057  EndedHighRate=51.82%  AvgProb=45.74%  (EndedHighAvg=54.12%, EndedLowAvg=36.72%)
+[PERF 2026-08-27 08:00:26] WARNING: H=14 eval=20260826: excluding HHS -- incomplete label window (20260822 outage; 20260823 outage)
+[PERF 2026-08-27 08:00:26] WARNING: H=14 eval=20260826: excluding VA -- incomplete label window (20260825 outage; 20260826 outage)
+[PERF 2026-08-27 08:00:26] INFO: H=14 eval=20260826: scoring CDC, CMS, DHA, FDA, HRSA, IHS, NIH, OS on days that have delivered but not formally settled; rows are marked provisional with their completeness and will be rewritten once those days settle
+PERF SUMMARY  Horizon=14-Day  Eval=20260826  Forecast=20260812  UniqueIndicators=7167  Pairs=13336  Decided=10442  Coverage=78.3%
+  Accuracy=91.69%  Precision=97.62%  Recall(decided)=81.68%  Recall(all)=60.44%  F1=88.94%
+  HIGH band: TP=3491/3576  FP=85  FN=783
+  LOW  band: TN=6083/6866  FP=783  Neg Precision=88.6%
+  POSS band: n=2894  EndedHigh=1502  EndedLow=1392  EndedHighRate=51.9%  AvgProb=44.47%  (EndedHighAvg=50.27%, EndedLowAvg=38.22%)
+[PERF 2026-08-27 08:00:27] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260727.csv
+[PERF 2026-08-27 08:00:27] WARNING: forecast daily report missing: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260712.csv
+[PERF 2026-08-27 08:00:27] INFO: forecast coverage: all 15 of the last 15 days present
+[PERF 2026-08-27 08:00:27] INFO: evaluation finished successfully
+---- end output ---- 
+[20260827 08:00:27] SUCCESS Report confirmed: \\cscso1fsappv01\data\HTOC\JA\NextObserveV4Test\Full Daily Reports\full_daily_report_20260827.csv
