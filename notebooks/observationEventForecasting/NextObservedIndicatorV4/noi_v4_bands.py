@@ -7,12 +7,12 @@ High stays at 0.80 by default. Per-OpDiv cuts below 0.80 are applied only where
 settled balanced-model history still holds the precision floor. OpDivs already
 under the floor (CDC, DHA, HHS, NIH at 1-day) are not cut further -- that is
 noise without enough recovered sightings, and those positives live in Possibly
-Active, which is the review queue.
+Active (abstain), not 1-day High.
 
 Three jobs: 1-day High is the tomorrow page; 7-day High is the weekly board
-(skip-day regulars); Possibly Active is human review, sorted by 1-day p. Do
-not lower 1-day High to chase skip-day leftovers, and do not use a global 0.50
-cut -- it flooded false positives.
+(skip-day regulars); Possibly Active is abstain. Do not lower 1-day High to
+chase skip-day leftovers, and do not use a global 0.50 cut -- it flooded
+false positives.
 """
 from __future__ import annotations
 
@@ -109,31 +109,6 @@ def reband_frame(df: pd.DataFrame, opdiv: str | None = None) -> pd.DataFrame:
         else:
             out[ccol] = [f"{H}-Day: {band(pi, H, opdiv)}" for pi in p]
     return out
-
-
-def possibly_active_review(df: pd.DataFrame, horizon: int = 1) -> pd.DataFrame:
-    """Rows in the abstain band, highest probability first -- the catch queue."""
-    ccol = CONFNAME[horizon]
-    pcol = PROBNAME[horizon]
-    if ccol not in df.columns:
-        return pd.DataFrame()
-    tag = f"{horizon}-Day: "
-    band_h = df[ccol].astype(str).str.replace(tag, "", regex=False).str.strip()
-    review = df.loc[band_h.eq(BAND_LABELS["W"])].copy()
-    if review.empty:
-        return review
-    if pcol in review.columns:
-        review["_sort_p"] = parse_prob_pct(review[pcol])
-        review = review.sort_values("_sort_p", ascending=False).drop(columns=["_sort_p"])
-    keep = [
-        c for c in (
-            "Partner", "Indicator", "Observed Today",
-            PROBNAME[1], CONFNAME[1], PROBNAME[7], CONFNAME[7],
-            "Frequency (1d)", "Frequency (7d)", "Frequency (30d)", "Basis",
-        )
-        if c in review.columns
-    ]
-    return review[keep].reset_index(drop=True)
 
 
 def reband_saved_outputs(save_root: str, date_str: str) -> list[str]:

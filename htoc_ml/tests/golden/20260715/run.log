@@ -1,0 +1,55 @@
+AS-OF REPLAY: rebuilding 2026-07-15 using only data available then
+panel: 842,284 rows | 24,575 (opdiv,indicator) | 2025-12-07 -> 2026-07-15
+feed health: issues over the last 30 days
+  CMS: outage=0 degraded=19 missing=0 | 
+  HHS: outage=1 degraded=0 missing=0 | 20260712:outage
+outage imputation:
+  CDC: 2026-02-07..2026-02-08 (2d) not imputed -- only 0 regulars; this feed has no daily core
+  CDC: 2026-02-14..2026-02-16 (3d) not imputed -- only 0 regulars; this feed has no daily core
+  CDC: 2026-02-21..2026-02-22 (2d) not imputed -- only 0 regulars; this feed has no daily core
+  CDC: 2026-02-28..2026-03-01 (2d) not imputed -- only 0 regulars; this feed has no daily core
+  CDC: 2026-05-06..2026-05-21 (16d) not imputed -- only 0 regulars; this feed has no daily core
+  FDA: 2026-04-22..2026-04-23 -- filled 154 regulars across 2d
+  HHS: 2026-07-12..2026-07-12 -- filled 15 regulars across 1d
+  HRSA: 2026-04-19..2026-04-19 -- filled 152 regulars across 1d
+  HRSA: 2026-04-21..2026-04-21 -- filled 138 regulars across 1d
+  VA: 2026-02-26..2026-02-26 -- filled 477 regulars across 1d
+training rows: 203,134 from 16 cutoffs (2026-03-17 -> 2026-05-31)
+feed-health mask withheld 54,814 of 753,365 training labels (7.28%) -- windows containing a feed outage
+OpDiv-balanced sample weights: mean w(y=1)=1.52  mean w(y=0)=0.74  (unweighted pos rate 32.9%)
+feed-health mask withheld 3,427 of 262,305 training labels (1.31%) -- windows containing a feed outage
+trained OpDiv-balanced model on 150,673 rows, isotonic-calibrated on 52,461 later rows (val pos rate 34.6%, mean predicted p 34.6%)
+scoring 16,484 indicators as-of 2026-07-15
+forecast rests on imputed days for 15 indicators (marked 'est' in the Basis column)
+OpDivs: ['CDC', 'CMS', 'DHA', 'FDA', 'HHS', 'HRSA', 'IHS', 'NIH', 'OS', 'VA']
+        Indicator  Observed Today  ...       Confidence: 45-Day  Basis
+0  198.235.24.254               0  ...   45-Day: Low confidence       
+1   198.235.24.76               0  ...   45-Day: Low confidence       
+2   64.62.156.108               1  ...  45-Day: Possibly active       
+3   64.62.156.118               0  ...   45-Day: Low confidence       
+4    64.62.156.13               0  ...   45-Day: Low confidence       
+5    64.62.156.51               0  ...   45-Day: Low confidence       
+6    64.62.156.67               0  ...   45-Day: Low confidence       
+7    64.62.156.89               0  ...  45-Day: Possibly active       
+8     65.49.1.115               0  ...   45-Day: Low confidence       
+9      65.49.1.12               0  ...   45-Day: Low confidence       
+
+[10 rows x 16 columns]
+saved to \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output
+Wrote 10 OpDiv files under \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output
+AS-OF REPLAY: recorded 20260715 in \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\backfilled_forecasts.txt
+[PERF 2026-08-31 13:38:41] INFO: starting post-forecast evaluation (stamp=20260715)
+loaded \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\CDC\CDC_output_20260715.csv (426 rows)
+loaded \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\CMS\CMS_output_20260715.csv (1037 rows)
+loaded \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\DHA\DHA_output_20260715.csv (730 rows)
+loaded \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\FDA\FDA_output_20260715.csv (526 rows)
+loaded \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\HHS\HHS_output_20260715.csv (1567 rows)
+loaded \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\HRSA\HRSA_output_20260715.csv (4139 rows)
+loaded \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\IHS\IHS_output_20260715.csv (1070 rows)
+loaded \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\NIH\NIH_output_20260715.csv (3560 rows)
+loaded \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\OS\OS_output_20260715.csv (1359 rows)
+loaded \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\VA\VA_output_20260715.csv (2070 rows)
+Saved to \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\Full Daily Reports\full_daily_report_20260715.csv (16484 rows)
+[PERF 2026-08-31 13:38:42] INFO: consolidated daily report: \\cscso1fsappv01\home\jaskew\HTOC\htoc_ml\tests\golden\20260715\output\Full Daily Reports\full_daily_report_20260715.csv
+[PERF 2026-08-31 13:38:42] INFO: consolidate-only mode (stamp=20260715); skipping scoring pass
+PIPELINE_OK

@@ -88,13 +88,13 @@ if max(HORIZONS) > L:
     print(f"FATAL: max(HORIZONS)={max(HORIZONS)} exceeds lookback L={L}; cnt(k) would undercount.")
     sys.exit(2)
 
-# Cutoffs spaced a multiple of 7 apart all land on the same weekday, which makes the
-# `dow` feature a constant the trees can never split on -- and hands inference a value
-# it never saw in training. Any step coprime with 7 walks all seven weekdays.
+# `dow` is no longer a feature (held-out permutation did not pay), but a step
+# that is a multiple of 7 still locks every cutoff onto one weekday and aliases
+# last_seen / gap structure. Any step coprime with 7 walks all seven weekdays.
 if CUTOFF_STEP % 7 == 0:
     print(
         f"FATAL: CUTOFF_STEP={CUTOFF_STEP} is a multiple of 7; every training cutoff "
-        f"would share one weekday and `dow` would carry no signal."
+        f"would lock every cutoff onto one weekday and alias last_seen / gap structure."
     )
     sys.exit(2)
 
@@ -195,14 +195,13 @@ if _findings:
     for _line in format_findings(_findings):
         print(_line)
 
+# Held-out permutation (31 Aug 2026): last_seen is ~73% of AUC drop; horizon,
+# avg_gap, overdue, freq_100, burstiness, and the 7/14/30 windows pay rent.
+# Dropped as dead or redundant with last_seen / freq_100: freq_1, freq_45,
+# active_frac (exactly freq_100/L), dow, mom, tenure, weekday_hit, skip_gap_frac.
 FEATS = [
-    "last_seen", "freq_1", "freq_7", "freq_14", "freq_30", "freq_45", "freq_100",
-    "avg_gap", "burstiness", "active_frac", "dow",
-    "overdue", "mom", "tenure",
-    # Skip-day ranking inside Possibly Active. Not a High cut -- 1-day High stays
-    # at the 90% precision floor. weekday_hit = how often this indicator appears
-    # on tomorrow's weekday; skip_gap_frac = share of gaps that are exactly 2 days.
-    "weekday_hit", "skip_gap_frac",
+    "last_seen", "freq_7", "freq_14", "freq_30", "freq_100",
+    "avg_gap", "burstiness", "overdue",
 ]
 
 
@@ -210,11 +209,9 @@ def featurize(dates, t):
     """Behavioral features from observations <= t. Leakage-safe."""
     hi = np.searchsorted(dates, t, side="right")
     lo = np.searchsorted(dates, t - L + 1, side="left")
-    prior = dates[:hi]
     win = dates[lo:hi]
-    tenure = int(t - prior[0]) if prior.size else L
     if win.size == 0:
-        return [L, 0, 0, 0, 0, 0, 0, L, 0.0, 0.0, t % 7, 1.0, 0.0, tenure, 0.0, 0.0]
+        return [L, 0, 0, 0, 0, float(L), 0.0, 1.0]
 
     def cnt(k):
         return int(win.size - np.searchsorted(win, t - k + 1, side="left"))
@@ -224,22 +221,11 @@ def featurize(dates, t):
         ag = float(gaps.mean())
         sd = float(gaps.std())
         bu = (sd - ag) / (sd + ag) if (sd + ag) > 0 else 0.0
-        skip_gap_frac = float((gaps == 2).mean())
     else:
-        ag, bu, skip_gap_frac = float(L), 0.0, 0.0
+        ag, bu = float(L), 0.0
     last_seen = int(t - win[-1])
     overdue = last_seen / ag if ag > 0 else 0.0
-    mom = cnt(7) / 7.0 - cnt(30) / 30.0
-    # Fraction of tenure-weeks with a sighting on weekday (t+1) -- tomorrow from
-    # the cutoff. Helps rank skip-day regulars inside Possibly Active; does not
-    # change the High band.
-    n_weeks = max(1, int(np.ceil((tenure + 1) / 7.0)))
-    weekday_hit = float(np.sum(np.mod(prior.astype(np.int64), 7) == ((int(t) + 1) % 7))) / n_weeks
-    return [
-        last_seen, 1 if win[-1] == t else 0,
-        cnt(7), cnt(14), cnt(30), cnt(45), win.size, ag, bu, win.size / L, t % 7,
-        overdue, mom, tenure, weekday_hit, skip_gap_frac,
-    ]
+    return [last_seen, cnt(7), cnt(14), cnt(30), win.size, ag, bu, overdue]
 
 
 def seen_next(dates, t, H):
@@ -436,7 +422,7 @@ P = model.predict_proba(Xinf)[:, 1].reshape(len(HORIZONS), len(infer_df)).T
 P = np.maximum.accumulate(P, axis=1)
 
 
-out = infer_df[["opdiv", "indicator", "freq_1", "freq_7", "freq_30"]].copy()
+out = infer_df[["opdiv", "indicator", "last_seen", "freq_7", "freq_30"]].copy()
 for j, H in enumerate(HORIZONS):
     out[f"prob_{H}"] = P[:, j]
     out[f"band_{H}"] = [band(p, H, opd) for p, opd in zip(P[:, j], out["opdiv"])]
@@ -445,7 +431,7 @@ for j, H in enumerate(HORIZONS):
 def _really_seen(opd, ind, t):
     """Was this actually observed on `t`, ignoring anything imputed.
 
-    freq_1 is a model input and may rest on a filled day; "Observed Today" is a
+    last_seen on features may rest on a filled day; "Observed Today" is a
     statement of fact on a report someone reads, so it comes off the raw panel.
     """
     dates = lookup.get((opd, ind))
@@ -473,7 +459,7 @@ def to_production(g):
     d = pd.DataFrame({
         "Indicator": g["indicator"].values,
         "Observed Today": g["observed_today"].values.astype(int),
-        "Frequency (1d)": g["freq_1"].values,
+        "Frequency (1d)": (g["last_seen"].values == 0).astype(int),
         "Frequency (7d)": g["freq_7"].values,
         "Frequency (30d)": g["freq_30"].values,
     })

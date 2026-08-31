@@ -30,7 +30,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
 import noi_v4_feed_health as feed_health
-from noi_v4_bands import BAND_HIGH_P_OPDIV, possibly_active_review
+from noi_v4_bands import BAND_HIGH_P_OPDIV
 from noi_v4_feed_health import FeedHealth
 
 try:
@@ -49,7 +49,6 @@ SAVE_PATH = os.path.join(SAVE_ROOT, "Full Daily Reports")
 PERF_DIR = os.path.join(SAVE_ROOT, "Performance")
 PERF_ALERTS_DIR = os.path.join(PERF_DIR, "Alerts")
 PERF_LOG_DIR = os.path.join(PERF_DIR, "Logs")
-REVIEW_DIR = os.path.join(SAVE_ROOT, "Possibly Active Review")
 EXCLUDE_FOLDERS = {"automation scripts", "Logs", "LogsBackup", "Full Daily Reports",
                    "Performance", "Possibly Active Review", "Alerts"}
 
@@ -84,14 +83,13 @@ def log_perf_error(context: str, exc: BaseException | None = None) -> None:
 
 def init_performance_eval(save_root: str, htoc_share_root: str | None = None) -> None:
     """Configure paths for evaluation (call once before running eval)."""
-    global SAVE_ROOT, DATA_PATH, SAVE_PATH, PERF_DIR, PERF_ALERTS_DIR, PERF_LOG_DIR, REVIEW_DIR, OBS_TEMPLATE, HTOC_SHARE_ROOT
+    global SAVE_ROOT, DATA_PATH, SAVE_PATH, PERF_DIR, PERF_ALERTS_DIR, PERF_LOG_DIR, OBS_TEMPLATE, HTOC_SHARE_ROOT
     SAVE_ROOT = save_root.strip()
     DATA_PATH = SAVE_ROOT
     SAVE_PATH = os.path.join(SAVE_ROOT, "Full Daily Reports")
     PERF_DIR = os.path.join(SAVE_ROOT, "Performance")
     PERF_ALERTS_DIR = os.path.join(PERF_DIR, "Alerts")
     PERF_LOG_DIR = os.path.join(PERF_DIR, "Logs")
-    REVIEW_DIR = os.path.join(SAVE_ROOT, "Possibly Active Review")
     if htoc_share_root:
         HTOC_SHARE_ROOT = htoc_share_root.strip()
     OBS_TEMPLATE = os.environ.get(
@@ -269,7 +267,7 @@ METRIC_DESCRIPTIONS = {
         "Count of 1-day Possibly Active rows that were actually observed the next day and were "
         "already Highly likely on 7-day. 1-day eval only; N/A on other horizons.",
         "The leftover two-thirds that a 1-day High cut cannot take without breaking 90% precision. "
-        "They are already on the weekly board. Work the review file for tomorrow-specific leftovers.",
+        "They are already on the weekly board. Do not promote them into 1-day High.",
     ),
     "F1 Score - High (%)": (
         "Balance of Precision - High and Recall - High (decided-only recall; harmonic mean).",
@@ -278,13 +276,13 @@ METRIC_DESCRIPTIONS = {
     ),
     "Coverage (%)": (
         "Percent of scored pairs placed in High or Low (not Possibly active).",
-        "The complement is the Possibly Active review queue. Low coverage with a high Ended-High "
-        "rate means the catchable-but-unflagged sightings are sitting in that queue.",
+        "The complement is the Possibly Active abstain band. Low coverage with a high Ended-High "
+        "rate means catchable-but-unflagged sightings sat between High and Low.",
     ),
     "Possibly Active Ended High Rate (%)": (
         "Of Possibly active predictions, the percent that were later observed within the horizon.",
-        "The primary leftover catch: if nobody works this band, these are silent missed sightings. "
-        "The daily review file lists them highest-probability first.",
+        "Leftover 1-day recurrences the High band did not take. Judge skip-day coverage on "
+        "7-day High, not by promoting these rows into 1-day High.",
     ),
     "Avg Prob - Possibly Active (%)": (
         "Average model probability for all Possibly active predictions.",
@@ -838,21 +836,7 @@ def save_daily_report(df: pd.DataFrame, save_path: str, today_str: str) -> str:
     output_path = os.path.join(save_path, f"full_daily_report_{today_str}.csv")
     df.to_csv(output_path, index=False)
     print(f"Saved to {output_path} ({len(df)} rows)")
-    _write_possibly_active_review(df, today_str)
     return output_path
-
-
-def _write_possibly_active_review(df: pd.DataFrame, date_str: str) -> str | None:
-    """Worklist for the catch-the-sightings mission: 1-day abstain band, p descending."""
-    review = possibly_active_review(df, horizon=1)
-    os.makedirs(REVIEW_DIR, exist_ok=True)
-    fp = os.path.join(REVIEW_DIR, f"possibly_active_1day_{date_str}.csv")
-    review.to_csv(fp, index=False)
-    _perf_log(
-        f"Possibly Active 1-day review: {len(review):,} rows -> {fp} "
-        f"(highest probability first; these are the catchable-but-unflagged sightings)"
-    )
-    return fp
 
 
 def consolidate_daily_report(date_str: str | None = None) -> str | None:
@@ -1641,9 +1625,8 @@ def _write_legend_sheet(wb) -> None:
         "1-day High to chase skip-day leftovers -- those are the 7-Day High coverage columns. "
         "Accuracy (%) is dominated by Low-band true negatives and is not a High-band signal. "
         "Three jobs: 1-day High = page for tomorrow; 7-day High = already on the weekly board; "
-        "Possibly active = review queue (Possibly Active Review\\possibly_active_1day_YYYYMMDD.csv, "
-        "highest probability first). Bands: Highly likely = predicted positive, Low confidence = "
-        "predicted negative, Possibly active = abstain."
+        "Possibly active = abstain (not a worklist). Bands: Highly likely = predicted positive, "
+        "Low confidence = predicted negative, Possibly active = abstain."
     )
     ws["A2"].alignment = Alignment(wrap_text=True)
     ws.merge_cells("A2:F2")

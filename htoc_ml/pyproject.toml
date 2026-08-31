@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "htoc-ml"
+version = "0.1.0"
+description = "HTOC production forecasting and scoring models"
+requires-python = ">=3.13"
+dependencies = [
+  "numpy",
+  "pandas",
+  "scikit-learn",
+  "openpyxl",
+  "pytz",
+]
+
+[project.scripts]
+htoc-noi = "htoc_ml.noi.__main__:main"
+htoc-prism = "htoc_ml.prism.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["htoc_ml*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

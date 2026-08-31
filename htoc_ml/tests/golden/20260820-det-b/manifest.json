@@ -1,0 +1,20 @@
+{
+  "as_of": "20260820",
+  "captured_at": "2026-08-31T13:37:45",
+  "exit_code": 0,
+  "runner": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\notebooks\\observationEventForecasting\\NextObservedIndicatorV4\\NextObservedIndicatorV4.0.py",
+  "python": "C:\\Program Files\\Python313\\python.exe",
+  "share_root": "\\\\cscso1fsappv01\\data\\HTOC",
+  "forecast_files": {
+    "CDC/CDC_output_20260820.csv": "bdfc0674ef61ff26d27a8a2e92b5ef4860929c9bc732ad5521ff60e0b7936ff7",
+    "CMS/CMS_output_20260820.csv": "b585dcd67a710a91197ed12a7d8ddf90349bea956cf9474f95234148f6525590",
+    "DHA/DHA_output_20260820.csv": "cc2cb5ccbbaaeee8b989c51481f62f12974c24be3d7f3e321c2f99b34101c224",
+    "FDA/FDA_output_20260820.csv": "75dd94cd5e79ae83d394f60e785115a3f7847697eed0f7f7d397e1732ba07110",
+    "HHS/HHS_output_20260820.csv": "daff5f37e85144d9692a02edcadae55d4b4e725770261f60dfb93ef1d92a4807",
+    "HRSA/HRSA_output_20260820.csv": "041280b6cb1d88d981674588fb89f672ebc63da33048933d0510fd5d427178bf",
+    "IHS/IHS_output_20260820.csv": "fb2b3ec45eedecaadb0abb3e9c9ffa788d16804c3b2e4df1083a060c168fd16b",
+    "NIH/NIH_output_20260820.csv": "88815f81c193029243e3c93387e596e5d149542de67bbdf7693188bc98799419",
+    "OS/OS_output_20260820.csv": "bddefaf781dc74ec41a293c91cdcf87bbf19b43af6d6403d611989ce3800c567",
+    "VA/VA_output_20260820.csv": "f09714915f2690b00082e3a3fa9b7fe3006fc2650317ee606cce808e0e46a6d2"
+  }
+}
