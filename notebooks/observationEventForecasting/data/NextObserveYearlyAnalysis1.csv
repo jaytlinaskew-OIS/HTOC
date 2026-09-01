@@ -1,5 +1,0 @@
-horizon_days,n_predictions,n_indicators,precision_%,accuracy_%,highly_likely_n,highly_likely_success_%,low_confidence_n,low_confidence_success_%,possibly_active_n,possibly_active_hit_%
-7,3934398,9100,91.1,90.6,1671296,91.1,1955955,90.2,307147,48
-14,3861284,8942,86.4,88.1,1970156,86.4,1598594,90,292534,46
-30,3680399,8457,79.7,83.4,2334815,79.7,1096128,91.3,249456,41.8
-45,3073617,7105,78.1,82,1996681,78.1,719125,92.8,357811,31.6

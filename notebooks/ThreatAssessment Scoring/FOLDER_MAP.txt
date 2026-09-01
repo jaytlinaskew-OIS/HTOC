@@ -1,6 +1,6 @@
 ThreatAssessment Scoring — folder map
 =====================================
-Updated: 2026-08-10
+Updated: 2026-08-31
 
 production pipelines (scheduled)
 --------------------------------
@@ -14,19 +14,13 @@ Each production folder contains:
   run_*.bat / run_*_hidden.vbs  Task Scheduler launchers
   logs\    created on first run
 
+Package equivalent (not yet cut over):
+  py -3.13 -m htoc_ml.prism            (daily)
+  set PRISM_MODE=weekly & py -3.13 -m htoc_ml.prism
+
 supporting
 ----------
 docs\                          Scoring rules / notes (md, pdf)
-data\                          One-off CSV/XLSX artifacts
-tools\                         Utility scripts (triage, PDF builder)
-DataReports\                   Report exports / PowerPoint
-prism_score_distribution_report\
-logs\                          Older root-level run logs (pre-reorg)
-
-archive
--------
-archive\notebooks\             Older scoring notebooks (V1–V4, research)
-archive\legacy_daily\          Former threat_assessment_scoring_daily pipeline
 
 Task Scheduler (Jaytlin Scripts)
 --------------------------------
