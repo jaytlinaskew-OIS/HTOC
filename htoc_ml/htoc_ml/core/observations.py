@@ -128,10 +128,6 @@ class ObservationPanel:
 
         found = expected - len(missing)
         coverage = found / expected if expected else 0.0
-        print(
-            f"observation files: {found}/{expected} present "
-            f"({coverage:.0%} coverage) {start} -> {today}"
-        )
         if coverage < min_file_coverage:
             from htoc_ml.core.pipeline import PipelineError
 
