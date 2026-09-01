@@ -376,7 +376,7 @@ class EvalConfig:
         )
 
     @classmethod
-    def from_paths(cls, save_root: str, htoc_share_root: str, obs_template: str = "") -> "EvalConfig":
+    def from_paths(eval_config_class, save_root: str, htoc_share_root: str, obs_template: str = "") -> "EvalConfig":
         from htoc_ml.core import paths as htoc_paths
 
         share = str(htoc_paths.share_root(htoc_share_root or None))
@@ -390,7 +390,7 @@ class EvalConfig:
             horizons = _parse_horizons(horizons_raw) if horizons_raw else (1, 7, 14, 30, 45)
         except ValueError:
             horizons = (1, 7, 14, 30, 45)
-        return cls(
+        return eval_config_class(
             save_root=save_root.strip(),
             htoc_share_root=share,
             obs_template=template,

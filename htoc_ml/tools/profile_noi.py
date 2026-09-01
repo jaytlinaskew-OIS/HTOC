@@ -54,28 +54,28 @@ def profile_steps(config: ForecastConfig) -> list[StepResult]:
         results.append(StepResult(name, elapsed, peak / 1e6, notes))
         return out
 
-    panel = run_step(
-        "1 load_observation_panel",
-        runner.load_observation_panel,
+    observations = run_step(
+        "1 load_observation_data",
+        runner.load_observation_data,
         config,
-        note_fn=lambda p: [
-            p.describe(),
-            f"frame {_df_mb(p.frame):.1f} MB",
-            f"indicators {len(p.labels):,}",
+        note_fn=lambda obs: [
+            obs.describe(),
+            f"frame {_df_mb(obs.frame):.1f} MB",
+            f"indicators {len(obs.labels):,}",
         ],
     )
-    health = run_step("2 report_feed_health", runner.report_feed_health, panel, config)
-    imputer = run_step(
+    health = run_step("2 report_feed_health", runner.report_feed_health, observations, config)
+    outage_context = run_step(
         "3 fill_outage_gaps",
         runner.fill_outage_gaps,
-        panel,
+        observations,
         health,
-        note_fn=lambda _: [f"features index {len(panel.features):,} keys"],
+        note_fn=lambda _: [f"features index {len(observations.features):,} keys"],
     )
     model, training, as_of_day = run_step(
         "4 fit_model_on_history",
         runner.fit_model_on_history,
-        panel,
+        observations,
         health,
         config,
         note_fn=lambda t: [f"as_of_day {t[2]}"],
@@ -83,10 +83,10 @@ def profile_steps(config: ForecastConfig) -> list[StepResult]:
     scored = run_step(
         "5 score_indicators",
         runner.score_indicators,
-        panel,
+        observations,
         training,
         model,
-        imputer,
+        outage_context,
         as_of_day,
         config,
         note_fn=lambda s: [f"scored rows {len(s):,}", f"frame {_df_mb(s):.1f} MB"],

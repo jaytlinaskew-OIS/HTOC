@@ -9,21 +9,13 @@ import pandas as pd
 from htoc_ml.core.day import Day, to_timestamp
 from htoc_ml.core.observations import IndicatorIndex
 from htoc_ml.noi.config import ForecastConfig
-from htoc_ml.noi.features import FEATURE_NAMES, MONOTONIC_CONSTRAINTS, FeatureBuilder
+from htoc_ml.noi.features import FEATURE_NAMES, MONOTONIC_CONSTRAINTS, featurize, featurize_window
 from htoc_ml.noi.feed_health import FeedHealth
 
 
 class TrainingSet:
-    def __init__(
-        self,
-        config: ForecastConfig,
-        feature_builder: FeatureBuilder,
-        labels: IndicatorIndex,
-        features: IndicatorIndex,
-        health: FeedHealth,
-    ) -> None:
+    def __init__(self, config: ForecastConfig, labels: IndicatorIndex, features: IndicatorIndex, health: FeedHealth) -> None:
         self.config = config
-        self.feature_builder = feature_builder
         self.labels = labels
         self.features = features
         self.health = health
@@ -32,7 +24,6 @@ class TrainingSet:
         return [MONOTONIC_CONSTRAINTS[name] for name in FEATURE_NAMES] + [1]
 
     def build_label_mask(self, cutoffs: list[Day], opdivs: list[str]) -> dict[tuple[str, int, int], bool]:
-        """O(O·D) day-level health precompute + O(O·C·H·W) window checks."""
         if not cutoffs or not opdivs:
             return {}
 
@@ -62,7 +53,6 @@ class TrainingSet:
         return usable
 
     def build_rows(self, cutoffs: list[Day], need_label: bool = True) -> pd.DataFrame:
-        """O(I·C·log D) with batched horizon labels and reused window slices."""
         label_mask = self.build_label_mask(cutoffs, self.labels.opdivs()) if need_label else {}
         recs = []
         lookback = self.config.lookback_days
@@ -76,8 +66,8 @@ class TrainingSet:
                 window_start = np.searchsorted(feat_dates, cutoff_day - lookback + 1, side="left")
                 if window_end - window_start == 0:
                     continue
-                rec = self.feature_builder.featurize_window(
-                    feat_dates[window_start:window_end], cutoff_day
+                rec = featurize_window(
+                    lookback, feat_dates[window_start:window_end], cutoff_day
                 )
                 rec["opdiv"] = opdiv
                 rec["indicator"] = indicator

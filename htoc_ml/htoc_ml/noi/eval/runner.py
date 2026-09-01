@@ -94,24 +94,24 @@ class PerformanceEval:
         if not os.path.exists(obs_fp):
             self.log(f"observation file missing for {obs_date_str}: {obs_fp}", level="WARNING")
             return empty
-        panel = pd.read_csv(obs_fp, usecols=["indicator", "obs_date", "OpDiv"])
-        panel["Indicator"] = panel["indicator"].astype(str).str.strip()
-        panel["Partner"] = panel["OpDiv"].astype(str).str.strip()
-        panel["date"] = pd.to_datetime(panel["obs_date"], errors="coerce").dt.normalize()
-        panel = panel[
-            panel["Indicator"].ne("")
-            & panel["Indicator"].ne("nan")
-            & panel["Partner"].ne("")
-            & panel["Partner"].ne("nan")
+        obs_frame = pd.read_csv(obs_fp, usecols=["indicator", "obs_date", "OpDiv"])
+        obs_frame["Indicator"] = obs_frame["indicator"].astype(str).str.strip()
+        obs_frame["Partner"] = obs_frame["OpDiv"].astype(str).str.strip()
+        obs_frame["date"] = pd.to_datetime(obs_frame["obs_date"], errors="coerce").dt.normalize()
+        obs_frame = obs_frame[
+            obs_frame["Indicator"].ne("")
+            & obs_frame["Indicator"].ne("nan")
+            & obs_frame["Partner"].ne("")
+            & obs_frame["Partner"].ne("nan")
         ]
-        if panel.empty:
+        if obs_frame.empty:
             return empty
         eval_date = pd.to_datetime(obs_date_str, format=DATE_FMT, errors="coerce")
         if pd.notna(eval_date):
-            panel = panel[panel["date"] == eval_date]
-        if panel.empty:
+            obs_frame = obs_frame[obs_frame["date"] == eval_date]
+        if obs_frame.empty:
             return empty
-        out = panel.drop_duplicates(["Indicator", "Partner"])[["Indicator", "Partner"]]
+        out = obs_frame.drop_duplicates(["Indicator", "Partner"])[["Indicator", "Partner"]]
         out["Observed"] = 1
         return out
 

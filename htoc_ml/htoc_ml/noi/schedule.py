@@ -11,7 +11,7 @@ class CutoffSchedule:
         self.val_count = val_count
 
     @classmethod
-    def build(cls, day_min: Day, day_max: Day, config: ForecastConfig) -> "CutoffSchedule":
+    def build(cutoff_schedule_class, day_min: Day, day_max: Day, config: ForecastConfig) -> "CutoffSchedule":
         cutoffs = list(
             range(
                 day_min + config.lookback_days,
@@ -29,7 +29,7 @@ class CutoffSchedule:
                 f"Increase train_days."
             )
         val_count = max(1, int(len(cutoffs) * config.val_tail_frac))
-        return cls(cutoffs, val_count)
+        return cutoff_schedule_class(cutoffs, val_count)
 
     @property
     def val_cutoffs(self) -> set[Day]:

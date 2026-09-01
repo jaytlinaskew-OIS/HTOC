@@ -10,8 +10,8 @@ from htoc_ml.core.day import to_day_index
 
 
 @pytest.fixture
-def synthetic_panel() -> pd.DataFrame:
-    """Small in-memory observation panel. No share mount required."""
+def synthetic_observation_frame() -> pd.DataFrame:
+    """Small in-memory observation rows. No share mount required."""
     start = date(2026, 1, 1)
     rows = []
     for offset in range(60):

@@ -53,7 +53,7 @@ class ForecastConfig:
         return max(self.horizons)
 
     @classmethod
-    def from_env(cls) -> "ForecastConfig":
+    def from_env(forecast_config_class) -> "ForecastConfig":
         try:
             as_of_raw = os.environ.get("NOI_V4_AS_OF", "").strip()
             as_of = datetime.strptime(as_of_raw, DATE_FMT).date() if as_of_raw else None
@@ -63,7 +63,7 @@ class ForecastConfig:
             share = str(htoc_paths.share_root())
             obs = os.environ.get("HTOC_OBS_TEMPLATE", "").strip()
             save = os.environ.get("NOI_V4_SAVE_DIR", "").strip()
-            return cls(
+            return forecast_config_class(
                 htoc_share_root=share,
                 obs_template=obs,
                 save_dir=save,

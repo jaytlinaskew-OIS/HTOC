@@ -54,7 +54,7 @@ def test_run_daily_reports_missing_report(capsys, tmp_path: Path):
 @patch("htoc_ml.noi.runner.fit_model_on_history")
 @patch("htoc_ml.noi.runner.fill_outage_gaps")
 @patch("htoc_ml.noi.runner.report_feed_health")
-@patch("htoc_ml.noi.runner.load_observation_panel")
+@patch("htoc_ml.noi.runner.load_observation_data")
 def test_noi_runner_calls_steps_in_order(
     mock_load,
     mock_health,

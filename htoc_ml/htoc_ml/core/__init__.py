@@ -1,5 +1,5 @@
 from htoc_ml.core.day import Day, to_date, to_day_index, to_timestamp
-from htoc_ml.core.observations import IndicatorIndex, ObservationPanel
+from htoc_ml.core.observations import IndicatorIndex, ObservationData
 from htoc_ml.core.paths import (
     noi_forecast_save_dir,
     opdiv_obs_template,
@@ -11,7 +11,7 @@ from htoc_ml.core.threatconnect import ThreatConnectClient, build_indicator_tql,
 __all__ = [
     "Day",
     "IndicatorIndex",
-    "ObservationPanel",
+    "ObservationData",
     "PipelineError",
     "PipelineNoWork",
     "ThreatConnectClient",

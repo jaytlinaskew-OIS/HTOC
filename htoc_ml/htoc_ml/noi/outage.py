@@ -40,7 +40,7 @@ daily regulars, so an outage there cannot be papered over by this and the
 forecast should be treated as absent rather than quiet.
 
 More importantly, an outage is not always a neutral gap in an unchanged stream.
-Across the six outage episodes in the panel with enough history to test, five
+Across the six outage episodes in the data with enough history to test, five
 would have imputed near-perfectly -- FDA Apr 22-23, VA Feb 26 and HHS Jul 12 at
 zero error, HRSA's two single days within four points. HHS 22-23 Aug did not:
 its volume returned to 99% of normal while 32 of its 134 regulars, every one of
@@ -49,7 +49,7 @@ outage was an upstream content change wearing an outage's clothes, and while it
 was happening it looked exactly like FDA's clean one.
 
 That case cannot be detected in advance, so it is detected afterwards instead.
-`verify_recovery` re-reads the regulars once the feed is back and reports any
+`verify_outage_recovery` re-reads the regulars once the feed is back and reports any
 that did not return, which surfaced the HHS shortfall on the first day of
 recovery. Imputation is worth doing -- weighted across those episodes it is
 about 96% accurate, against a status quo that is 0% -- but it is an assertion
@@ -61,14 +61,15 @@ Imputed observations feed features only. They must never reach seen_next(), or
 the pipeline starts manufacturing training labels out of its own assumptions --
 the exact poisoning the feed-health mask exists to prevent, except self-inflicted
 and invisible, because the mask keys on empty days and an imputed day is not
-empty. The separation is structural rather than conventional: `build()` returns
-a second lookup for features and leaves the original untouched for labels.
+empty. The separation is structural rather than conventional: `build_imputed_feature_lookup`
+returns a second lookup for features and leaves the original untouched for labels.
 """
 
 from __future__ import annotations
 
 import os
 from collections import defaultdict
+from dataclasses import dataclass, field
 from datetime import date, timedelta
 
 import numpy as np
@@ -117,240 +118,231 @@ VERIFY_ALERT_PP = _env_float("NOI_V4_IMPUTE_VERIFY_ALERT_PP", 10.0)
 _UNUSABLE = {fh.OUTAGE, fh.MISSING}
 
 
-class OutageImputer:
-    """Fills an OpDiv's reliably-present indicators across a short outage.
+@dataclass
+class OutageContext:
+    """Indexed observation history and feed-health state for outage imputation."""
 
-    Consumes the panel the runner has already loaded, so no observation file is
-    read a second time.
-    """
+    health: fh.FeedHealth
+    regular_rate: float
+    lookback: int
+    max_outage_days: int
+    epoch: np.datetime64
+    byday: dict[tuple[str, int], set[str]]
+    day_min: int
+    day_max: int
+    opdivs: list[str]
+    status_cache: dict[tuple[str, int], str] = field(default_factory=dict)
 
-    def __init__(
-        self,
-        panel: pd.DataFrame,
-        health: fh.FeedHealth,
-        regular_rate: float | None = None,
-        lookback: int | None = None,
-        max_outage_days: int | None = None,
-    ) -> None:
-        self.health = health
-        self.regular_rate = REGULAR_RATE if regular_rate is None else regular_rate
-        self.lookback = REGULAR_LOOKBACK if lookback is None else lookback
-        self.max_outage_days = (
-            MAX_OUTAGE_DAYS if max_outage_days is None else max_outage_days
+
+def prepare_outage_context(observation_frame: pd.DataFrame, health: fh.FeedHealth, regular_rate: float | None = None, lookback: int | None = None, max_outage_days: int | None = None) -> OutageContext:
+    """Index loaded observation rows for outage detection and imputation."""
+    if "date" not in observation_frame.columns:
+        raise ValueError("observation data needs a 'date' column to anchor its day integers")
+    ref = observation_frame.iloc[0]
+    epoch = np.datetime64(pd.Timestamp(ref["date"]).date()) - np.timedelta64(int(ref["d"]), "D")
+
+    byday: dict[tuple[str, int], set[str]] = defaultdict(set)
+    for opd, ind, di in zip(
+        observation_frame["opdiv"], observation_frame["indicator"], observation_frame["d"]
+    ):
+        byday[(opd, int(di))].add(ind)
+
+    day_min = int(observation_frame["d"].min())
+    day_max = int(observation_frame["d"].max())
+    opdivs = sorted(observation_frame["opdiv"].unique())
+
+    probe = observation_frame.iloc[len(observation_frame) // 2]
+    if day_index_to_date(epoch, int(probe["d"])) != pd.Timestamp(probe["date"]).date():
+        raise ValueError(
+            "day-integer epoch does not round-trip against the observation dates; "
+            "every feed would read as dark"
         )
 
-        # The runner counts days from its own epoch, not the Unix one. Deriving
-        # the offset from a row of the panel rather than restating the constant
-        # keeps the two from drifting apart -- getting this wrong is silent, and
-        # reads as every feed having been dark for the whole window.
-        if "date" not in panel.columns:
-            raise ValueError("panel needs a 'date' column to anchor its day integers")
-        ref = panel.iloc[0]
-        self._epoch = np.datetime64(pd.Timestamp(ref["date"]).date()) - np.timedelta64(
-            int(ref["d"]), "D"
-        )
+    return OutageContext(
+        health=health,
+        regular_rate=REGULAR_RATE if regular_rate is None else regular_rate,
+        lookback=REGULAR_LOOKBACK if lookback is None else lookback,
+        max_outage_days=MAX_OUTAGE_DAYS if max_outage_days is None else max_outage_days,
+        epoch=epoch,
+        byday=dict(byday),
+        day_min=day_min,
+        day_max=day_max,
+        opdivs=opdivs,
+    )
 
-        self._byday: dict[tuple[str, int], set[str]] = defaultdict(set)
-        for opd, ind, di in zip(panel["opdiv"], panel["indicator"], panel["d"]):
-            self._byday[(opd, int(di))].add(ind)
 
-        self._day_min = int(panel["d"].min())
-        self._day_max = int(panel["d"].max())
-        self._opdivs = sorted(panel["opdiv"].unique())
-        self._status: dict[tuple[str, int], str] = {}
+def day_index_to_date(epoch: np.datetime64, day_index: int) -> date:
+    return (epoch + np.timedelta64(int(day_index), "D")).astype(date)
 
-        probe = panel.iloc[len(panel) // 2]
-        if self.to_date(int(probe["d"])) != pd.Timestamp(probe["date"]).date():
-            raise ValueError(
-                "day-integer epoch does not round-trip against the panel's dates; "
-                "every feed would read as dark"
-            )
 
-    # ------------------------------------------------------------------ days
-    def to_date(self, di: int) -> date:
-        return (self._epoch + np.timedelta64(int(di), "D")).astype(date)
+def feed_status(context: OutageContext, opdiv: str, day_index: int) -> str:
+    key = (opdiv, day_index)
+    cached = context.status_cache.get(key)
+    if cached is not None:
+        return cached
+    status = context.health.status(opdiv, day_index_to_date(context.epoch, day_index))
+    context.status_cache[key] = status
+    return status
 
-    def _stat(self, opdiv: str, di: int) -> str:
-        key = (opdiv, di)
-        if key not in self._status:
-            self._status[key] = self.health.status(opdiv, self.to_date(di))
-        return self._status[key]
 
-    def _healthy_before(self, opdiv: str, di: int, n: int) -> list[int]:
-        """The n most recent days before `di` whose data can be believed."""
-        out: list[int] = []
-        d = di - 1
-        while d >= self._day_min and len(out) < n:
-            if self._stat(opdiv, d) not in _UNUSABLE and self._byday.get((opdiv, d)):
-                out.append(d)
-            d -= 1
-        return sorted(out)
+def healthy_days_before(context: OutageContext, opdiv: str, day_index: int, count: int) -> list[int]:
+    """The `count` most recent days before `day_index` whose data can be believed."""
+    out: list[int] = []
+    d = day_index - 1
+    while d >= context.day_min and len(out) < count:
+        if feed_status(context, opdiv, d) not in _UNUSABLE and context.byday.get((opdiv, d)):
+            out.append(d)
+        d -= 1
+    return sorted(out)
 
-    def outage_runs(self, opdiv: str) -> list[list[int]]:
-        """Contiguous dark stretches for an OpDiv, oldest first."""
-        bad = [
-            d
-            for d in range(self._day_min, self._day_max + 1)
-            if self._stat(opdiv, d) in _UNUSABLE
-        ]
-        if not bad:
-            return []
-        runs, cur = [], [bad[0]]
-        for d in bad[1:]:
-            if d == cur[-1] + 1:
-                cur.append(d)
-            else:
-                runs.append(cur)
-                cur = [d]
-        runs.append(cur)
-        return runs
 
-    # -------------------------------------------------------------- regulars
-    def regulars(self, opdiv: str, before_di: int) -> tuple[set[str], int]:
-        """Indicators present on at least `regular_rate` of the trailing healthy days.
+def outage_runs(context: OutageContext, opdiv: str) -> list[list[int]]:
+    """Contiguous dark stretches for an OpDiv, oldest first."""
+    bad = [
+        d
+        for d in range(context.day_min, context.day_max + 1)
+        if feed_status(context, opdiv, d) in _UNUSABLE
+    ]
+    if not bad:
+        return []
+    runs, cur = [], [bad[0]]
+    for d in bad[1:]:
+        if d == cur[-1] + 1:
+            cur.append(d)
+        else:
+            runs.append(cur)
+            cur = [d]
+    runs.append(cur)
+    return runs
 
-        Trailing-only by construction: nothing at or after `before_di` is read,
-        so a regular list built during an outage could have been built live.
-        """
-        hd = self._healthy_before(opdiv, before_di, self.lookback)
-        if len(hd) < max(10, self.lookback // 3):
-            return set(), len(hd)
-        counts: dict[str, int] = defaultdict(int)
-        for d in hd:
-            for ind in self._byday.get((opdiv, d), ()):
-                counts[ind] += 1
-        need = self.regular_rate * len(hd)
-        recent = set()
-        for d in hd[-MAX_PRE_GAP:]:
-            recent |= self._byday.get((opdiv, d), set())
-        return {i for i, n in counts.items() if n >= need and i in recent}, len(hd)
 
-    # ----------------------------------------------------------------- build
-    def build(self, lookup: dict) -> tuple[dict, list[dict]]:
-        """Return a feature-only lookup with outage days filled, plus a report.
+def regular_indicators(context: OutageContext, opdiv: str, before_day_index: int) -> tuple[set[str], int]:
+    """Indicators present on at least `regular_rate` of the trailing healthy days."""
+    healthy = healthy_days_before(context, opdiv, before_day_index, context.lookback)
+    if len(healthy) < max(10, context.lookback // 3):
+        return set(), len(healthy)
+    counts: dict[str, int] = defaultdict(int)
+    for d in healthy:
+        for ind in context.byday.get((opdiv, d), ()):
+            counts[ind] += 1
+    need = context.regular_rate * len(healthy)
+    recent = set()
+    for d in healthy[-MAX_PRE_GAP:]:
+        recent |= context.byday.get((opdiv, d), set())
+    return {i for i, n in counts.items() if n >= need and i in recent}, len(healthy)
 
-        The input mapping is not modified. Labels must keep using it.
-        """
-        report: list[dict] = []
-        if not IMPUTE_ENABLED:
-            return lookup, report
 
-        add: dict[tuple[str, str], list[int]] = defaultdict(list)
-        for opdiv in self._opdivs:
-            for run in self.outage_runs(opdiv):
-                fill = run[: self.max_outage_days]
-                regs, n_hist = self.regulars(opdiv, run[0])
-                entry = {
-                    "opdiv": opdiv,
-                    "start": self.to_date(run[0]),
-                    "end": self.to_date(run[-1]),
-                    "days": len(run),
-                    "days_filled": len(fill) if len(regs) >= MIN_REGULARS else 0,
-                    "regulars": len(regs),
-                    "history_days": n_hist,
-                    "truncated": len(run) > len(fill),
-                }
-                if len(regs) < MIN_REGULARS:
-                    entry["skipped"] = (
-                        f"only {len(regs)} regulars; this feed has no daily core"
-                    )
-                    report.append(entry)
-                    continue
-                for ind in regs:
-                    if (opdiv, ind) in lookup:
-                        add[(opdiv, ind)].extend(fill)
+def build_imputed_feature_lookup(context: OutageContext, lookup: dict) -> tuple[dict, list[dict]]:
+    """Return a feature-only lookup with outage days filled, plus a report."""
+    report: list[dict] = []
+    if not IMPUTE_ENABLED:
+        return lookup, report
+
+    add: dict[tuple[str, str], list[int]] = defaultdict(list)
+    for opdiv in context.opdivs:
+        for run in outage_runs(context, opdiv):
+            fill = run[: context.max_outage_days]
+            regulars, n_hist = regular_indicators(context, opdiv, run[0])
+            entry = {
+                "opdiv": opdiv,
+                "start": day_index_to_date(context.epoch, run[0]),
+                "end": day_index_to_date(context.epoch, run[-1]),
+                "days": len(run),
+                "days_filled": len(fill) if len(regulars) >= MIN_REGULARS else 0,
+                "regulars": len(regulars),
+                "history_days": n_hist,
+                "truncated": len(run) > len(fill),
+            }
+            if len(regulars) < MIN_REGULARS:
+                entry["skipped"] = f"only {len(regulars)} regulars; this feed has no daily core"
                 report.append(entry)
+                continue
+            for ind in regulars:
+                if (opdiv, ind) in lookup:
+                    add[(opdiv, ind)].extend(fill)
+            report.append(entry)
 
-        if not add:
-            return lookup, report
+    if not add:
+        return lookup, report
 
-        imputed = dict(lookup)
-        for key, days in add.items():
-            imputed[key] = np.unique(
-                np.concatenate([lookup[key], np.asarray(days, dtype=lookup[key].dtype)])
-            )
-        return imputed, report
+    imputed = dict(lookup)
+    for key, days in add.items():
+        imputed[key] = np.unique(
+            np.concatenate([lookup[key], np.asarray(days, dtype=lookup[key].dtype)])
+        )
+    return imputed, report
 
-    def imputed_indicators(self, lookup: dict, upto_di: int | None = None) -> set[tuple[str, str]]:
-        """Pairs whose features rest on a filled day, for flagging output rows.
 
-        `upto_di` restricts to outages still affecting a cutoff -- an outage that
-        ended months ago no longer colours today's forecast in any way worth
-        marking.
-        """
-        out: set[tuple[str, str]] = set()
-        if not IMPUTE_ENABLED:
-            return out
-        horizon = 0 if upto_di is None else upto_di
-        for opdiv in self._opdivs:
-            for run in self.outage_runs(opdiv):
-                if upto_di is not None and run[-1] < horizon - self.max_outage_days:
-                    continue
-                regs, _ = self.regulars(opdiv, run[0])
-                if len(regs) < MIN_REGULARS:
-                    continue
-                for ind in regs:
-                    if (opdiv, ind) in lookup:
-                        out.add((opdiv, ind))
+def imputed_indicator_pairs(context: OutageContext, lookup: dict, upto_day_index: int | None = None) -> set[tuple[str, str]]:
+    """Pairs whose features rest on a filled day, for flagging output rows."""
+    out: set[tuple[str, str]] = set()
+    if not IMPUTE_ENABLED:
         return out
+    horizon = 0 if upto_day_index is None else upto_day_index
+    for opdiv in context.opdivs:
+        for run in outage_runs(context, opdiv):
+            if upto_day_index is not None and run[-1] < horizon - context.max_outage_days:
+                continue
+            regulars, _ = regular_indicators(context, opdiv, run[0])
+            if len(regulars) < MIN_REGULARS:
+                continue
+            for ind in regulars:
+                if (opdiv, ind) in lookup:
+                    out.add((opdiv, ind))
+    return out
 
-    # ------------------------------------------------------------- verifying
-    def verify_recovery(self) -> list[dict]:
-        """Check whether each ended outage's regulars actually came back.
 
-        This is the guard against the HHS case, where a feed returns at full
-        volume having quietly dropped part of its content. It is retrospective
-        by necessity -- during the outage there is nothing to compare against --
-        but it fires on the first day of recovery, which is early enough to stop
-        imputing into a feed that has changed underneath us.
-        """
-        findings: list[dict] = []
-        if not IMPUTE_ENABLED:
-            return findings
-
-        for opdiv in self._opdivs:
-            for run in self.outage_runs(opdiv):
-                after = [
-                    d
-                    for d in range(run[-1] + 1, self._day_max + 1)
-                    if self._stat(opdiv, d) not in _UNUSABLE
-                    and self._byday.get((opdiv, d))
-                ][:VERIFY_WINDOW]
-                if len(after) < VERIFY_WINDOW:
-                    continue  # still dark, or too soon to judge
-                regs, _ = self.regulars(opdiv, run[0])
-                if len(regs) < MIN_REGULARS:
-                    continue
-
-                back = {
-                    i for i in regs if any(i in self._byday.get((opdiv, d), ()) for d in after)
-                }
-                returned = 100.0 * len(back) / len(regs)
-
-                pre = self._healthy_before(opdiv, run[0], self.lookback)
-                ratios = []
-                for k in range(len(pre) - VERIFY_WINDOW):
-                    w = pre[k : k + VERIFY_WINDOW]
-                    hit = {i for i in regs if any(i in self._byday.get((opdiv, d), ()) for d in w)}
-                    ratios.append(100.0 * len(hit) / len(regs))
-                baseline = sum(ratios) / len(ratios) if ratios else 100.0
-
-                shortfall = baseline - returned
-                if shortfall < VERIFY_ALERT_PP:
-                    continue
-                findings.append(
-                    {
-                        "opdiv": opdiv,
-                        "start": self.to_date(run[0]),
-                        "end": self.to_date(run[-1]),
-                        "regulars": len(regs),
-                        "returned_pct": round(returned, 1),
-                        "baseline_pct": round(baseline, 1),
-                        "shortfall_pp": round(shortfall, 1),
-                        "lost": len(regs) - len(back),
-                    }
-                )
+def verify_outage_recovery(context: OutageContext) -> list[dict]:
+    """Check whether each ended outage's regulars actually came back."""
+    findings: list[dict] = []
+    if not IMPUTE_ENABLED:
         return findings
+
+    for opdiv in context.opdivs:
+        for run in outage_runs(context, opdiv):
+            after = [
+                d
+                for d in range(run[-1] + 1, context.day_max + 1)
+                if feed_status(context, opdiv, d) not in _UNUSABLE
+                and context.byday.get((opdiv, d))
+            ][:VERIFY_WINDOW]
+            if len(after) < VERIFY_WINDOW:
+                continue
+            regulars, _ = regular_indicators(context, opdiv, run[0])
+            if len(regulars) < MIN_REGULARS:
+                continue
+
+            back = {
+                i for i in regulars if any(i in context.byday.get((opdiv, d), ()) for d in after)
+            }
+            returned = 100.0 * len(back) / len(regulars)
+
+            pre = healthy_days_before(context, opdiv, run[0], context.lookback)
+            ratios = []
+            for k in range(len(pre) - VERIFY_WINDOW):
+                window = pre[k : k + VERIFY_WINDOW]
+                hit = {
+                    i for i in regulars if any(i in context.byday.get((opdiv, d), ()) for d in window)
+                }
+                ratios.append(100.0 * len(hit) / len(regulars))
+            baseline = sum(ratios) / len(ratios) if ratios else 100.0
+
+            shortfall = baseline - returned
+            if shortfall < VERIFY_ALERT_PP:
+                continue
+            findings.append(
+                {
+                    "opdiv": opdiv,
+                    "start": day_index_to_date(context.epoch, run[0]),
+                    "end": day_index_to_date(context.epoch, run[-1]),
+                    "regulars": len(regulars),
+                    "returned_pct": round(returned, 1),
+                    "baseline_pct": round(baseline, 1),
+                    "shortfall_pp": round(shortfall, 1),
+                    "lost": len(regulars) - len(back),
+                }
+            )
+    return findings
 
 
 def format_report(report: list[dict]) -> list[str]:

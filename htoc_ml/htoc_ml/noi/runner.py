@@ -1,7 +1,7 @@
 """Next Observed Indicator forecast process.
 
 Walkthrough (start at run_next_observed_indicator_forecast):
-  1. load_observation_panel
+  1. load_observation_data
   2. report_feed_health
   3. fill_outage_gaps
   4. fit_model_on_history
@@ -17,15 +17,22 @@ import numpy as np
 import pandas as pd
 
 from htoc_ml.core.day import to_day_index, to_timestamp
-from htoc_ml.core.observations import ObservationPanel
+from htoc_ml.core.observations import ObservationData
 from htoc_ml.core.pipeline import PipelineError
 from htoc_ml.noi.bands import BandPolicy
 from htoc_ml.noi.config import DATE_FMT, ForecastConfig
 from htoc_ml.noi.dataset import TrainingSet
-from htoc_ml.noi.features import FeatureBuilder
+from htoc_ml.noi.features import featurize_window
 from htoc_ml.noi.feed_health import FeedHealth
 from htoc_ml.noi.model import HorizonModel
-from htoc_ml.noi.outage import OutageImputer, format_findings
+from htoc_ml.noi.outage import (
+    OutageContext,
+    build_imputed_feature_lookup,
+    format_findings,
+    imputed_indicator_pairs,
+    prepare_outage_context,
+    verify_outage_recovery,
+)
 from htoc_ml.noi.report import ProductionReport
 from htoc_ml.noi.schedule import CutoffSchedule
 
@@ -33,18 +40,18 @@ from htoc_ml.noi.schedule import CutoffSchedule
 def run_next_observed_indicator_forecast(config: ForecastConfig | None = None) -> list[Path]:
     """Build the forecast and write OpDiv CSVs. Returns paths written."""
     config = config or ForecastConfig.from_env()
-    panel = load_observation_panel(config)
-    health = report_feed_health(panel, config)
-    imputer = fill_outage_gaps(panel, health)
-    model, training, as_of_day = fit_model_on_history(panel, health, config)
-    scored = score_indicators(panel, training, model, imputer, as_of_day, config)
+    observations = load_observation_data(config)
+    health = report_feed_health(observations, config)
+    outage_context = fill_outage_gaps(observations, health)
+    model, training, as_of_day = fit_model_on_history(observations, health, config)
+    scored = score_indicators(observations, training, model, outage_context, as_of_day, config)
     written = write_opdiv_csv(scored, as_of_day, config)
     write_opdiv_eval(as_of_day, config)
     return written
 
 
-def load_observation_panel(config: ForecastConfig) -> ObservationPanel:
-    return ObservationPanel.load(
+def load_observation_data(config: ForecastConfig) -> ObservationData:
+    return ObservationData.load(
         obs_template=config.obs_template,
         train_days=config.train_days,
         end_date=config.as_of,
@@ -53,31 +60,32 @@ def load_observation_panel(config: ForecastConfig) -> ObservationPanel:
     )
 
 
-def report_feed_health(panel: ObservationPanel, config: ForecastConfig) -> FeedHealth:
-    return FeedHealth.from_panel(panel.frame, today=config.as_of)
+def report_feed_health(observations: ObservationData, config: ForecastConfig) -> FeedHealth:
+    return FeedHealth.from_data(observations.frame, today=config.as_of)
 
 
-def fill_outage_gaps(panel: ObservationPanel, health: FeedHealth) -> OutageImputer:
-    imputer = OutageImputer(panel.frame, health)
-    feature_lookup, _impute_report = imputer.build(panel.labels.as_dict())
-    panel.set_features(feature_lookup)
-    findings = imputer.verify_recovery()
+def fill_outage_gaps(observations: ObservationData, health: FeedHealth) -> OutageContext:
+    context = prepare_outage_context(observations.frame, health)
+    feature_lookup, _impute_report = build_imputed_feature_lookup(
+        context, observations.labels.as_dict()
+    )
+    observations.set_features(feature_lookup)
+    findings = verify_outage_recovery(context)
     if findings:
         print("WARNING: feed composition changed across an outage")
         for line in format_findings(findings):
             print(line)
-    return imputer
+    return context
 
 
-def fit_model_on_history(panel: ObservationPanel, health: FeedHealth, config: ForecastConfig) -> tuple[HorizonModel, TrainingSet, int]:
+def fit_model_on_history(observations: ObservationData, health: FeedHealth, config: ForecastConfig) -> tuple[HorizonModel, TrainingSet, int]:
     training = TrainingSet(
         config=config,
-        feature_builder=FeatureBuilder(config.lookback_days),
-        labels=panel.labels,
-        features=panel.features,
+        labels=observations.labels,
+        features=observations.features,
         health=health,
     )
-    schedule = CutoffSchedule.build(panel.day_min, panel.day_max, config)
+    schedule = CutoffSchedule.build(observations.day_min, observations.day_max, config)
     train_df = training.build_rows(schedule.cutoffs, need_label=True)
     if train_df.empty:
         raise PipelineError("Training frame is empty after feature build.")
@@ -85,13 +93,13 @@ def fit_model_on_history(panel: ObservationPanel, health: FeedHealth, config: Fo
     model = HorizonModel(config, training).fit(train_df, schedule)
 
     if config.as_of is None:
-        as_of_day = panel.day_max
+        as_of_day = observations.day_max
     else:
         as_of_day = int(to_day_index(np.datetime64(pd.Timestamp(config.as_of).date())))
     return model, training, as_of_day
 
 
-def score_indicators(panel: ObservationPanel, training: TrainingSet, model: HorizonModel, imputer: OutageImputer, as_of_day: int, config: ForecastConfig) -> pd.DataFrame:
+def score_indicators(observations: ObservationData, training: TrainingSet, model: HorizonModel, outage_context: OutageContext, as_of_day: int, config: ForecastConfig) -> pd.DataFrame:
     infer_df = training.build_rows([as_of_day], need_label=False)
     if infer_df.empty:
         raise PipelineError(
@@ -109,9 +117,11 @@ def score_indicators(panel: ObservationPanel, training: TrainingSet, model: Hori
             for p, opdiv in zip(probabilities[:, j], out["opdiv"])
         ]
 
-    imputed_pairs = imputer.imputed_indicators(panel.labels.as_dict(), upto_di=as_of_day)
+    imputed_pairs = imputed_indicator_pairs(
+        outage_context, observations.labels.as_dict(), upto_day_index=as_of_day
+    )
     out["observed_today"] = [
-        panel.labels.really_seen(opdiv, indicator, as_of_day)
+        observations.labels.really_seen(opdiv, indicator, as_of_day)
         for opdiv, indicator in zip(out["opdiv"], out["indicator"])
     ]
     out["basis"] = [

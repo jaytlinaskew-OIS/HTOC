@@ -1,4 +1,4 @@
-"""Daily observation files as a panel plus per-indicator day-index lookups."""
+"""Daily observation files as loaded data plus per-indicator day-index lookups."""
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
@@ -37,9 +37,7 @@ class IndicatorIndex:
         upto = np.searchsorted(dates, cutoff_day + horizon_days, side="right")
         return 1 if upto > after else 0
 
-    def seen_next_horizons(
-        self, dates: np.ndarray, cutoff_day: Day, horizons: tuple[int, ...] | list[int]
-    ) -> dict[int, int]:
+    def seen_next_horizons(self, dates: np.ndarray, cutoff_day: Day, horizons: tuple[int, ...] | list[int]) -> dict[int, int]:
         """Batch seen_next for multiple horizons; one lower-bound search, H upper-bound."""
         after = np.searchsorted(dates, cutoff_day + 1, side="left")
         return {
@@ -65,18 +63,10 @@ class IndicatorIndex:
         return self._lookup
 
 
-class ObservationPanel:
+class ObservationData:
     """Loaded observation rows plus the raw (label-safe) indicator index."""
 
-    def __init__(
-        self,
-        frame: pd.DataFrame,
-        labels: IndicatorIndex,
-        expected_files: int,
-        found_files: int,
-        missing_files: list[str],
-        end_date: date,
-    ) -> None:
+    def __init__(self, frame: pd.DataFrame, labels: IndicatorIndex, expected_files: int, found_files: int, missing_files: list[str], end_date: date) -> None:
         self.frame = frame
         self.labels = labels
         self.features = labels
@@ -97,12 +87,12 @@ class ObservationPanel:
         self.features = IndicatorIndex(lookup)
 
     @classmethod
-    def from_frame(cls, frame: pd.DataFrame, end_date: date | None = None) -> "ObservationPanel":
+    def from_frame(observation_data_class, frame: pd.DataFrame, end_date: date | None = None) -> "ObservationData":
         lookup: dict[tuple[str, str], np.ndarray] = {}
         for (opdiv, indicator), group in frame.groupby(["opdiv", "indicator"], sort=False):
             lookup[(opdiv, indicator)] = np.sort(group["d"].to_numpy())
         end = end_date or datetime.today().date()
-        return cls(
+        return observation_data_class(
             frame=frame,
             labels=IndicatorIndex(lookup),
             expected_files=0,
@@ -112,14 +102,7 @@ class ObservationPanel:
         )
 
     @classmethod
-    def load(
-        cls,
-        obs_template: str,
-        train_days: int,
-        end_date: date | None = None,
-        min_file_coverage: float = 0.0,
-        max_lag_days: int = 2,
-    ) -> "ObservationPanel":
+    def load(observation_data_class, obs_template: str, train_days: int, end_date: date | None = None, min_file_coverage: float = 0.0, max_lag_days: int = 2) -> "ObservationData":
         today = end_date or datetime.today().date()
         start = today - timedelta(days=train_days)
         frames: list[pd.DataFrame] = []
@@ -156,19 +139,19 @@ class ObservationPanel:
                 f"(template={obs_template}). Check share path / date coverage."
             )
 
-        panel = pd.concat(frames, ignore_index=True)
-        panel["indicator"] = panel["indicator"].astype(str).str.strip()
-        panel["opdiv"] = panel["OpDiv"].astype(str).str.strip()
-        panel["date"] = pd.to_datetime(panel["obs_date"], errors="coerce").dt.normalize()
-        panel = panel[["indicator", "opdiv", "date"]].dropna()
-        panel = panel[panel["indicator"].ne("nan") & panel["indicator"].ne("")]
-        panel = panel.drop_duplicates(["indicator", "opdiv", "date"])
-        if panel.empty:
+        frame = pd.concat(frames, ignore_index=True)
+        frame["indicator"] = frame["indicator"].astype(str).str.strip()
+        frame["opdiv"] = frame["OpDiv"].astype(str).str.strip()
+        frame["date"] = pd.to_datetime(frame["obs_date"], errors="coerce").dt.normalize()
+        frame = frame[["indicator", "opdiv", "date"]].dropna()
+        frame = frame[frame["indicator"].ne("nan") & frame["indicator"].ne("")]
+        frame = frame.drop_duplicates(["indicator", "opdiv", "date"])
+        if frame.empty:
             from htoc_ml.core.pipeline import PipelineError
 
-            raise PipelineError("Observation files were found, but the cleaned panel is empty.")
-        panel["d"] = to_day_index(panel["date"].values.astype("datetime64[D]"))
-        loaded = cls.from_frame(panel, end_date=today)
+            raise PipelineError("Observation files were found, but the cleaned data is empty.")
+        frame["d"] = to_day_index(frame["date"].values.astype("datetime64[D]"))
+        loaded = observation_data_class.from_frame(frame, end_date=today)
         loaded.expected_files = expected
         loaded.found_files = found
         loaded.missing_files = missing
@@ -182,6 +165,6 @@ class ObservationPanel:
 
     def describe(self) -> str:
         return (
-            f"panel: {len(self.frame):,} rows | {len(self.labels):,} (opdiv,indicator) | "
+            f"observations: {len(self.frame):,} rows | {len(self.labels):,} (opdiv,indicator) | "
             f"{to_timestamp(self.day_min).date()} -> {to_timestamp(self.day_max).date()}"
         )

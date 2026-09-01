@@ -36,7 +36,7 @@ computed; what protects the reader is that the row says how complete it was,
 not that the cell was left blank.
 
 Counts can come from observation files (lazily, with caching) or from an
-already-loaded panel DataFrame, so the forecast runner does not pay to read
+already-loaded observation DataFrame, so the forecast runner does not pay to read
 the same 220 files twice.
 """
 
@@ -210,24 +210,24 @@ class FeedHealth:
     # ---------- construction ----------
 
     @classmethod
-    def from_panel(cls, panel: pd.DataFrame, **kwargs) -> "FeedHealth":
-        """Build from an already-loaded panel of (indicator, opdiv, date) rows.
+    def from_data(feed_health_class, observation_frame: pd.DataFrame, **kwargs) -> "FeedHealth":
+        """Build from already-loaded observation rows (indicator, opdiv, date).
 
-        Only days present in the panel are known; any other day reads as
+        Only days present in the data are known; any other day reads as
         MISSING, which is the conservative answer.
         """
         need = {"opdiv", "date"}
-        if not need.issubset(panel.columns):
-            raise ValueError(f"panel must have columns {sorted(need)}")
-        grp = panel.groupby([panel["date"].dt.date, "opdiv"]).size()
+        if not need.issubset(observation_frame.columns):
+            raise ValueError(f"observation data must have columns {sorted(need)}")
+        grp = observation_frame.groupby([observation_frame["date"].dt.date, "opdiv"]).size()
         counts: dict[date, dict[str, int]] = {}
         for (day, opdiv), n in grp.items():
             counts.setdefault(day, {})[str(opdiv).strip()] = int(n)
-        return cls(counts_by_day=counts, **kwargs)
+        return feed_health_class(counts_by_day=counts, **kwargs)
 
     @classmethod
-    def from_files(cls, obs_template: str, **kwargs) -> "FeedHealth":
-        return cls(obs_template=obs_template, **kwargs)
+    def from_files(feed_health_class, obs_template: str, **kwargs) -> "FeedHealth":
+        return feed_health_class(obs_template=obs_template, **kwargs)
 
     # ---------- raw counts ----------
 

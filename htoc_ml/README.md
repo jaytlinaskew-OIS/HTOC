@@ -146,9 +146,9 @@ Unit tests (no share mount): `py -3.13 -m pytest htoc_ml/tests`
 |---|---|
 | `L`, `HORIZONS`, `TRAIN_DAYS`, … | `ForecastConfig` |
 | `_to_int` / `_to_ts` | `htoc_ml.core.day` |
-| `load_panel` + `lookup` | `ObservationPanel` + `IndicatorIndex` |
-| `LOOKUP_FEAT` vs `lookup` | `panel.features` vs `panel.labels` |
-| `featurize` | `FeatureBuilder.featurize` (name-keyed dict) |
+| `load_panel` + `lookup` | `ObservationData` + `IndicatorIndex` |
+| `LOOKUP_FEAT` vs `lookup` | `observations.features` vs `observations.labels` |
+| `featurize` | `featurize(lookback_days, dates, cutoff_day)` (name-keyed dict) |
 | `train_cutoffs` | `CutoffSchedule` |
 | `build_rows` / `stack` | `TrainingSet` |
 | `new_model` + isotonic fit | `HorizonModel` |
@@ -178,7 +178,7 @@ Until step 5, the copies in this package are **intentional duplication**.
 
 Reusable as-is:
 
-- `ObservationPanel` — every HTOC model reads `htoc_opdiv_obs_d{date}.csv`
+- `ObservationData` — every HTOC model reads `htoc_opdiv_obs_d{date}.csv`
 - `htoc_ml.core.day` — epoch-integer days
 - `run_and_return_exit_code()` — wrap a `run_*()` function that returns `list[Path]`; prints `PIPELINE_OK`, maps `PipelineError` to exit codes 2/3/4
 - `core/threatconnect_presets.py` — shared TC owner/type lists for PRISM and ThreatScoreIW
@@ -188,7 +188,7 @@ Checklist:
 
 1. Add a `run_<model>()` orchestrator with numbered step functions (see module docstring walkthrough).
 2. Return `list[Path]` from the orchestrator; wire `__main__.py` through `run_and_return_exit_code`.
-3. Put model-specific code in its own subpackage (`htoc_ml.prism`, …). Do not inherit `FeatureBuilder` or `BandPolicy` unless the new model actually uses those features.
+3. Put model-specific code in its own subpackage (`htoc_ml.prism`, …). Do not reuse NOI feature or band helpers unless the new model actually uses them.
 4. Add a `tests/conftest.py` fixture that does not need the share.
 5. Use `ForecastConfig`-style frozen dataclasses for tunables, with validation in `__post_init__`.
 6. If the model is a classifier with a later binary label, call `count_bands` / `rates_from_counts` and pass your own `BandSpec`, `MetricAlertRule` list, and `LegendSpec`. Do not import `htoc_ml.noi.eval` for that.
@@ -197,7 +197,7 @@ Checklist:
 
 ### Changing NOI features
 
-`FeatureBuilder.featurize` returns a dict. Column order is `FEATURE_NAMES`. Constraints are `MONOTONIC_CONSTRAINTS`. A test fails if those three disagree. To add a feature: compute it in `featurize`, add the name, add its constraint — all in `features.py`.
+`featurize(lookback_days, dates, cutoff_day)` returns a dict. Column order is `FEATURE_NAMES`. Constraints are `MONOTONIC_CONSTRAINTS`. A test fails if those three disagree. To add a feature: compute it in `featurize`, add the name, add its constraint — all in `features.py`.
 
 ## Design decisions
 
@@ -205,13 +205,13 @@ Checklist:
 
 **`cutoff_step` must be coprime with 7.** A multiple of 7 pins every training cutoff to one weekday and aliases `last_seen` / gap structure.
 
-**AS-OF replay.** `NOI_V4_AS_OF` truncates the panel, so `day_max` and the label windows stop at that morning. Replay still reads today's settled files, so the last few days are slightly cleaner than they were live. Replayed days are recorded in `backfilled_forecasts.txt`.
+**AS-OF replay.** `NOI_V4_AS_OF` truncates the loaded observations, so `day_max` and the label windows stop at that morning. Replay still reads today's settled files, so the last few days are slightly cleaner than they were live. Replayed days are recorded in `backfilled_forecasts.txt`.
 
 **Masked labels are withheld, not counted as negatives.** `seen_next` cannot tell "this indicator went quiet" from "the feed was down". Those windows become NaN and `stack()` drops them per horizon.
 
 **Feature list.** Held-out permutation (31 Aug 2026): `last_seen` is most of the AUC drop; horizon, `avg_gap`, `overdue`, `freq_100`, burstiness, and the 7/14/30 windows pay rent. Dropped as dead or redundant: `freq_1`, `freq_45`, `active_frac`, `dow`, `mom`, `tenure`.
 
-**`Observed Today` vs `Frequency (1d)`.** `Observed Today` reads the raw panel. `Frequency (1d)` is `last_seen == 0` on (possibly imputed) features. A report line is a statement of fact; features may rest on a fill.
+**`Observed Today` vs `Frequency (1d)`.** `Observed Today` reads the raw observation data. `Frequency (1d)` is `last_seen == 0` on (possibly imputed) features. A report line is a statement of fact; features may rest on a fill.
 
 **Two indicator indexes.** Features may include imputed outage days. Labels never do. Mixing them poisons training.
 
