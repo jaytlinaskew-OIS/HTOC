@@ -69,12 +69,12 @@ class PrismConfig:
         return Path(self.save_dir) / self.excel_filename
 
     @classmethod
-    def daily(cls, **kwargs) -> "PrismConfig":
-        return cls(mode="daily", opdiv_lookback_days=365, **kwargs)
+    def daily(prism_config_class, **kwargs) -> "PrismConfig":
+        return prism_config_class(mode="daily", opdiv_lookback_days=365, **kwargs)
 
     @classmethod
-    def weekly(cls, **kwargs) -> "PrismConfig":
-        return cls(
+    def weekly(prism_config_class, **kwargs) -> "PrismConfig":
+        return prism_config_class(
             mode="weekly",
             indicator_types=WEEKLY_TYPES,
             owner_names=WEEKLY_OWNERS,
@@ -83,7 +83,7 @@ class PrismConfig:
         )
 
     @classmethod
-    def from_env(cls) -> "PrismConfig":
+    def from_env(prism_config_class) -> "PrismConfig":
         try:
             mode = os.environ.get("PRISM_MODE", "daily").strip().lower() or "daily"
             kwargs = {
@@ -93,10 +93,10 @@ class PrismConfig:
                 "save_dir": os.environ.get("PRISM_SAVE_DIR", ""),
             }
             if mode == "weekly":
-                return cls.weekly(**kwargs)
+                return prism_config_class.weekly(**kwargs)
             if mode != "daily":
                 raise PipelineError(f"PRISM_MODE must be 'daily' or 'weekly', got {mode!r}")
-            return cls.daily(**kwargs)
+            return prism_config_class.daily(**kwargs)
         except PipelineError:
             raise
         except (ValueError, TypeError) as exc:

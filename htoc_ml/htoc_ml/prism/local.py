@@ -56,16 +56,16 @@ def load_opdiv_observations(config: PrismConfig) -> pd.DataFrame:
     return frame
 
 
-def mass_scanner_flags(observed: pd.DataFrame) -> pd.DataFrame:
+def mass_scanner_flags(observation_rows: pd.DataFrame) -> pd.DataFrame:
     empty = pd.DataFrame(columns=[
         "indicator", "total_obs_7d", "unique_opdivs_7d", "unique_days_7d",
         "mass_scanner_tier1", "mass_scanner_tier2",
     ])
-    if observed.empty or "obs_date" not in observed.columns:
-        print("Mass scanner detection skipped — observed data is empty or missing obs_date.")
+    if observation_rows.empty or "obs_date" not in observation_rows.columns:
+        print("Mass scanner detection skipped — observation data is empty or missing obs_date.")
         return empty
     cutoff_7d = (pd.Timestamp.utcnow() - pd.Timedelta(days=7)).strftime("%Y-%m-%d")
-    obs_7d = observed[observed["obs_date"] >= cutoff_7d].copy()
+    obs_7d = observation_rows[observation_rows["obs_date"] >= cutoff_7d].copy()
     agg = (
         obs_7d.groupby("indicator")
         .agg(

@@ -79,9 +79,9 @@ def enrich_with_local_and_partner_context(client: ThreatConnectClient, observed_
     observed_src = annotate_incidents(observed_src)
     observed_src = attach_tag_lists(observed_src)
 
-    opdiv = load_opdiv_observations(config)
-    scanners = mass_scanner_flags(opdiv)
-    agg_df, _ = attach_partners(observed_src, opdiv)
+    observation_rows = load_opdiv_observations(config)
+    scanners = mass_scanner_flags(observation_rows)
+    agg_df, _ = attach_partners(observed_src, observation_rows)
     if not scanners.empty:
         agg_df = agg_df.merge(
             scanners[["indicator", "total_obs_7d", "unique_opdivs_7d", "mass_scanner_tier1", "mass_scanner_tier2"]],
@@ -110,7 +110,7 @@ def enrich_with_local_and_partner_context(client: ThreatConnectClient, observed_
         inplace=True,
         errors="ignore",
     )
-    return attach_yearly_obs(recent, opdiv)
+    return attach_yearly_obs(recent, observation_rows)
 
 
 def score_prism_indicators(recent: pd.DataFrame, config: PrismConfig) -> pd.DataFrame:
