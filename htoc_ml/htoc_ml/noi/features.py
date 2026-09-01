@@ -29,7 +29,11 @@ class FeatureBuilder:
         lookback = self.lookback_days
         window_end = np.searchsorted(dates, cutoff_day, side="right")
         window_start = np.searchsorted(dates, cutoff_day - lookback + 1, side="left")
-        window = dates[window_start:window_end]
+        return self.featurize_window(dates[window_start:window_end], cutoff_day)
+
+    def featurize_window(self, window: np.ndarray, cutoff_day: Day) -> dict[str, float]:
+        """Featurize a pre-sliced lookback window (avoids redundant searchsorted)."""
+        lookback = self.lookback_days
         if window.size == 0:
             return {
                 "last_seen": lookback,

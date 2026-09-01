@@ -27,6 +27,16 @@ def test_monotonic_vector_puts_horizon_last():
     assert all(c == 0 for c in vector[:-1])
 
 
+def test_featurize_window_matches_featurize():
+    builder = FeatureBuilder(lookback_days=100)
+    dates = np.array([10, 12, 13, 20, 21, 22, 29], dtype=int)
+    cutoff_day = 29
+    window_end = np.searchsorted(dates, cutoff_day, side="right")
+    window_start = np.searchsorted(dates, cutoff_day - 100 + 1, side="left")
+    window = dates[window_start:window_end]
+    assert builder.featurize_window(window, cutoff_day) == builder.featurize(dates, cutoff_day)
+
+
 def test_featurize_matches_legacy_list_order():
     """Same arithmetic as NextObservedIndicatorV4.0.py featurize(), name-keyed."""
     dates = np.array([10, 12, 13, 20, 21, 22, 29], dtype=int)

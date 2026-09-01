@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -37,6 +36,20 @@ class IndicatorIndex:
         after = np.searchsorted(dates, cutoff_day + 1, side="left")
         upto = np.searchsorted(dates, cutoff_day + horizon_days, side="right")
         return 1 if upto > after else 0
+
+    def seen_next_horizons(
+        self, dates: np.ndarray, cutoff_day: Day, horizons: tuple[int, ...] | list[int]
+    ) -> dict[int, int]:
+        """Batch seen_next for multiple horizons; one lower-bound search, H upper-bound."""
+        after = np.searchsorted(dates, cutoff_day + 1, side="left")
+        return {
+            horizon_days: (
+                1
+                if np.searchsorted(dates, cutoff_day + horizon_days, side="right") > after
+                else 0
+            )
+            for horizon_days in horizons
+        }
 
     def really_seen(self, opdiv: str, indicator: str, cutoff_day: Day) -> bool:
         dates = self.get(opdiv, indicator)
@@ -116,13 +129,13 @@ class ObservationPanel:
         while day <= today:
             expected += 1
             path = obs_template.format(date=day.strftime(DATE_FMT))
-            if Path(path).exists():
-                try:
-                    frames.append(pd.read_csv(path, usecols=["indicator", "obs_date", "OpDiv"]))
-                except (OSError, ValueError, pd.errors.ParserError) as exc:
-                    print("skip", path, exc)
-                    missing.append(path)
-            else:
+            # Single open attempt per day (O(D) I/O). Avoid exists()+read (2× syscalls).
+            try:
+                frames.append(pd.read_csv(path, usecols=["indicator", "obs_date", "OpDiv"]))
+            except FileNotFoundError:
+                missing.append(path)
+            except (OSError, ValueError, pd.errors.ParserError) as exc:
+                print("skip", path, exc)
                 missing.append(path)
             day += timedelta(days=1)
 

@@ -1,6 +1,8 @@
 """Rows, labels, and the horizon-stacked matrix for one monotone model."""
 from __future__ import annotations
 
+from datetime import date, timedelta
+
 import numpy as np
 import pandas as pd
 
@@ -30,39 +32,63 @@ class TrainingSet:
         return [MONOTONIC_CONSTRAINTS[name] for name in FEATURE_NAMES] + [1]
 
     def build_label_mask(self, cutoffs: list[Day], opdivs: list[str]) -> dict[tuple[str, int, int], bool]:
+        """O(O·D) day-level health precompute + O(O·C·H·W) window checks."""
+        if not cutoffs or not opdivs:
+            return {}
+
+        min_date = to_timestamp(min(cutoffs)).date()
+        max_date = to_timestamp(max(cutoffs) + max(self.config.horizons)).date()
+        day_usable: dict[tuple[str, date], bool] = {}
+        for opdiv in opdivs:
+            cur = min_date
+            while cur <= max_date:
+                day_usable[(opdiv, cur)] = self.health.is_usable(opdiv, cur)
+                cur += timedelta(days=1)
+
         usable: dict[tuple[str, int, int], bool] = {}
         for opdiv in opdivs:
             for cutoff_day in cutoffs:
                 start = to_timestamp(cutoff_day).date()
                 for horizon_days in self.config.horizons:
-                    ok, _ = self.health.window_usable(
-                        opdiv, start, to_timestamp(cutoff_day + horizon_days).date()
-                    )
+                    end = to_timestamp(cutoff_day + horizon_days).date()
+                    ok = True
+                    cur = start + timedelta(days=1)
+                    while cur <= end:
+                        if not day_usable.get((opdiv, cur), False):
+                            ok = False
+                            break
+                        cur += timedelta(days=1)
                     usable[(opdiv, cutoff_day, horizon_days)] = ok
         return usable
 
     def build_rows(self, cutoffs: list[Day], need_label: bool = True) -> pd.DataFrame:
+        """O(I·C·log D) with batched horizon labels and reused window slices."""
         label_mask = self.build_label_mask(cutoffs, self.labels.opdivs()) if need_label else {}
         recs = []
         lookback = self.config.lookback_days
+        horizons = self.config.horizons
         label_lookup = self.labels.as_dict()
         feature_lookup = self.features.as_dict()
-        for cutoff_day in cutoffs:
-            for (opdiv, indicator), dates in label_lookup.items():
-                feat_dates = feature_lookup.get((opdiv, indicator), dates)
+        for (opdiv, indicator), dates in label_lookup.items():
+            feat_dates = feature_lookup.get((opdiv, indicator), dates)
+            for cutoff_day in cutoffs:
                 window_end = np.searchsorted(feat_dates, cutoff_day, side="right")
                 window_start = np.searchsorted(feat_dates, cutoff_day - lookback + 1, side="left")
                 if window_end - window_start == 0:
                     continue
-                rec = self.feature_builder.featurize(feat_dates, cutoff_day)
+                rec = self.feature_builder.featurize_window(
+                    feat_dates[window_start:window_end], cutoff_day
+                )
                 rec["opdiv"] = opdiv
                 rec["indicator"] = indicator
                 rec["t"] = cutoff_day
                 if need_label:
-                    for horizon_days in self.config.horizons:
+                    horizon_labels = self.labels.seen_next_horizons(dates, cutoff_day, horizons)
+                    for horizon_days in horizons:
+                        key = (opdiv, cutoff_day, horizon_days)
                         rec[f"y_{horizon_days}"] = (
-                            float(self.labels.seen_next(dates, cutoff_day, horizon_days))
-                            if label_mask.get((opdiv, cutoff_day, horizon_days), True)
+                            float(horizon_labels[horizon_days])
+                            if label_mask.get(key, True)
                             else np.nan
                         )
                 recs.append(rec)
