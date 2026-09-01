@@ -12,12 +12,15 @@ except (AttributeError, OSError):
 
 warnings.filterwarnings("ignore")
 
+from htoc_ml.core.cli_exit import run_and_return_exit_code
 from htoc_ml.noi.config import ForecastConfig
-from htoc_ml.noi.runner import ForecastRunner
+from htoc_ml.noi.runner import run_next_observed_indicator_forecast
 
 
 def main() -> int:
-    return ForecastRunner(ForecastConfig.from_env()).run()
+    return run_and_return_exit_code(
+        lambda: run_next_observed_indicator_forecast(ForecastConfig.from_env())
+    )
 
 
 if __name__ == "__main__":

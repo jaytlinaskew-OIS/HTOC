@@ -25,3 +25,23 @@ def test_cutoff_step_cannot_be_multiple_of_seven():
         assert "weekday" in str(exc)
     else:
         raise AssertionError("expected PipelineError")
+
+
+def test_from_env_bad_as_of_is_pipeline_error(monkeypatch):
+    monkeypatch.setenv("NOI_V4_AS_OF", "not-a-date")
+    try:
+        ForecastConfig.from_env()
+    except PipelineError as exc:
+        assert "invalid NOI env config" in str(exc)
+    else:
+        raise AssertionError("expected PipelineError")
+
+
+def test_from_env_bad_coverage_is_pipeline_error(monkeypatch):
+    monkeypatch.setenv("NOI_V4_MIN_FILE_COVERAGE", "abc")
+    try:
+        ForecastConfig.from_env()
+    except PipelineError as exc:
+        assert "invalid NOI env config" in str(exc)
+    else:
+        raise AssertionError("expected PipelineError")

@@ -71,7 +71,6 @@ class TrainingSet:
     def stack(self, df: pd.DataFrame, with_label: bool = True, with_weights: bool = False):
         base = df[list(FEATURE_NAMES)].to_numpy(float)
         Xs, ys, ws = [], [], []
-        dropped = 0
         for horizon_days in self.config.horizons:
             Xh = np.hstack([base, np.full((len(df), 1), horizon_days, float)])
             if not with_label:
@@ -79,28 +78,15 @@ class TrainingSet:
                 continue
             yh = df[f"y_{horizon_days}"].to_numpy(float)
             keep = ~np.isnan(yh)
-            dropped += int((~keep).sum())
             y = yh[keep].astype(int)
             Xs.append(Xh[keep])
             ys.append(y)
             if with_weights:
                 ws.append(_balanced_group_weights(df["opdiv"].to_numpy()[keep], y))
-        if with_label and dropped:
-            total = len(df) * len(self.config.horizons)
-            print(
-                f"feed-health mask withheld {dropped:,} of {total:,} training labels "
-                f"({dropped / total * 100:.2f}%) -- windows containing a feed outage"
-            )
         X = np.vstack(Xs)
         y = np.concatenate(ys) if with_label else None
         if with_label and with_weights:
             w = np.concatenate(ws)
-            if y is not None and y.size:
-                print(
-                    f"OpDiv-balanced sample weights: mean w(y=1)={w[y == 1].mean():.2f}  "
-                    f"mean w(y=0)={w[y == 0].mean():.2f}  "
-                    f"(unweighted pos rate {y.mean() * 100:.1f}%)"
-                )
             return X, y, w
         return X, y
 

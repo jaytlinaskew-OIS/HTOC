@@ -1,4 +1,14 @@
-"""Scheduled Next Observed Indicator forecast runner."""
+"""Next Observed Indicator forecast process.
+
+Walkthrough (start at run_next_observed_indicator_forecast):
+  1. load_observation_panel
+  2. report_feed_health
+  3. fill_outage_gaps
+  4. fit_model_on_history
+  5. score_indicators
+  6. write_opdiv_csv
+  7. write_opdiv_eval
+"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -8,172 +18,153 @@ import pandas as pd
 
 from htoc_ml.core.day import to_day_index, to_timestamp
 from htoc_ml.core.observations import ObservationPanel
-from htoc_ml.core.pipeline import Pipeline, PipelineError
+from htoc_ml.core.pipeline import PipelineError
 from htoc_ml.noi.bands import BandPolicy
 from htoc_ml.noi.config import DATE_FMT, ForecastConfig
 from htoc_ml.noi.dataset import TrainingSet
 from htoc_ml.noi.features import FeatureBuilder
 from htoc_ml.noi.feed_health import FeedHealth
 from htoc_ml.noi.model import HorizonModel
-from htoc_ml.noi.outage import OutageImputer, format_findings, format_report
+from htoc_ml.noi.outage import OutageImputer, format_findings
 from htoc_ml.noi.report import ProductionReport
 from htoc_ml.noi.schedule import CutoffSchedule
 
 
-class ForecastRunner(Pipeline):
-    def __init__(self, config: ForecastConfig | None = None) -> None:
-        self.config = config or ForecastConfig.from_env()
-        self._written: list[Path] = []
+def run_next_observed_indicator_forecast(config: ForecastConfig | None = None) -> list[Path]:
+    """Build the forecast and write OpDiv CSVs. Returns paths written."""
+    config = config or ForecastConfig.from_env()
+    panel = load_observation_panel(config)
+    health = report_feed_health(panel, config)
+    imputer = fill_outage_gaps(panel, health)
+    model, training, as_of_day = fit_model_on_history(panel, health, config)
+    scored = score_indicators(panel, training, model, imputer, as_of_day, config)
+    written = write_opdiv_csv(scored, as_of_day, config)
+    write_opdiv_eval(as_of_day, config)
+    return written
 
-    def expected_outputs(self) -> list[Path]:
-        return list(self._written)
 
-    def execute(self) -> None:
-        config = self.config
-        if config.as_of:
-            print(f"AS-OF REPLAY: rebuilding {config.as_of} using only data available then", flush=True)
+def load_observation_panel(config: ForecastConfig) -> ObservationPanel:
+    return ObservationPanel.load(
+        obs_template=config.obs_template,
+        train_days=config.train_days,
+        end_date=config.as_of,
+        min_file_coverage=config.min_file_coverage,
+        max_lag_days=config.max_lag_days,
+    )
 
-        panel = ObservationPanel.load(
-            obs_template=config.obs_template,
-            train_days=config.train_days,
-            end_date=config.as_of,
-            min_file_coverage=config.min_file_coverage,
-            max_lag_days=config.max_lag_days,
+
+def report_feed_health(panel: ObservationPanel, config: ForecastConfig) -> FeedHealth:
+    return FeedHealth.from_panel(panel.frame, today=config.as_of)
+
+
+def fill_outage_gaps(panel: ObservationPanel, health: FeedHealth) -> OutageImputer:
+    imputer = OutageImputer(panel.frame, health)
+    feature_lookup, _impute_report = imputer.build(panel.labels.as_dict())
+    panel.set_features(feature_lookup)
+    findings = imputer.verify_recovery()
+    if findings:
+        print("WARNING: feed composition changed across an outage")
+        for line in format_findings(findings):
+            print(line)
+    return imputer
+
+
+def fit_model_on_history(panel: ObservationPanel, health: FeedHealth, config: ForecastConfig) -> tuple[HorizonModel, TrainingSet, int]:
+    training = TrainingSet(
+        config=config,
+        feature_builder=FeatureBuilder(config.lookback_days),
+        labels=panel.labels,
+        features=panel.features,
+        health=health,
+    )
+    schedule = CutoffSchedule.build(panel.day_min, panel.day_max, config)
+    train_df = training.build_rows(schedule.cutoffs, need_label=True)
+    if train_df.empty:
+        raise PipelineError("Training frame is empty after feature build.")
+
+    model = HorizonModel(config, training).fit(train_df, schedule)
+
+    if config.as_of is None:
+        as_of_day = panel.day_max
+    else:
+        as_of_day = int(to_day_index(np.datetime64(pd.Timestamp(config.as_of).date())))
+    return model, training, as_of_day
+
+
+def score_indicators(panel: ObservationPanel, training: TrainingSet, model: HorizonModel, imputer: OutageImputer, as_of_day: int, config: ForecastConfig) -> pd.DataFrame:
+    infer_df = training.build_rows([as_of_day], need_label=False)
+    if infer_df.empty:
+        raise PipelineError(
+            f"No candidate indicators to score as-of {to_timestamp(as_of_day).date()}.",
+            exit_code=3,
         )
-        print(panel.describe())
 
-        health = FeedHealth.from_panel(panel.frame, today=config.as_of)
-        summary = health.summarize(
-            sorted(panel.frame["opdiv"].unique()),
-            to_timestamp(panel.day_max - 30).date(),
-            to_timestamp(panel.day_max).date(),
-        )
-        unhealthy = summary[
-            (summary["outage"] > 0) | (summary["missing"] > 0) | (summary["degraded"] > 0)
+    probabilities = model.predict(infer_df)
+    bands = BandPolicy()
+    out = infer_df[["opdiv", "indicator", "last_seen", "freq_7", "freq_30"]].copy()
+    for j, horizon_days in enumerate(config.horizons):
+        out[f"prob_{horizon_days}"] = probabilities[:, j]
+        out[f"band_{horizon_days}"] = [
+            bands.label(p, horizon_days, opdiv)
+            for p, opdiv in zip(probabilities[:, j], out["opdiv"])
         ]
-        if unhealthy.empty:
-            print("feed health: all OpDivs nominal over the last 30 days")
-        else:
-            print("feed health: issues over the last 30 days")
-            for _, row in unhealthy.iterrows():
-                print(
-                    f"  {row['OpDiv']}: outage={row['outage']} degraded={row['degraded']} "
-                    f"missing={row['missing']} | {row['unusable_days']}"
-                )
 
-        imputer = OutageImputer(panel.frame, health)
-        feature_lookup, impute_report = imputer.build(panel.labels.as_dict())
-        panel.set_features(feature_lookup)
-        if impute_report:
-            print("outage imputation:")
-            for line in format_report(impute_report):
-                print(line)
-        else:
-            print("outage imputation: no outages in the panel window")
+    imputed_pairs = imputer.imputed_indicators(panel.labels.as_dict(), upto_di=as_of_day)
+    out["observed_today"] = [
+        panel.labels.really_seen(opdiv, indicator, as_of_day)
+        for opdiv, indicator in zip(out["opdiv"], out["indicator"])
+    ]
+    out["basis"] = [
+        "est" if (opdiv, indicator) in imputed_pairs else ""
+        for opdiv, indicator in zip(out["opdiv"], out["indicator"])
+    ]
+    return out
 
-        findings = imputer.verify_recovery()
-        if findings:
-            print("WARNING: feed composition changed across an outage")
-            for line in format_findings(findings):
-                print(line)
 
-        features = FeatureBuilder(config.lookback_days)
-        training = TrainingSet(
-            config=config,
-            feature_builder=features,
-            labels=panel.labels,
-            features=panel.features,
-            health=health,
-        )
-        schedule = CutoffSchedule.build(panel.day_min, panel.day_max, config)
-        train_df = training.build_rows(schedule.cutoffs, need_label=True)
-        if train_df.empty:
-            raise PipelineError("Training frame is empty after feature build.")
-        print(f"training rows: {len(train_df):,} from {schedule.describe()}")
+def write_opdiv_csv(scored: pd.DataFrame, as_of_day: int, config: ForecastConfig) -> list[Path]:
+    report = ProductionReport(config.horizons)
+    opdiv_outputs = {
+        opdiv: report.format_opdiv(group).reset_index(drop=True)
+        for opdiv, group in scored.groupby("opdiv")
+    }
 
-        model = HorizonModel(config, training).fit(train_df, schedule)
+    if not config.save_output:
+        raise PipelineError("SAVE_OUTPUT is False")
+    if not opdiv_outputs:
+        raise PipelineError("no OpDiv outputs produced", exit_code=3)
 
-        if config.as_of is None:
-            infer_t = panel.day_max
-        else:
-            infer_t = int(to_day_index(np.datetime64(pd.Timestamp(config.as_of).date())))
-        infer_df = training.build_rows([infer_t], need_label=False)
-        print(f"scoring {len(infer_df):,} indicators as-of {to_timestamp(infer_t).date()}")
-        if infer_df.empty:
-            raise PipelineError(
-                f"No candidate indicators to score as-of {to_timestamp(infer_t).date()}.",
-                exit_code=3,
-            )
+    stamp = to_timestamp(as_of_day).strftime(DATE_FMT)
+    written = report.write(opdiv_outputs, config.save_dir, stamp)
+    record_as_of_replay_marker(stamp, config)
+    return written
 
-        probabilities = model.predict(infer_df)
-        bands = BandPolicy()
-        out = infer_df[["opdiv", "indicator", "last_seen", "freq_7", "freq_30"]].copy()
-        for j, horizon_days in enumerate(config.horizons):
-            out[f"prob_{horizon_days}"] = probabilities[:, j]
-            out[f"band_{horizon_days}"] = [
-                bands.label(p, horizon_days, opdiv)
-                for p, opdiv in zip(probabilities[:, j], out["opdiv"])
-            ]
 
-        imputed_pairs = imputer.imputed_indicators(panel.labels.as_dict(), upto_di=infer_t)
-        out["observed_today"] = [
-            panel.labels.really_seen(opdiv, indicator, infer_t)
-            for opdiv, indicator in zip(out["opdiv"], out["indicator"])
-        ]
-        out["basis"] = [
-            "est" if (opdiv, indicator) in imputed_pairs else ""
-            for opdiv, indicator in zip(out["opdiv"], out["indicator"])
-        ]
-        if imputed_pairs:
-            print(
-                f"forecast rests on imputed days for {int((out['basis'] == 'est').sum()):,} "
-                f"indicators (marked 'est' in the Basis column)"
-            )
+def write_opdiv_eval(as_of_day: int, config: ForecastConfig) -> None:
+    """Run post-forecast eval. Failures are non-fatal: forecast CSVs already written."""
+    if not config.run_eval:
+        return
+    from htoc_ml.noi.eval import run_eval_after_forecast
 
-        report = ProductionReport(config.horizons)
-        opdiv_outputs = {
-            opdiv: report.format_opdiv(group).reset_index(drop=True)
-            for opdiv, group in out.groupby("opdiv")
-        }
-        print("OpDivs:", list(opdiv_outputs.keys()))
-        if opdiv_outputs:
-            print(opdiv_outputs[list(opdiv_outputs)[0]].head(10))
+    stamp = to_timestamp(as_of_day).strftime(DATE_FMT)
+    if not run_eval_after_forecast(
+        stamp,
+        config.save_dir,
+        config.htoc_share_root,
+        consolidate_only=bool(config.as_of),
+    ):
+        print("WARN: PERF evaluation completed with errors (forecast outputs were still written)")
 
-        if not config.save_output:
-            raise PipelineError("SAVE_OUTPUT is False in scheduled runner")
-        if not opdiv_outputs:
-            raise PipelineError("no OpDiv outputs produced", exit_code=3)
 
-        stamp = to_timestamp(infer_t).strftime(DATE_FMT)
-        self._written = report.write(opdiv_outputs, config.save_dir, stamp)
-        print(f"Wrote {len(opdiv_outputs)} OpDiv files under {config.save_dir}")
-        self._record_backfill(stamp)
-        self._run_eval(stamp, consolidate_only=bool(config.as_of))
-
-    def _record_backfill(self, stamp: str) -> None:
-        if not self.config.as_of:
-            return
-        marker = Path(self.config.save_dir) / "backfilled_forecasts.txt"
-        try:
-            seen: set[str] = set()
-            if marker.exists():
-                seen = {ln.strip() for ln in marker.read_text(encoding="utf-8").splitlines() if ln.strip()}
-            if stamp not in seen:
-                with marker.open("a", encoding="utf-8") as fh:
-                    fh.write(f"{stamp}\n")
-            print(f"AS-OF REPLAY: recorded {stamp} in {marker}")
-        except OSError as exc:
-            print(f"WARN: could not record backfill marker: {exc}")
-
-    def _run_eval(self, stamp: str, consolidate_only: bool) -> None:
-        if not self.config.run_eval:
-            return
-        from htoc_ml.noi.eval import run_eval_after_forecast
-
-        if not run_eval_after_forecast(
-            stamp,
-            self.config.save_dir,
-            self.config.htoc_share_root,
-            consolidate_only=consolidate_only,
-        ):
-            print("PERF: evaluation completed with errors (see Performance/Logs on share)")
+def record_as_of_replay_marker(stamp: str, config: ForecastConfig) -> None:
+    if not config.as_of:
+        return
+    marker = Path(config.save_dir) / "backfilled_forecasts.txt"
+    try:
+        seen: set[str] = set()
+        if marker.exists():
+            seen = {ln.strip() for ln in marker.read_text(encoding="utf-8").splitlines() if ln.strip()}
+        if stamp not in seen:
+            with marker.open("a", encoding="utf-8") as fh:
+                fh.write(f"{stamp}\n")
+    except OSError as exc:
+        print(f"WARN: could not record backfill marker: {exc}")

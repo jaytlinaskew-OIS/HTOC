@@ -377,10 +377,13 @@ class EvalConfig:
 
     @classmethod
     def from_paths(cls, save_root: str, htoc_share_root: str, obs_template: str = "") -> "EvalConfig":
-        share = (htoc_share_root or os.environ.get("HTOC_SHARE_ROOT", r"\\cscso1fsappv01\data\HTOC")).strip()
-        template = obs_template or os.environ.get(
-            "HTOC_OBS_TEMPLATE",
-            str(Path(share) / r"Data_Analytics\Data\OpDiv_Observations\htoc_opdiv_obs_d{date}.csv"),
+        from htoc_ml.core import paths as htoc_paths
+
+        share = str(htoc_paths.share_root(htoc_share_root or None))
+        template = (
+            obs_template
+            or os.environ.get("HTOC_OBS_TEMPLATE", "").strip()
+            or htoc_paths.opdiv_obs_template(share)
         )
         horizons_raw = os.environ.get("NOI_V4_EVAL_HORIZONS", "").strip()
         try:

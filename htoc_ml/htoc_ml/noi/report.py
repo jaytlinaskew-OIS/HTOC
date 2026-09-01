@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from htoc_ml.core.pipeline import PipelineError
 from htoc_ml.noi.bands import CONFNAME, PROBNAME
 
 
@@ -41,13 +42,18 @@ class ProductionReport:
 
     def write(self, outputs: dict[str, pd.DataFrame], save_dir: str, stamp: str) -> list[Path]:
         root = Path(save_dir)
-        root.mkdir(parents=True, exist_ok=True)
         written: list[Path] = []
-        for opdiv, frame in outputs.items():
-            sub = root / opdiv
-            sub.mkdir(parents=True, exist_ok=True)
-            path = sub / f"{opdiv}_output_{stamp}.csv"
-            frame.to_csv(path, index=False)
-            written.append(path)
-        print("saved to", save_dir)
+        try:
+            root.mkdir(parents=True, exist_ok=True)
+            for opdiv, frame in outputs.items():
+                sub = root / opdiv
+                sub.mkdir(parents=True, exist_ok=True)
+                path = sub / f"{opdiv}_output_{stamp}.csv"
+                frame.to_csv(path, index=False)
+                written.append(path)
+        except OSError as exc:
+            raise PipelineError(
+                f"failed writing OpDiv CSVs under {save_dir}: {exc}",
+                exit_code=4,
+            ) from exc
         return written
