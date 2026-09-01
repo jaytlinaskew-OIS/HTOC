@@ -8,4 +8,6 @@ Scheduled jobs that still run outside `htoc_ml`. Live Task Scheduler launchers:
 | `Next_Obs_Daily/` | Consolidates those OpDiv prediction CSVs |
 | `Tipper/` | Daily partner indicator tips (`run_tipper.bat`) |
 
-I&W reporting lives under `notebooks/I&W Reporting/Batch/`. NOI V4 and PRISM live under `notebooks/` until those `.bat` files are pointed at `htoc_ml`.
+I&W batch reporting was archived to `archive/production_20260831/I&W_Reporting_Batch/`
+(see `notebooks/I&W Reporting/README.md`). NOI V4 and PRISM live under `notebooks/`
+until those `.bat` files are pointed at `htoc_ml`.

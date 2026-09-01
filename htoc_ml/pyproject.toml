@@ -18,6 +18,7 @@ dependencies = [
 
 [project.scripts]
 htoc-noi = "htoc_ml.noi.__main__:main"
+htoc-noi-daily-reports = "htoc_ml.noi.daily_reports:main"
 htoc-prism = "htoc_ml.prism.__main__:main"
 htoc-threat-score-iw = "htoc_ml.datapipelines.threat_score_iw:main"
 htoc-search-tags = "htoc_ml.datapipelines.search_tags:main"

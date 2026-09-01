@@ -118,6 +118,24 @@ Environment variables (same names as the live runner):
 | `NOI_V4_MAX_LAG_DAYS` | Warn if the newest observation is older than this (default `2`) |
 | `NOI_V4_SKIP_EVAL` | `1` to skip the post-forecast performance eval (still imported from the live folder when unset) |
 
+## Run daily reports (consolidate + performance eval)
+
+Separate scheduled job from the forecast runner. Consolidates per-OpDiv
+``{OpDiv}_output_YYYYMMDD.csv`` files into ``Full Daily Reports/full_daily_report_YYYYMMDD.csv``,
+then runs day-to-day performance scoring.
+
+```
+py -3.13 -m htoc_ml.noi.daily_reports
+```
+
+| Variable | Role |
+|---|---|
+| `NOI_V4_SAVE_DIR` | Same forecast output root as the main NOI job |
+| `HTOC_SHARE_ROOT` / `HTOC_OBS_TEMPLATE` | Observation files for scoring |
+| `NOI_V4_PERF_BACKFILL_START` / `NOI_V4_PERF_BACKFILL_END` | Optional `YYYYMMDD` range — eval-only backfill, skips consolidation |
+
+Exit markers match the notebook script: `PIPELINE_OK`, `PIPELINE_OK_NOWORK`, or exit `3` if the consolidated report is missing. Performance eval errors are logged but non-fatal.
+
 Install editable (optional): `uv pip install -e ./htoc_ml`
 
 Unit tests (no share mount): `py -3.13 -m pytest htoc_ml/tests`
@@ -136,7 +154,8 @@ Unit tests (no share mount): `py -3.13 -m pytest htoc_ml/tests`
 | `new_model` + isotonic fit | `HorizonModel` |
 | `noi_v4_bands.band` | `BandPolicy` |
 | `to_production` | `ProductionReport` |
-| top-level script + `PIPELINE_OK` | `ForecastRunner` (`Pipeline` subclass) |
+| top-level script + `PIPELINE_OK` | `run_*` function + `core.cli_exit.run_and_return_exit_code` |
+| `next_observed_daily_reports_v4.py` | `htoc_ml.noi.daily_reports` (`-m htoc_ml.noi.daily_reports`) |
 | `noi_v4_feed_health` / `noi_v4_outage_impute` | copied into `htoc_ml.noi` (see below) |
 | `noi_v4_performance_eval` | `htoc_ml.core.eval` (metrics/alerts/workbook) + `htoc_ml.noi.eval` (forecast join, bands, horizons) |
 
@@ -161,16 +180,18 @@ Reusable as-is:
 
 - `ObservationPanel` — every HTOC model reads `htoc_opdiv_obs_d{date}.csv`
 - `htoc_ml.core.day` — epoch-integer days
-- `Pipeline` — execute, check files, print `PIPELINE_OK`, map `PipelineError` to exit codes 2/3/4
-- `htoc_ml.core.eval` — banded binary metrics, rolling alerts, traffic-light workbooks
+- `run_and_return_exit_code()` — wrap a `run_*()` function that returns `list[Path]`; prints `PIPELINE_OK`, maps `PipelineError` to exit codes 2/3/4
+- `core/threatconnect_presets.py` — shared TC owner/type lists for PRISM and ThreatScoreIW
+- `htoc_ml.core.eval` — **delayed-label** banded binary metrics, rolling alerts, traffic-light workbooks (`core/evaluation.py` is immediate sklearn metrics — different job)
 
 Checklist:
 
-1. Subclass `Pipeline`, implement `execute()`, return paths from `expected_outputs()`.
-2. Put model-specific code in its own subpackage (`htoc_ml.prism`, …). Do not inherit `FeatureBuilder` or `BandPolicy` unless the new model actually uses those features.
-3. Add a `tests/conftest.py` fixture that does not need the share.
-4. Use `ForecastConfig`-style frozen dataclasses for tunables, with validation in `__post_init__`.
-5. If the model is a classifier with a later binary label, call `count_bands` / `rates_from_counts` and pass your own `BandSpec`, `MetricAlertRule` list, and `LegendSpec`. Do not import `htoc_ml.noi.eval` for that.
+1. Add a `run_<model>()` orchestrator with numbered step functions (see module docstring walkthrough).
+2. Return `list[Path]` from the orchestrator; wire `__main__.py` through `run_and_return_exit_code`.
+3. Put model-specific code in its own subpackage (`htoc_ml.prism`, …). Do not inherit `FeatureBuilder` or `BandPolicy` unless the new model actually uses those features.
+4. Add a `tests/conftest.py` fixture that does not need the share.
+5. Use `ForecastConfig`-style frozen dataclasses for tunables, with validation in `__post_init__`.
+6. If the model is a classifier with a later binary label, call `count_bands` / `rates_from_counts` and pass your own `BandSpec`, `MetricAlertRule` list, and `LegendSpec`. Do not import `htoc_ml.noi.eval` for that.
 
 `noi/` is the forecasting reference. `prism/` is the scoring reference (shared engine, two intake modes). `noi.eval` is the delayed-label eval reference (forecast CSVs joined to observation files).
 

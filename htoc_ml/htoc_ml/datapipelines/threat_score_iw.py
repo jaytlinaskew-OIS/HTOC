@@ -33,21 +33,10 @@ from htoc_ml.core import paths as htoc_paths
 from htoc_ml.core.cli_exit import run_and_return_exit_code
 from htoc_ml.core.pipeline import PipelineError, PipelineNoWork
 from htoc_ml.core.threatconnect import ThreatConnectClient
+from htoc_ml.core.threatconnect_presets import INDICATOR_TYPES_WEEKLY, OWNERS_WEEKLY
 
-INDICATOR_TYPES = (
-    "Address", "EmailAddress", "File", "Host", "URL", "ASN", "CIDR",
-    "Email Subject", "Hashtag", "Mutex", "Registry Key", "User Agent", "Stripped URL",
-)
-OWNER_NAMES = (
-    "HTOC Org",
-    "CISA Federal Feed",
-    "CMS_CTI",
-    "Crowdstrike Falcon Intelligence",
-    "DHS CISCP",
-    "Intel471",
-    "Mandiant Advantage Threat Intelligence",
-    "VA_TIP Data",
-)
+INDICATOR_TYPES = INDICATOR_TYPES_WEEKLY
+OWNER_NAMES = OWNERS_WEEKLY
 
 
 @dataclass(frozen=True)

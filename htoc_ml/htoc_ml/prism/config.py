@@ -7,36 +7,17 @@ from pathlib import Path
 
 from htoc_ml.core import paths as htoc_paths
 from htoc_ml.core.pipeline import PipelineError
+from htoc_ml.core.threatconnect_presets import (
+    INDICATOR_TYPES_DAILY,
+    INDICATOR_TYPES_WEEKLY,
+    OWNERS_DAILY,
+    OWNERS_WEEKLY,
+)
 
-WEEKLY_TYPES = (
-    "Address", "EmailAddress", "File", "Host", "URL", "ASN", "CIDR",
-    "Email Subject", "Hashtag", "Mutex", "Registry Key", "User Agent", "Stripped URL",
-)
-DAILY_TYPES = (
-    "Address", "EmailAddress", "File", "Host", "URL", "ASN", "CIDR",
-    "Email Subject", "Hashtag", "Mutex", "Registry Key", "User Agent",
-)
-WEEKLY_OWNERS = (
-    "HTOC Org",
-    "CISA Federal Feed",
-    "CMS_CTI",
-    "Crowdstrike Falcon Intelligence",
-    "DHS CISCP",
-    "Intel471",
-    "Mandiant Advantage Threat Intelligence",
-    "VA_TIP Data",
-)
-DAILY_OWNERS = (
-    "HTOC Org",
-    "CISA Federal Feed",
-    "CMS_CTI",
-    "Crowdstrike Falcon Intelligence",
-    "DHS CISCP",
-    "Intel 471 Intelligence",
-    "Mandiant Advantage Threat Intelligence",
-    "VA_TIP Data",
-    "Google Threat Intelligence",
-)
+WEEKLY_TYPES = INDICATOR_TYPES_WEEKLY
+DAILY_TYPES = INDICATOR_TYPES_DAILY
+WEEKLY_OWNERS = OWNERS_WEEKLY
+DAILY_OWNERS = OWNERS_DAILY
 WEEKLY_STANDALONE_EXTRA = frozenset({"tor node"})
 
 

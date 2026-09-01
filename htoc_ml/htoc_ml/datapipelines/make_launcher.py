@@ -55,26 +55,6 @@ PRODUCTION_SNAPSHOTS: tuple[tuple[str, str], ...] = (
         "notebooks/ThreatAssessment Scoring/ThreatScoreIW/run_skip_wheelhouse.bat",
         "ThreatScoreIW/run_skip_wheelhouse.bat",
     ),
-    (
-        "notebooks/I&W Reporting/Batch/I&W Generator/run_iw_generator.bat",
-        "IW_Batch/run_iw_generator.bat",
-    ),
-    (
-        "notebooks/I&W Reporting/Batch/I&W Spreadsheet/run_iw_spreadsheet.bat",
-        "IW_Batch/run_iw_spreadsheet.bat",
-    ),
-    (
-        "notebooks/I&W Reporting/Batch/I&W Spreadsheet/run_iw_spreadsheet_Test.bat",
-        "IW_Batch/run_iw_spreadsheet_Test.bat",
-    ),
-    (
-        "notebooks/I&W Reporting/Batch/I&W Expanded/run_iw_expanded_spreadsheet.bat",
-        "IW_Batch/run_iw_expanded_spreadsheet.bat",
-    ),
-    (
-        "notebooks/I&W Reporting/Batch/I&W Expanded/run_iw_expanded_generator.bat",
-        "IW_Batch/run_iw_expanded_generator.bat",
-    ),
     ("scripts/batch-processing-script/Tipper/run_tipper.bat", "Tipper/run_tipper.bat"),
     (
         "scripts/batch-processing-script/NextObserved/NextObserved.bat",
@@ -110,6 +90,15 @@ JOBS: dict[str, LauncherJob] = {
         log_prefix="noi_v4",
         python_args="-m htoc_ml.noi",
         packages="pandas numpy scikit-learn openpyxl",
+    ),
+    "noi-daily-reports": LauncherJob(
+        key="noi-daily-reports",
+        name="run_noi_daily_reports",
+        title="NextObservedIndicator V4 daily reports (htoc_ml)",
+        log_prefix="noi_v4_daily",
+        python_args="-m htoc_ml.noi.daily_reports",
+        packages="pandas numpy scikit-learn openpyxl",
+        allow_nowork=True,
     ),
     "prism-daily": LauncherJob(
         key="prism-daily",
