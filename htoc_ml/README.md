@@ -161,11 +161,10 @@ Unit tests (no share mount): `py -3.13 -m pytest htoc_ml/tests`
 
 ## Cut over the scheduled job
 
-1. Capture goldens: `py -3.13 htoc_ml/tools/capture_golden.py`
-2. Run the package into `htoc_ml/golden/new/{YYYYMMDD}` with `NOI_V4_AS_OF` and `NOI_V4_SAVE_DIR`
-3. `py -3.13 htoc_ml/tools/compare_golden.py --as-of 20260822 20260826 20260828`
-4. Point `run_NextObservedIndicatorV4.bat` at `py -3.13 -m htoc_ml.noi` (keep the share mount, log capture, and `PIPELINE_OK` grep)
-5. Delete the copies under the old folder once the bat is cut over:
+1. Run unit tests: `py -3.13 -m pytest htoc_ml/tests`
+2. Compare a test run on the share (`NOI_V4_SAVE_DIR` → `JA\NextObserveV4Test`) against the live notebook for a few replay dates
+3. Point `run_NextObservedIndicatorV4.bat` at `py -3.13 -m htoc_ml.noi` (keep the share mount, log capture, and `PIPELINE_OK` grep)
+4. Delete the copies under the old folder once the bat is cut over:
    - `noi_v4_feed_health.py`
    - `noi_v4_outage_impute.py`
    - `noi_v4_bands.py` (policy now lives in `htoc_ml.noi.bands`)

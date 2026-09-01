@@ -1,3 +1,0 @@
-# Captured forecast CSVs are large and regenerable via tools/capture_golden.py.
-# Manifests and run logs are small and worth keeping under version control.
-*/output/
