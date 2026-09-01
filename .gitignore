@@ -1,3 +1,5 @@
 clean.ipynb
 htoc_ml/golden/legacy/
 htoc_ml/golden/new/
+htoc_ml/launchers/logs/*.log
+htoc_ml/launchers/logs/temp_output_*.log
