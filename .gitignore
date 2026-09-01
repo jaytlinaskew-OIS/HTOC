@@ -3,6 +3,10 @@ htoc_ml/golden/legacy/
 htoc_ml/golden/new/
 htoc_ml/launchers/logs/
 htoc_ml/launchers/production_copies/
+# .bat files on this UNC share fail git/Python reads (Invalid argument);
+# regenerate with: py -3.13 -m htoc_ml.datapipelines make-launcher --all
+htoc_ml/launchers/*.bat
+archive/**/*.bat
 htoc_ml/**/__pycache__/
 htoc_ml/**/*.py[cod]
 **/__pycache__/
