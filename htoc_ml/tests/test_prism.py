@@ -1,6 +1,5 @@
 import pandas as pd
 
-from htoc_ml.core.pipeline import PipelineNoWork
 from htoc_ml.prism.config import PrismConfig
 from htoc_ml.prism.engine import score_frame
 from htoc_ml.prism.tags import evaluate_tagging_boost_reason, has_pb_lower_tag
@@ -47,13 +46,32 @@ def test_score_frame_assigns_severity():
     assert int(scored["PRISM Score"].iloc[0]) >= 0
 
 
+def test_from_env_bad_mode_is_pipeline_error(monkeypatch):
+    from htoc_ml.core.pipeline import PipelineError
+
+    monkeypatch.setenv("PRISM_MODE", "monthly")
+    try:
+        PrismConfig.from_env()
+    except PipelineError as exc:
+        assert "PRISM_MODE" in str(exc)
+    else:
+        raise AssertionError("expected PipelineError")
+
+
+def test_paths_shared_with_noi():
+    from htoc_ml.core.paths import DEFAULT_SHARE_ROOT, opdiv_obs_template, share_root
+
+    cfg = PrismConfig.daily(save_dir=".")
+    assert cfg.htoc_share_root == DEFAULT_SHARE_ROOT or cfg.htoc_share_root == str(share_root())
+    assert cfg.opdiv_template == opdiv_obs_template(cfg.htoc_share_root)
+
+
 def test_pipeline_nowork_is_success(capsys):
-    from htoc_ml.core.pipeline import Pipeline
+    from htoc_ml.core.cli_exit import run_and_return_exit_code
+    from htoc_ml.core.pipeline import PipelineNoWork
 
-    class Empty(Pipeline):
-        def execute(self) -> None:
-            raise PipelineNoWork("nothing today")
+    def empty():
+        raise PipelineNoWork("nothing today")
 
-    assert Empty().run() == 0
-    out = capsys.readouterr().out
-    assert "PIPELINE_OK_NOWORK" in out
+    assert run_and_return_exit_code(empty) == 0
+    assert "PIPELINE_OK_NOWORK" in capsys.readouterr().out

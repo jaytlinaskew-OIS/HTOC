@@ -12,12 +12,13 @@ except (AttributeError, OSError):
 
 warnings.filterwarnings("ignore")
 
+from htoc_ml.core.cli_exit import run_and_return_exit_code
 from htoc_ml.prism.config import PrismConfig
-from htoc_ml.prism.runner import PrismRunner
+from htoc_ml.prism.runner import run_prism_indicator_scoring
 
 
 def main() -> int:
-    return PrismRunner(PrismConfig.from_env()).run()
+    return run_and_return_exit_code(lambda: run_prism_indicator_scoring(PrismConfig.from_env()))
 
 
 if __name__ == "__main__":

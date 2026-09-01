@@ -5,10 +5,8 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from htoc_ml.core import paths as htoc_paths
 from htoc_ml.core.pipeline import PipelineError
-
-DEFAULT_SHARE = r"\\cscso1fsappv01\data\HTOC"
-DEFAULT_TC_PROJECT = r"\\cscso1fsappv01\home\jaskew\HTOC\scripts\Data Movement\ThrearConnect-api-pull"
 
 WEEKLY_TYPES = (
     "Address", "EmailAddress", "File", "Host", "URL", "ASN", "CIDR",
@@ -45,8 +43,8 @@ WEEKLY_STANDALONE_EXTRA = frozenset({"tor node"})
 @dataclass(frozen=True)
 class PrismConfig:
     mode: str = "daily"
-    htoc_share_root: str = DEFAULT_SHARE
-    tc_project_root: str = DEFAULT_TC_PROJECT
+    htoc_share_root: str = htoc_paths.DEFAULT_SHARE_ROOT
+    tc_project_root: str = htoc_paths.DEFAULT_TC_PROJECT_ROOT
     config_path: str = ""
     tc_sdk_path: str = ""
     observed_indicators_csv: str = ""
@@ -66,32 +64,24 @@ class PrismConfig:
     def __post_init__(self) -> None:
         if self.mode not in {"daily", "weekly"}:
             raise PipelineError(f"mode must be 'daily' or 'weekly', got {self.mode!r}")
-        object.__setattr__(self, "htoc_share_root", self.htoc_share_root.strip() or DEFAULT_SHARE)
-        share = Path(self.htoc_share_root)
+        share = self.htoc_share_root.strip() or htoc_paths.DEFAULT_SHARE_ROOT
+        object.__setattr__(self, "htoc_share_root", share)
+        tc_root = self.tc_project_root.strip() or htoc_paths.DEFAULT_TC_PROJECT_ROOT
+        object.__setattr__(self, "tc_project_root", tc_root)
         if not self.config_path:
-            object.__setattr__(self, "config_path", str(Path(self.tc_project_root) / "utils" / "config.json"))
+            object.__setattr__(self, "config_path", str(htoc_paths.tc_config_json(tc_root)))
         if not self.tc_sdk_path:
-            object.__setattr__(self, "tc_sdk_path", str(share / "Data_Analytics" / "threatconnect"))
+            object.__setattr__(self, "tc_sdk_path", str(htoc_paths.threatconnect_sdk_dir(share)))
         if not self.observed_indicators_csv:
             object.__setattr__(
-                self,
-                "observed_indicators_csv",
-                str(share / r"Data_Analytics\Data\Observed_Indicators\htoc_observed_indicators.csv"),
+                self, "observed_indicators_csv", str(htoc_paths.observed_indicators_csv(share))
             )
         if not self.tags_csv:
-            object.__setattr__(
-                self,
-                "tags_csv",
-                str(share / r"Data_Analytics\Data\Observed_Tags\htoc_observed_indicator_tags.csv"),
-            )
+            object.__setattr__(self, "tags_csv", str(htoc_paths.observed_tags_csv(share)))
         if not self.opdiv_template:
-            object.__setattr__(
-                self,
-                "opdiv_template",
-                str(share / r"Data_Analytics\Data\OpDiv_Observations\htoc_opdiv_obs_d{date}.csv"),
-            )
+            object.__setattr__(self, "opdiv_template", htoc_paths.opdiv_obs_template(share))
         if not self.save_dir:
-            object.__setattr__(self, "save_dir", str(share / r"JA\PrismTest"))
+            object.__setattr__(self, "save_dir", str(htoc_paths.prism_save_dir(share)))
 
     @property
     def excel_path(self) -> Path:
@@ -113,14 +103,20 @@ class PrismConfig:
 
     @classmethod
     def from_env(cls) -> "PrismConfig":
-        mode = os.environ.get("PRISM_MODE", "daily").strip().lower() or "daily"
-        share = os.environ.get("HTOC_SHARE_ROOT", DEFAULT_SHARE)
-        kwargs = {
-            "htoc_share_root": share,
-            "tc_project_root": os.environ.get("PRISM_TC_PROJECT", DEFAULT_TC_PROJECT),
-            "config_path": os.environ.get("PRISM_CONFIG_PATH", ""),
-            "save_dir": os.environ.get("PRISM_SAVE_DIR", ""),
-        }
-        if mode == "weekly":
-            return cls.weekly(**kwargs)
-        return cls.daily(**kwargs)
+        try:
+            mode = os.environ.get("PRISM_MODE", "daily").strip().lower() or "daily"
+            kwargs = {
+                "htoc_share_root": str(htoc_paths.share_root()),
+                "tc_project_root": str(htoc_paths.tc_project_root()),
+                "config_path": os.environ.get("PRISM_CONFIG_PATH", ""),
+                "save_dir": os.environ.get("PRISM_SAVE_DIR", ""),
+            }
+            if mode == "weekly":
+                return cls.weekly(**kwargs)
+            if mode != "daily":
+                raise PipelineError(f"PRISM_MODE must be 'daily' or 'weekly', got {mode!r}")
+            return cls.daily(**kwargs)
+        except PipelineError:
+            raise
+        except (ValueError, TypeError) as exc:
+            raise PipelineError(f"invalid PRISM env config: {exc}") from exc

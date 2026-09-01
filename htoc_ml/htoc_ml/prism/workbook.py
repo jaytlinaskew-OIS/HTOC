@@ -33,75 +33,79 @@ def export_frame(df_scored: pd.DataFrame) -> pd.DataFrame:
 
 
 def merge_into_workbook(df_scored: pd.DataFrame, excel_path: Path) -> Path:
-    excel_path.parent.mkdir(parents=True, exist_ok=True)
-    df_export = export_frame(df_scored)
-    columns_to_save = list(df_export.columns)
-    if excel_path.exists():
-        existing = pd.read_excel(excel_path, engine="openpyxl")
-        rename = {
-            old: new
-            for old, new in COLUMN_RENAME.items()
-            if old in existing.columns and new not in existing.columns
-        }
-        if rename:
-            existing.rename(columns=rename, inplace=True)
-        for col in columns_to_save:
-            if col not in existing.columns:
-                existing[col] = pd.NaT if col == "Last Observed" else (
-                    0 if col in {
-                        "VirusTotal Malicious Score", "Observation Yearly Count",
-                        "ThreatConnect Rating", "Observation Penalty Multiplier",
-                        "Botnet Flag", "False Positives", "PRISM Score", "ThreatConnect Score",
-                    } else ""
-                )
-        existing = existing[[c for c in columns_to_save if c in existing.columns]].copy()
-        existing_set = set(existing["Indicator"].values)
-        new_set = set(df_export["Indicator"].values)
-        existing_idx = existing.set_index("Indicator").sort_index()
-        export_idx = df_export.set_index("Indicator").sort_index()
-        to_update = [
-            i for i in existing_set & new_set
-            if not existing_idx.loc[i].equals(export_idx.loc[i])
-        ]
-        unchanged = [i for i in existing_set & new_set if i not in to_update]
-        combined = pd.concat([
-            existing[existing["Indicator"].isin(unchanged)],
-            df_export[df_export["Indicator"].isin(to_update)],
-            df_export[df_export["Indicator"].isin(new_set - existing_set)],
-            existing[~existing["Indicator"].isin(new_set)],
-        ], ignore_index=True).drop_duplicates(subset="Indicator", keep="last")
-        print(f"Updated: {len(to_update)} | Added: {len(new_set - existing_set)} | Total: {len(combined)}")
-    else:
-        combined = df_export.drop_duplicates(subset="Indicator", keep="last").copy()
-        print(f"Created new file with {len(combined)} indicators")
+    from htoc_ml.core.pipeline import PipelineError
 
-    history = None
-    if excel_path.exists():
-        try:
-            history = pd.read_excel(excel_path, sheet_name="Complete History", engine="openpyxl")
-        except (ValueError, KeyError, OSError):
-            history = None
+    try:
+        excel_path.parent.mkdir(parents=True, exist_ok=True)
+        df_export = export_frame(df_scored)
+        columns_to_save = list(df_export.columns)
+        if excel_path.exists():
+            existing = pd.read_excel(excel_path, engine="openpyxl")
+            rename = {
+                old: new
+                for old, new in COLUMN_RENAME.items()
+                if old in existing.columns and new not in existing.columns
+            }
+            if rename:
+                existing.rename(columns=rename, inplace=True)
+            for col in columns_to_save:
+                if col not in existing.columns:
+                    existing[col] = pd.NaT if col == "Last Observed" else (
+                        0 if col in {
+                            "VirusTotal Malicious Score", "Observation Yearly Count",
+                            "ThreatConnect Rating", "Observation Penalty Multiplier",
+                            "Botnet Flag", "False Positives", "PRISM Score", "ThreatConnect Score",
+                        } else ""
+                    )
+            existing = existing[[c for c in columns_to_save if c in existing.columns]].copy()
+            existing_set = set(existing["Indicator"].values)
+            new_set = set(df_export["Indicator"].values)
+            existing_idx = existing.set_index("Indicator").sort_index()
+            export_idx = df_export.set_index("Indicator").sort_index()
+            to_update = [
+                i for i in existing_set & new_set
+                if not existing_idx.loc[i].equals(export_idx.loc[i])
+            ]
+            unchanged = [i for i in existing_set & new_set if i not in to_update]
+            combined = pd.concat([
+                existing[existing["Indicator"].isin(unchanged)],
+                df_export[df_export["Indicator"].isin(to_update)],
+                df_export[df_export["Indicator"].isin(new_set - existing_set)],
+                existing[~existing["Indicator"].isin(new_set)],
+            ], ignore_index=True).drop_duplicates(subset="Indicator", keep="last")
+        else:
+            combined = df_export.drop_duplicates(subset="Indicator", keep="last").copy()
 
-    with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
-        combined.to_excel(writer, index=False, sheet_name="PRISM Scores")
-        if "ThreatConnect Score" in combined.columns and "PRISM Score" in combined.columns:
-            compare = combined[["Indicator", "ThreatConnect Score", "PRISM Score"]].copy()
-            compare["ThreatConnect Score"] = pd.to_numeric(compare["ThreatConnect Score"], errors="coerce").fillna(0)
-            compare["PRISM Score"] = pd.to_numeric(compare["PRISM Score"], errors="coerce").fillna(0)
-            compare["Difference"] = compare["PRISM Score"] - compare["ThreatConnect Score"]
-            compare.to_excel(writer, index=False, sheet_name="Score Comparison")
-        if history is not None:
-            history.to_excel(writer, index=False, sheet_name="Complete History")
-        worksheet = writer.sheets["PRISM Scores"]
-        for row_idx, severity in enumerate(combined["Severity"], start=2):
-            fill = FILLS.get(str(severity).lower())
-            if fill:
-                for col_idx in range(1, len(combined.columns) + 1):
-                    worksheet.cell(row=row_idx, column=col_idx).fill = fill
+        history = None
+        if excel_path.exists():
+            try:
+                history = pd.read_excel(excel_path, sheet_name="Complete History", engine="openpyxl")
+            except (ValueError, KeyError, OSError):
+                history = None
 
-    _append_history(df_scored, excel_path)
-    print(f"Saved {len(combined)} indicators to {excel_path}")
-    return excel_path
+        with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
+            combined.to_excel(writer, index=False, sheet_name="PRISM Scores")
+            if "ThreatConnect Score" in combined.columns and "PRISM Score" in combined.columns:
+                compare = combined[["Indicator", "ThreatConnect Score", "PRISM Score"]].copy()
+                compare["ThreatConnect Score"] = pd.to_numeric(compare["ThreatConnect Score"], errors="coerce").fillna(0)
+                compare["PRISM Score"] = pd.to_numeric(compare["PRISM Score"], errors="coerce").fillna(0)
+                compare["Difference"] = compare["PRISM Score"] - compare["ThreatConnect Score"]
+                compare.to_excel(writer, index=False, sheet_name="Score Comparison")
+            if history is not None:
+                history.to_excel(writer, index=False, sheet_name="Complete History")
+            worksheet = writer.sheets["PRISM Scores"]
+            for row_idx, severity in enumerate(combined["Severity"], start=2):
+                fill = FILLS.get(str(severity).lower())
+                if fill:
+                    for col_idx in range(1, len(combined.columns) + 1):
+                        worksheet.cell(row=row_idx, column=col_idx).fill = fill
+
+        _append_history(df_scored, excel_path)
+        return excel_path
+    except PipelineError:
+        raise
+    except OSError as exc:
+        raise PipelineError(f"failed writing PRISM workbook {excel_path}: {exc}", exit_code=4) from exc
 
 
 def _append_history(df_scored: pd.DataFrame, excel_path: Path) -> None:
@@ -150,7 +154,7 @@ def _append_history(df_scored: pd.DataFrame, excel_path: Path) -> None:
                     existing_sheets[name] = pd.read_excel(excel_path, sheet_name=name, engine="openpyxl")
             book.close()
         except (ValueError, OSError) as exc:
-            print(f"Warning: Could not read existing sheets: {exc}")
+            print(f"WARN: Could not read existing sheets: {exc}")
 
     with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
         for name, sheet in existing_sheets.items():
@@ -170,7 +174,3 @@ def _append_history(df_scored: pd.DataFrame, excel_path: Path) -> None:
             cell.font = Font(bold=True, color="FFFFFF")
             cell.fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
             cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-    print(
-        f"Scoring history updated — {len(history_all)} total records, "
-        f"{history_all['Indicator'].nunique()} unique indicators"
-    )
