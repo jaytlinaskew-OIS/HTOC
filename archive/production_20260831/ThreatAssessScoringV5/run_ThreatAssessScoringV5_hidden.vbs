@@ -1,0 +1,12 @@
+' Hidden launcher for Task Scheduler — no console window.
+' Propagates the batch file's exit code to Task Scheduler.
+Option Explicit
+Dim sh, bat, rc, cmd
+Set sh = CreateObject("WScript.Shell")
+bat = "\\cscso1fsappv01\home\jaskew\HTOC\notebooks\ThreatAssessment Scoring\ThreatAssessScoringV5\run_ThreatAssessScoringV5.bat"
+cmd = "cmd.exe /c call """ & bat & """"
+rc = sh.Run(cmd, 0, True)
+If rc < 0 Then
+  rc = 1
+End If
+WScript.Quit rc

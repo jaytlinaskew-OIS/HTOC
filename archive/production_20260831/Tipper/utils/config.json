@@ -1,0 +1,10 @@
+{
+    "threatconnect": {
+        "credentials": {
+            "secret_key": "GOIUnxSqhP@9%BFvFHr9OnzGrn?DpPGDkdn2w6h@VfnRqK28vwiOaA$Cc@CD4%u5",
+            "access_id": "09783848890162390382",
+            "base_url": "https://hvs.threatconnect.com/api",
+            "default_org": "HTOC Org"
+        }
+    }
+}
