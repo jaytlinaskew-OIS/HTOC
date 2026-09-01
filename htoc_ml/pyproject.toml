@@ -13,11 +13,28 @@ dependencies = [
   "scikit-learn",
   "openpyxl",
   "pytz",
+  "xlsxwriter",
 ]
 
 [project.scripts]
 htoc-noi = "htoc_ml.noi.__main__:main"
 htoc-prism = "htoc_ml.prism.__main__:main"
+htoc-threat-score-iw = "htoc_ml.datapipelines.threat_score_iw:main"
+htoc-search-tags = "htoc_ml.datapipelines.search_tags:main"
+htoc-triage = "htoc_ml.datapipelines.triage:main"
+htoc-iw-listing = "htoc_ml.datapipelines.iw_listing:main"
+htoc-make-launcher = "htoc_ml.datapipelines.make_launcher:main"
+
+[project.optional-dependencies]
+datapipelines = [
+  "requests",
+  "tabulate",
+  "python-pptx",
+  "pdfplumber",
+]
+datapipelines-ui = [
+  "gradio>=4.0",
+]
 
 [tool.setuptools.packages.find]
 where = ["."]

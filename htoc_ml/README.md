@@ -27,7 +27,76 @@ py -3.13 -m htoc_ml.prism
 
 Cut over later by pointing `run_ThreatAssessScoringV5Daily.bat` at `py -3.13 -m htoc_ml.prism` and `run_ThreatAssessScoringV5.bat` at the same with `PRISM_MODE=weekly`. Set `PRISM_SAVE_DIR` to the production Threat Assessment Scores folder only after you have compared a test workbook.
 
-I&W (`ThreatScoreIW`) is a downstream report, not part of this drop.
+## Run ThreatScoreIW
+
+Downstream I&W candidate workbook from recent ThreatConnect observations + PRISM scores + OpDiv multi-partner hits. Default output is `%HTOC_SHARE_ROOT%\JA\ThreatScoreIwTest\ThreatAssessI_W_YYYYMMDD.xlsx` (does **not** write the live `ThreatAssessI_W` folder until you set `THREAT_SCORE_IW_SAVE_DIR`).
+
+```
+cd htoc_ml
+py -3.13 -m htoc_ml.datapipelines.threat_score_iw
+```
+
+| Variable | Role |
+|---|---|
+| `HTOC_SHARE_ROOT` | UNC root |
+| `THREAT_SCORE_IW_SAVE_DIR` | Output directory (default `JA\ThreatScoreIwTest`) |
+| `THREAT_SCORE_IW_SCORES_XLSX` | PRISM scores workbook input |
+| `THREAT_SCORE_IW_LOOKBACK_HOURS` | Rolling UTC lookback (default `48`) |
+| `PRISM_CONFIG_PATH` | ThreatConnect `config.json` (shared with PRISM) |
+
+## Datapipelines CLIs
+
+Each datapipeline is one module under `htoc_ml/datapipelines/` that wires shared
+`htoc_ml.core` (and model packages) — not a nested package tree. Live notebooks
+under `notebooks/` are unchanged. Outputs default to `%HTOC_SHARE_ROOT%\JA\...Test\`
+where a write could clobber a shared workbook.
+
+```
+cd htoc_ml
+py -3.13 -m htoc_ml.datapipelines search-tags --search phishing
+py -3.13 -m htoc_ml.datapipelines search-tags --ui
+py -3.13 -m htoc_ml.datapipelines triage
+py -3.13 -m htoc_ml.datapipelines iw-listing
+py -3.13 -m htoc_ml.datapipelines threat-score-iw
+```
+
+Optional extras: `uv pip install -e "./htoc_ml[datapipelines]"` (requests, tabulate, python-pptx, pdfplumber). Gradio UI: `uv pip install -e "./htoc_ml[datapipelines,datapipelines-ui]"`.
+
+| Command | Replaces | Default write |
+|---|---|---|
+| `search-tags` | `notebooks/SearchIndicatorsByTags/` | reads live tags CSV + PRISM workbook; optional CSV under Saved Search Files |
+| `triage` | `ThreatAssessment Scoring/tools/indicator_triage.py` | `JA\PrismTest\indicator_triage_results.csv` |
+| `iw-listing` | `I&W Master Listing/frontEnd.ipynb` (PDFs) and the PPTX `src/` (`--from-pptx`) | `JA\IwListingTest\reported_iocs.xlsx` |
+| `threat-score-iw` | `ThreatAssessment Scoring/ThreatScoreIW/` | `JA\ThreatScoreIwTest\ThreatAssessI_W_*.xlsx` |
+
+The PowerPoint slide-template fill at the bottom of `frontEnd.ipynb` stays in the notebook.
+
+## Launchers
+
+Standard Task Scheduler wrappers live in `htoc_ml/launchers/`. Live jobs still
+point at `notebooks/` — do not retarget them until cutover.
+
+```
+cd htoc_ml
+py -3.13 -m htoc_ml.datapipelines make-launcher --all
+py -3.13 -m htoc_ml.datapipelines make-launcher --name noi
+py -3.13 -m htoc_ml.datapipelines make-launcher --snapshot
+```
+
+`--all` writes `run_noi`, `run_prism_daily`, `run_prism_weekly`, `run_threat_score_iw`, plus analyst
+CLI bats, copies `ensure_htoc_data_share.bat` next to them, and snapshots the
+live `.bat`/`.vbs` files into `launchers/production_copies/` (reference only).
+
+New job:
+
+```
+py -3.13 -m htoc_ml.datapipelines make-launcher --new-name run_myjob --python-args "-m htoc_ml.mypkg" --log-prefix myjob --packages "pandas openpyxl"
+```
+
+Point the scheduled task at `run_myjob_hidden.vbs`. The `.vbs` resolves the
+sibling `.bat` from its own folder (no hardcoded UNC). Contract: share probe,
+Python 3.13, log capture, `PIPELINE_OK` (optional `PIPELINE_OK_NOWORK`).
+See `launchers/README.txt`.
 
 ## Run the forecast
 
