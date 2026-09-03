@@ -1,3 +1,4 @@
+from htoc.core.bootstrap import ensure_htoc_on_path, find_htoc_src, htoc_src_dir
 from htoc.core.day import Day, to_date, to_day_index, to_timestamp
 from htoc.core.observations import IndicatorIndex, ObservationData
 from htoc.core.paths import (
@@ -10,6 +11,9 @@ from htoc.core.threatconnect import ThreatConnectClient, build_indicator_tql, lo
 
 __all__ = [
     "Day",
+    "ensure_htoc_on_path",
+    "find_htoc_src",
+    "htoc_src_dir",
     "IndicatorIndex",
     "ObservationData",
     "PipelineError",

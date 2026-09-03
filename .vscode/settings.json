@@ -1,6 +1,10 @@
 {
     "claudeCodeChat.permissions.yoloMode": false,
     "python.analysis.extraPaths": [
+        "htoc_ml/src",
         "notebooks/observationEventForecasting/NextObservedIndicatorV4"
-    ]
+    ],
+    "terminal.integrated.env.windows": {
+        "PYTHONPATH": "${workspaceFolder}\\htoc_ml\\src;${env:PYTHONPATH}"
+    }
 }

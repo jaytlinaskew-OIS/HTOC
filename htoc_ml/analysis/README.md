@@ -18,7 +18,7 @@ Production code lives in `htoc_ml/src/htoc/`. This folder is Jupyter-only.
 
 | Folder | Use for |
 |---|---|
-| `noi/` | Forecast features, eval deep-dives, feed-health experiments |
+| `noi/` | Forecast features, eval deep-dives, feed-health experiments — see also [Next Observed Relationships plan](../../notebooks/NextObservedRelationships/README.md) |
 | `prism/` | Score distributions, ThreatConnect intake checks |
 | `threatconnect/` | TC API probes, tag/playbook experiments |
 | `datapipelines/` | ThreatScoreIW, search-tags, triage, iw-listing exploration |
@@ -31,8 +31,11 @@ Run notebooks with working directory `htoc_ml/` (or adjust `OUT` below).
 ```python
 from pathlib import Path
 
+from htoc.core.bootstrap import ensure_htoc_on_path
 from htoc.core.observations import ObservationData
 from htoc.noi.config import ForecastConfig
+
+ensure_htoc_on_path()  # no-op when htoc is installed / on PYTHONPATH
 
 OUT = Path("analysis/_outputs")
 OUT.mkdir(parents=True, exist_ok=True)
