@@ -1,6 +1,6 @@
-from htoc_ml.core.pipeline import PipelineError
-from htoc_ml.noi.config import ForecastConfig
-from htoc_ml.noi.schedule import CutoffSchedule
+from htoc.core.pipeline import PipelineError
+from htoc.noi.config import ForecastConfig
+from htoc.noi.schedule import CutoffSchedule
 
 
 def test_cutoffs_need_lookback_and_horizon_runway():

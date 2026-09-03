@@ -8,9 +8,14 @@ What lives here
 ---------------
 ensure_htoc_data_share.bat     SMB probe (same as notebooks/)
 run_loggedoff_share_probe.bat  Session-0 share + ThreatConnect smoke test
-run_*.bat / run_*_hidden.vbs   Generated wrappers for htoc_ml modules
+run_noi*.bat / run_prism*.bat  NOI + PRISM wrappers
 production_copies/             Exact snapshots of the live launchers
 logs/                          Timestamped run logs (14-day rotation)
+
+Datapipeline runners (ThreatScoreIW, triage, search-tags, iw-listing) live next
+to the Python package:
+  src\htoc\datapipelines\bats\
+
 
 Standard contract (generated .bat)
 ----------------------------------
@@ -18,23 +23,23 @@ Standard contract (generated .bat)
 2. Call ensure_htoc_data_share.bat; exit 3 if the share is down
 3. PYTHONUTF8=1, TMP=C:\Temp, PYTHONUSERBASE=%USERPROFILE%\AppData\Roaming\Python
 4. Optional wheelhouse then PyPI pip install
-5. pushd to htoc_ml/ (the folder with pyproject.toml) and run python -m ...
+5. pushd to htoc_ml/ (the folder with pyproject.toml); PYTHONPATH includes src/
 6. Capture stdout; require PIPELINE_OK (or PIPELINE_OK_NOWORK when allowed)
 7. Hidden .vbs uses a path relative to itself (no hardcoded UNC)
 
 Generate / refresh
 ------------------
   cd htoc_ml
-  py -3.13 -m htoc_ml.datapipelines make-launcher --all
-  py -3.13 -m htoc_ml.datapipelines make-launcher --name noi
-  py -3.13 -m htoc_ml.datapipelines make-launcher --snapshot
+  py -3.13 -m htoc.datapipelines make-launcher --all
+  py -3.13 -m htoc.datapipelines make-launcher --name noi
+  py -3.13 -m htoc.datapipelines make-launcher --snapshot
 
 New job (example)
 -----------------
-  py -3.13 -m htoc_ml.datapipelines make-launcher ^
+  py -3.13 -m htoc.datapipelines make-launcher ^
     --new-name run_myjob ^
     --title "My pipeline" ^
-    --python-args "-m htoc_ml.mypkg" ^
+    --python-args "-m htoc.mypkg" ^
     --log-prefix myjob ^
     --packages "pandas openpyxl" ^
     --need-tc ^

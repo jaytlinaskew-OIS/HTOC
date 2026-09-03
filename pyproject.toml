@@ -48,10 +48,12 @@ package = false
 
 [tool.pyright]
 extraPaths = [
+  "htoc_ml/src",
   "notebooks/observationEventForecasting/NextObservedIndicatorV4",
 ]
 
 [tool.basedpyright]
 extraPaths = [
+  "htoc_ml/src",
   "notebooks/observationEventForecasting/NextObservedIndicatorV4",
 ]

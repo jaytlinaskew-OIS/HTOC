@@ -1,4 +1,4 @@
-from htoc_ml.noi.bands import BandPolicy
+from htoc.noi.bands import BandPolicy
 
 
 def test_default_high_cut_is_080():

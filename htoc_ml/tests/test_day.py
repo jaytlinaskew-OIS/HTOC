@@ -1,6 +1,6 @@
 from datetime import date
 
-from htoc_ml.core.day import to_date, to_day_index, to_timestamp
+from htoc.core.day import to_date, to_day_index, to_timestamp
 
 
 def test_epoch_round_trip():

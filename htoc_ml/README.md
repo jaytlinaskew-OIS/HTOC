@@ -1,8 +1,8 @@
 # htoc_ml
 
-Object-oriented package for HTOC production models. Live scheduled scripts
-under `notebooks/` are unchanged. Cut over a `.bat` only after you have compared
-outputs.
+Production models and datapipelines live in `htoc_ml/src/htoc/`. Exploratory
+Jupyter notebooks live in `htoc_ml/analysis/`. Live scheduled scripts under
+repo-root `notebooks/` are unchanged until cutover.
 
 ## Run PRISM (Threat Assessment)
 
@@ -12,7 +12,7 @@ Does **not** touch the live V5 / V5Daily Excel. Default output is
 ```
 cd htoc_ml
 set PRISM_MODE=daily
-py -3.13 -m htoc_ml.prism
+py -3.13 -m htoc.prism
 ```
 
 `PRISM_MODE=weekly` is the 7-day `lastObserved` intake (V5). Daily is first-seen-today (V5Daily). Both call the same `score_frame` engine.
@@ -23,9 +23,9 @@ py -3.13 -m htoc_ml.prism
 | `HTOC_SHARE_ROOT` | UNC root |
 | `PRISM_SAVE_DIR` | Workbook directory (default `JA\PrismTest`) |
 | `PRISM_CONFIG_PATH` | ThreatConnect `config.json` |
-| `PRISM_TC_PROJECT` | Folder that contains `utils/config.json` |
+| `PRISM_TC_PROJECT` | Folder with `utils/config.json` (default `%HTOC_SHARE_ROOT%\Data_Analytics\ThrearConnect-api-pull`) |
 
-Cut over later by pointing `run_ThreatAssessScoringV5Daily.bat` at `py -3.13 -m htoc_ml.prism` and `run_ThreatAssessScoringV5.bat` at the same with `PRISM_MODE=weekly`. Set `PRISM_SAVE_DIR` to the production Threat Assessment Scores folder only after you have compared a test workbook.
+Cut over later by pointing `run_ThreatAssessScoringV5Daily.bat` at `py -3.13 -m htoc.prism` and `run_ThreatAssessScoringV5.bat` at the same with `PRISM_MODE=weekly`. Set `PRISM_SAVE_DIR` to the production Threat Assessment Scores folder only after you have compared a test workbook.
 
 ## Run ThreatScoreIW
 
@@ -33,7 +33,7 @@ Downstream I&W candidate workbook from recent ThreatConnect observations + PRISM
 
 ```
 cd htoc_ml
-py -3.13 -m htoc_ml.datapipelines.threat_score_iw
+py -3.13 -m htoc.datapipelines.threat_score_iw
 ```
 
 | Variable | Role |
@@ -46,18 +46,18 @@ py -3.13 -m htoc_ml.datapipelines.threat_score_iw
 
 ## Datapipelines CLIs
 
-Each datapipeline is one module under `htoc_ml/datapipelines/` that wires shared
-`htoc_ml.core` (and model packages) — not a nested package tree. Live notebooks
+Each datapipeline is one module under `src/htoc/datapipelines/` that wires shared
+`htoc.core` (and model packages) — not a nested package tree. Live notebooks
 under `notebooks/` are unchanged. Outputs default to `%HTOC_SHARE_ROOT%\JA\...Test\`
 where a write could clobber a shared workbook.
 
 ```
 cd htoc_ml
-py -3.13 -m htoc_ml.datapipelines search-tags --search phishing
-py -3.13 -m htoc_ml.datapipelines search-tags --ui
-py -3.13 -m htoc_ml.datapipelines triage
-py -3.13 -m htoc_ml.datapipelines iw-listing
-py -3.13 -m htoc_ml.datapipelines threat-score-iw
+py -3.13 -m htoc.datapipelines search-tags --search phishing
+py -3.13 -m htoc.datapipelines search-tags --ui
+py -3.13 -m htoc.datapipelines triage
+py -3.13 -m htoc.datapipelines iw-listing
+py -3.13 -m htoc.datapipelines threat-score-iw
 ```
 
 Optional extras: `uv pip install -e "./htoc_ml[datapipelines]"` (requests, tabulate, python-pptx, pdfplumber). Gradio UI: `uv pip install -e "./htoc_ml[datapipelines,datapipelines-ui]"`.
@@ -78,9 +78,9 @@ point at `notebooks/` — do not retarget them until cutover.
 
 ```
 cd htoc_ml
-py -3.13 -m htoc_ml.datapipelines make-launcher --all
-py -3.13 -m htoc_ml.datapipelines make-launcher --name noi
-py -3.13 -m htoc_ml.datapipelines make-launcher --snapshot
+py -3.13 -m htoc.datapipelines make-launcher --all
+py -3.13 -m htoc.datapipelines make-launcher --name noi
+py -3.13 -m htoc.datapipelines make-launcher --snapshot
 ```
 
 `--all` writes `run_noi`, `run_prism_daily`, `run_prism_weekly`, `run_threat_score_iw`, plus analyst
@@ -90,7 +90,7 @@ live `.bat`/`.vbs` files into `launchers/production_copies/` (reference only).
 New job:
 
 ```
-py -3.13 -m htoc_ml.datapipelines make-launcher --new-name run_myjob --python-args "-m htoc_ml.mypkg" --log-prefix myjob --packages "pandas openpyxl"
+py -3.13 -m htoc.datapipelines make-launcher --new-name run_myjob --python-args "-m htoc.mypkg" --log-prefix myjob --packages "pandas openpyxl"
 ```
 
 Point the scheduled task at `run_myjob_hidden.vbs`. The `.vbs` resolves the
@@ -103,7 +103,7 @@ See `launchers/README.txt`.
 From the `htoc_ml/` directory (or after `uv pip install -e ./htoc_ml`):
 
 ```
-py -3.13 -m htoc_ml.noi
+py -3.13 -m htoc.noi
 ```
 
 Environment variables (same names as the live runner):
@@ -125,7 +125,7 @@ Separate scheduled job from the forecast runner. Consolidates per-OpDiv
 then runs day-to-day performance scoring.
 
 ```
-py -3.13 -m htoc_ml.noi.daily_reports
+py -3.13 -m htoc.noi.daily_reports
 ```
 
 | Variable | Role |
@@ -140,12 +140,24 @@ Install editable (optional): `uv pip install -e ./htoc_ml`
 
 Unit tests (no share mount): `py -3.13 -m pytest htoc_ml/tests`
 
+## Analysis notebooks
+
+Exploratory work goes in `htoc_ml/analysis/` (by domain: `noi/`, `prism/`,
+`threatconnect/`, `datapipelines/`, `adhoc/`). See `htoc_ml/analysis/README.md`.
+
+- Install editable: `uv pip install -e ./htoc_ml`
+- Notebooks import from `htoc`; reusable code moves into the package with tests
+- Write CSVs/plots to `analysis/_outputs/` — not live or cutover share paths
+- Name notebooks `YYYYMMDD_<topic>.ipynb`
+
+Repo-root `notebooks/` remains the scheduled-job source until `.bat` cutover.
+
 ## Map to the old script
 
 | Old | New |
 |---|---|
 | `L`, `HORIZONS`, `TRAIN_DAYS`, … | `ForecastConfig` |
-| `_to_int` / `_to_ts` | `htoc_ml.core.day` |
+| `_to_int` / `_to_ts` | `htoc.core.day` |
 | `load_panel` + `lookup` | `ObservationData` + `IndicatorIndex` |
 | `LOOKUP_FEAT` vs `lookup` | `observations.features` vs `observations.labels` |
 | `featurize` | `featurize(lookback_days, dates, cutoff_day)` (name-keyed dict) |
@@ -155,20 +167,20 @@ Unit tests (no share mount): `py -3.13 -m pytest htoc_ml/tests`
 | `noi_v4_bands.band` | `BandPolicy` |
 | `to_production` | `ProductionReport` |
 | top-level script + `PIPELINE_OK` | `run_*` function + `core.cli_exit.run_and_return_exit_code` |
-| `next_observed_daily_reports_v4.py` | `htoc_ml.noi.daily_reports` (`-m htoc_ml.noi.daily_reports`) |
-| `noi_v4_feed_health` / `noi_v4_outage_impute` | copied into `htoc_ml.noi` (see below) |
-| `noi_v4_performance_eval` | `htoc_ml.core.eval` (metrics/alerts/workbook) + `htoc_ml.noi.eval` (forecast join, bands, horizons) |
+| `next_observed_daily_reports_v4.py` | `htoc.noi.daily_reports` (`-m htoc.noi.daily_reports`) |
+| `noi_v4_feed_health` / `noi_v4_outage_impute` | copied into `htoc.noi` (see below) |
+| `noi_v4_performance_eval` | `htoc.core.eval` (metrics/alerts/workbook) + `htoc.noi.eval` (forecast join, bands, horizons) |
 
 ## Cut over the scheduled job
 
 1. Run unit tests: `py -3.13 -m pytest htoc_ml/tests`
 2. Compare a test run on the share (`NOI_V4_SAVE_DIR` → `JA\NextObserveV4Test`) against the live notebook for a few replay dates
-3. Point `run_NextObservedIndicatorV4.bat` at `py -3.13 -m htoc_ml.noi` (keep the share mount, log capture, and `PIPELINE_OK` grep)
+3. Point `run_NextObservedIndicatorV4.bat` at `py -3.13 -m htoc.noi` (keep the share mount, log capture, and `PIPELINE_OK` grep)
 4. Delete the copies under the old folder once the bat is cut over:
    - `noi_v4_feed_health.py`
    - `noi_v4_outage_impute.py`
-   - `noi_v4_bands.py` (policy now lives in `htoc_ml.noi.bands`)
-   - `noi_v4_performance_eval.py` (eval now lives in `htoc_ml.core.eval` + `htoc_ml.noi.eval`)
+   - `noi_v4_bands.py` (policy now lives in `htoc.noi.bands`)
+   - `noi_v4_performance_eval.py` (eval now lives in `htoc.core.eval` + `htoc.noi.eval`)
    - `NextObservedIndicatorV4.0.py` if nothing else imports it
 
 Until step 5, the copies in this package are **intentional duplication**.
@@ -178,19 +190,19 @@ Until step 5, the copies in this package are **intentional duplication**.
 Reusable as-is:
 
 - `ObservationData` — every HTOC model reads `htoc_opdiv_obs_d{date}.csv`
-- `htoc_ml.core.day` — epoch-integer days
+- `htoc.core.day` — epoch-integer days
 - `run_and_return_exit_code()` — wrap a `run_*()` function that returns `list[Path]`; prints `PIPELINE_OK`, maps `PipelineError` to exit codes 2/3/4
 - `core/threatconnect_presets.py` — shared TC owner/type lists for PRISM and ThreatScoreIW
-- `htoc_ml.core.eval` — **delayed-label** banded binary metrics, rolling alerts, traffic-light workbooks (`core/evaluation.py` is immediate sklearn metrics — different job)
+- `htoc.core.eval` — **delayed-label** banded binary metrics, rolling alerts, traffic-light workbooks (`core/evaluation.py` is immediate sklearn metrics — different job)
 
 Checklist:
 
 1. Add a `run_<model>()` orchestrator with numbered step functions (see module docstring walkthrough).
 2. Return `list[Path]` from the orchestrator; wire `__main__.py` through `run_and_return_exit_code`.
-3. Put model-specific code in its own subpackage (`htoc_ml.prism`, …). Do not reuse NOI feature or band helpers unless the new model actually uses them.
+3. Put model-specific code in its own subpackage (`htoc.prism`, …). Do not reuse NOI feature or band helpers unless the new model actually uses them.
 4. Add a `tests/conftest.py` fixture that does not need the share.
 5. Use `ForecastConfig`-style frozen dataclasses for tunables, with validation in `__post_init__`.
-6. If the model is a classifier with a later binary label, call `count_bands` / `rates_from_counts` and pass your own `BandSpec`, `MetricAlertRule` list, and `LegendSpec`. Do not import `htoc_ml.noi.eval` for that.
+6. If the model is a classifier with a later binary label, call `count_bands` / `rates_from_counts` and pass your own `BandSpec`, `MetricAlertRule` list, and `LegendSpec`. Do not import `htoc.noi.eval` for that.
 
 `noi/` is the forecasting reference. `prism/` is the scoring reference (shared engine, two intake modes). `noi.eval` is the delayed-label eval reference (forecast CSVs joined to observation files).
 

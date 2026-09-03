@@ -8,13 +8,13 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 
-from htoc_ml.core.day import to_day_index, to_timestamp
-from htoc_ml.core.observations import ObservationData
-from htoc_ml.core.pipeline import PipelineError
-from htoc_ml.noi.bands import CONFNAME, PROBNAME
-from htoc_ml.noi.config import DATE_FMT, ForecastConfig
-from htoc_ml.noi.report import ProductionReport
-from htoc_ml.noi.runner import (
+from htoc.core.day import to_day_index, to_timestamp
+from htoc.core.observations import ObservationData
+from htoc.core.pipeline import PipelineError
+from htoc.noi.bands import CONFNAME, PROBNAME
+from htoc.noi.config import DATE_FMT, ForecastConfig
+from htoc.noi.report import ProductionReport
+from htoc.noi.runner import (
     fill_outage_gaps,
     fit_model_on_history,
     report_feed_health,
@@ -173,7 +173,7 @@ def test_noi_pipeline_on_synthetic_observations(
         )
 
 
-@patch("htoc_ml.noi.runner.load_observation_data")
+@patch("htoc.noi.runner.load_observation_data")
 def test_run_next_observed_indicator_forecast_on_synthetic(
     mock_load,
     synthetic_observation_frame: pd.DataFrame,

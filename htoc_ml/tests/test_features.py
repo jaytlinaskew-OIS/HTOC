@@ -1,6 +1,6 @@
 import numpy as np
 
-from htoc_ml.noi.features import FEATURE_NAMES, MONOTONIC_CONSTRAINTS, featurize, featurize_window, feature_vector
+from htoc.noi.features import FEATURE_NAMES, MONOTONIC_CONSTRAINTS, featurize, featurize_window, feature_vector
 
 
 def test_feature_names_match_constraints_and_featurize_keys():

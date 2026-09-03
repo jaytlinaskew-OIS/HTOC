@@ -6,15 +6,15 @@ import pandas as pd
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import HistGradientBoostingClassifier
 
-from htoc_ml.core.modeling import (
+from htoc.core.modeling import (
     build_hist_gradient_boosting_classifier,
     fit_isotonic_calibrated_classifier,
 )
-from htoc_ml.core.pipeline import PipelineError
-from htoc_ml.noi.config import ForecastConfig
-from htoc_ml.noi.features import FEATURE_NAMES
-from htoc_ml.noi.model import HorizonModel
-from htoc_ml.noi.schedule import CutoffSchedule
+from htoc.core.pipeline import PipelineError
+from htoc.noi.config import ForecastConfig
+from htoc.noi.features import FEATURE_NAMES
+from htoc.noi.model import HorizonModel
+from htoc.noi.schedule import CutoffSchedule
 
 
 class _FakeTraining:

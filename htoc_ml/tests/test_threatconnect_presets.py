@@ -1,6 +1,6 @@
 """Tests for shared ThreatConnect preset lists."""
-from htoc_ml.core.threatconnect_presets import OWNERS_DAILY, OWNERS_WEEKLY
-from htoc_ml.prism.config import DAILY_OWNERS, WEEKLY_OWNERS
+from htoc.core.threatconnect_presets import OWNERS_DAILY, OWNERS_WEEKLY
+from htoc.prism.config import DAILY_OWNERS, WEEKLY_OWNERS
 
 
 def test_prism_config_uses_shared_presets():

@@ -1,4 +1,4 @@
-from htoc_ml.core.observations import ObservationData
+from htoc.core.observations import ObservationData
 
 
 def test_groupby_sort_false_preserves_first_seen_order(synthetic_observation_frame):

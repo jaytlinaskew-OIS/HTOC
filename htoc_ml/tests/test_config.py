@@ -1,5 +1,5 @@
-from htoc_ml.core.pipeline import PipelineError
-from htoc_ml.noi.config import ForecastConfig
+from htoc.core.pipeline import PipelineError
+from htoc.noi.config import ForecastConfig
 
 
 def test_default_config_is_valid():

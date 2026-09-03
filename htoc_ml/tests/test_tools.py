@@ -1,14 +1,14 @@
 import pandas as pd
 
-from htoc_ml.datapipelines.iw_listing import (
+from htoc.datapipelines.iw_listing import (
     combine_pdf_extractions,
     description_from_title,
     fill_master_sheet,
     is_defanged_ip,
     serial_from_pdf_name,
 )
-from htoc_ml.datapipelines.search_tags import filter_chunk_by_tag, parse_terms
-from htoc_ml.datapipelines.triage import classify_indicator, run_triage
+from htoc.datapipelines.search_tags import filter_chunk_by_tag, parse_terms
+from htoc.datapipelines.triage import classify_indicator, run_triage
 
 
 def test_parse_terms_splits_comma_and_newline():

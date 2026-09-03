@@ -5,8 +5,8 @@ import json
 import urllib.parse
 from types import SimpleNamespace
 
-from htoc_ml.core.pipeline import PipelineError
-from htoc_ml.core.threatconnect import ThreatConnectClient, _quoted, build_indicator_tql, load_api_config
+from htoc.core.pipeline import PipelineError
+from htoc.core.threatconnect import ThreatConnectClient, _quoted, build_indicator_tql, load_api_config
 
 
 class _FakeRequest:

@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from htoc_ml.core.cli_exit import run_and_return_exit_code
-from htoc_ml.core.pipeline import PipelineError, PipelineNoWork
+from htoc.core.cli_exit import run_and_return_exit_code
+from htoc.core.pipeline import PipelineError, PipelineNoWork
 
 
 def test_success_prints_pipeline_ok(tmp_path, capsys):

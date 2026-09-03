@@ -1,14 +1,14 @@
 import pandas as pd
 
-from htoc_ml.core.eval.alerts import MetricAlertRule, collect_alerts
-from htoc_ml.core.eval.metrics import (
+from htoc.core.eval.alerts import MetricAlertRule, collect_alerts
+from htoc.core.eval.metrics import (
     NOT_APPLICABLE,
     BandSpec,
     count_bands,
     percent_or_sentinel,
     rates_from_counts,
 )
-from htoc_ml.core.eval.workbook import traffic_light_for_value, upsert_history
+from htoc.core.eval.workbook import traffic_light_for_value, upsert_history
 
 
 SPEC = BandSpec(positive_name="Highly likely", negative_name="Low confidence", abstain_name="Possibly active")
@@ -104,8 +104,8 @@ def test_precision_drop_alert_only_fires_under_floor():
 
 
 def test_provisional_rows_are_not_alerted():
-    from htoc_ml.noi.eval.config import EvalConfig
-    from htoc_ml.noi.eval.runner import PerformanceEval
+    from htoc.noi.eval.config import EvalConfig
+    from htoc.noi.eval.runner import PerformanceEval
 
     evaler = PerformanceEval(EvalConfig.from_paths(".", "."))
     row = {

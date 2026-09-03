@@ -7,10 +7,10 @@ from unittest.mock import MagicMock, patch
 import pandas as pd
 import pytest
 
-from htoc_ml.core.cli_exit import run_daily_reports_exit_code
-from htoc_ml.core.pipeline import PipelineNoWork
-from htoc_ml.noi.config import ForecastConfig
-from htoc_ml.prism.config import PrismConfig
+from htoc.core.cli_exit import run_daily_reports_exit_code
+from htoc.core.pipeline import PipelineNoWork
+from htoc.noi.config import ForecastConfig
+from htoc.prism.config import PrismConfig
 
 
 def test_run_daily_reports_backfill(capsys):
@@ -48,13 +48,13 @@ def test_run_daily_reports_missing_report(capsys, tmp_path: Path):
     assert "FATAL: expected report missing" in capsys.readouterr().out
 
 
-@patch("htoc_ml.noi.runner.write_opdiv_eval")
-@patch("htoc_ml.noi.runner.write_opdiv_csv")
-@patch("htoc_ml.noi.runner.score_indicators")
-@patch("htoc_ml.noi.runner.fit_model_on_history")
-@patch("htoc_ml.noi.runner.fill_outage_gaps")
-@patch("htoc_ml.noi.runner.report_feed_health")
-@patch("htoc_ml.noi.runner.load_observation_data")
+@patch("htoc.noi.runner.write_opdiv_eval")
+@patch("htoc.noi.runner.write_opdiv_csv")
+@patch("htoc.noi.runner.score_indicators")
+@patch("htoc.noi.runner.fit_model_on_history")
+@patch("htoc.noi.runner.fill_outage_gaps")
+@patch("htoc.noi.runner.report_feed_health")
+@patch("htoc.noi.runner.load_observation_data")
 def test_noi_runner_calls_steps_in_order(
     mock_load,
     mock_health,
@@ -65,7 +65,7 @@ def test_noi_runner_calls_steps_in_order(
     mock_eval,
     tmp_path: Path,
 ):
-    from htoc_ml.noi.runner import run_next_observed_indicator_forecast
+    from htoc.noi.runner import run_next_observed_indicator_forecast
 
     out = tmp_path / "CDC_output.csv"
     mock_load.return_value = MagicMock()
@@ -88,11 +88,11 @@ def test_noi_runner_calls_steps_in_order(
     mock_eval.assert_called_once()
 
 
-@patch("htoc_ml.prism.runner.write_prism_workbook")
-@patch("htoc_ml.prism.runner.score_prism_indicators")
-@patch("htoc_ml.prism.runner.enrich_with_local_and_partner_context")
-@patch("htoc_ml.prism.runner.intake_indicators_from_threatconnect")
-@patch("htoc_ml.prism.runner.connect_threatconnect")
+@patch("htoc.prism.runner.write_prism_workbook")
+@patch("htoc.prism.runner.score_prism_indicators")
+@patch("htoc.prism.runner.enrich_with_local_and_partner_context")
+@patch("htoc.prism.runner.intake_indicators_from_threatconnect")
+@patch("htoc.prism.runner.connect_threatconnect")
 def test_prism_runner_calls_steps_in_order(
     mock_connect,
     mock_intake,
@@ -101,7 +101,7 @@ def test_prism_runner_calls_steps_in_order(
     mock_write,
     tmp_path: Path,
 ):
-    from htoc_ml.prism.runner import run_prism_indicator_scoring
+    from htoc.prism.runner import run_prism_indicator_scoring
 
     workbook = tmp_path / "Threat_Assessment_Scores.xlsx"
     mock_connect.return_value = MagicMock()
@@ -121,10 +121,10 @@ def test_prism_runner_calls_steps_in_order(
 
 
 def test_prism_runner_nowork_on_empty_daily_intake():
-    from htoc_ml.prism.runner import run_prism_indicator_scoring
+    from htoc.prism.runner import run_prism_indicator_scoring
 
     config = PrismConfig.daily(save_dir=".")
-    with patch("htoc_ml.prism.runner.connect_threatconnect", return_value=MagicMock()):
-        with patch("htoc_ml.prism.runner.intake_indicators_from_threatconnect", return_value=pd.DataFrame()):
+    with patch("htoc.prism.runner.connect_threatconnect", return_value=MagicMock()):
+        with patch("htoc.prism.runner.intake_indicators_from_threatconnect", return_value=pd.DataFrame()):
             with pytest.raises(PipelineNoWork):
                 run_prism_indicator_scoring(config)

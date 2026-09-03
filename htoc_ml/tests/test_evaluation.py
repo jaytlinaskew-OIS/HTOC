@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression, LogisticRegression
 
-from htoc_ml.core.evaluation import (
+from htoc.core.evaluation import (
     CLASSIFICATION_METRICS,
     REGRESSION_METRICS,
     assert_metrics_for_task,
@@ -13,7 +13,7 @@ from htoc_ml.core.evaluation import (
     evaluate_model,
     infer_task_from_model,
 )
-from htoc_ml.core.pipeline import PipelineError
+from htoc.core.pipeline import PipelineError
 
 
 def test_infer_task_from_sklearn_estimators():

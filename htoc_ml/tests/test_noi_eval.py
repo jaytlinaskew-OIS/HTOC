@@ -1,7 +1,7 @@
 import pandas as pd
 
-from htoc_ml.core.eval.metrics import NOT_APPLICABLE
-from htoc_ml.noi.eval.scoring import score_banded_forecast, week_horizon_coverage
+from htoc.core.eval.metrics import NOT_APPLICABLE
+from htoc.noi.eval.scoring import score_banded_forecast, week_horizon_coverage
 
 
 def test_score_banded_forecast_maps_bands_and_week_coverage():

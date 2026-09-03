@@ -15,13 +15,14 @@ import tracemalloc
 from dataclasses import dataclass, field
 from pathlib import Path
 
-# htoc_ml package lives under htoc_ml/htoc_ml
+# Package source lives under htoc_ml/src/htoc
 _ROOT = Path(__file__).resolve().parents[1]
-if str(_ROOT) not in sys.path:
-    sys.path.insert(0, str(_ROOT))
+_SRC = _ROOT / "src"
+if str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
 
-from htoc_ml.noi import runner  # noqa: E402
-from htoc_ml.noi.config import ForecastConfig  # noqa: E402
+from htoc.noi import runner  # noqa: E402
+from htoc.noi.config import ForecastConfig  # noqa: E402
 
 
 @dataclass

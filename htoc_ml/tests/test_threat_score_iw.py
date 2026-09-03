@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import pandas as pd
 
-from htoc_ml.core.pipeline import PipelineError
-from htoc_ml.datapipelines.threat_score_iw import (
+from htoc.core.pipeline import PipelineError
+from htoc.datapipelines.threat_score_iw import (
     condense_final_indicators,
     filter_threat_assess_bands,
     has_iw_tag,

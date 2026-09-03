@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from htoc_ml.core.day import to_day_index
+from htoc.core.day import to_day_index
 
 
 @pytest.fixture
