@@ -61,9 +61,18 @@ See [templates.md](templates.md) § Notebook (optional).
 
 ## HTOC conventions (when implementing)
 
+**Exploration (notebook / analysis):**
+
 - `from htoc.core.bootstrap import ensure_htoc_on_path`
 - `htoc.core.paths.share_root()` — no hardcoded share paths
 - Write to `_outputs/` only
+- Inline cleaning and featuring is fine — do not create `htoc.core` modules yet
+
+**Promotion (to `src/htoc/` or `htoc.datapipelines/`):**
+
+- Reusable cleaning and feature transforms → `htoc.core` with pytest
+- Model orchestration and model-only features → `htoc.{noi,prism,...}`
+- Datapipelines → thin CLI wiring; import transforms from core
 
 **Example:** [notebooks/NextObservedRelationships/README.md](../../notebooks/NextObservedRelationships/README.md)
 
@@ -81,3 +90,7 @@ See [templates.md](templates.md) § Notebook (optional).
 | 7 | Model deployment | [ ] |
 | 8 | Feedback loops | [ ] |
 ```
+
+## Tooling efficiency
+
+When filling a step or adding implementation, consider [ml-engineering-efficiency](../ml-engineering-efficiency/SKILL.md) — tools, clean code, and Big-O/data-structure choices. Suggest only what fits the project.

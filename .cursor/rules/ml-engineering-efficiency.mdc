@@ -1,0 +1,44 @@
+---
+description: ML engineering efficiency — clean code, Big-O/data structures, pipeline tools; right-size stack
+alwaysApply: true
+---
+
+# ML engineering efficiency
+
+When planning or building ML work, optimize for **clean code**, **algorithmic efficiency**, and **right-sized tooling**.
+
+## Clean code (data/ML)
+
+- **Package over notebook** for prod; functions do one thing; type hints on public APIs
+- **No repeated full-frame copies** — chain transforms; `.copy()` only when mutating
+- **Explicit dtypes** — `category`, `bool`, `float32` when it cuts memory
+- **Name by domain** — `prob_mat`, `spread_7d`, not `df2`
+- **Promote before optimizing** — readable vectorized pandas beats clever nested loops
+
+## Big-O sanity check
+
+Before nested loops or `itertools.combinations`, state expected **n** and complexity:
+
+| Pattern | Typical complexity | Prefer when |
+|---------|-------------------|-------------|
+| `pivot_table` / `groupby` | O(n) | Aggregations |
+| Dict/set lookup | O(1) per key | Joins, `(partner, indicator)` maps |
+| `DataFrame.corr` | O(d² × rows) | d = partners/columns (small d OK) |
+| Nested loops over indicators × partners | O(I × P²) | **Avoid** — vectorize or groupby |
+| Pairwise combinations per group | O(k²) per group | Cap k or filter first |
+
+If I×P or Σk² is > ~1M ops, refactor before adding features.
+
+## Promote to core (on cutover only)
+
+- **Notebooks explore** — keep cleaning/featuring inline in `notebooks/` or `htoc_ml/analysis/`; do not extract to `htoc.core` mid-exploration
+- **On promotion** to `htoc_ml/src/htoc/` or `htoc.datapipelines/` — move **reusable** cleaning and feature transforms into `htoc.core` with pytest; model-specific logic stays in `htoc.{noi,prism,...}`; datapipelines wire core, they don't own transforms
+
+## Pipeline tools & HTOC
+
+See step → tool table and defer list in `.cursor/skills/ml-engineering-efficiency/SKILL.md`
+
+- Eight pipeline steps: `.cursor/skills/ml-pipeline-notebook/`
+- Outputs: `htoc_ml/analysis/_outputs/` only; `htoc.core.paths` for share paths
+
+**Data structures & complexity detail:** `.cursor/skills/ml-engineering-efficiency/reference.md` § Clean code & Big-O
