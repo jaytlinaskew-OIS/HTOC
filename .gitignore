@@ -3,6 +3,8 @@ htoc_ml/analysis/_outputs/*
 !htoc_ml/analysis/_outputs/.gitkeep
 htoc_ml/analysis/**/.ipynb_checkpoints/
 htoc_ml/launchers/logs/
+notebooks/**/logs/
+htoc_ml/tools/*.prof
 htoc_ml/launchers/production_copies/
 # .bat files on this UNC share fail git/Python reads (Invalid argument);
 # regenerate with: py -3.13 -m htoc.datapipelines make-launcher --all
