@@ -1,6 +1,7 @@
 import os
 import sys
 from datetime import datetime, timedelta
+from pathlib import Path
 import pandas as pd
 import pytz
 import urllib.parse
@@ -9,6 +10,13 @@ import re
 # Use the UNC path—this works even when the Z: drive isn’t mapped
 SDK_PATH = r"\\10.1.4.22\data\HTOC\Data_Analytics\threatconnect"
 sys.path.insert(0, SDK_PATH)
+_here = Path(__file__).resolve()
+for _base in (_here, *_here.parents):
+    _src = _base / "htoc_ml" / "src"
+    if (_src / "htoc").is_dir():
+        if str(_src) not in sys.path:
+            sys.path.insert(0, str(_src))
+        break
 
 from ThreatConnect import ThreatConnect
 from RequestObject import RequestObject
@@ -180,13 +188,13 @@ def excludeSoarData(recent_tags):
     indicator_values = filtered_recent_tags['summary'].dropna().unique().tolist()
     enriched_results = []
 
-    print(f"Enriching {len(indicator_values)} indicators with DomainTools and VirusTotalV3...")
+    print(f"Enriching {len(indicator_values)} indicators with Shodan and Google TI...")
 
     for value in indicator_values:
         try:
             # Use the indicator *value*, not the ID
             encoded_value = urllib.parse.quote(value)
-            enrich_url = f'/v3/indicators/{encoded_value}/enrich?type=Shodan&type=VirusTotalV3'
+            enrich_url = f'/v3/indicators/{encoded_value}/enrich?type=Shodan'
             ro.set_http_method('POST')
             ro.set_request_uri(enrich_url)
             ro.set_body({})
@@ -221,12 +229,20 @@ def excludeSoarData(recent_tags):
             # Join enrichment columns back to filtered_recent_tags
             filtered_recent_tags = filtered_recent_tags.join(enrichment_df[enrichment_cols], how='left')
 
-        # Keep only records with vtMaliciousCount > 10
-        filtered_recent_tags = filtered_recent_tags[filtered_recent_tags['vtMaliciousCount'] > 10]
-
         print(f"Successfully enriched and merged {len(df_enriched)} indicators.")
     else:
-        print("No enrichment data retrieved.")
+        print("No Shodan enrichment data retrieved.")
+
+    from htoc.core.gti import attach_gti_enrichment
+    filtered_recent_tags = attach_gti_enrichment(filtered_recent_tags, key_col="summary")
+    if "enrich_vtMaliciousCount" in filtered_recent_tags.columns:
+        mal_count = pd.to_numeric(filtered_recent_tags["enrich_vtMaliciousCount"], errors="coerce")
+        if mal_count.notna().any():
+            filtered_recent_tags = filtered_recent_tags[mal_count.fillna(0) > 10]
+        else:
+            print("WARN: Google TI returned no malicious counts; skipping VT>10 filter")
+    else:
+        print("WARN: Google TI unavailable; skipping VT>10 filter")
 #=============================================================
 #=================== Enrichment Data Extraction ==============
     # Unnest the 'data.enrichment.data' column into separate columns for each enrichment type
@@ -241,8 +257,6 @@ def excludeSoarData(recent_tags):
                     # Flatten Shodan fields
                     for key in ['hostNames', 'domains', 'tags', 'country', 'city', 'isp', 'asn', 'org', 'openPorts']:
                         result[f'shodan_{key}'] = enrich.get(key, np.nan)
-                elif enrich_type == 'VirusTotal':
-                    result['vtMaliciousCount'] = enrich.get('vtMaliciousCount', np.nan)
         return pd.Series(result)
 
     # Apply extraction to recent_tags
@@ -251,6 +265,8 @@ def excludeSoarData(recent_tags):
 
     filtered_recent_tags = filtered_recent_tags.rename(columns={
         'indicator': 'Indicator',
+        'summary': 'Indicator',
+        'enrich_vtMaliciousCount': 'Malicious Score/Count',
         'vtMaliciousCount': 'Malicious Score/Count',
         'obs_date': 'Observation Date',
         'shodan_asn': 'ASN',
@@ -259,14 +275,21 @@ def excludeSoarData(recent_tags):
         'shodan_city': 'City',
         'shodan_country': 'Country',
         'data.legacyLink': 'ThreatConnect Link',
-        'partners': 'Partners'
+        'partners': 'Partners',
+        'enrich_gti_verdict': 'GTI Verdict',
+        'enrich_gti_threat_score': 'GTI Threat Score',
+        'enrich_gti_severity': 'GTI Severity',
+        'enrich_gti_mandiant': 'Mandiant',
     })
 
     # Now select only the columns you want, after renaming
-    filtered_recent_tags = filtered_recent_tags[
-        [
+    keep_cols = [
             'Indicator',
             'Malicious Score/Count',
+            'GTI Verdict',
+            'GTI Threat Score',
+            'GTI Severity',
+            'Mandiant',
             'Observation Date',
             'ASN',
             'ThreatAssessRating',
@@ -276,6 +299,8 @@ def excludeSoarData(recent_tags):
             'ThreatConnect Link',
             'Partners'
         ]
+    filtered_recent_tags = filtered_recent_tags[
+        [c for c in keep_cols if c in filtered_recent_tags.columns]
     ]
 
     # Remove duplicate columns by keeping only the first occurrence

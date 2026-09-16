@@ -19,3 +19,4 @@ htoc_ml/**/*.py[cod]
 .pytest_cache/
 .mypy_cache/
 notebooks/GoogleThreatIntel/config.json
+notebooks/GoogleThreatIntel/gti_cache.json

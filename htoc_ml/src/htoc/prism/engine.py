@@ -105,6 +105,13 @@ COLUMN_RENAME = {
     "vt_high_floor_bypassed": "VT High Floor Bypassed",
     "calScore": "CAL Score",
     "threatAssessScore": "ThreatConnect Score",
+    "enrich_gti_verdict": "GTI Verdict",
+    "enrich_gti_severity": "GTI Severity",
+    "enrich_gti_threat_score": "GTI Threat Score",
+    "enrich_gti_description": "GTI Description",
+    "enrich_gti_mandiant": "Mandiant",
+    "enrich_gti_threat_actors": "GTI Threat Actors",
+    "enrich_gti_malware_families": "GTI Malware Families",
     "PRISM_Score": "PRISM Score",
     "PRISM_Score_Final": "PRISM Score (Final)",
     "Severity": "Severity",
@@ -114,6 +121,7 @@ COLUMN_RENAME = {
 
 EXPORT_COLUMNS = [
     "Indicator", "Last Observed", "Indicator Type", "VirusTotal Malicious Score",
+    "GTI Verdict", "GTI Threat Score", "GTI Severity", "Mandiant",
     "Observation Yearly Count", "ThreatConnect Rating", "Observation Penalty Multiplier",
     "Botnet Flag", "False Positives", "Partners", "incidents/events", "Threat Actor",
     "Threat Nation State", "Threat Security Org", "Threat CVE", "Tagging Boost", "Tagging Boost Reason",

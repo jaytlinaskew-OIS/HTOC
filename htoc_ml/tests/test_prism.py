@@ -46,6 +46,37 @@ def test_score_frame_assigns_severity():
     assert int(scored["PRISM Score"].iloc[0]) >= 0
 
 
+def test_score_frame_keeps_vt_count_and_renames_gti_columns():
+    frame = pd.DataFrame([{
+        "indicator": "1.2.3.4",
+        "type": "Address",
+        "obs_count": 3,
+        "rating": 3,
+        "confidence": 80,
+        "calScore": 200,
+        "threatAssessScore": 100,
+        "sources": "HTOC Org",
+        "partners": "FDA",
+        "tag_list": [],
+        "enrich_vtMaliciousCount": 15,
+        "enrich_gti_verdict": "VERDICT_MALICIOUS",
+        "enrich_gti_threat_score": 70,
+        "enrich_gti_severity": "SEVERITY_HIGH",
+        "enrich_gti_mandiant": True,
+    }])
+    scored = score_frame(frame)
+    assert "GTI Verdict" in scored.columns
+    assert scored["GTI Verdict"].iloc[0] == "VERDICT_MALICIOUS"
+    assert scored["Mandiant"].iloc[0] == True
+    from htoc.prism.workbook import export_frame
+    exported = export_frame(scored)
+    assert "GTI Verdict" in exported.columns
+    assert "GTI Threat Score" in exported.columns
+    assert "GTI Severity" in exported.columns
+    assert "Mandiant" in exported.columns
+    assert "VirusTotal Malicious Score" in exported.columns
+
+
 def test_from_env_bad_mode_is_pipeline_error(monkeypatch):
     from htoc.core.pipeline import PipelineError
 

@@ -41,6 +41,8 @@ def test_prism_daily_allows_nowork():
     assert "Data_Analytics\\threatconnect" in text
     assert r"%HTOC_ML_ROOT%\src" in text
     assert "-m htoc.prism" in text
+    assert "requests" in JOBS["prism-daily"].packages
+    assert "requests" in JOBS["prism-weekly"].packages
 
 
 def test_threat_score_iw_bat_allows_nowork():

@@ -26,7 +26,16 @@ except Exception:
     pass
 
 # Hostname UNC (not \\10.1.4.22) — IP/NTLM fails in logged-off Task Scheduler.
+from pathlib import Path
+
 HTOC_SHARE_ROOT = os.environ.get("HTOC_SHARE_ROOT", r"\\cscso1fsappv01\data\HTOC")
+_here = Path(__file__).resolve()
+for _base in (_here, *_here.parents):
+    _src = _base / "htoc_ml" / "src"
+    if (_src / "htoc").is_dir():
+        if str(_src) not in sys.path:
+            sys.path.insert(0, str(_src))
+        break
 _TC_SDK = os.path.join(HTOC_SHARE_ROOT, "Data_Analytics", "threatconnect")
 if _TC_SDK not in sys.path:
     sys.path.insert(0, _TC_SDK)
@@ -903,6 +912,7 @@ import pandas as pd
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 COL_PATH = "data.enrichment.data"   # adjust if API changes
+exploded = pd.DataFrame()
 
 # Determine candidate indicators (use 'indicator' if present, else 'summary')
 key_col = 'indicator' if 'indicator' in agg_df.columns else 'summary'
@@ -923,13 +933,13 @@ candidates = (
     .drop_duplicates(subset=[key_col])
 )
 
-# Pre-filter: skip types that cannot be enriched (e.g. EmailAddress)
+# ThreatConnect Shodan only; Google TI supplies VirusTotal / GTI fields.
 candidates = candidates[
-    candidates['type'].astype(str).str.strip().isin(VT_TYPES | SHODAN_TYPES)
+    candidates['type'].astype(str).str.strip().isin(SHODAN_TYPES)
 ].copy()
 
 indicator_values = candidates[key_col].tolist()
-print(f"Enriching {len(indicator_values)} indicators (VT; Shodan for IP types only)...")
+print(f"Enriching {len(indicator_values)} indicators (Shodan for IP types; Google TI separately)...")
 
 def _enrich_one(row_series):
     """Call enrich API for one indicator. Returns (data_dict, None) on success or (None, fail_dict) on failure."""
@@ -946,12 +956,10 @@ def _enrich_one(row_series):
             indicator_id_or_value = urllib.parse.quote(value, safe="")
 
         providers = []
-        if typ in VT_TYPES:
-            providers.append("VirusTotalV3")
         if typ in SHODAN_TYPES:
             providers.append("Shodan")
         if not providers:
-            providers.append("VirusTotalV3")
+            return (None, {key_col: value, "type": typ, "error": "not a Shodan type"})
 
         q = urllib.parse.urlencode({"type": providers}, doseq=True)
         enrich_url = f"/v3/indicators/{indicator_id_or_value}/enrich?{q}"
@@ -1053,6 +1061,9 @@ if failed:
     fail_df = pd.DataFrame(failed)
     print(f"{len(failed)} indicators failed enrichment (showing up to 10):")
     print(fail_df.head(10))
+
+from htoc.core.gti import attach_gti_enrichment
+recent_tags = attach_gti_enrichment(recent_tags, key_col=key_col)
 
 # Show preview of key enrichment columns if present
 preview_cols = [c for c in [key_col, 'enrich_hostNames', 'enrich_domains', 'enrich_tags', 'enrich_vtMaliciousCount'] if c in recent_tags.columns]
@@ -1944,6 +1955,10 @@ column_rename_map = {
     'vt_high_floor_bypassed': 'VT High Floor Bypassed',
     'calScore': 'CAL Score',
     'threatAssessScore': 'ThreatConnect Score',
+    'enrich_gti_verdict': 'GTI Verdict',
+    'enrich_gti_severity': 'GTI Severity',
+    'enrich_gti_threat_score': 'GTI Threat Score',
+    'enrich_gti_mandiant': 'Mandiant',
     'PRISM_Score': 'PRISM Score',
     'PRISM_Score_Final': 'PRISM Score (Final)',
     'Severity': 'Severity',
@@ -1952,6 +1967,8 @@ column_rename_map = {
 }
 
 df_scored.rename(columns=column_rename_map, inplace=True)
+if 'VirusTotal Malicious Score' not in df_scored.columns and 'VT Display' in df_scored.columns:
+    df_scored['VirusTotal Malicious Score'] = df_scored['VT Display']
 
 display_columns = [
     'Indicator', 'Indicator Type', 'Last Observed',
@@ -2035,7 +2052,8 @@ excel_filename = "Threat_Assessment_Scores.xlsx"
 excel_path = os.path.join(output_dir, excel_filename)
 
 # Select only the columns to save (using renamed column names)
-columns_to_save = ['Indicator', 'Last Observed', 'Indicator Type', 'VirusTotal Malicious Score', 
+columns_to_save = ['Indicator', 'Last Observed', 'Indicator Type', 'VirusTotal Malicious Score',
+                   'GTI Verdict', 'GTI Threat Score', 'GTI Severity', 'Mandiant',
                    'Observation Yearly Count', 'ThreatConnect Rating', 'Observation Penalty Multiplier',
                    'Botnet Flag', 'False Positives', 'Partners', 'incidents/events', 'Threat Actor',
                    'Threat Nation State', 'Threat Security Org', 'Threat CVE', 'Tagging Boost', 'Tagging Boost Reason',

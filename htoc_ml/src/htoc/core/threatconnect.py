@@ -194,92 +194,101 @@ class ThreatConnectClient:
             frame = frame[frame["ownerName"] == prefer_owner]
         return frame.copy()
 
-    def enrich_indicators(self, agg_df: pd.DataFrame, *, max_workers: int = 8) -> pd.DataFrame:
-        """POST enrichment (VirusTotal / Shodan by type) and merge results onto ``agg_df``."""
+    def enrich_indicators(self, agg_df: pd.DataFrame, *, max_workers: int = 8, gti_workers: int = 4) -> pd.DataFrame:
+        """POST Shodan enrichment via ThreatConnect, then attach Google TI columns.
+
+        VirusTotal engine counts come from GTI (``enrich_vtMaliciousCount``), not
+        ThreatConnect ``VirusTotalV3``. GTI failures are fail-open so scoring still writes.
+        """
+        from htoc.core.gti import attach_gti_enrichment
+
+        if agg_df.empty:
+            return agg_df.copy()
         key_col = "indicator" if "indicator" in agg_df.columns else "summary"
-        vt_types = {"Address", "IPv4", "IPv6", "Host", "Domain", "URL", "File", "SHA1", "SHA256", "MD5"}
         shodan_types = {"Address", "IPv4", "IPv6"}
         cols = [key_col, "type"] + (["id"] if "id" in agg_df.columns else [])
+        present_cols = [c for c in cols if c in agg_df.columns]
         candidates = (
-            agg_df[cols].dropna(subset=[key_col]).astype({key_col: str}).drop_duplicates(subset=[key_col])
+            agg_df[present_cols].dropna(subset=[key_col]).astype({key_col: str}).drop_duplicates(subset=[key_col])
         )
-        candidates = candidates[candidates["type"].astype(str).str.strip().isin(vt_types | shodan_types)].copy()
-        if candidates.empty:
-            return agg_df.copy()
+        shodan_candidates = candidates
+        if "type" in candidates.columns:
+            shodan_candidates = candidates[
+                candidates["type"].astype(str).str.strip().isin(shodan_types)
+            ].copy()
 
-        def _one(row_series):
-            value = row_series[key_col]
-            typ = str(row_series.get("type", "") or "")
-            row_id = row_series.get("id")
-            use_id = pd.notna(row_id) and str(row_id).strip().isdigit()
-            try:
-                iid = str(int(float(row_id))) if use_id else urllib.parse.quote(value, safe="")
-                providers = []
-                if typ in vt_types:
-                    providers.append("VirusTotalV3")
-                if typ in shodan_types:
-                    providers.append("Shodan")
-                if not providers:
-                    providers.append("VirusTotalV3")
-                query = urllib.parse.urlencode({"type": providers}, doseq=True)
-                request = self._RequestObject()
-                request.set_http_method("POST")
-                request.set_request_uri(f"/v3/indicators/{iid}/enrich?{query}")
-                request.set_body({})
-                resp = self.session.api_request(request)
+        recent = agg_df.copy()
+        if not shodan_candidates.empty:
+            def _one(row_series):
+                value = row_series[key_col]
+                typ = str(row_series.get("type", "") or "")
+                row_id = row_series.get("id") if "id" in row_series.index else None
+                use_id = pd.notna(row_id) and str(row_id).strip().isdigit()
                 try:
-                    data = resp.json()
-                except (ValueError, TypeError):
-                    data = {"status": getattr(resp, "status_code", "n/a"), "raw": getattr(resp, "text", None)}
-                data[key_col] = value
-                return data, None
-            except Exception as exc:
-                return None, {key_col: value, "type": typ, "error": str(exc)}
+                    iid = str(int(float(row_id))) if use_id else urllib.parse.quote(value, safe="")
+                    query = urllib.parse.urlencode({"type": ["Shodan"]}, doseq=True)
+                    request = self._RequestObject()
+                    request.set_http_method("POST")
+                    request.set_request_uri(f"/v3/indicators/{iid}/enrich?{query}")
+                    if hasattr(request, "set_body"):
+                        request.set_body({})
+                    resp = self.session.api_request(request)
+                    try:
+                        data = resp.json()
+                    except (ValueError, TypeError):
+                        data = {"status": getattr(resp, "status_code", "n/a"), "raw": getattr(resp, "text", None)}
+                    data[key_col] = value
+                    return data, None
+                except Exception as exc:
+                    return None, {key_col: value, "type": typ, "error": str(exc)}
 
-        enriched, failed = [], []
-        with ThreadPoolExecutor(max_workers=max_workers) as pool:
-            futures = {pool.submit(_one, row): row for _, row in candidates.iterrows()}
-            for future in as_completed(futures):
-                result, err = future.result()
-                if result is not None:
-                    enriched.append(result)
-                else:
-                    failed.append(err)
-        if failed:
-            print(f"WARN: {len(failed)} indicators failed enrichment (showing up to 10)")
-            print(pd.DataFrame(failed).head(10).to_string())
-        if not enriched:
-            return agg_df.copy()
-        df_enriched = pd.json_normalize(enriched).drop_duplicates(subset=[key_col], keep="last")
-        recent = agg_df.merge(df_enriched, on=key_col, how="left")
-        col_path = "data.enrichment.data"
-        if col_path not in recent.columns:
+            enriched, failed = [], []
+            with ThreadPoolExecutor(max_workers=max_workers) as pool:
+                futures = {pool.submit(_one, row): row for _, row in shodan_candidates.iterrows()}
+                for future in as_completed(futures):
+                    result, err = future.result()
+                    if result is not None:
+                        enriched.append(result)
+                    else:
+                        failed.append(err)
+            if failed:
+                print(f"WARN: {len(failed)} indicators failed Shodan enrichment (showing up to 10)")
+                print(pd.DataFrame(failed).head(10).to_string())
+            if enriched:
+                df_enriched = pd.json_normalize(enriched).drop_duplicates(subset=[key_col], keep="last")
+                recent = agg_df.merge(df_enriched, on=key_col, how="left")
+                col_path = "data.enrichment.data"
+                if col_path in recent.columns:
+                    exploded = recent[[key_col, col_path]].explode(col_path).dropna(subset=[col_path])
+                    enrich_flat = pd.json_normalize(exploded[col_path]).add_prefix("enrich_")
+                    enrich_flat[key_col] = exploded[key_col].values
+
+                    def _agg_obj(series):
+                        vals = [v for v in series.dropna()]
+                        if not vals:
+                            return None
+                        flat = []
+                        for v in vals:
+                            if isinstance(v, list):
+                                flat.extend(v)
+                            else:
+                                flat.append(v)
+                        if all(not isinstance(v, (list, dict)) for v in flat):
+                            return list(pd.Series(flat).unique())
+                        return flat
+
+                    obj_cols = enrich_flat.select_dtypes("object").columns.difference([key_col])
+                    num_cols = enrich_flat.columns.difference(obj_cols.union({key_col}))
+                    agg_dict = {c: _agg_obj for c in obj_cols}
+                    agg_dict.update({c: "max" for c in num_cols})
+                    enrich_wide = enrich_flat.groupby(key_col, as_index=False).agg(agg_dict)
+                    recent = (
+                        recent.drop(columns=[col_path], errors="ignore")
+                        .drop_duplicates(subset=[key_col])
+                        .merge(enrich_wide, on=key_col, how="left")
+                    )
+        try:
+            return attach_gti_enrichment(recent, key_col=key_col, max_workers=gti_workers)
+        except Exception as exc:
+            print(f"WARN: Google TI attach failed ({exc}). Scoring continues without GTI columns.")
             return recent
-        exploded = recent[[key_col, col_path]].explode(col_path).dropna(subset=[col_path])
-        enrich_flat = pd.json_normalize(exploded[col_path]).add_prefix("enrich_")
-        enrich_flat[key_col] = exploded[key_col].values
-
-        def _agg_obj(series):
-            vals = [v for v in series.dropna()]
-            if not vals:
-                return None
-            flat = []
-            for v in vals:
-                if isinstance(v, list):
-                    flat.extend(v)
-                else:
-                    flat.append(v)
-            if all(not isinstance(v, (list, dict)) for v in flat):
-                return list(pd.Series(flat).unique())
-            return flat
-
-        obj_cols = enrich_flat.select_dtypes("object").columns.difference([key_col])
-        num_cols = enrich_flat.columns.difference(obj_cols.union({key_col}))
-        agg_dict = {c: _agg_obj for c in obj_cols}
-        agg_dict.update({c: "max" for c in num_cols})
-        enrich_wide = enrich_flat.groupby(key_col, as_index=False).agg(agg_dict)
-        return (
-            recent.drop(columns=[col_path], errors="ignore")
-            .drop_duplicates(subset=[key_col])
-            .merge(enrich_wide, on=key_col, how="left")
-        )

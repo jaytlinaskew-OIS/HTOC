@@ -4,6 +4,9 @@ from __future__ import annotations
 import json
 import urllib.parse
 from types import SimpleNamespace
+from unittest.mock import patch
+
+import pandas as pd
 
 from htoc.core.pipeline import PipelineError
 from htoc.core.threatconnect import ThreatConnectClient, _quoted, build_indicator_tql, load_api_config
@@ -19,6 +22,9 @@ class _FakeRequest:
 
     def set_request_uri(self, uri: str) -> None:
         self.uri = uri
+
+    def set_body(self, body) -> None:
+        self.body = body
 
 
 class _FakeSession:
@@ -188,3 +194,55 @@ def test_paginate_indicators_non_json_raises_pipeline_error():
         assert "Non-JSON" in str(exc)
     else:
         raise AssertionError("expected PipelineError")
+
+
+def test_enrich_indicators_uses_shodan_not_virustotal():
+    def _attach(df, **kwargs):
+        out = df.copy()
+        out["enrich_vtMaliciousCount"] = 7
+        out["enrich_gti_verdict"] = "VERDICT_MALICIOUS"
+        return out
+
+    session = _FakeSession(
+        [
+            _json_response(
+                {"data": {"enrichment": {"data": [{"type": "Shodan", "country": "US"}]}}}
+            )
+        ]
+    )
+    client = _client_with_session(session)
+    frame = pd.DataFrame([{"indicator": "1.2.3.4", "type": "Address", "id": 99}])
+    with patch("htoc.core.gti.attach_gti_enrichment", side_effect=_attach):
+        out = client.enrich_indicators(frame)
+
+    assert len(session.calls) == 1
+    uri = session.calls[0].uri
+    assert uri.startswith("/v3/indicators/")
+    assert "Shodan" in uri
+    assert "VirusTotalV3" not in uri
+    assert int(out["enrich_vtMaliciousCount"].iloc[0]) == 7
+    assert out["enrich_gti_verdict"].iloc[0] == "VERDICT_MALICIOUS"
+
+
+def test_enrich_indicators_non_ip_skips_threatconnect():
+    def _attach(df, **kwargs):
+        return df.assign(enrich_vtMaliciousCount=3)
+
+    session = _FakeSession([])
+    client = _client_with_session(session)
+    frame = pd.DataFrame([{"indicator": "a" * 64, "type": "SHA256"}])
+    with patch("htoc.core.gti.attach_gti_enrichment", side_effect=_attach):
+        out = client.enrich_indicators(frame)
+
+    assert session.calls == []
+    assert int(out["enrich_vtMaliciousCount"].iloc[0]) == 3
+
+
+def test_enrich_indicators_survives_gti_attach_error():
+    session = _FakeSession([])
+    client = _client_with_session(session)
+    frame = pd.DataFrame([{"indicator": "evil.example", "type": "Host"}])
+    with patch("htoc.core.gti.attach_gti_enrichment", side_effect=RuntimeError("gti down")):
+        out = client.enrich_indicators(frame)
+    assert list(out["indicator"]) == ["evil.example"]
+    assert "enrich_vtMaliciousCount" not in out.columns

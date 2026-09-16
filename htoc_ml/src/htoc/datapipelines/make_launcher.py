@@ -119,7 +119,7 @@ JOBS: dict[str, LauncherJob] = {
         log_prefix="prism_daily",
         python_args="-m htoc.prism",
         extra_env=(("PRISM_MODE", "daily"),),
-        packages="pandas openpyxl pytz",
+        packages="pandas openpyxl pytz requests",
         allow_nowork=True,
         need_threatconnect_path=True,
     ),
@@ -130,7 +130,7 @@ JOBS: dict[str, LauncherJob] = {
         log_prefix="prism_weekly",
         python_args="-m htoc.prism",
         extra_env=(("PRISM_MODE", "weekly"),),
-        packages="pandas openpyxl pytz",
+        packages="pandas openpyxl pytz requests",
         need_threatconnect_path=True,
     ),
     "threat-score-iw": LauncherJob(

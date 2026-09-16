@@ -34,6 +34,8 @@ PRISM_SAVE_DIR = Path(r"JA\PrismTest")
 THREAT_ASSESSMENT_SCORES_DIR = Path(r"Data_Analytics\Data\Threat Assessment Scores")
 THREAT_ASSESSMENT_SCORES_FILENAME = "Threat_Assessment_Scores.xlsx"
 THREAT_SCORE_IW_SAVE_DIR = Path(r"JA\ThreatScoreIwTest")
+GTI_CACHE_DIR = Path(r"JA")
+GTI_CACHE_FILENAME = "gti_enrichment_cache.json"
 
 # ThreatConnect API-pull project (utils/config.json). Shared on the data share.
 DEFAULT_TC_PROJECT_ROOT = (
@@ -115,3 +117,8 @@ def tc_project_root(project: str | Path | None = None) -> Path:
 
 def tc_config_json(project: str | Path | None = None) -> Path:
     return tc_project_root(project) / "utils" / "config.json"
+
+
+def gti_cache_path(share: str | Path | None = None) -> Path:
+    """Google TI lookup cache (JSON). Override with ``GTI_CACHE_PATH``."""
+    return env_path("GTI_CACHE_PATH", under_share(GTI_CACHE_DIR, GTI_CACHE_FILENAME, share=share))
