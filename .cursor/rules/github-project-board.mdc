@@ -1,0 +1,29 @@
+---
+description: Keep GitHub Project board items updated while working; ask to create a board if none exists
+alwaysApply: true
+---
+
+# GitHub Project board hygiene
+
+When doing substantive work on a named effort (analysis, model, pipeline, SOP, deliverable):
+
+## If a project board exists
+
+1. Identify the matching GitHub Project (e.g. via `gh project list` / linked repo projects).
+2. Map the current task to the relevant board item (draft issue or issue).
+3. **Update the item as you work**, not only at the end:
+   - Status: Todo → In Progress when starting; Done when finished
+   - Title/body: reflect scope changes, decisions, blockers
+   - Start date / Target date / Sprint / Priority when the plan shifts
+   - Add a short note in the body when a deliverable lands (path, PR, or result summary)
+4. Prefer `gh project item-edit` (and related `gh project` commands) over leaving board state stale.
+
+## If no project board exists
+
+- **Ask the user** whether to create one before continuing large multi-step work.
+- If they agree, create a GitHub Project linked to the repo, seed cards from the stated scope/proposal, and set a time window when they give one.
+- Do not invent a board silently.
+
+## Scope
+
+Applies to ongoing delivery work. Skip for tiny one-off Q&A with no project context.
