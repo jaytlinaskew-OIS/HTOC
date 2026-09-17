@@ -1,11 +1,89 @@
 ---
-description: Keep GitHub Project board items updated while working; ask to create a board if none exists
+description: GitHub Project boards — CRISP-DM breakdown, weekday scheduling, keep items updated
 alwaysApply: true
 ---
 
 # GitHub Project board hygiene
 
 When doing substantive work on a named effort (analysis, model, pipeline, SOP, deliverable):
+
+## Project breakdown standard (CRISP-DM)
+
+Use **CRISP-DM** as the default phase structure when creating or reshaping a board:
+
+| # | Phase | Typical board work |
+|---|--------|-------------------|
+| 1 | Business Understanding | **1a–1d:** Question / Process / Users / Modeling |
+| 2 | Data Understanding | Collect/explore sources; quality & coverage |
+| 3 | Data Preparation | Clean, join, labels, features |
+| 4 | Modeling | **Baseline (simple) + improved options** (see format below) |
+| 5 | Evaluation | Metrics, deliverables, business value check |
+| 6 | Deployment / Acceptance | Package findings; go/no-go; handoff |
+
+- Seed **one board card per phase** (rename titles with project-specific work under that phase).
+- Map proposal deliverables into the matching phase (do not invent a parallel custom stage list unless the user asks).
+- For pure software (non-ML) work, keep the same six names where they fit; fold build/test into Modeling/Evaluation and release into Deployment / Acceptance.
+
+## Business Understanding format (required)
+
+Keep **one** Business Understanding board card. Organize its body (and the project README §1) into three pieces with **clean bullets** — do not dump a dense paragraph or a single mega-table.
+
+### Structure
+
+1. **1a. Question solving** — what we predict; model type; baseline; horizons; grain; filters; data; features; comparisons; success criteria; exclusions  
+2. **1b. Process breakdown** — end-to-end CRISP-DM steps; product outputs; supporting stats; controls (calibration, EDA-before-model, leakage)  
+3. **1c. Users** — who consumes the products; what decision each output supports; actionability notes  
+4. **1d. Modeling** — **Baseline (simple, required)** + **Improved options** (same content/format as the Modeling phase; lock choices here during Business Understanding)  
+
+### Board ticket style
+
+- Short title, e.g. `[Due M/D] 1. Business Understanding`
+- Body: markdown headings for 1a / 1b / 1c / 1d, each with bullets
+- Point to the README for full narrative if needed; ticket stays scannable
+- **Done when:** 1a, 1b, 1c, and 1d agreed
+
+### README style
+
+- Same 1a / 1b / 1c / 1d headings under `## 1. Business Understanding`
+- Prefer bullets over wide tables for locked decisions
+- §4 Modeling should execute (and can repeat) the plan locked in §1d
+
+## Modeling format (required)
+
+Keep **one** Modeling board card. Organize its body (and the project README §4) with **clean bullets**.
+
+### Model selection (research-based)
+
+- Choose baseline and improved options from **research and standards for the problem class** (e.g. tabular binary probability, ranking, time series) — papers, textbooks, established ML practice, and problem-appropriate defaults.
+- **Do not** copy model families from prior HTOC projects or SOPs unless independent research shows they fit **this** outcome definition and data shape.
+- Briefly note *why* each candidate fits (problem type + evidence), not just a list of names.
+- Prefer models that support the locked success metrics (e.g. calibrated probabilities when the product is a probability score).
+- **Do not** lock reporting cuts to a predefined probability (e.g. P≥75%) during Business Understanding; choose operating points from EDA and holdout testing.
+
+### Structure
+
+1. **Baseline (required — always simple)**  
+   - Pick a **simple, interpretable** probability or scoring model first (e.g. logistic regression, linear regression, simple rules + calibration).  
+   - State why it is the baseline and what “good enough” means (metrics, calibration).  
+   - Ship / evaluate the baseline before treating improved models as primary.
+
+2. **Improved model options**  
+   - List **2–4** stronger candidates after the baseline, chosen via the research-based rule above.  
+   - For **tabular binary probability**: regularized GLM (L1/L2/elastic-net ± interactions), gradient boosting, random forest + calibration are common research-backed defaults — still justify for the specific task.  
+   - Promote an improved model only if it beats the simple baseline on agreed holdout metrics.  
+   - Do not skip straight to a complex model without a documented simple baseline.  
+   - Do not default to survival / deep nets / ensembles from another pipeline unless research supports them for this outcome.
+
+### Board ticket style
+
+- Short title, e.g. `[Due M/D] 4. Modeling`
+- Body: **Baseline** then **Improved options**, bullets only
+- Point to README §4 for detail; ticket stays scannable
+- **Done when:** baseline trained + calibrated/compared; improved options tried or explicitly deferred with rationale
+
+### README style
+
+- Under `## 4. Modeling`, use the same **Baseline** / **Improved options** headings with bullets
 
 ## If a project board exists
 
@@ -21,8 +99,14 @@ When doing substantive work on a named effort (analysis, model, pipeline, SOP, d
 ## If no project board exists
 
 - **Ask the user** whether to create one before continuing large multi-step work.
-- If they agree, create a GitHub Project linked to the repo, seed cards from the stated scope/proposal, and set a time window when they give one.
+- If they agree, create a GitHub Project linked to the repo, seed **CRISP-DM phase cards**, and set a time window when they give one.
 - Do not invent a board silently.
+
+## Scheduling
+
+- **Exclude weekends** when setting start/target dates, sprint windows, and duration estimates.
+- Count working days (Mon–Fri) only; do not place start or due dates on Saturday or Sunday.
+- If a calculated end falls on a weekend, move it to the prior Friday (or next Monday if the user prefers start-of-week handoffs).
 
 ## Scope
 
