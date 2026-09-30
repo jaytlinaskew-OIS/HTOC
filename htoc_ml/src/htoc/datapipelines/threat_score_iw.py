@@ -11,8 +11,9 @@ Walkthrough (start at run_threat_score_iw):
   3. join_prism_scores
   4. attach_opdiv_multi_partners
   5. filter_vt_and_severity
-  6. attach_tags_and_iw_flag
-  7. condense_and_write
+  6. attach_tags
+  7. exclude_indicators_by_tags
+  8. condense_and_write
 """
 from __future__ import annotations
 
@@ -59,6 +60,7 @@ class ThreatScoreIwConfig:
     owner_names: tuple[str, ...] = OWNER_NAMES
     prefer_owner: str = "HTOC Org"
     severities: tuple[str, ...] = ("high", "critical")
+    exclusion_tags: tuple[str, ...] = ("i&w", "i & w", "iw", "Benign PB", "tor", "TOR Node")
 
     def __post_init__(self) -> None:
         share = self.htoc_share_root.strip() or htoc_paths.DEFAULT_SHARE_ROOT
@@ -115,8 +117,9 @@ def run_threat_score_iw(config: ThreatScoreIwConfig | None = None) -> list[Path]
     scored = join_prism_scores(observed, config, cutoff)
     multi = attach_opdiv_multi_partners(scored, config)
     filtered = filter_vt_and_severity(multi, config)
-    labeled = attach_tags_and_iw_flag(filtered, observed, config)
-    return condense_and_write(labeled, config)
+    labeled = attach_tags(filtered, observed, config)
+    eligible = exclude_indicators_by_tags(labeled, config)
+    return condense_and_write(eligible, config)
 
 
 def intake_recent_indicators_from_threatconnect(
@@ -334,22 +337,20 @@ def filter_vt_and_severity(frame: pd.DataFrame, config: ThreatScoreIwConfig) -> 
     return out
 
 
-def has_iw_tag(tags_value) -> bool:
-    if tags_value is None or (isinstance(tags_value, float) and pd.isna(tags_value)):
-        return False
-    if not isinstance(tags_value, (list, tuple)):
-        return False
-    for tag in tags_value:
-        try:
-            name = str(tag.get("name", "") if isinstance(tag, dict) else tag).strip().lower()
-            if name in {"i&w", "i & w", "iw"}:
-                return True
-        except Exception:
-            continue
-    return False
+def _tag_name(value) -> str:
+    if isinstance(value, dict):
+        value = value.get("name", "")
+    if value is None:
+        return ""
+    try:
+        if pd.isna(value):
+            return ""
+    except (TypeError, ValueError):
+        pass
+    return str(value).strip()
 
 
-def attach_tags_and_iw_flag(
+def attach_tags(
     final_indicators: pd.DataFrame,
     observed_src: pd.DataFrame,
     config: ThreatScoreIwConfig,
@@ -376,28 +377,60 @@ def attach_tags_and_iw_flag(
             raise PipelineError(f"Could not find Indicator column. Columns: {list(out.columns)}")
         out = out.rename(columns={ind_col: "Indicator"})
 
-    indicator_to_tags = tags_df.set_index(tags_indicator_col)[tags_value_col].to_dict()
-    out["Tags"] = out["Indicator"].map(indicator_to_tags)
+    tag_rows = tags_df.dropna(subset=[tags_indicator_col, tags_value_col]).copy()
+    tag_rows["_indicator_key"] = tag_rows[tags_indicator_col].astype(str).str.strip()
+    tag_rows["_tag_name"] = tag_rows[tags_value_col].map(_tag_name)
+    csv_tags_by_indicator = (
+        tag_rows[tag_rows["_tag_name"] != ""]
+        .groupby("_indicator_key")["_tag_name"]
+        .agg(lambda values: list(dict.fromkeys(values)))
+        .to_dict()
+    )
+
+    live_tags_by_indicator: dict[str, list[str]] = {}
+    if "tags.data" in observed_src.columns:
+        live_tags = observed_src[["indicator", "tags.data"]].explode("tags.data").copy()
+        live_tags["_indicator_key"] = live_tags["indicator"].astype(str).str.strip()
+        live_tags["_tag_name"] = live_tags["tags.data"].map(_tag_name)
+        live_tags_by_indicator = (
+            live_tags[live_tags["_tag_name"] != ""]
+            .groupby("_indicator_key")["_tag_name"]
+            .agg(lambda values: list(dict.fromkeys(values)))
+            .to_dict()
+        )
+
+    def combined_tags(indicator):
+        key = str(indicator).strip()
+        tags = list(dict.fromkeys(csv_tags_by_indicator.get(key, []) + live_tags_by_indicator.get(key, [])))
+        return ", ".join(tags) if tags else pd.NA
+
+    out["Tags"] = out["Indicator"].map(combined_tags)
     cols = [c for c in out.columns if c != "Tags"]
     out = out[cols[:-1] + ["Tags"] + cols[-1:]] if cols else out
 
-    observed = observed_src.copy()
-    if "tags.data" in observed.columns:
-        observed["has_iw"] = observed["tags.data"].apply(has_iw_tag)
-    else:
-        observed["has_iw"] = False
-    iw_per_indicator = (
-        observed.groupby("indicator", dropna=False)["has_iw"]
-        .max()
-        .reset_index()
-        .rename(columns={"indicator": "Indicator", "has_iw": "Reported I&W?_raw"})
-    )
-    out = out.drop(columns=[c for c in out.columns if c.startswith("Reported I&W?")], errors="ignore")
-    out = out.merge(iw_per_indicator, on="Indicator", how="left")
-    out["Reported I&W?"] = out["Reported I&W?_raw"].fillna(False).map({True: "Yes", False: "No"})
-    out = out.drop(columns=["Reported I&W?_raw"])
     if "HTOC Threat Score" in out.columns:
         out = out.rename(columns={"HTOC Threat Score": "PRISM Score"})
+    return out
+
+
+def exclude_indicators_by_tags(frame: pd.DataFrame, config: ThreatScoreIwConfig) -> pd.DataFrame:
+    """Remove indicators carrying any configured exclusion tag."""
+    if "Tags" not in frame.columns:
+        raise PipelineError("Could not find Tags column in final indicators frame.")
+
+    excluded = {str(tag).strip().casefold() for tag in config.exclusion_tags if str(tag).strip()}
+    if not excluded:
+        return frame.copy()
+
+    def has_exclusion_tag(value) -> bool:
+        if value is None or (isinstance(value, float) and pd.isna(value)):
+            return False
+        tags = {tag.strip().casefold() for tag in str(value).split(",") if tag.strip()}
+        return bool(tags & excluded)
+
+    out = frame.loc[~frame["Tags"].map(has_exclusion_tag)].copy()
+    if out.empty:
+        raise PipelineNoWork("No indicators remain after exclusion-tag filtering.")
     return out
 
 
@@ -494,8 +527,6 @@ def condense_final_indicators(frame: pd.DataFrame, *, min_hosts: int = 5) -> pd.
         "Explanation": "first",
     }
     agg.update({col: fn for col, fn in optional_aggs.items() if col in dense_df.columns})
-    if "Reported I&W?" in dense_df.columns:
-        agg["Reported I&W?"] = lambda s: "Yes" if (s == "Yes").any() else "No"
 
     condensed = dense_df.groupby("_subnet24", as_index=False).agg(agg)
     condensed = condensed.rename(columns={"Indicator": "_member_ips"})
@@ -593,7 +624,7 @@ def _apply_member_dropdowns(
 
 
 def write_iw_workbook(final_indicators: pd.DataFrame, output_path: Path) -> Path:
-    """Write I&W_No / I&W_Yes sheets with optional Host IP dropdowns."""
+    """Write eligible indicators to I&W_No with optional Host IP dropdowns."""
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -601,34 +632,26 @@ def write_iw_workbook(final_indicators: pd.DataFrame, output_path: Path) -> Path
     for col in frame.select_dtypes(include=["datetimetz"]).columns:
         frame[col] = frame[col].dt.tz_convert(None)
 
-    iw_col = "Reported I&W?"
-    if iw_col not in frame.columns:
-        raise PipelineError(f"Missing required column '{iw_col}' for sheet split.")
-
     export_df, member_map = _prepare_export_df(frame)
-    final_iw_no = export_df[export_df[iw_col] == "No"].copy()
-    final_iw_yes = export_df[export_df[iw_col] == "Yes"].copy()
 
     try:
         with pd.ExcelWriter(output_path, engine="xlsxwriter") as writer:
-            final_iw_no.to_excel(writer, index=False, sheet_name="I&W_No")
-            final_iw_yes.to_excel(writer, index=False, sheet_name="I&W_Yes")
+            export_df.to_excel(writer, index=False, sheet_name="I&W_No")
             workbook = writer.book
             range_names = _write_subnet_members_sheet(workbook, member_map)
             wrap_fmt = workbook.add_format({"text_wrap": True, "valign": "top"})
-            for sheet_name, sheet_df in [("I&W_No", final_iw_no), ("I&W_Yes", final_iw_yes)]:
-                worksheet = writer.sheets[sheet_name]
-                worksheet.set_column(0, len(export_df.columns) - 1, 18)
-                if "Explanation" in export_df.columns:
-                    exp_idx = export_df.columns.get_loc("Explanation")
-                    worksheet.set_column(exp_idx, exp_idx, 100, wrap_fmt)
-                if "Associated Groups" in export_df.columns:
-                    ag_idx = export_df.columns.get_loc("Associated Groups")
-                    worksheet.set_column(ag_idx, ag_idx, 45, wrap_fmt)
-                if "Host IP" in export_df.columns:
-                    member_idx = export_df.columns.get_loc("Host IP")
-                    worksheet.set_column(member_idx, member_idx, 22)
-                _apply_member_dropdowns(worksheet, sheet_df, member_map, range_names)
+            worksheet = writer.sheets["I&W_No"]
+            worksheet.set_column(0, len(export_df.columns) - 1, 18)
+            if "Explanation" in export_df.columns:
+                exp_idx = export_df.columns.get_loc("Explanation")
+                worksheet.set_column(exp_idx, exp_idx, 100, wrap_fmt)
+            if "Associated Groups" in export_df.columns:
+                ag_idx = export_df.columns.get_loc("Associated Groups")
+                worksheet.set_column(ag_idx, ag_idx, 45, wrap_fmt)
+            if "Host IP" in export_df.columns:
+                member_idx = export_df.columns.get_loc("Host IP")
+                worksheet.set_column(member_idx, member_idx, 22)
+            _apply_member_dropdowns(worksheet, export_df, member_map, range_names)
     except OSError as exc:
         raise PipelineError(f"Failed to write ThreatScoreIW workbook: {exc}", exit_code=4) from exc
 

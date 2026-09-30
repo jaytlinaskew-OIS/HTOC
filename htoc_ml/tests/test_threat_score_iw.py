@@ -5,9 +5,12 @@ import pandas as pd
 
 from htoc.core.pipeline import PipelineError
 from htoc.datapipelines.threat_score_iw import (
+    ThreatScoreIwConfig,
+    attach_tags,
     condense_final_indicators,
+    exclude_indicators_by_tags,
     filter_threat_assess_bands,
-    has_iw_tag,
+    write_iw_workbook,
 )
 
 
@@ -35,10 +38,63 @@ def test_filter_threat_assess_bands_missing_columns_raises():
         raise AssertionError("expected PipelineError")
 
 
-def test_has_iw_tag():
-    assert has_iw_tag([{"name": "I&W"}, {"name": "other"}]) is True
-    assert has_iw_tag([{"name": "malware"}]) is False
-    assert has_iw_tag(None) is False
+def test_attach_tags_combines_csv_and_live_threatconnect_tags(tmp_path):
+    tags_path = tmp_path / "tags.csv"
+    pd.DataFrame(
+        {
+            "indicator": ["csv-iw", "csv-iw", "live-iw", "keep"],
+            "tag": ["I&W", "malware", "other", "malware"],
+        }
+    ).to_csv(tags_path, index=False)
+    final_indicators = pd.DataFrame(
+        {
+            "Indicator": ["csv-iw", "live-iw", "keep"],
+            "HTOC Threat Score": [10, 9, 8],
+        }
+    )
+    observed = pd.DataFrame(
+        {
+            "indicator": ["csv-iw", "live-iw", "keep"],
+            "tags.data": [
+                [{"name": "other"}],
+                [{"name": "IW"}],
+                [{"name": "clean"}],
+            ],
+        }
+    )
+    config = ThreatScoreIwConfig(tags_csv=str(tags_path))
+
+    labeled = attach_tags(final_indicators, observed, config)
+    out = exclude_indicators_by_tags(labeled, config)
+
+    assert labeled.loc[labeled["Indicator"] == "csv-iw", "Tags"].iat[0] == "I&W, malware, other"
+    assert labeled.loc[labeled["Indicator"] == "live-iw", "Tags"].iat[0] == "other, IW"
+    assert "Reported I&W?" not in labeled.columns
+    assert out["Indicator"].tolist() == ["keep"]
+
+
+def test_exclude_indicators_by_tags_matches_all_configured_tags_case_insensitively():
+    frame = pd.DataFrame(
+        {
+            "Indicator": ["keep", "iw", "benign", "tor", "tor-node", "substring", "tor-near"],
+            "Tags": ["malware", "Other, I&W", "benign pb, Other", "TOR", "tor node", "iwest", "TOR Exit Node"],
+        }
+    )
+
+    out = exclude_indicators_by_tags(frame, ThreatScoreIwConfig())
+
+    assert out["Indicator"].tolist() == ["keep", "substring", "tor-near"]
+
+
+def test_write_iw_workbook_omits_redundant_yes_sheet(tmp_path):
+    output_path = tmp_path / "iw.xlsx"
+    frame = pd.DataFrame({"Indicator": ["keep"], "Tags": ["clean"]})
+
+    written = write_iw_workbook(frame, output_path)
+
+    assert written == output_path
+    with pd.ExcelFile(output_path) as workbook:
+        assert workbook.sheet_names == ["I&W_No"]
 
 
 def test_condense_final_indicators_rolls_dense_subnet():
@@ -52,7 +108,6 @@ def test_condense_final_indicators_rolls_dense_subnet():
                 "Partners": "CMS",
                 "OpDiv": "CMS",
                 "Threat Actor": "",
-                "Reported I&W?": "No",
                 "Last Observed": pd.Timestamp("2026-08-01"),
                 "Explanation": "VT score: 5",
                 "Tags": None,
@@ -66,7 +121,6 @@ def test_condense_final_indicators_rolls_dense_subnet():
             "Partners": "VA",
             "OpDiv": "VA",
             "Threat Actor": "",
-            "Reported I&W?": "Yes",
             "Last Observed": pd.Timestamp("2026-08-01"),
             "Explanation": "VT score: 8",
             "Tags": None,
