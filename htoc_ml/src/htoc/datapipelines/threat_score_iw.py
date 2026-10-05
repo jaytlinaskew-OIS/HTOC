@@ -10,7 +10,7 @@ Walkthrough (start at run_threat_score_iw):
   2. filter_threat_assess_bands
   3. join_prism_scores
   4. attach_opdiv_multi_partners
-  5. filter_vt_and_severity
+  5. filter_vt_and_severity  (also drops "TOR activity detected" explanations)
   6. attach_tags
   7. exclude_indicators_by_tags
   8. condense_and_write
@@ -60,7 +60,8 @@ class ThreatScoreIwConfig:
     owner_names: tuple[str, ...] = OWNER_NAMES
     prefer_owner: str = "HTOC Org"
     severities: tuple[str, ...] = ("high", "critical")
-    exclusion_tags: tuple[str, ...] = ("i&w", "i & w", "iw", "Benign PB", "tor", "TOR Node")
+    exclusion_tags: tuple[str, ...] = ("i&w", "i & w", "iw", "Benign PB", "tor", "TOR Node", "TorExitNode")
+    exclusion_explanation_phrases: tuple[str, ...] = ("TOR activity detected",)
 
     def __post_init__(self) -> None:
         share = self.htoc_share_root.strip() or htoc_paths.DEFAULT_SHARE_ROOT
@@ -322,18 +323,31 @@ def attach_opdiv_multi_partners(df: pd.DataFrame, config: ThreatScoreIwConfig) -
 
 
 def filter_vt_and_severity(frame: pd.DataFrame, config: ThreatScoreIwConfig) -> pd.DataFrame:
+    """Keep high/critical rows with a sufficient VT score, dropping TOR explanations."""
     if "Explanation" not in frame.columns:
         raise PipelineError("Scores frame missing Explanation column for VT filter.")
     if "Severity" not in frame.columns:
         raise PipelineError("Scores frame missing Severity column.")
+    explanation = frame["Explanation"].astype("string")
     vt_scores = pd.to_numeric(
-        frame["Explanation"].str.extract(r"VT score:\s*(\d+)", expand=False),
+        explanation.str.extract(r"VT score:\s*(\d+)", expand=False),
         errors="coerce",
     )
-    out = frame[vt_scores >= config.min_vt_score].copy()
+    phrases = tuple(
+        str(phrase).strip().casefold()
+        for phrase in config.exclusion_explanation_phrases
+        if str(phrase).strip()
+    )
+    folded = explanation.fillna("").str.casefold()
+    blocked = pd.Series(False, index=frame.index)
+    for phrase in phrases:
+        blocked = blocked | folded.str.contains(phrase, regex=False)
+    out = frame[(vt_scores >= config.min_vt_score) & ~blocked].copy()
     out = out[out["Severity"].astype(str).str.lower().isin(config.severities)].copy()
     if out.empty:
-        raise PipelineNoWork("No indicators remain after VT score and severity filters.")
+        raise PipelineNoWork(
+            "No indicators remain after VT score, severity, and explanation filters."
+        )
     return out
 
 
