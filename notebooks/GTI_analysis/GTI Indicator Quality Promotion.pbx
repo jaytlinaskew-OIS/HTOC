@@ -1,0 +1,1441 @@
+{
+  "groupXid": "GTIQual1",
+  "name": "GTI Indicator Quality Promotion",
+  "type": "Playbook",
+  "panX": -75.0,
+  "panY": 120.0,
+  "zoom": 0.45,
+  "logLevel": "INFO",
+  "description": "Query the previous 24 hours of Google Threat Intelligence indicators, enforce the GTI quality rules, and create only passing indicators in HTOC Org. Includes a WebHook test trigger; the daily timer is disabled on import. No credentials embedded.",
+  "roiDollarsPerHour": 0.0,
+  "roiMinutes": 0,
+  "priority": 3,
+  "version": "1.4",
+  "comment": "Added a WebHook trigger for testing. The daily timer remains disabled. Generated from GTI_indicator_quality_rules.md; validate once before enabling the timer.",
+  "jobList": [
+    {
+      "id": 8800000000000010,
+      "appCatalogItem": {
+        "programName": "TCPB - Datetime Operations v1",
+        "displayName": "Datetime Operations",
+        "programVersion": "1.0.1",
+        "id": 817
+      },
+      "name": "Calculate rolling 24-hour cutoff (UTC)",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tc_action"
+          },
+          "value": "Format Datetime"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "date_input"
+          },
+          "value": "#Global:0:gbl.timestamp.iso!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "fail_on_error"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "date_offset"
+          },
+          "value": "-1 day"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "date_timezone"
+          },
+          "value": "UTC"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "date_format"
+          },
+          "value": "%Y-%m-%dT%H:%M:%SZ"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "date_input1"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "date_input2"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "date_input_array"
+          }
+        }
+      ],
+      "locationLeft": 220.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"datetime.format.date\",\"type\":\"String\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"tc_action\",\"date_input\",\"date_format\"]",
+      "layoutDisplayedInputParams": "[\"tc_action\",\"date_input\",\"date_format\",\"date_timezone\",\"date_offset\"]"
+    },
+    {
+      "id": 8800000000000020,
+      "appCatalogItem": {
+        "programName": "TCPB - TC Api v1.0",
+        "displayName": "ThreatConnect API",
+        "programVersion": "1.0.7"
+      },
+      "name": "Get GTI candidates (last 24 hours)",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "method"
+          },
+          "value": "GET"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "path"
+          },
+          "value": "/v3/indicators"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "query_params"
+          },
+          "value": "[{\"key\":\"tql\",\"value\":\"ownerName = \\\"Google Threat Intelligence\\\" AND typeName IN (\\\"Address\\\", \\\"EmailAddress\\\", \\\"Host\\\", \\\"URL\\\") AND DateAdded >= \\\"#App:8800000000000010:datetime.format.date!String\\\" AND indicatorActive = true AND falsePositiveCount = 0 AND observationCount = 0 AND rating >= 3 AND confidence >= 50 AND source IS NOT NULL\"},{\"key\":\"fields\",\"value\":\"attributes,tags,associatedGroups,falsePositives,threatAssess\"},{\"key\":\"resultStart\",\"value\":\"0\"},{\"key\":\"resultLimit\",\"value\":\"10000\"}]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "headers"
+          },
+          "value": "[]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "body"
+          }
+        }
+      ],
+      "locationLeft": 500.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.api.result\",\"type\":\"String\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"method\",\"path\"]",
+      "layoutDisplayedInputParams": "[\"method\",\"path\",\"query_params\",\"headers\",\"body\"]"
+    },
+    {
+      "id": 8800000000000030,
+      "appCatalogItem": {
+        "programName": "TCPB - JMESPath v2.0",
+        "displayName": "JMESPath",
+        "programVersion": "2.0.8",
+        "id": 359
+      },
+      "name": "Extract candidate records",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "string_expressions"
+          },
+          "value": "[]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "json_data"
+          },
+          "value": "#App:8800000000000020:tc.api.result!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "string_array_expressions"
+          },
+          "value": "[{\"key\":\"records\",\"value\":\"data[].to_string(@)\"}]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "strip_quotes"
+          },
+          "value": "true"
+        }
+      ],
+      "locationLeft": 780.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"records\",\"type\":\"StringArray\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"json_data\"]",
+      "layoutDisplayedInputParams": "[\"json_data\",\"string_expressions\",\"string_array_expressions\",\"strip_quotes\"]"
+    },
+    {
+      "id": 8800000000000040,
+      "appCatalogItem": {
+        "programName": "Iterator",
+        "displayName": "Iterator",
+        "programVersion": "1.0.0"
+      },
+      "name": "Evaluate each candidate",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "array_inputs"
+          },
+          "value": "[{\"key\":\"record\",\"value\":\"#App:8800000000000030:records!StringArray\"}]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "array_outputs"
+          },
+          "value": "[]"
+        }
+      ],
+      "locationLeft": 1060.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"record\",\"type\":\"String\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"array_inputs\"]",
+      "layoutDisplayedInputParams": "[\"array_inputs\",\"array_outputs\"]"
+    },
+    {
+      "id": 8800000000000050,
+      "appCatalogItem": {
+        "programName": "TCPB - JMESPath v2.0",
+        "displayName": "JMESPath",
+        "programVersion": "2.0.8",
+        "id": 359
+      },
+      "name": "Extract fields and deterministic checks",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "string_expressions"
+          },
+          "value": "[{\"key\":\"indicator_id\",\"value\":\"to_string(id)\"},{\"key\":\"indicator_type\",\"value\":\"type\"},{\"key\":\"summary\",\"value\":\"summary\"},{\"key\":\"type_summary\",\"value\":\"join(`|`, [type, summary])\"},{\"key\":\"date_added\",\"value\":\"dateAdded\"},{\"key\":\"owner_name\",\"value\":\"ownerName\"},{\"key\":\"source_url\",\"value\":\"source\"},{\"key\":\"rating\",\"value\":\"to_string(rating)\"},{\"key\":\"confidence\",\"value\":\"to_string(confidence)\"},{\"key\":\"threat_rating\",\"value\":\"to_string(not_null(threatAssessRating, threatAssess.threatAssessRating))\"},{\"key\":\"threat_confidence\",\"value\":\"to_string(not_null(threatAssessConfidence, threatAssess.threatAssessConfidence))\"},{\"key\":\"description\",\"value\":\"not_null(attributes.data[?type == `Description`].value | [0], ``)\"},{\"key\":\"tags_joined\",\"value\":\"join(`\\\\n`, not_null(tags.data[].name, `[]`))\"},{\"key\":\"groups_joined\",\"value\":\"join(`; `, not_null(associatedGroups.data[].name, `[]`))\"},{\"key\":\"qualified_group_count\",\"value\":\"to_string(length(not_null(associatedGroups.data[?contains(`[\\\"Malware\\\",\\\"Campaign\\\",\\\"Intrusion Set\\\",\\\"Report\\\"]`, type) && id != null && name != null], `[]`)))\"},{\"key\":\"threat_assess_pass\",\"value\":\"to_string((not_null(threatAssessRating, threatAssess.threatAssessRating) >= `3`) && (not_null(threatAssessConfidence, threatAssess.threatAssessConfidence) >= `50`))\"},{\"key\":\"source_pass\",\"value\":\"to_string((type == `Address` && starts_with(source, `https://www.virustotal.com/gui/ip-address/`)) || (type == `Host` && starts_with(source, `https://www.virustotal.com/gui/domain/`)) || (type == `URL` && starts_with(source, `https://www.virustotal.com/gui/url/`)))\"},{\"key\":\"provenance_pass\",\"value\":\"to_string(privateFlag == `false` && id != null && type != null && summary != null && dateAdded != null && ownerName != null && source != null && rating != null && confidence != null && length(not_null(attributes.data[?type == `Description`].value | [0], ``)) > `0`)\"}]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "json_data"
+          },
+          "value": "#App:8800000000000040:record!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "string_array_expressions"
+          },
+          "value": "[]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "strip_quotes"
+          },
+          "value": "true"
+        }
+      ],
+      "locationLeft": 1340.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"indicator_id\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"indicator_type\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"summary\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"type_summary\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"date_added\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"owner_name\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"source_url\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"rating\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"confidence\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"threat_rating\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"threat_confidence\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"description\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tags_joined\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"groups_joined\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"qualified_group_count\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"threat_assess_pass\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"source_pass\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"provenance_pass\",\"type\":\"String\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"json_data\"]",
+      "layoutDisplayedInputParams": "[\"json_data\",\"string_expressions\",\"string_array_expressions\",\"strip_quotes\"]"
+    },
+    {
+      "id": 8800000000000060,
+      "appCatalogItem": {
+        "programName": "If / Else",
+        "displayName": "If / Else",
+        "programVersion": "1.0.0",
+        "id": 19
+      },
+      "name": "Threat assessment meets rating and confidence?",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "match_case"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operand_1"
+          },
+          "value": "#App:8800000000000050:threat_assess_pass!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "as_numeric"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operand_2"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operator"
+          },
+          "value": "equals"
+        }
+      ],
+      "locationLeft": 1620.0,
+      "locationTop": 50.0,
+      "outputVariables": "[]",
+      "layoutRequiredInputParams": "[\"operand_1\",\"operator\",\"operand_2\"]",
+      "layoutDisplayedInputParams": "[\"operand_1\",\"operator\",\"operand_2\",\"as_numeric\",\"match_case\"]"
+    },
+    {
+      "id": 8800000000000070,
+      "appCatalogItem": {
+        "programName": "TCPB - Regex Operations v1",
+        "displayName": "Python Regex Operations",
+        "programVersion": "1.0.1"
+      },
+      "name": "Validate type-specific indicator syntax",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "flatteninput"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "input_replace"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "failonempty"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "regex"
+          },
+          "value": "^(?:Address\\|(?:(?:(?:25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1?\\d?\\d)|[0-9A-Fa-f:]*:[0-9A-Fa-f:]+)|EmailAddress\\|[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+|Host\\|(?=.{1,253}$)(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\\.)+[A-Za-z]{2,63}|URL\\|.+)$"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "replace"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "input"
+          },
+          "value": "#App:8800000000000050:type_summary!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "stripnull"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tc_action"
+          },
+          "value": "Findall"
+        }
+      ],
+      "locationLeft": 1900.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"regex.group\",\"type\":\"StringArray\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"tc_action\",\"input\",\"regex\"]",
+      "layoutDisplayedInputParams": "[\"tc_action\",\"input\",\"regex\",\"flatteninput\",\"stripnull\",\"failonempty\"]"
+    },
+    {
+      "id": 8800000000000100,
+      "appCatalogItem": {
+        "programName": "TCPB - Regex Operations v1",
+        "displayName": "Python Regex Operations",
+        "programVersion": "1.0.1"
+      },
+      "name": "Require 200 non-whitespace description characters",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "flatteninput"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "input_replace"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "failonempty"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "regex"
+          },
+          "value": "(?s)^(?:\\s*\\S){200}"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "replace"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "input"
+          },
+          "value": "#App:8800000000000050:description!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "stripnull"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tc_action"
+          },
+          "value": "Findall"
+        }
+      ],
+      "locationLeft": 2180.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"regex.group\",\"type\":\"StringArray\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"tc_action\",\"input\",\"regex\"]",
+      "layoutDisplayedInputParams": "[\"tc_action\",\"input\",\"regex\",\"flatteninput\",\"stripnull\",\"failonempty\"]"
+    },
+    {
+      "id": 8800000000000130,
+      "appCatalogItem": {
+        "programName": "TCPB - Regex Operations v1",
+        "displayName": "Python Regex Operations",
+        "programVersion": "1.0.1"
+      },
+      "name": "Require analytical description (reject boilerplate)",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "flatteninput"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "input_replace"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "failonempty"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "regex"
+          },
+          "value": "(?is)^(?!.*(?:did not match our detection criteria|there is currently no evidence of malicious activity))(?!\\s*(?:n/?a|none|unknown|placeholder|test)\\s*$)(?!\\s*this indicator is (?:suspicious|malicious)\\s*\\([^)]*\\)\\.?(?:\\s*(?:its verdict recently changed|gti's ml scoring model identified).*)?\\s*$).+"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "replace"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "input"
+          },
+          "value": "#App:8800000000000050:description!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "stripnull"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tc_action"
+          },
+          "value": "Findall"
+        }
+      ],
+      "locationLeft": 2460.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"regex.group\",\"type\":\"StringArray\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"tc_action\",\"input\",\"regex\"]",
+      "layoutDisplayedInputParams": "[\"tc_action\",\"input\",\"regex\",\"flatteninput\",\"stripnull\",\"failonempty\"]"
+    },
+    {
+      "id": 8800000000000200,
+      "appCatalogItem": {
+        "programName": "If / Else",
+        "displayName": "If / Else",
+        "programVersion": "1.0.0",
+        "id": 19
+      },
+      "name": "Has qualified associated group?",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "match_case"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operand_1"
+          },
+          "value": "#App:8800000000000050:qualified_group_count!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "as_numeric"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operand_2"
+          },
+          "value": "0"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operator"
+          },
+          "value": "greater than"
+        }
+      ],
+      "locationLeft": 2740.0,
+      "locationTop": 50.0,
+      "outputVariables": "[]",
+      "layoutRequiredInputParams": "[\"operand_1\",\"operator\",\"operand_2\"]",
+      "layoutDisplayedInputParams": "[\"operand_1\",\"operator\",\"operand_2\",\"as_numeric\",\"match_case\"]"
+    },
+    {
+      "id": 8800000000000180,
+      "appCatalogItem": {
+        "programName": "TCPB - Regex Operations v1",
+        "displayName": "Python Regex Operations",
+        "programVersion": "1.0.1"
+      },
+      "name": "Require strong threat tag fallback",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "flatteninput"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "input_replace"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "failonempty"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "regex"
+          },
+          "value": "(?im)^.*(?:malware|phish|dga|fraud|bot(?:net)?|c2|command(?:-|\\s+)?and(?:-|\\s+)?control|infect|spyware|ransom|trojan|stealer|loader|backdoor|\\brat\\b|campaign|threat|malicious).*$"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "replace"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "input"
+          },
+          "value": "#App:8800000000000050:tags_joined!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "stripnull"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tc_action"
+          },
+          "value": "Findall"
+        }
+      ],
+      "locationLeft": 3020.0,
+      "locationTop": 180.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"regex.group\",\"type\":\"StringArray\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"tc_action\",\"input\",\"regex\"]",
+      "layoutDisplayedInputParams": "[\"tc_action\",\"input\",\"regex\",\"flatteninput\",\"stripnull\",\"failonempty\"]"
+    },
+    {
+      "id": 8800000000000160,
+      "appCatalogItem": {
+        "programName": "TCPB - Regex Operations v1",
+        "displayName": "Python Regex Operations",
+        "programVersion": "1.0.1"
+      },
+      "name": "Require two meaningful tag fallbacks",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "flatteninput"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "input_replace"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "failonempty"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "regex"
+          },
+          "value": "(?ims)^(?!(?:ip|address|host|url|email(?:address)?|ns-port|external-resources|google threat intelligence|gti|indicator|unknown|uncategorized|none|n/?a)\\s*$)(?=.{2,}$).*\\S.*$(?:(?:\\r?\\n)+.*)*?^(?!(?:ip|address|host|url|email(?:address)?|ns-port|external-resources|google threat intelligence|gti|indicator|unknown|uncategorized|none|n/?a)\\s*$)(?=.{2,}$).*\\S.*$"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "replace"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "input"
+          },
+          "value": "#App:8800000000000050:tags_joined!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "stripnull"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tc_action"
+          },
+          "value": "Findall"
+        }
+      ],
+      "locationLeft": 3300.0,
+      "locationTop": 260.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"regex.group\",\"type\":\"StringArray\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"tc_action\",\"input\",\"regex\"]",
+      "layoutDisplayedInputParams": "[\"tc_action\",\"input\",\"regex\",\"flatteninput\",\"stripnull\",\"failonempty\"]"
+    },
+    {
+      "id": 8800000000000230,
+      "appCatalogItem": {
+        "programName": "If / Else",
+        "displayName": "If / Else",
+        "programVersion": "1.0.0",
+        "id": 19
+      },
+      "name": "VirusTotal Source matches indicator type?",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "match_case"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operand_1"
+          },
+          "value": "#App:8800000000000050:source_pass!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "as_numeric"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operand_2"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operator"
+          },
+          "value": "equals"
+        }
+      ],
+      "locationLeft": 3580.0,
+      "locationTop": 50.0,
+      "outputVariables": "[]",
+      "layoutRequiredInputParams": "[\"operand_1\",\"operator\",\"operand_2\"]",
+      "layoutDisplayedInputParams": "[\"operand_1\",\"operator\",\"operand_2\",\"as_numeric\",\"match_case\"]"
+    },
+    {
+      "id": 8800000000000240,
+      "appCatalogItem": {
+        "programName": "If / Else",
+        "displayName": "If / Else",
+        "programVersion": "1.0.0",
+        "id": 19
+      },
+      "name": "Required provenance complete?",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "match_case"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operand_1"
+          },
+          "value": "#App:8800000000000050:provenance_pass!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "as_numeric"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operand_2"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operator"
+          },
+          "value": "equals"
+        }
+      ],
+      "locationLeft": 3860.0,
+      "locationTop": 50.0,
+      "outputVariables": "[]",
+      "layoutRequiredInputParams": "[\"operand_1\",\"operator\",\"operand_2\"]",
+      "layoutDisplayedInputParams": "[\"operand_1\",\"operator\",\"operand_2\",\"as_numeric\",\"match_case\"]"
+    },
+    {
+      "id": 8800000000000250,
+      "appCatalogItem": {
+        "programName": "Merge",
+        "displayName": "Merge",
+        "programVersion": "1.0.0"
+      },
+      "name": "Build destination Description with provenance",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "output_array"
+          },
+          "value": "[{\"key\":\"description\",\"value\":\"#App:8800000000000050:description!String\\n\\nGTI promotion provenance: indicatorId=#App:8800000000000050:indicator_id!String; type=#App:8800000000000050:indicator_type!String; originalDateAdded=#App:8800000000000050:date_added!String; owner=#App:8800000000000050:owner_name!String; rating=#App:8800000000000050:rating!String; confidence=#App:8800000000000050:confidence!String; threatAssessRating=#App:8800000000000050:threat_rating!String; threatAssessConfidence=#App:8800000000000050:threat_confidence!String; tags=#App:8800000000000050:tags_joined!String; associatedGroups=#App:8800000000000050:groups_joined!String\"}]"
+        }
+      ],
+      "locationLeft": 4140.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"description\",\"type\":\"String\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"output_array\"]",
+      "layoutDisplayedInputParams": "[\"output_array\"]"
+    },
+    {
+      "id": 8800000000000260,
+      "appCatalogItem": {
+        "programName": "TCPB - Threatconnect Create Indicators v1",
+        "displayName": "ThreatConnect Create Indicators",
+        "programVersion": "1.0.6",
+        "id": 744
+      },
+      "name": "Create qualified indicator in HTOC Org",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "indicator_type"
+          },
+          "value": "#App:8800000000000050:indicator_type!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "owner"
+          },
+          "value": "HTOC Org"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "summary"
+          },
+          "value": "#App:8800000000000050:summary!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "rating"
+          },
+          "value": "#App:8800000000000050:rating!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "confidence"
+          },
+          "value": "#App:8800000000000050:confidence!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "fail_on_error"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "whois_active"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "size"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "dns_active"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "value2"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "md5"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "sha256"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "value1"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "sha1"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "value3"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "first_seen"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "external_date_added"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "last_seen"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "external_last_modified"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "external_date_expires"
+          }
+        }
+      ],
+      "locationLeft": 4420.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators\",\"type\":\"TCEntityArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.count\",\"type\":\"String\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"indicator_type\",\"owner\",\"summary\"]",
+      "layoutDisplayedInputParams": "[\"indicator_type\",\"owner\",\"summary\",\"confidence\",\"rating\",\"external_date_added\",\"external_last_modified\",\"external_date_expires\",\"first_seen\",\"last_seen\",\"fail_on_error\"]"
+    },
+    {
+      "id": 8800000000000270,
+      "appCatalogItem": {
+        "programName": "TCPB - Threatconnect Attributes v2",
+        "displayName": "ThreatConnect Attributes",
+        "programVersion": "2.0.5",
+        "id": 799
+      },
+      "name": "Add Description and embedded provenance",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tc_action"
+          },
+          "value": "Add"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "entities"
+          },
+          "value": "#App:8800000000000260:tc.indicators!TCEntityArray"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "attribute_type"
+          },
+          "value": "Description"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "attribute_values"
+          },
+          "value": "#App:8800000000000250:description!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "attribute_sources"
+          },
+          "value": "#App:8800000000000050:source_url!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "add_type"
+          },
+          "value": "Restrict by Attribute"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "displayed"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "apply_all"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "fail_on_error"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "fail_on_no_results"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "delete_entities"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "filter_attribute_type"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "entity"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operation"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "delete_id"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "delete_attribute_type"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "attribute_type_value_mapping"
+          }
+        }
+      ],
+      "locationLeft": 4700.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.attributes.success.count\",\"type\":\"String\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"entities\",\"attribute_type\",\"attribute_values\",\"add_type\"]",
+      "layoutDisplayedInputParams": "[\"tc_action\",\"entities\",\"apply_all\",\"attribute_type\",\"attribute_values\",\"attribute_sources\",\"add_type\",\"displayed\",\"fail_on_error\"]"
+    },
+    {
+      "id": 8800000000000280,
+      "appCatalogItem": {
+        "programName": "TCPB - Threatconnect Attributes v2",
+        "displayName": "ThreatConnect Attributes",
+        "programVersion": "2.0.5",
+        "id": 799
+      },
+      "name": "Add Source attribute",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tc_action"
+          },
+          "value": "Add"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "entities"
+          },
+          "value": "#App:8800000000000260:tc.indicators!TCEntityArray"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "attribute_type"
+          },
+          "value": "Source"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "attribute_values"
+          },
+          "value": "#App:8800000000000050:source_url!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "attribute_sources"
+          },
+          "value": "Google Threat Intelligence"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "add_type"
+          },
+          "value": "Restrict by Attribute"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "displayed"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "apply_all"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "fail_on_error"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "fail_on_no_results"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "delete_entities"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "filter_attribute_type"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "entity"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "operation"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "delete_id"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "delete_attribute_type"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "attribute_type_value_mapping"
+          }
+        }
+      ],
+      "locationLeft": 4980.0,
+      "locationTop": 50.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.attributes.success.count\",\"type\":\"String\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"entities\",\"attribute_type\",\"attribute_values\",\"add_type\"]",
+      "layoutDisplayedInputParams": "[\"tc_action\",\"entities\",\"apply_all\",\"attribute_type\",\"attribute_values\",\"attribute_sources\",\"add_type\",\"displayed\",\"fail_on_error\"]"
+    },
+    {
+      "id": 8800000000000290,
+      "appCatalogItem": {
+        "programName": "TCPB - Threatconnect Tags TI v2",
+        "displayName": "ThreatConnect Tags",
+        "programVersion": "2.0.7",
+        "id": 779
+      },
+      "name": "Tag as GTI quality-qualified",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tc_action"
+          },
+          "value": "Add"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "add_entities"
+          },
+          "value": "#App:8800000000000260:tc.indicators!TCEntityArray"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "get_by"
+          },
+          "value": "Threat Intel Entity"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "name"
+          },
+          "value": "GTI Quality Qualified"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "apply_all"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "check_mitre_tag"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "check_naics_tag"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "fail_on_error"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "fail_on_no_results"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "entity_remove"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tql"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "entity"
+          }
+        }
+      ],
+      "locationLeft": 5260.0,
+      "locationTop": 50.0,
+      "outputVariables": "[]",
+      "layoutRequiredInputParams": "[\"tc_action\",\"add_entities\",\"name\"]",
+      "layoutDisplayedInputParams": "[\"tc_action\",\"add_entities\",\"apply_all\",\"name\",\"check_mitre_tag\",\"check_naics_tag\",\"fail_on_error\"]"
+    },
+    {
+      "id": 8800000000000300,
+      "appCatalogItem": {
+        "programName": "Merge",
+        "displayName": "Merge",
+        "programVersion": "1.0.0"
+      },
+      "name": "Skip failed indicator",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "output_array"
+          },
+          "value": "[{\"key\":\"skipped\",\"value\":\"true\"}]"
+        }
+      ],
+      "locationLeft": 3580.0,
+      "locationTop": 430.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"skipped\",\"type\":\"String\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"output_array\"]",
+      "layoutDisplayedInputParams": "[\"output_array\"]"
+    }
+  ],
+  "playbookConnectionList": [
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceTriggerId": 8800000000000001,
+      "targetJobId": 8800000000000010
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceTriggerId": 8800000000000002,
+      "targetJobId": 8800000000000010
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000010,
+      "targetJobId": 8800000000000020
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000020,
+      "targetJobId": 8800000000000030
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000030,
+      "targetJobId": 8800000000000040
+    },
+    {
+      "type": "StartLoop",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000040,
+      "targetJobId": 8800000000000050
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000050,
+      "targetJobId": 8800000000000060
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000060,
+      "targetJobId": 8800000000000070
+    },
+    {
+      "type": "Fail",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000060,
+      "targetJobId": 8800000000000300
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000070,
+      "targetJobId": 8800000000000100
+    },
+    {
+      "type": "Fail",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000070,
+      "targetJobId": 8800000000000300
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000100,
+      "targetJobId": 8800000000000130
+    },
+    {
+      "type": "Fail",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000100,
+      "targetJobId": 8800000000000300
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000130,
+      "targetJobId": 8800000000000200
+    },
+    {
+      "type": "Fail",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000130,
+      "targetJobId": 8800000000000300
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000200,
+      "targetJobId": 8800000000000230
+    },
+    {
+      "type": "Fail",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000200,
+      "targetJobId": 8800000000000300
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000180,
+      "targetJobId": 8800000000000230
+    },
+    {
+      "type": "Fail",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000180,
+      "targetJobId": 8800000000000160
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000160,
+      "targetJobId": 8800000000000230
+    },
+    {
+      "type": "Fail",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000160,
+      "targetJobId": 8800000000000300
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000230,
+      "targetJobId": 8800000000000240
+    },
+    {
+      "type": "Fail",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000230,
+      "targetJobId": 8800000000000300
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000240,
+      "targetJobId": 8800000000000250
+    },
+    {
+      "type": "Fail",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000240,
+      "targetJobId": 8800000000000300
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000250,
+      "targetJobId": 8800000000000260
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000260,
+      "targetJobId": 8800000000000270
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000270,
+      "targetJobId": 8800000000000280
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8800000000000280,
+      "targetJobId": 8800000000000290
+    },
+    {
+      "type": "EndLoop",
+      "isCircularOnTarget": true,
+      "sourceJobId": 8800000000000290,
+      "targetJobId": 8800000000000040
+    },
+    {
+      "type": "EndLoop",
+      "isCircularOnTarget": true,
+      "sourceJobId": 8800000000000300,
+      "targetJobId": 8800000000000040
+    }
+  ],
+  "playbookTriggerList": [
+    {
+      "id": 8800000000000001,
+      "name": "Daily Timer - DISABLED UNTIL VALIDATED",
+      "type": "Timer",
+      "eventType": "External",
+      "locationLeft": 0.0,
+      "locationTop": 50.0,
+      "scheduleType": "Daily",
+      "scheduleCronFormat": "00 15 6 * * ? *",
+      "anyOrg": true,
+      "playbookTriggerFilterList": [],
+      "outputVariables": "[]",
+      "active": false,
+      "organizationNames": []
+    },
+    {
+      "id": 8800000000000002,
+      "name": "WebHook Trigger - TEST",
+      "type": "HttpLink",
+      "eventType": "External",
+      "locationLeft": 0.0,
+      "locationTop": 180.0,
+      "httpResponseHeader": "[]",
+      "httpResponseBody": "",
+      "timeoutMinutes": 5,
+      "scheduleType": "Daily",
+      "anyOrg": true,
+      "playbookTriggerFilterList": [],
+      "outputVariables": "[]",
+      "cacheMinutes": 120,
+      "cacheParams": "{\"includeMethod\":false,\"includeBody\":false,\"queryParams\":[],\"headerNames\":[]}",
+      "organizationNames": []
+    }
+  ],
+  "playbookLabels": [],
+  "playbookScopeVariables": [],
+  "exportablePipes": []
+}
