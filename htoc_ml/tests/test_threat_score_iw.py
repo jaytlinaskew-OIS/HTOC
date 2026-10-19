@@ -2,6 +2,9 @@
 from __future__ import annotations
 
 import pandas as pd
+import pytest
+import runpy
+from pathlib import Path
 
 from htoc.core.pipeline import PipelineError
 from htoc.datapipelines.threat_score_iw import (
@@ -10,6 +13,7 @@ from htoc.datapipelines.threat_score_iw import (
     condense_final_indicators,
     exclude_indicators_by_tags,
     filter_threat_assess_bands,
+    filter_vt_and_severity,
     write_iw_workbook,
 )
 
@@ -133,3 +137,84 @@ def test_condense_final_indicators_rolls_dense_subnet():
     assert cidr["Indicator Type"] == "CIDR"
     assert isinstance(cidr["_member_ips"], list)
     assert len(cidr["_member_ips"]) == 5
+
+
+def test_tor_explanation_excluded_even_with_high_vt_and_six_partners():
+    frame = pd.DataFrame({
+        "Indicator": ["tor", "tor-mixed-case", "keep", "missing", "low-vt", "medium"],
+        "Severity": ["high", "critical", "high", "high", "critical", "medium"],
+        "Partners": ["A, B, C, D, E, F"] * 6,
+        "Explanation": [
+            "[2026-10-19] Severity: high. VT score: 20. Contextual Drivers: "
+            "VT malicious (log-scaled); TOR activity; Reinforcing context bonus. "
+            "Observed across 6 partner(s). Observed by 2 sources. "
+            "3 reinforcing context signal(s). No PB lower-start rule. "
+            "No botnet penalty. No false positive tags. No scanner penalty. "
+            "TOR activity detected. No incident/event link. Score: 788/1000.",
+            "VT score: 20. tor ACTIVITY detected.",
+            "VT score: 20. No TOR activity.",
+            None,
+            "VT score: 1. No TOR activity.",
+            "VT score: 20. No TOR activity.",
+        ],
+    })
+
+    out = filter_vt_and_severity(frame, ThreatScoreIwConfig())
+
+    assert out["Indicator"].tolist() == ["keep"]
+
+
+def test_tor_tags_excluded_from_both_csv_and_live_data(tmp_path):
+    tags_path = tmp_path / "tags.csv"
+    pd.DataFrame({
+        "indicator": ["csv-tor", "csv-tor", "csv-exit", "live-tor", "keep"],
+        "tag": ["ToR", "malware", "torexitnode", "malware", "torpedo"],
+    }).to_csv(tags_path, index=False)
+    frame = pd.DataFrame({"Indicator": ["csv-tor", "csv-exit", "live-tor", "keep"]})
+    observed = pd.DataFrame({
+        "indicator": frame["Indicator"],
+        "tags.data": [[], [], [{"name": "tOr NoDe"}], []],
+    })
+    config = ThreatScoreIwConfig(tags_csv=str(tags_path))
+
+    out = exclude_indicators_by_tags(attach_tags(frame, observed, config), config)
+
+    assert out["Indicator"].tolist() == ["keep"]
+
+
+@pytest.mark.parametrize("exit_code", [0, 3])
+def test_legacy_scheduled_entry_uses_package_main(monkeypatch, exit_code):
+    from htoc.datapipelines import threat_score_iw
+
+    called = []
+
+    def fake_main():
+        called.append(True)
+        return exit_code
+
+    monkeypatch.setattr(threat_score_iw, "main", fake_main)
+    # The compatibility entry point adjusts sys.path; isolate that side effect.
+    import sys
+    monkeypatch.setattr(sys, "path", sys.path.copy())
+    runner = (Path(__file__).resolve().parents[2] /
+              "notebooks/ThreatAssessment Scoring/ThreatScoreIW/ThreatScoreIW.py")
+
+    with pytest.raises(SystemExit) as exc:
+        runpy.run_path(str(runner), run_name="__main__")
+
+    assert exc.value.code == exit_code
+    assert called == [True]
+
+
+def test_all_tor_rows_produce_nowork_marker(monkeypatch, capsys):
+    from htoc.datapipelines import threat_score_iw
+
+    def all_tor(config):
+        return filter_vt_and_severity(pd.DataFrame({
+            "Severity": ["high"],
+            "Explanation": ["VT score: 20. TOR activity detected."],
+        }), config)
+
+    monkeypatch.setattr(threat_score_iw, "run_threat_score_iw", all_tor)
+    assert threat_score_iw.main() == 0
+    assert "PIPELINE_OK_NOWORK" in capsys.readouterr().out

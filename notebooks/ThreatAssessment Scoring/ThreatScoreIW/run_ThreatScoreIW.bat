@@ -121,6 +121,14 @@ if not "!SCRIPT_EXIT_CODE!"=="0" (
     goto :finish
 )
 
+REM Exclusions can leave no eligible rows; no workbook is expected in that case.
+findstr /X /C:"PIPELINE_OK_NOWORK" "%TEMP_OUT%" >nul 2>&1
+if "!ERRORLEVEL!"=="0" (
+    call :log SUCCESS No eligible indicators ^(PIPELINE_OK_NOWORK^)
+    set "FINAL_EXIT=0"
+    goto :finish
+)
+
 findstr /C:"%SUCCESS_MARKER%" "%TEMP_OUT%" >nul 2>&1
 if not "!ERRORLEVEL!"=="0" (
     call :log ERROR   Python exit 0 but missing success marker %SUCCESS_MARKER%
