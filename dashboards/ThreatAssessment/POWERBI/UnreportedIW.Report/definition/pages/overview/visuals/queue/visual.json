@@ -1,0 +1,376 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "queue",
+  "position": {
+    "x": 24,
+    "y": 683,
+    "z": 6854,
+    "width": 1552,
+    "height": 257,
+    "tabOrder": 6854
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Unreported indicator queue'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#18324D'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "13D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#DDE5ED'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "Indicator"
+                }
+              },
+              "queryRef": "Unreported I&W.Indicator",
+              "nativeQueryRef": "Indicator"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "Severity"
+                }
+              },
+              "queryRef": "Unreported I&W.Severity",
+              "nativeQueryRef": "Severity"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "PRISM Score"
+                }
+              },
+              "queryRef": "Unreported I&W.PRISM Score",
+              "nativeQueryRef": "PRISM Score"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "ThreatConnect Score"
+                }
+              },
+              "queryRef": "Unreported I&W.ThreatConnect Score",
+              "nativeQueryRef": "ThreatConnect Score"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "CAL Score"
+                }
+              },
+              "queryRef": "Unreported I&W.CAL Score",
+              "nativeQueryRef": "CAL Score"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "GTI Threat Score"
+                }
+              },
+              "queryRef": "Unreported I&W.GTI Threat Score",
+              "nativeQueryRef": "GTI Threat Score"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "GTI Verdict"
+                }
+              },
+              "queryRef": "Unreported I&W.GTI Verdict",
+              "nativeQueryRef": "GTI Verdict"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "VirusTotal Malicious Score"
+                }
+              },
+              "queryRef": "Unreported I&W.VirusTotal Malicious Score",
+              "nativeQueryRef": "VirusTotal Malicious Score"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "Last Observed"
+                }
+              },
+              "queryRef": "Unreported I&W.Last Observed",
+              "nativeQueryRef": "Last Observed"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "Partners"
+                }
+              },
+              "queryRef": "Unreported I&W.Partners",
+              "nativeQueryRef": "Partners"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "OpDiv"
+                }
+              },
+              "queryRef": "Unreported I&W.OpDiv",
+              "nativeQueryRef": "OpDiv"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "Threat Actor"
+                }
+              },
+              "queryRef": "Unreported I&W.Threat Actor",
+              "nativeQueryRef": "Threat Actor"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "Botnet Flag"
+                }
+              },
+              "queryRef": "Unreported I&W.Botnet Flag",
+              "nativeQueryRef": "Botnet Flag"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "False Positives"
+                }
+              },
+              "queryRef": "Unreported I&W.False Positives",
+              "nativeQueryRef": "False Positives"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Unreported I&W"
+                    }
+                  },
+                  "Property": "Tagging Boost Reason"
+                }
+              },
+              "queryRef": "Unreported I&W.Tagging Boost Reason",
+              "nativeQueryRef": "Tagging Boost Reason"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Unreported I&W"
+                  }
+                },
+                "Property": "PRISM Score"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "textSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

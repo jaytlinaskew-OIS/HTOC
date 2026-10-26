@@ -1,0 +1,24 @@
+{
+  "data": {
+    "id": 21392098237000692,
+    "dateAdded": "2026-06-26T00:00:14Z",
+    "ownerId": 9,
+    "ownerName": "HTOC Org",
+    "webLink": "https://hvs.threatconnect.com/#/details/indicators/21392098237000692",
+    "type": "URL",
+    "lastModified": "2026-10-18T08:02:08Z",
+    "rating": 5.0,
+    "confidence": 35,
+    "description": "Associated indicators identified as related to Gootloader via VirusTotal Intelligence pulling configuration data from recently submitted Gootloader Malware samples. These indicators were determined to have been embedded within the malware and may signify stage two downloader sites, C2 channels, or additional malware installs.",
+    "summary": "tcp://gootloader.websexviet.net:8443",
+    "privateFlag": false,
+    "active": true,
+    "activeLocked": false,
+    "associatedGroups": {},
+    "associatedIndicators": {},
+    "customAssociations": {},
+    "text": "tcp://gootloader.websexviet.net:8443",
+    "legacyLink": "https://hvs.threatconnect.com/auth/indicators/details/url.xhtml?orgid=21392098237000692&owner=HTOC+Org"
+  },
+  "status": "Success"
+}

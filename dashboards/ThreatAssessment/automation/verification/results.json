@@ -1,0 +1,24 @@
+[
+  {
+    "status": "updated",
+    "file": "ThreatAssessI_W_20261019.xlsx",
+    "rows": 2,
+    "target": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\automation\\verification\\test-dashboard.pbix"
+  },
+  {
+    "status": "updated",
+    "file": "ThreatAssessI_W_20261020.xlsx",
+    "rows": 0,
+    "target": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\automation\\verification\\test-dashboard.pbix"
+  },
+  {
+    "status": "updated",
+    "file": "ThreatAssessI_W_20261021.xlsx",
+    "rows": 1,
+    "target": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\automation\\verification\\test-dashboard.pbix"
+  },
+  {
+    "status": "unchanged",
+    "file": "ThreatAssessI_W_20261021.xlsx"
+  }
+]

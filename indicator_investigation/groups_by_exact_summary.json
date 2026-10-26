@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "id": 5629499539006434,
+      "dateAdded": "2025-05-06T07:37:12Z",
+      "ownerId": 1004002,
+      "ownerName": "Intel 471 Intelligence",
+      "webLink": "https://hvs.threatconnect.com/#/details/groups/5629499539006434",
+      "type": "Malware",
+      "xid": "c50d72ea2075da01dedac1f0cf43ab52-c7c658c874fdf773be19d875b12e9ff6",
+      "name": "asyncrat",
+      "createdBy": {
+        "userName": "ApiUser-intel_471_intelligence",
+        "firstName": "ApiUser",
+        "lastName": "Intel 471 Intelligence",
+        "owner": "Intel 471 Intelligence"
+      },
+      "upVoteCount": "0",
+      "downVoteCount": "0",
+      "lastModified": "2026-09-22T19:20:39Z",
+      "legacyLink": "https://hvs.threatconnect.com/auth/malware/malware.xhtml?malware=5629499539006434"
+    }
+  ],
+  "status": "Success"
+}

@@ -1,0 +1,319 @@
+{
+  "groupXid": "GTIDepr1",
+  "name": "GTI Indicator Deprecation",
+  "type": "Playbook",
+  "panX": -50.0,
+  "panY": 80.0,
+  "zoom": 0.75,
+  "logLevel": "INFO",
+  "description": "Deactivates only active HTOC Org indicators tagged GTI Indicator PB. Never-observed indicators age out after 30 days; observed indicators age out 90 days after lastObserved. GTI Retain is a manual exemption. Records are deactivated, not deleted. Maximum 1,000 candidates per execution.",
+  "roiDollarsPerHour": 0.0,
+  "roiMinutes": 0,
+  "priority": 3,
+  "version": "1.0",
+  "comment": "Built from known-good target-instance exports. WebHook for controlled testing; production Timer remains disabled until validation.",
+  "jobList": [
+    {
+      "id": 8900000000000010,
+      "appCatalogItem": {
+        "id": 730,
+        "programName": "TCPB - Threatconnect Get Indicators v1",
+        "displayName": "ThreatConnect Get Indicators",
+        "programVersion": "1.0.9"
+      },
+      "name": "Get GTI-managed indicators eligible for deactivation",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "indicator_id"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "entities"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "summary"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "indicator_type"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tags"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "summaries"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "entity"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "fail_on_no_results"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "indicator_ids"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "max_results"
+          },
+          "value": "1000"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tc_action"
+          },
+          "value": "TQL"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "tql"
+          },
+          "value": "ownerName in (\"HTOC Org\") and hasTag(summary in (\"GTI Indicator PB\")) and NOT hasTag(summary in (\"GTI Retain\")) and indicatorActive = true and (((observationCount = 0) and (dateAdded <= \"NOW() - 30 DAYS\")) or ((observationCount > 0) and (lastObserved <= \"NOW() - 90 DAYS\")))"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "owner"
+          }
+        }
+      ],
+      "locationLeft": 300.0,
+      "locationTop": 100.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.entity\",\"type\":\"TCEntityArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.id\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.count\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.response.error_message\",\"type\":\"String\",\"encrypt\":false}]",
+      "layoutDisplayOutputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.entity\",\"type\":\"TCEntityArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.observation\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.id\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.first_seen\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.date_added\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.active\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.last_observed\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.last_seen\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.last_modified\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.hosts.dns_active\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.external_date_expires\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.action\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.rating\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.external_last_modified\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.files.size\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.false_positive\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.external_date_added\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.value3\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.count\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.last_false_positive\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.value2\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.value1\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.summary\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.owner_name\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.web_link\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.response.status_code\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.hosts.whois_active\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.type\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.response.json.raw\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.response.error_message\",\"type\":\"String\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.threat_assess_score\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.active_locked\",\"type\":\"StringArray\",\"encrypt\":false},{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"tc.indicators.confidence\",\"type\":\"StringArray\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"max_results\",\"tql\"]",
+      "layoutDisplayedInputParams": "[\"tc_action\",\"max_results\",\"tql\",\"fail_on_no_results\"]"
+    },
+    {
+      "id": 8900000000000020,
+      "appCatalogItem": {
+        "programName": "Iterator",
+        "displayName": "Iterator",
+        "programVersion": "1.0.0"
+      },
+      "name": "Evaluate each deprecation candidate",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "array_inputs"
+          },
+          "value": "[{\"key\":\"indicator_id\",\"value\":\"#App:8900000000000010:tc.indicators.id!StringArray\"}]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "array_outputs"
+          },
+          "value": "[]"
+        }
+      ],
+      "locationLeft": 800.0,
+      "locationTop": 100.0,
+      "outputVariables": "[{\"sourceInputList\":[],\"loopVariables\":false,\"name\":\"indicator_id\",\"type\":\"String\",\"encrypt\":false}]",
+      "layoutRequiredInputParams": "[\"array_inputs\"]",
+      "layoutDisplayedInputParams": "[\"array_inputs\",\"array_outputs\"]"
+    },
+    {
+      "id": 8900000000000030,
+      "appCatalogItem": {
+        "id": 737,
+        "programName": "TCPB - HTTP Client v3.0",
+        "displayName": "HTTP Client",
+        "programVersion": "3.0.9",
+        "runLevels": [
+          {
+            "id": 14636698788954117,
+            "runLevel": "Playbook"
+          }
+        ]
+      },
+      "name": "Deactivate stale GTI-managed indicator",
+      "jobParameterList": [
+        {
+          "appCatalogItemParameter": {
+            "paramName": "fail_on_error"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "urlencode_body"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "advanced"
+          },
+          "value": "[]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "proxies_enabled"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "exclude_null_parameters"
+          },
+          "value": "false"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "params"
+          },
+          "value": "[]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "body"
+          },
+          "value": "{\"active\":false}"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "headers"
+          },
+          "value": "[{\"key\":\"Content-Type\",\"value\":\"application/json\"},{\"key\":\"Accept\",\"value\":\"application/json\"},{\"key\":\"Authorization\",\"value\":\"TC-TOKEN @tc_token\"}]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "url"
+          },
+          "value": "https://hvs.threatconnect.com/api/v3/indicators/#App:8900000000000020:indicator_id!String"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "verify_ssl"
+          },
+          "value": "true"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "http_method"
+          },
+          "value": "PUT"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "multipart"
+          },
+          "value": "[]"
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "custom_proxy_user"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "custom_proxy_pass"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "custom_proxy_host"
+          }
+        },
+        {
+          "appCatalogItemParameter": {
+            "paramName": "custom_proxy"
+          }
+        }
+      ],
+      "locationLeft": 1320.0,
+      "locationTop": 100.0,
+      "outputVariables": "[]",
+      "layoutRequiredInputParams": "[]",
+      "layoutDisplayedInputParams": "[]",
+      "agentTools": [],
+      "toolsets": []
+    }
+  ],
+  "playbookConnectionList": [
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceTriggerId": 8900000000000001,
+      "targetJobId": 8900000000000010
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceTriggerId": 8900000000000002,
+      "targetJobId": 8900000000000010
+    },
+    {
+      "type": "Pass",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8900000000000010,
+      "targetJobId": 8900000000000020
+    },
+    {
+      "type": "StartLoop",
+      "isCircularOnTarget": false,
+      "sourceJobId": 8900000000000020,
+      "targetJobId": 8900000000000030
+    },
+    {
+      "type": "EndLoop",
+      "isCircularOnTarget": true,
+      "sourceJobId": 8900000000000030,
+      "targetJobId": 8900000000000020
+    }
+  ],
+  "playbookTriggerList": [
+    {
+      "id": 8900000000000001,
+      "name": "Daily deprecation timer - DISABLED UNTIL VALIDATED",
+      "type": "Timer",
+      "eventType": "External",
+      "locationLeft": 0.0,
+      "locationTop": 50.0,
+      "scheduleType": "Daily",
+      "scheduleCronFormat": "00 45 6 * * ? *",
+      "anyOrg": true,
+      "playbookTriggerFilterList": [],
+      "outputVariables": "[]",
+      "active": false,
+      "organizationNames": []
+    },
+    {
+      "id": 8900000000000002,
+      "name": "WebHook Trigger - TEST",
+      "type": "HttpLink",
+      "eventType": "External",
+      "locationLeft": 0.0,
+      "locationTop": 180.0,
+      "httpResponseHeader": "[]",
+      "httpResponseBody": "",
+      "timeoutMinutes": 5,
+      "scheduleType": "Daily",
+      "anyOrg": true,
+      "playbookTriggerFilterList": [],
+      "outputVariables": "[]",
+      "cacheMinutes": 120,
+      "cacheParams": "{\"includeMethod\":false,\"includeBody\":false,\"queryParams\":[],\"headerNames\":[]}",
+      "organizationNames": []
+    }
+  ],
+  "playbookLabels": [],
+  "playbookScopeVariables": [],
+  "exportablePipes": []
+}

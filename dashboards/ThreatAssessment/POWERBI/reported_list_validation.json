@@ -1,0 +1,23 @@
+{
+  "windowStart": "2026-10-17",
+  "windowEnd": "2026-10-21",
+  "sourceFiles": [
+    "ThreatAssessI_W_20261017.xlsx",
+    "ThreatAssessI_W_20261018.xlsx",
+    "ThreatAssessI_W_20261019.xlsx",
+    "ThreatAssessI_W_20261020.xlsx",
+    "ThreatAssessI_W_20261021.xlsx"
+  ],
+  "reportedSourceRows": 14,
+  "uniqueIndicators": [
+    "104.244.73.43",
+    "130.12.182.224",
+    "176.123.5.126",
+    "70.39.70.194",
+    "77.239.124.108",
+    "77.247.126.189"
+  ],
+  "highPriorityCardRemoved": true,
+  "pages": 1,
+  "queryRefreshesWindowUsingCurrentDate": true
+}

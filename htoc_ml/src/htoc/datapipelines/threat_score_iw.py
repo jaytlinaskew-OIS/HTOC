@@ -113,13 +113,33 @@ def run_threat_score_iw(config: ThreatScoreIwConfig | None = None) -> list[Path]
         result_page_size=config.result_page_size,
     )
     cutoff = datetime.now(pytz.UTC) - timedelta(hours=config.query_lookback_hours)
-    observed = intake_recent_indicators_from_threatconnect(client, config, cutoff)
-    observed = filter_threat_assess_bands(observed)
-    scored = join_prism_scores(observed, config, cutoff)
-    multi = attach_opdiv_multi_partners(scored, config)
-    filtered = filter_vt_and_severity(multi, config)
-    labeled = attach_tags(filtered, observed, config)
-    eligible = exclude_indicators_by_tags(labeled, config)
+    try:
+        observed = intake_recent_indicators_from_threatconnect(client, config, cutoff)
+        observed = filter_threat_assess_bands(observed)
+        scored = join_prism_scores(observed, config, cutoff)
+        multi = attach_opdiv_multi_partners(scored, config)
+        filtered = filter_vt_and_severity(multi, config)
+        labeled = attach_tags(filtered, observed, config)
+        eligible = exclude_indicators_by_tags(labeled, config)
+    except PipelineNoWork as exc:
+        # A valid zero-row result still requires the daily report, with headers.
+        print(f"No eligible indicators: {exc} Writing empty I&W_No report.")
+        try:
+            empty = pd.read_excel(config.scores_xlsx, nrows=0)
+        except OSError as read_error:
+            raise PipelineError(f"Failed to read report headers: {read_error}") from read_error
+        empty = empty.rename(columns={"HTOC Threat Score": "PRISM Score"})
+        if "Indicator" not in empty.columns:
+            indicator_col = next((c for c in ("indicator", "INDICATOR") if c in empty.columns), None)
+            if indicator_col is None:
+                raise PipelineError("Scores workbook missing Indicator column for empty report.")
+            empty = empty.rename(columns={indicator_col: "Indicator"})
+        for col in ("OpDiv", "Partners", "Tags"):
+            if col not in empty.columns:
+                empty[col] = pd.Series(dtype="object")
+        path = write_iw_workbook(empty, config.output_path())
+        print(f"OUTPUT: {path} (0 eligible indicators)")
+        return [path]
     return condense_and_write(eligible, config)
 
 
@@ -642,7 +662,13 @@ def write_iw_workbook(final_indicators: pd.DataFrame, output_path: Path) -> Path
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    frame = final_indicators.copy()
+    frame = final_indicators.drop(
+        columns=[
+            "GTI Verdict", "GTI Threat Score", "GTI Severity", "Mandiant", "Botnet Flag",
+            "Observation Penalty Multiplier", "VirusTotal Malicious Score",
+        ],
+        errors="ignore",
+    ).copy()
     for col in frame.select_dtypes(include=["datetimetz"]).columns:
         frame[col] = frame[col].dt.tz_convert(None)
 

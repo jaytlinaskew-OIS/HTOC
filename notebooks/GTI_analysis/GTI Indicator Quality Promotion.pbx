@@ -85,7 +85,7 @@
           "appCatalogItemParameter": {
             "paramName": "tql"
           },
-          "value": "rating in (3,4,5) and (confidence > 49) and (observationCount = 0) and (falsePositiveCount = 0) and (dateAdded >= \"NOW() - 90 DAYS\") and (ownerName in (\"Google Threat Intelligence\")) and typeName in (\"Address\",\"EmailAddress\",\"Host\",\"URL\")"
+          "value": "rating in (3,4,5) and (confidence > 49) and (falsePositiveCount = 0) and (dateAdded >= \"NOW() - 90 DAYS\") and (ownerName in (\"Google Threat Intelligence\")) and typeName in (\"Address\",\"EmailAddress\",\"Host\",\"URL\")"
         },
         {
           "appCatalogItemParameter": {

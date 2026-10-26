@@ -1,0 +1,322 @@
+[
+  {
+    "name": "Unreported I&W",
+    "columns": [
+      {
+        "name": "Indicator",
+        "dataType": "string",
+        "sourceColumn": "Indicator",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "Host IP",
+        "dataType": "string",
+        "sourceColumn": "Host IP",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "Last Observed",
+        "dataType": "dateTime",
+        "sourceColumn": "Last Observed",
+        "summarizeBy": "none",
+        "formatString": "yyyy-MM-dd HH:mm"
+      },
+      {
+        "name": "Indicator Type",
+        "dataType": "string",
+        "sourceColumn": "Indicator Type",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "VirusTotal Malicious Score",
+        "dataType": "double",
+        "sourceColumn": "VirusTotal Malicious Score",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "GTI Verdict",
+        "dataType": "string",
+        "sourceColumn": "GTI Verdict",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "GTI Threat Score",
+        "dataType": "double",
+        "sourceColumn": "GTI Threat Score",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "GTI Severity",
+        "dataType": "string",
+        "sourceColumn": "GTI Severity",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "Mandiant",
+        "dataType": "double",
+        "sourceColumn": "Mandiant",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "Observation Yearly Count",
+        "dataType": "double",
+        "sourceColumn": "Observation Yearly Count",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "ThreatConnect Rating",
+        "dataType": "double",
+        "sourceColumn": "ThreatConnect Rating",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "Observation Penalty Multiplier",
+        "dataType": "double",
+        "sourceColumn": "Observation Penalty Multiplier",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "Botnet Flag",
+        "dataType": "double",
+        "sourceColumn": "Botnet Flag",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "False Positives",
+        "dataType": "double",
+        "sourceColumn": "False Positives",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "Partners",
+        "dataType": "string",
+        "sourceColumn": "Partners",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "incidents/events",
+        "dataType": "string",
+        "sourceColumn": "incidents/events",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "Threat Actor",
+        "dataType": "string",
+        "sourceColumn": "Threat Actor",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "Tagging Boost",
+        "dataType": "double",
+        "sourceColumn": "Tagging Boost",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "Tagging Boost Reason",
+        "dataType": "string",
+        "sourceColumn": "Tagging Boost Reason",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "CAL Score",
+        "dataType": "double",
+        "sourceColumn": "CAL Score",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "ThreatConnect Score",
+        "dataType": "double",
+        "sourceColumn": "ThreatConnect Score",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "PRISM Score",
+        "dataType": "double",
+        "sourceColumn": "PRISM Score",
+        "summarizeBy": "none",
+        "formatString": "#,0.0"
+      },
+      {
+        "name": "Severity",
+        "dataType": "string",
+        "sourceColumn": "Severity",
+        "summarizeBy": "none",
+        "sortByColumn": "Severity Rank"
+      },
+      {
+        "name": "Explanation",
+        "dataType": "string",
+        "sourceColumn": "Explanation",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "Associated Groups",
+        "dataType": "string",
+        "sourceColumn": "Associated Groups",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "Tags",
+        "dataType": "string",
+        "sourceColumn": "Tags",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "OpDiv",
+        "dataType": "string",
+        "sourceColumn": "OpDiv",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "Severity Rank",
+        "dataType": "int64",
+        "sourceColumn": "Severity Rank",
+        "summarizeBy": "none",
+        "isHidden": true
+      },
+      {
+        "name": "Reported I&W?",
+        "dataType": "string",
+        "sourceColumn": "Reported I&W?",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "Snapshot Date",
+        "dataType": "dateTime",
+        "sourceColumn": "Snapshot Date",
+        "summarizeBy": "none",
+        "formatString": "yyyy-MM-dd"
+      },
+      {
+        "name": "Source File",
+        "dataType": "string",
+        "sourceColumn": "Source File",
+        "summarizeBy": "none"
+      }
+    ],
+    "measures": [
+      {
+        "name": "Unreported Indicators",
+        "expression": "COALESCE(DISTINCTCOUNT('Unreported I&W'[Indicator]), 0)",
+        "formatString": "#,0",
+        "displayFolder": "Unreported I&W"
+      },
+      {
+        "name": "High or Critical",
+        "expression": "COALESCE(CALCULATE([Unreported Indicators], KEEPFILTERS('Unreported I&W'[Severity] IN {\"High\", \"Critical\"})), 0)",
+        "formatString": "#,0",
+        "displayFolder": "Unreported I&W"
+      },
+      {
+        "name": "Average PRISM",
+        "expression": "AVERAGE('Unreported I&W'[PRISM Score])",
+        "formatString": "#,0.0",
+        "displayFolder": "Unreported I&W"
+      },
+      {
+        "name": "Highest PRISM",
+        "expression": "MAX('Unreported I&W'[PRISM Score])",
+        "formatString": "#,0",
+        "displayFolder": "Unreported I&W"
+      },
+      {
+        "name": "Unreported Records",
+        "expression": "COUNTROWS('Unreported I&W')",
+        "formatString": "#,0",
+        "displayFolder": "Unreported I&W"
+      },
+      {
+        "name": "Average VT Malicious",
+        "expression": "AVERAGE('Unreported I&W'[VirusTotal Malicious Score])",
+        "formatString": "#,0.0",
+        "displayFolder": "Unreported I&W"
+      }
+    ],
+    "partitions": [
+      {
+        "name": "Latest unreported snapshot",
+        "mode": "import",
+        "source": {
+          "type": "m",
+          "expression": "let Source = UnreportedSnapshot in Source"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Snapshot",
+    "columns": [
+      {
+        "name": "Snapshot Date",
+        "dataType": "dateTime",
+        "sourceColumn": "Snapshot Date",
+        "summarizeBy": "none",
+        "formatString": "yyyy-MM-dd"
+      },
+      {
+        "name": "Source File",
+        "dataType": "string",
+        "sourceColumn": "Source File",
+        "summarizeBy": "none"
+      },
+      {
+        "name": "File Modified",
+        "dataType": "dateTime",
+        "sourceColumn": "File Modified",
+        "summarizeBy": "none",
+        "formatString": "yyyy-MM-dd HH:mm"
+      },
+      {
+        "name": "Refreshed At",
+        "dataType": "dateTime",
+        "sourceColumn": "Refreshed At",
+        "summarizeBy": "none",
+        "formatString": "yyyy-MM-dd HH:mm"
+      },
+      {
+        "name": "Unreported Rows",
+        "dataType": "int64",
+        "sourceColumn": "Unreported Rows",
+        "summarizeBy": "none"
+      }
+    ],
+    "measures": [
+      {
+        "name": "Snapshot As Of",
+        "expression": "MAX('Snapshot'[Snapshot Date])",
+        "formatString": "dd MMM yyyy"
+      },
+      {
+        "name": "Source Modified",
+        "expression": "MAX('Snapshot'[File Modified])",
+        "formatString": "dd MMM yyyy HH:mm"
+      },
+      {
+        "name": "Last Refresh",
+        "expression": "MAX('Snapshot'[Refreshed At])",
+        "formatString": "dd MMM yyyy HH:mm"
+      }
+    ],
+    "partitions": [
+      {
+        "name": "Snapshot metadata",
+        "mode": "import",
+        "source": {
+          "type": "m",
+          "expression": "let\n    Result = #table({\"Snapshot Date\", \"Source File\", \"File Modified\", \"Refreshed At\", \"Unreported Rows\"}, {{LatestFile[Snapshot Date], LatestFile[Name], LatestFile[Date modified], DateTime.LocalNow(), Table.RowCount(UnreportedSnapshot)}}),\n    Typed = Table.TransformColumnTypes(Result, {{\"Snapshot Date\", type date}, {\"Source File\", type text}, {\"File Modified\", type datetime}, {\"Refreshed At\", type datetime}, {\"Unreported Rows\", Int64.Type}})\nin Typed"
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,47 @@
+Diagnostics for 'final_check':
+
+  ✅ File exists: 63,370 bytes
+  ✅ File type: PBIX
+  ✅ Report layout: 1 pages (legacy format)
+  ✅ DataModel (XPress9): 55,102 bytes compressed, 741,754 bytes decompressed
+  ✅ ABF archive: 247 internal files
+  ✅ Metadata SQLite: 2 tables, 9 measures, 0 relationships
+  ✅ Data sources & storage modes: Modes: Import | Sources: Other M expression
+    Snapshot: Import
+    Unreported I&W: Import
+  ✅ Column breakdown: 36 total data columns
+    Snapshot: 5 columns (DateTime,String,Int64)
+    Unreported I&W: 31 columns (String,DateTime,Double,Int64)
+  ✅ VertiPaq data (row counts): 2 tables, 2 total rows
+    Snapshot: 1 rows
+    Unreported I&W: 1 rows
+  ✅ String dictionary invariants: 14 string dictionaries, no case-folded duplicates
+  ✅ Table / column name collisions: 2 tables, 38 columns, no case-folded name collisions
+  ✅ Dictionary width vs IsOperatingOn32: 19 numeric dictionaries, width matches IsOperatingOn32
+  ✅ Relationships: None
+  ✅ DAX measures: 9 measures
+    [Unreported I&W] Unreported Indicators = COALESCE(DISTINCTCOUNT('Unreported I&W'[...
+    [Unreported I&W] High or Critical = COALESCE(CALCULATE([Unreported Indicator...
+    [Unreported I&W] Average PRISM = AVERAGE('Unreported I&W'[PRISM Score])
+    [Unreported I&W] Highest PRISM = MAX('Unreported I&W'[PRISM Score])
+    [Unreported I&W] Unreported Records = COUNTROWS('Unreported I&W')
+    [Unreported I&W] Average VT Malicious = AVERAGE('Unreported I&W'[VirusTotal Mali...
+    [Snapshot] Snapshot As Of = MAX('Snapshot'[Snapshot Date])
+    [Snapshot] Source Modified = MAX('Snapshot'[File Modified])
+    [Snapshot] Last Refresh = MAX('Snapshot'[Refreshed At])
+  ✅ Row-Level Security (RLS): None
+  ✅ Calculated tables: None
+  ✅ Default slicer filters: None
+  ✅ Table/storage consistency: All metadata tables have VertiPaq storage
+  ✅ Metadata referential integrity: No orphaned references
+  ✅ Expression Kind validity: None
+  ✅ MAXID consistency: MAXID=2211 (highest ID=2205)
+  ✅ Registered resources: 0 registered resource(s), all consistent
+  ✅ Custom visual registration: 0 custom visual(s) in use, all registered (0 AppSource, 0 embedded)
+  ✅ Page / visual naming: 1 page(s), 17 visual(s), names unique where they must be
+  ✅ Bookmark references: none
+  ✅ Rebuild-path eligibility: rebuild-path edits supported
+  ✅ Rebuild-path cost: a rebuild-path edit re-creates by name: annotations (42), Q&A synonyms and phrasings (1). Anything it cannot re-attach is reported in the response warnings.
+
+Live Desktop rendering and refresh were not tested.
+Backup: Z:\HTOC\Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W\Dashobard.blank-backup-20261021-135651.pbix

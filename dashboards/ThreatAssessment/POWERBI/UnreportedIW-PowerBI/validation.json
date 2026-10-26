@@ -1,0 +1,42 @@
+{
+  "validatedAt": "2026-10-21T13:35:56.598165",
+  "schemaValidatedFiles": 23,
+  "officialSchemasRetrieved": 11,
+  "schemaErrors": [],
+  "visualFieldReferencesChecked": 35,
+  "sourceFolderAccessible": true,
+  "eligibleSnapshots": 169,
+  "recentSnapshots": [
+    {
+      "file": "ThreatAssessI_W_20261019.xlsx",
+      "unreportedRows": 2,
+      "distinctIndicators": 2,
+      "highOrCritical": 2,
+      "averagePRISM": 500.0,
+      "highestPRISM": 500.0,
+      "reportedRowsExcludedBySheet": 5
+    },
+    {
+      "file": "ThreatAssessI_W_20261020.xlsx",
+      "unreportedRows": 0,
+      "distinctIndicators": 0,
+      "highOrCritical": 0,
+      "averagePRISM": null,
+      "highestPRISM": null,
+      "reportedRowsExcludedBySheet": 5
+    },
+    {
+      "file": "ThreatAssessI_W_20261021.xlsx",
+      "unreportedRows": 1,
+      "distinctIndicators": 1,
+      "highOrCritical": 1,
+      "averagePRISM": 572.0,
+      "highestPRISM": 572.0,
+      "reportedRowsExcludedBySheet": 0
+    }
+  ],
+  "nativeTabularModelDeserialization": "passed using installed Power BI Desktop libraries",
+  "reportPages": 1,
+  "powerBIDesktopRefreshValidated": false,
+  "desktopOpenCheck": "Power BI recognized the PBIR report but blocked opening because Store reports using enhanced metadata format is disabled."
+}

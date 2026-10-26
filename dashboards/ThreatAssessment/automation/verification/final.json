@@ -1,0 +1,20 @@
+{
+  "title": "I&W Dashboard",
+  "pages": 1,
+  "visuals": 22,
+  "slicers": 0,
+  "metricLegendsPresent": true,
+  "updaterState": {
+    "source": {
+      "name": "ThreatAssessI_W_20261021.xlsx",
+      "size": 6520,
+      "modified_ns": 1792583848929167300,
+      "sha256": "919a658f5ea76cb84050240736c47e91bc779e34d5ce311f636403cc9759dfa7"
+    },
+    "updated_at": "2026-10-21T14:10:48.491792-04:00",
+    "unreported_rows": 1,
+    "target": "\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashobard.pbix"
+  },
+  "structuralDiagnostics": "passed",
+  "liveScreenRefreshConfigured": false
+}

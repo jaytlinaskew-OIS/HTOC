@@ -33,7 +33,7 @@ NOI_FORECAST_SAVE_DIR = Path(r"JA\NextObserveV4Test")
 PRISM_SAVE_DIR = Path(r"JA\PrismTest")
 THREAT_ASSESSMENT_SCORES_DIR = Path(r"Data_Analytics\Data\Threat Assessment Scores")
 THREAT_ASSESSMENT_SCORES_FILENAME = "Threat_Assessment_Scores.xlsx"
-THREAT_SCORE_IW_SAVE_DIR = Path(r"JA\ThreatScoreIwTest")
+THREAT_SCORE_IW_SAVE_DIR = THREAT_ASSESSMENT_SCORES_DIR / "ThreatAssessI_W"
 GTI_CACHE_DIR = Path(r"JA")
 GTI_CACHE_FILENAME = "gti_enrichment_cache.json"
 

@@ -109,14 +109,7 @@ if not "!SCRIPT_EXIT_CODE!"=="0" (
     goto :finish
 )
 
-findstr /C:"PIPELINE_OK_NOWORK" "%TEMP_OUT%" >nul 2>&1
-if "!ERRORLEVEL!"=="0" (
-    call :log SUCCESS No-work success ^(PIPELINE_OK_NOWORK^)
-    set "FINAL_EXIT=0"
-    goto :finish
-)
-
-findstr /C:"%SUCCESS_MARKER%" "%TEMP_OUT%" >nul 2>&1
+findstr /X /C:"%SUCCESS_MARKER%" "%TEMP_OUT%" >nul 2>&1
 if not "!ERRORLEVEL!"=="0" (
     call :log ERROR   Missing success marker %SUCCESS_MARKER%
     goto :finish

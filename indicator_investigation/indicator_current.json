@@ -1,0 +1,212 @@
+{
+  "data": [
+    {
+      "id": 22517998140006654,
+      "dateAdded": "2026-06-25T21:35:41Z",
+      "ownerId": 1004002,
+      "ownerName": "Intel 471 Intelligence",
+      "webLink": "https://hvs.threatconnect.com/#/details/indicators/22517998140006654",
+      "tags": {
+        "data": [
+          {
+            "id": 485863,
+            "name": "MITRE Tactic: command_and_control",
+            "lastUsed": "2026-09-22T19:25:46Z"
+          },
+          {
+            "id": 485854,
+            "name": "Source: Intel 471 Malware Intelligence Feed",
+            "lastUsed": "2026-09-22T19:25:46Z"
+          },
+          {
+            "id": 485592,
+            "name": "Malware: asyncrat",
+            "lastUsed": "2026-09-22T19:25:11Z"
+          },
+          {
+            "id": 485453,
+            "name": "GIR: 1.1.3 Remote access trojan (RAT) malware",
+            "lastUsed": "2026-09-22T19:25:46Z"
+          },
+          {
+            "id": 485449,
+            "name": "GIR: 1.4 Platforms",
+            "lastUsed": "2026-09-22T19:25:46Z"
+          },
+          {
+            "id": 485418,
+            "name": "GIR: 1.4.1 Windows",
+            "lastUsed": "2026-09-22T19:25:46Z"
+          },
+          {
+            "id": 485409,
+            "name": "GIR: 1 Malware",
+            "lastUsed": "2026-09-22T19:29:53Z"
+          },
+          {
+            "id": 485400,
+            "name": "GIR: 1.1 Malware variants",
+            "lastUsed": "2026-09-22T19:29:53Z"
+          }
+        ]
+      },
+      "type": "URL",
+      "lastModified": "2026-10-18T08:02:08Z",
+      "rating": 4.0,
+      "confidence": 75,
+      "threatAssessRating": 4.5,
+      "threatAssessConfidence": 55.0,
+      "threatAssessScore": 438,
+      "threatAssessScoreObserved": 0,
+      "threatAssessScoreFalsePositive": 0,
+      "calScore": 170,
+      "description": "asyncrat controller URL",
+      "summary": "tcp://gootloader.websexviet.net:8443",
+      "observations": 0,
+      "falsePositives": 0,
+      "falsePositiveReportedByUser": false,
+      "privateFlag": false,
+      "active": true,
+      "activeLocked": false,
+      "associatedGroups": {
+        "data": [
+          {
+            "id": 5629499539006434,
+            "dateAdded": "2025-05-06T07:37:12Z",
+            "ownerId": 1004002,
+            "ownerName": "Intel 471 Intelligence",
+            "webLink": "https://hvs.threatconnect.com/#/details/groups/5629499539006434",
+            "type": "Malware",
+            "xid": "c50d72ea2075da01dedac1f0cf43ab52-c7c658c874fdf773be19d875b12e9ff6",
+            "name": "asyncrat",
+            "createdBy": {
+              "userName": "ApiUser-intel_471_intelligence",
+              "firstName": "ApiUser",
+              "lastName": "Intel 471 Intelligence",
+              "owner": "Intel 471 Intelligence"
+            },
+            "upVoteCount": "0",
+            "downVoteCount": "0",
+            "lastModified": "2026-09-22T19:20:39Z",
+            "legacyLink": "https://hvs.threatconnect.com/auth/malware/malware.xhtml?malware=5629499539006434"
+          }
+        ]
+      },
+      "attributes": {
+        "data": [
+          {
+            "id": 22517998147169180,
+            "dateAdded": "2026-06-25T21:35:43Z",
+            "type": "Last Seen",
+            "value": "2026-06-25T07:05:43Z",
+            "lastModified": "2026-06-25T21:35:43Z",
+            "pinned": false,
+            "default": false
+          },
+          {
+            "id": 22517998147169179,
+            "dateAdded": "2026-06-25T21:35:43Z",
+            "type": "First Seen",
+            "value": "2026-06-25T07:05:43Z",
+            "lastModified": "2026-06-25T21:35:43Z",
+            "pinned": false,
+            "default": false
+          },
+          {
+            "id": 22517998147169178,
+            "dateAdded": "2026-06-25T21:35:43Z",
+            "type": "External ID",
+            "value": "3fe1766a01ef9a07e6da07c8e5be1ef6",
+            "lastModified": "2026-06-25T21:35:43Z",
+            "pinned": false,
+            "default": false
+          },
+          {
+            "id": 22517998147169177,
+            "dateAdded": "2026-06-25T21:35:43Z",
+            "type": "External Date Last Modified",
+            "value": "2026-06-25T07:06:16Z",
+            "lastModified": "2026-06-25T21:35:43Z",
+            "pinned": false,
+            "default": false
+          },
+          {
+            "id": 22517998147169176,
+            "dateAdded": "2026-06-25T21:35:43Z",
+            "type": "Description",
+            "value": "asyncrat controller URL",
+            "lastModified": "2026-06-25T21:35:43Z",
+            "pinned": false,
+            "default": true
+          }
+        ]
+      },
+      "text": "tcp://gootloader.websexviet.net:8443",
+      "legacyLink": "https://hvs.threatconnect.com/auth/indicators/details/url.xhtml?orgid=22517998140006654&owner=Intel+471+Intelligence"
+    },
+    {
+      "id": 21392098237000692,
+      "dateAdded": "2026-06-26T00:00:14Z",
+      "ownerId": 9,
+      "ownerName": "HTOC Org",
+      "webLink": "https://hvs.threatconnect.com/#/details/indicators/21392098237000692",
+      "tags": {
+        "data": [
+          {
+            "id": 2881522,
+            "name": "Gootloader PB",
+            "lastUsed": "2026-09-29T00:00:31Z"
+          },
+          {
+            "id": 29437,
+            "name": "Gootloader",
+            "lastUsed": "2026-09-29T00:00:30Z"
+          }
+        ]
+      },
+      "type": "URL",
+      "lastModified": "2026-10-18T08:02:08Z",
+      "rating": 5.0,
+      "confidence": 35,
+      "threatAssessRating": 4.5,
+      "threatAssessConfidence": 55.0,
+      "threatAssessScore": 438,
+      "threatAssessScoreObserved": 0,
+      "threatAssessScoreFalsePositive": 0,
+      "calScore": 170,
+      "description": "Associated indicators identified as related to Gootloader via VirusTotal Intelligence pulling configuration data from recently submitted Gootloader Malware samples. These indicators were determined to have been embedded within the malware and may signify stage two downloader sites, C2 channels, or additional malware installs.",
+      "summary": "tcp://gootloader.websexviet.net:8443",
+      "observations": 0,
+      "falsePositives": 0,
+      "falsePositiveReportedByUser": false,
+      "privateFlag": false,
+      "active": true,
+      "activeLocked": false,
+      "associatedGroups": {},
+      "attributes": {
+        "data": [
+          {
+            "id": 4503599629191946,
+            "dateAdded": "2026-07-13T15:57:45Z",
+            "type": "Description",
+            "value": "Associated indicators identified as related to Gootloader via VirusTotal Intelligence pulling configuration data from recently submitted Gootloader Malware samples. These indicators were determined to have been embedded within the malware and may signify stage two downloader sites, C2 channels, or additional malware installs.",
+            "createdBy": {
+              "id": 2011,
+              "userName": "jaytlin.askew@hhs.gov",
+              "firstName": "Jaytlin",
+              "lastName": "Askew /HHS-HTOC/",
+              "pseudonym": "DataGuru",
+              "owner": "HTOC Org"
+            },
+            "lastModified": "2026-07-13T15:57:45Z",
+            "pinned": false,
+            "default": true
+          }
+        ]
+      },
+      "text": "tcp://gootloader.websexviet.net:8443",
+      "legacyLink": "https://hvs.threatconnect.com/auth/indicators/details/url.xhtml?orgid=21392098237000692&owner=HTOC+Org"
+    }
+  ],
+  "status": "Success"
+}

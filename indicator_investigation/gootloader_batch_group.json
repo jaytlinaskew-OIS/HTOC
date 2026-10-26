@@ -1,0 +1,49 @@
+{
+  "data": {
+    "id": 4503599631004287,
+    "dateAdded": "2026-07-23T00:02:49Z",
+    "ownerId": 9,
+    "ownerName": "HTOC Org",
+    "webLink": "https://hvs.threatconnect.com/#/details/groups/4503599631004287",
+    "tags": {},
+    "type": "Event",
+    "name": "Gootloader VTI Batch - 07-23-2026",
+    "createdBy": {
+      "id": 633,
+      "userName": "12488526555309068164",
+      "firstName": "HTOC",
+      "lastName": "Playbook User",
+      "pseudonym": "APIUserOQys7",
+      "owner": "HTOC Org"
+    },
+    "upVoteCount": "0",
+    "downVoteCount": "0",
+    "attributes": {
+      "data": [
+        {
+          "id": 3377699726018040,
+          "dateAdded": "2026-07-23T00:02:51Z",
+          "type": "Description",
+          "value": "Associated indicators identified as related to Gootloader via VirusTotal Intelligence pulling configuration data from recently submitted Gootloader Malware samples.\u00a0 These indicators were determined to have been embedded within the malware and may signify stage two downloader sites, C2 channels, or additional malware installs.",
+          "createdBy": {
+            "id": 633,
+            "userName": "12488526555309068164",
+            "firstName": "HTOC",
+            "lastName": "Playbook User",
+            "pseudonym": "APIUserOQys7",
+            "owner": "HTOC Org"
+          },
+          "lastModified": "2026-07-23T00:02:51Z",
+          "pinned": false,
+          "default": true
+        }
+      ]
+    },
+    "status": "No Further Action",
+    "eventType": "None",
+    "lastModified": "2026-07-23T00:07:12Z",
+    "legacyLink": "https://hvs.threatconnect.com/auth/event/event.xhtml?event=4503599631004287",
+    "eventDate": "2026-07-23T00:00:00Z"
+  },
+  "status": "Success"
+}

@@ -1,0 +1,5 @@
+Removed duplicate model annotation __PBI_TimeIntelligenceEnabled; retained original value 0.
+Confirmed no duplicate annotation names within each model object.
+One page; unreported-only metrics remain 1 indicator, 1 high/critical, PRISM average/max 572.
+Structural diagnostics passed. Desktop opening remains to be confirmed.
+Backup: Z:\HTOC\Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W\Dashobard.before-annotation-fix-20261021-135918.pbix

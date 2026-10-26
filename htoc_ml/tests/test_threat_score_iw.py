@@ -206,15 +206,60 @@ def test_legacy_scheduled_entry_uses_package_main(monkeypatch, exit_code):
     assert called == [True]
 
 
-def test_all_tor_rows_produce_nowork_marker(monkeypatch, capsys):
-    from htoc.datapipelines import threat_score_iw
+@pytest.mark.parametrize("empty_stage", ["tags", "vt", "join"])
+def test_zero_eligible_run_writes_headers_only_report(tmp_path, monkeypatch, capsys, empty_stage):
+    from htoc.datapipelines import threat_score_iw as pipeline
+    from htoc.core.pipeline import PipelineNoWork
 
-    def all_tor(config):
-        return filter_vt_and_severity(pd.DataFrame({
-            "Severity": ["high"],
-            "Explanation": ["VT score: 20. TOR activity detected."],
-        }), config)
+    scores = tmp_path / "scores.xlsx"
+    tags = tmp_path / "tags.csv"
+    frame = pd.DataFrame({
+        "Indicator": ["blocked"], "Indicator Type": ["Address"],
+        "Severity": ["high"], "Explanation": ["VT score: 20. No TOR activity."],
+        "HTOC Threat Score": [600],
+    })
+    frame.to_excel(scores, index=False)
+    pd.DataFrame({"indicator": ["blocked"], "tag": ["I&W"]}).to_csv(tags, index=False)
+    config = ThreatScoreIwConfig(scores_xlsx=str(scores), tags_csv=str(tags), save_dir=str(tmp_path))
+    observed = pd.DataFrame({"indicator": ["blocked"], "tags.data": [[]]})
+    monkeypatch.setattr(pipeline.ThreatScoreIwConfig, "from_env", classmethod(lambda cls: config))
+    monkeypatch.setattr(pipeline, "ThreatConnectClient", lambda **kwargs: object())
+    monkeypatch.setattr(pipeline, "intake_recent_indicators_from_threatconnect", lambda *args: observed)
+    monkeypatch.setattr(pipeline, "filter_threat_assess_bands", lambda data: data)
+    monkeypatch.setattr(pipeline, "join_prism_scores", lambda *args: frame)
+    monkeypatch.setattr(pipeline, "attach_opdiv_multi_partners", lambda data, config: data)
+    if empty_stage == "vt":
+        frame["Explanation"] = "VT score: 20. TOR activity detected."
+    elif empty_stage == "join":
+        def no_overlap(*args):
+            raise PipelineNoWork("No overlapping indicators.")
+        monkeypatch.setattr(pipeline, "join_prism_scores", no_overlap)
 
-    monkeypatch.setattr(threat_score_iw, "run_threat_score_iw", all_tor)
-    assert threat_score_iw.main() == 0
-    assert "PIPELINE_OK_NOWORK" in capsys.readouterr().out
+    assert pipeline.main() == 0
+    output = capsys.readouterr().out
+    assert "PIPELINE_OK_NOWORK" not in output
+    assert "PIPELINE_OK" in output
+    with pd.ExcelFile(config.output_path()) as workbook:
+        assert workbook.sheet_names == ["I&W_No"]
+        report = pd.read_excel(workbook, sheet_name="I&W_No")
+    assert report.empty
+    assert {"Indicator", "Host IP", "PRISM Score", "Severity", "Tags", "OpDiv"} <= set(report.columns)
+
+
+def test_empty_report_write_failure_does_not_report_success(tmp_path, monkeypatch, capsys):
+    from htoc.datapipelines import threat_score_iw as pipeline
+    from htoc.core.pipeline import PipelineNoWork
+
+    scores = tmp_path / "scores.xlsx"
+    pd.DataFrame(columns=["Indicator", "Severity"]).to_excel(scores, index=False)
+    config = ThreatScoreIwConfig(scores_xlsx=str(scores), save_dir=str(tmp_path))
+    monkeypatch.setattr(pipeline.ThreatScoreIwConfig, "from_env", classmethod(lambda cls: config))
+    monkeypatch.setattr(pipeline, "ThreatConnectClient", lambda **kwargs: object())
+    def no_work(*args):
+        raise PipelineNoWork("No overlapping indicators.")
+    def write_failed(*args):
+        raise PipelineError("Workbook write denied", exit_code=4)
+    monkeypatch.setattr(pipeline, "intake_recent_indicators_from_threatconnect", no_work)
+    monkeypatch.setattr(pipeline, "write_iw_workbook", write_failed)
+    assert pipeline.main() == 4
+    assert "PIPELINE_OK" not in capsys.readouterr().out

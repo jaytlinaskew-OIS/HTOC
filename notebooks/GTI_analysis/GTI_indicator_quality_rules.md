@@ -9,14 +9,14 @@ These rules define which Google Threat Intelligence indicators are suitable for 
 - Owner must be Google Threat Intelligence.
 - Allowed types: Address, EmailAddress, Host, and URL.
 - `falsePositiveCount` is `0`. Prevents using an indicator that someone has already disputed as incorrectly classified as malicious.
-- Rating is at least `3`. Baseline.
-- Confidence is at least `50`. Baseline.
-- `observationCount` must equal `0`. This confirms its has not already been added to HTOC Org.
+- Indicator `rating` is at least `3`. Baseline.
+- Indicator `confidence` is at least `50`. Baseline.
+- Only the standard indicator `rating` and `confidence` fields are used. `threatAssessRating`, `threatAssessConfidence`, and `threatAssessScore` are not qualification criteria.
 
 Current 90-day TQL:
 
 ```text
-rating in (3,4,5) and (confidence > 49) and (observationCount = 0) and (falsePositiveCount = 0) and (dateAdded >= "NOW() - 90 DAYS") and (ownerName in ("Google Threat Intelligence")) and typeName in ("Address","EmailAddress","Host","URL")
+rating in (3,4,5) and (confidence > 49) and (falsePositiveCount = 0) and (dateAdded >= "NOW() - 90 DAYS") and (ownerName in ("Google Threat Intelligence")) and typeName in ("Address","EmailAddress","Host","URL")
 ```
 
 
@@ -52,7 +52,7 @@ The indicator must contain a non-empty Description attribute.
 
 Associated groups provide attribution and relationship context. They are not used as a separate promotion gate. For a qualified indicator, the Playbook reads the original GTI indicator's existing group associations and recreates those same associations on the HTOC Org indicator when ThreatConnect permits it. It does not create groups or generate a provenance attribute.
 
-Covered **446,399 indicators** returned by the current 90-day TQL:
+The October 8, 2026 historical group review covered **446,399 indicators** returned by the then-current 90-day TQL:
 
 - **442,898 (99.2%)** had at least one associated Malware, Campaign, Intrusion Set, or Report.
 - **3,501 (0.8%)** had none of those associated group types.
@@ -67,9 +67,9 @@ In the 1,000-record type-stratified sample, 912 indicators had exactly one assoc
 
 Tags are attached to indicators, not inherited from their associated groups. In the same sample, 460 indicators had both tags and groups. Of 54 unique tags observed on grouped indicators, 33 appeared with multiple groups. Broad tags such as `malware`, `Phishing`, `pwn`, `Phishing and Other Frauds`, `dga`, and `spyware and malware` were shared across many groups. 
 
-## 90-day Playbook volume estimate
+## 90-day Playbook volume history
 
-The live comparison completed on October 8, 2026 used the current initial TQL and a type-stratified systematic sample of 1,000 indicators.
+The live comparison completed on October 8, 2026 used the previous initial TQL, which still included the former zero-observation restriction, and a type-stratified systematic sample of 1,000 indicators. These figures are retained as historical context and are not a current estimate after removal of that restriction.
 
 - Initial TQL population: **446,224**.
 - Estimated passes using only tags on the GTI-owned copy: **64,577 (14.5%)**.
@@ -92,6 +92,8 @@ Within the sample, 892 indicators existed in one accessible owner, 79 in two own
 
 The initial population count is exact at query time. The passing counts are sample-based estimates because the normalized cross-owner tag rule cannot be expressed directly in the initial TQL.
 
+As of October 21, 2026, the revised initial TQL without an observation-count requirement returned **321,011 indicators**. The full-population cross-owner pass estimate has not been rerun for this revised population.
+
 ## ThreatConnect Playbook design plan
 
 The Playbook will use **ThreatConnect Get Indicators** for every indicator TQL lookup. The generic ThreatConnect API request App will not be used to execute the initial TQL.
@@ -112,7 +114,7 @@ Use **ThreatConnect Get Indicators v1.0.9** with:
 - TQL:
 
 ```text
-rating in (3,4,5) and (confidence > 49) and (observationCount = 0) and (falsePositiveCount = 0) and (dateAdded >= "NOW() - 90 DAYS") and (ownerName in ("Google Threat Intelligence")) and typeName in ("Address","EmailAddress","Host","URL")
+rating in (3,4,5) and (confidence > 49) and (falsePositiveCount = 0) and (dateAdded >= "NOW() - 90 DAYS") and (ownerName in ("Google Threat Intelligence")) and typeName in ("Address","EmailAddress","Host","URL")
 ```
 
 - `fail_on_no_results`: `false`

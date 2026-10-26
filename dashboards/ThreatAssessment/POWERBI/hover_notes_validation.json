@@ -1,0 +1,14 @@
+{
+  "visiblePages": 1,
+  "hiddenTooltipPages": 2,
+  "currentVerdict": "Suspicious",
+  "reportedIndicatorsWithNotes": 6,
+  "tooltipVisuals": [
+    "queue",
+    "prism",
+    "indicator_tags",
+    "reported_last5days"
+  ],
+  "nativeTooltipFormatMatched": true,
+  "desktopHoverInteractionTested": false
+}

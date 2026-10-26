@@ -1,0 +1,5 @@
+Cause: the blank source model declared PowerBI_V1 (0), while the added import partitions use M.
+Repair: set DefaultPowerBIDataSourceVersion=PowerBI_V3 (2) and SourceQueryCulture=en-US, matching an existing Desktop-authored report from this installation.
+Confirmed no duplicate annotations; one page; both M import queries retained; metrics unchanged.
+Live opening and refresh remain unverified.
+Backup: Z:\HTOC\Data_Analytics\Data\Threat Assessment Scores\ThreatAssessI_W\Dashobard.before-v3-fix-20261021-140059.pbix
