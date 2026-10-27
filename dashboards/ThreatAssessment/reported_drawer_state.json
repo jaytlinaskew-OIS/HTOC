@@ -1,0 +1,16 @@
+{
+  "original": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Dashobard.pbix",
+  "candidate": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Deprecated\\test-dashboards-20261027-112133\\Temporary Tests\\htoc_reported_drawer_2tc4os3y\\Reported Drawer.pbix",
+  "original_sha256": "397a36b7c7b1ca7dba9126009e18e12dd711ab5777ef0f97dcdc4cb5f0096bce",
+  "work": "C:\\Users\\jaskew\\AppData\\Local\\Temp\\htoc_reported_drawer_2tc4os3y",
+  "published": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Dashobard.pbix",
+  "backup": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Deprecated\\before-reported-side-panel-20261027-091522",
+  "published_sha256": "fd7d05eb2a412dd2f7df1b8d4c242e50b71e0c93324d9c4829d393c8f02a6175",
+  "validation": {
+    "native_open_close": "passed",
+    "HRSA_to_CMS_filter_preserved": "passed",
+    "no_overlap_both_layouts": true,
+    "data_model_and_other_parts_unchanged": true
+  },
+  "test_candidate_deprecated": true
+}

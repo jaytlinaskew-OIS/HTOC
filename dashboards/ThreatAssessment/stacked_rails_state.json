@@ -1,0 +1,24 @@
+{
+  "original": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Dashobard.pbix",
+  "candidate": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Deprecated\\test-dashboards-20261027-112133\\Temporary Tests\\htoc_stacked_rails_01a98j18\\Stacked Rails Final.pbix",
+  "work": "C:\\Users\\jaskew\\AppData\\Local\\Temp\\htoc_stacked_rails_01a98j18",
+  "original_sha256": "fd7d05eb2a412dd2f7df1b8d4c242e50b71e0c93324d9c4829d393c8f02a6175",
+  "validation": {
+    "native_drawers": {
+      "assessment_notes_present": true,
+      "states_tested": 4,
+      "partner_filter_persisted": true,
+      "selected_indicator": "195.178.110.104",
+      "status": "passed"
+    },
+    "default_assessment_indicator": "103.214.44.138",
+    "default_notes_rows": 1,
+    "selected_notes_rows": 1,
+    "existing_data_and_measures_unchanged": true,
+    "new_hidden_string_measures": 2
+  },
+  "status": "published",
+  "backup": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Deprecated\\before-stacked-partner-drawer-20261027-101555",
+  "published_sha256": "fcf276148b5b8bab7517799fd4b0e00804c7be60903d372a522f26a89e0aab11",
+  "test_candidate_deprecated": true
+}

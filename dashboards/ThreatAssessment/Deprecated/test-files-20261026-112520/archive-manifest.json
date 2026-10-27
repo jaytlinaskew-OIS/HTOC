@@ -1,0 +1,110 @@
+[
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\automation\\verification\\test-dashboard.auto-refresh-backup.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\automation\\verification\\test-dashboard.auto-refresh-backup.pbix",
+    "SHA256": "BB98D965D74298202F5C6AB5248A5C0DC604153E1F5EA86EBA3EC4D759D6A36F",
+    "Length": 55531
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\automation\\verification\\test-dashboard.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\automation\\verification\\test-dashboard.pbix",
+    "SHA256": "72D6EA234CE87ED905522C50D8434583AD0E1EBF8A3880AA55B9691F2A9EB076",
+    "Length": 66285
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\native_validation\\blank_control.abf",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\native_validation\\blank_control.abf",
+    "SHA256": "61A2DC3CB25925C7AC7445F6E93C308C9155896F218052E2E5A2C1A06C84A633",
+    "Length": 8382
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\native_validation\\blank_test.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\native_validation\\blank_test.pbix",
+    "SHA256": "0E173819E19A507A2A4F83A2CB9D00D9A2EACA7CD11C25BCA8E798AC801004B9",
+    "Length": 12932
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\native_validation\\current.abf",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\native_validation\\current.abf",
+    "SHA256": "DAE36278FE2A05ED4FEEE932C919F032BEB925FCB2EBA4025C8F7D840146F745",
+    "Length": 50648
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\native_validation\\native_packaged.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\native_validation\\native_packaged.pbix",
+    "SHA256": "A433CA4139B81DD26112A2D585C2DC6A643EF5F9296B11DE46201400B1EC2D75",
+    "Length": 67640
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\native_validation\\native_repaired.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\native_validation\\native_repaired.pbix",
+    "SHA256": "BA4992C0705CDDBD5D48D7CDD92A51B387D0A5FBEEC168A67827A702DB644CB8",
+    "Length": 79147
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\native_validation\\repaired.abf",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\native_validation\\repaired.abf",
+    "SHA256": "4E56D788FD9A6D9D76B584F0F0A3092356A96B6E95257348ECA3A4C577539FA9",
+    "Length": 62393
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\POWERBI\\Dashobard.annotation-fixed.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\POWERBI\\Dashobard.annotation-fixed.pbix",
+    "SHA256": "79DA32D43787D4A87784D56FCB6EB2E75AC70032524BC5F8CA496753FC8FAF6F",
+    "Length": 63370
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\POWERBI\\Dashobard.display-layout.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\POWERBI\\Dashobard.display-layout.pbix",
+    "SHA256": "DA83199AE05EEA4AF41534E08AAD0FB5C42F24CF45CE005E966CAF254A96418D",
+    "Length": 56839
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\POWERBI\\Dashobard.hover-notes.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\POWERBI\\Dashobard.hover-notes.pbix",
+    "SHA256": "253F234062F9C2E8AC49C330401CADC0E32A66A452D9199E01189E001AD0F0DD",
+    "Length": 69209
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\POWERBI\\Dashobard.hover-tags.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\POWERBI\\Dashobard.hover-tags.pbix",
+    "SHA256": "6381B2106D6DE70EA7650465EBC1EBD3CB7C8C339C8B07AD04461D855A46AAF3",
+    "Length": 71716
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\POWERBI\\Dashobard.HTOC-theme.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\POWERBI\\Dashobard.HTOC-theme.pbix",
+    "SHA256": "2710269E2EBBEDA35F435B38A017AC9B1E560BB50AE0D459266C2B1A99913E5E",
+    "Length": 78539
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\POWERBI\\Dashobard.metadata-v3-fixed.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\POWERBI\\Dashobard.metadata-v3-fixed.pbix",
+    "SHA256": "AF238162E9FD926BB46C5A5E68FCA8DA1DFAFDA693D9077092EFC2AC96451D75",
+    "Length": 63378
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\POWERBI\\Dashobard.package-repaired.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\POWERBI\\Dashobard.package-repaired.pbix",
+    "SHA256": "0207F7961E7BBE81F7F70914B889CA79004E63FD19960A909F025DD34D7341A8",
+    "Length": 67351
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\POWERBI\\Dashobard.updated.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\POWERBI\\Dashobard.updated.pbix",
+    "SHA256": "4045AC77158E5622D5942E171A74B6A6366C666375595B32A5D8B95BC1F28D81",
+    "Length": 63370
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\POWERBI\\Dashobard.with-reported.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\POWERBI\\Dashobard.with-reported.pbix",
+    "SHA256": "D3B8A146A08F8780F809A817E93B9D03898856D675B6AFBB72B0E15BDEE1133E",
+    "Length": 67394
+  },
+  {
+    "OriginalPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\POWERBI\\native_generated.pbix",
+    "ArchivedPath": "\\\\cscso1fsappv01\\home\\jaskew\\HTOC\\dashboards\\ThreatAssessment\\Deprecated\\test-files-20261026-112520\\POWERBI\\native_generated.pbix",
+    "SHA256": "81498E3B7FBF65C897790085218AF52D79C9ACB61D6C37250C06F937F418AFB1",
+    "Length": 59230
+  }
+]

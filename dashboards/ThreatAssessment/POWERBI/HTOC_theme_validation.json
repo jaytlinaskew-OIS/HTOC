@@ -1,0 +1,18 @@
+{
+  "target": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Dashobard.pbix",
+  "reference": "Z:\\HTOC\\Data_Analytics\\Business_Intelligence\\Dashboards-Code\\HTOC Big Board\\Dashboard\\1. In Development\\HTOC_BigBoard_Dashboard_Metrics_OCIO Format_Master_New.pbix",
+  "referenceSHA256": "5aedb9d3b72679a82f483bb99952412853b6dbe0c850083ca26b81d2ce857463",
+  "referenceUnchanged": true,
+  "layoutFieldsTextAndHoverRoutingUnchanged": true,
+  "dataModelUnchanged": true,
+  "nativeDiagnostics": "passed",
+  "mainBackground": "#0D0D0D",
+  "panels": "#0D1724",
+  "text": "#D9D9D9",
+  "accentColors": [
+    "#0075DB",
+    "#75D2FF"
+  ],
+  "tooltipBackground": "#AFC9DA",
+  "font": "Segoe UI / Segoe UI Semibold"
+}

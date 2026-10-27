@@ -1,0 +1,36 @@
+{
+  "original": "\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Dashobard.pbix",
+  "candidate": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Deprecated\\test-dashboards-20261027-112133\\Temporary Tests\\htoc_empty_message_kvx6ue3r\\Empty State Message.pbix",
+  "work": "C:\\Users\\jaskew\\AppData\\Local\\Temp\\htoc_empty_message_kvx6ue3r",
+  "original_sha256": "073d77c7307312645ed0d19896c3fd767dbbe39aacdbb346f1458cb04d5a8d20",
+  "validation": {
+    "populated": {
+      "partner_filter": "passed",
+      "status": "passed",
+      "counts": {
+        "current": 8,
+        "links": 24,
+        "reported": 6,
+        "context": "Showing 8 of 8 Indicators \u00b7 All partners",
+        "highest": 620
+      }
+    },
+    "empty": {
+      "partner_filter": "passed",
+      "status": "passed",
+      "counts": {
+        "current": null,
+        "links": null,
+        "reported": 4,
+        "context": "No I&W Indicators to report today",
+        "highest": 0
+      }
+    },
+    "data_rows_preserved": true,
+    "layout_unchanged": true
+  },
+  "status": "published",
+  "backup": "\\\\cscso1fsappv01\\data\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Deprecated\\before-empty-indicator-message-20261027-103949",
+  "published_sha256": "00e04f448a6c26b8e7511c2350b0ca9b8a2d7cb111c2f29e3df72ef814d0d1b7",
+  "test_candidate_deprecated": true
+}

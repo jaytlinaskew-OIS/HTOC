@@ -1,0 +1,21 @@
+{
+  "original": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Dashobard.pbix",
+  "candidate": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Deprecated\\test-dashboards-20261027-112133\\Temporary Tests\\htoc_fullheight_drawers_o25001rk\\Full Height Drawers.pbix",
+  "work": "C:\\Users\\jaskew\\AppData\\Local\\Temp\\htoc_fullheight_drawers_o25001rk",
+  "original_sha256": "fcf276148b5b8bab7517799fd4b0e00804c7be60903d372a522f26a89e0aab11",
+  "status": "published",
+  "backup": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Deprecated\\before-fullheight-drawers-20261027-103045",
+  "published_sha256": "073d77c7307312645ed0d19896c3fd767dbbe39aacdbb346f1458cb04d5a8d20",
+  "validation": {
+    "native_reported_panel_full_height": "passed",
+    "native_partner_panel_full_height": "passed",
+    "both_switch_directions": "passed",
+    "closing_partner": "passed",
+    "partner_filter_retained": "Showing 4 of 8 Indicators \u00b7 HRSA",
+    "width": 200,
+    "height": 512,
+    "data_model_unchanged": true,
+    "live_layout_matches_original": true
+  },
+  "test_candidate_deprecated": true
+}

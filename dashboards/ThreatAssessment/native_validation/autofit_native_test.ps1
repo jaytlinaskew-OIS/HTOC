@@ -1,0 +1,7 @@
+$ErrorActionPreference='Stop'
+[Reflection.Assembly]::LoadFrom('C:\Program Files\Microsoft Power BI Desktop\bin\Microsoft.PowerBI.Tabular.dll') | Out-Null
+[Reflection.Assembly]::LoadFrom('C:\Program Files\Microsoft Power BI Desktop\bin\Microsoft.PowerBI.AdomdClient.dll') | Out-Null
+$taskPort=([IO.File]::ReadAllText('C:\Users\jaskew\AppData\Local\Microsoft\Power BI Desktop\AnalysisServicesWorkspaces\AnalysisServicesWorkspace_c426643c-c4b8-457e-826d-bad3e6c7f821\Data\msmdsrv.port.txt')).Replace([string][char]0,'').Trim()
+$taskServer=New-Object Microsoft.AnalysisServices.Tabular.Server;$taskServer.Connect('Data Source=localhost:'+$taskPort);$taskDB=$taskServer.Databases[0]
+$taskConn=New-Object Microsoft.AnalysisServices.AdomdClient.AdomdConnection;$taskConn.ConnectionString='Data Source=localhost:'+$taskPort+';Initial Catalog='+$taskDB.ID;$taskConn.Open()
+try{$taskCmd=$taskConn.CreateCommand();$taskCmd.CommandText='EVALUATE SUMMARIZECOLUMNS(''Indicator Partners''[Partner],"Area",[Partner Block Area],"Indicators",[Unreported Indicators])';$taskReader=$taskCmd.ExecuteReader();$taskCount=0;while($taskReader.Read()){$taskCount++;if([double]$taskReader.GetValue(1) -ne 1){throw 'Partner area must be one'};Write-Output ([string]$taskReader.GetValue(0)+': equal block area='+$taskReader.GetValue(1)+'; Indicators='+$taskReader.GetValue(2))};$taskReader.Close();if($taskCount -ne 6){throw 'Unexpected production partner count'};Write-Output 'Native equal-area measure check passed.'}finally{$taskConn.Close();$taskServer.Disconnect()}

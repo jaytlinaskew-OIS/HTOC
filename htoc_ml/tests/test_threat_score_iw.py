@@ -73,8 +73,8 @@ def test_attach_tags_combines_csv_and_live_threatconnect_tags(tmp_path):
 
     assert labeled.loc[labeled["Indicator"] == "csv-iw", "Tags"].iat[0] == "I&W, malware, other"
     assert labeled.loc[labeled["Indicator"] == "live-iw", "Tags"].iat[0] == "other, IW"
-    assert "Reported I&W?" not in labeled.columns
-    assert out["Indicator"].tolist() == ["keep"]
+    assert labeled["Reported I&W?"].tolist() == ["No", "Yes", "No"]
+    assert out["Indicator"].tolist() == ["csv-iw", "live-iw", "keep"]
 
 
 def test_exclude_indicators_by_tags_matches_all_configured_tags_case_insensitively():
@@ -87,10 +87,10 @@ def test_exclude_indicators_by_tags_matches_all_configured_tags_case_insensitive
 
     out = exclude_indicators_by_tags(frame, ThreatScoreIwConfig())
 
-    assert out["Indicator"].tolist() == ["keep", "substring", "tor-near"]
+    assert out["Indicator"].tolist() == ["keep", "iw", "substring", "tor-near"]
 
 
-def test_write_iw_workbook_omits_redundant_yes_sheet(tmp_path):
+def test_write_iw_workbook_keeps_both_sheets_when_yes_empty(tmp_path):
     output_path = tmp_path / "iw.xlsx"
     frame = pd.DataFrame({"Indicator": ["keep"], "Tags": ["clean"]})
 
@@ -98,7 +98,7 @@ def test_write_iw_workbook_omits_redundant_yes_sheet(tmp_path):
 
     assert written == output_path
     with pd.ExcelFile(output_path) as workbook:
-        assert workbook.sheet_names == ["I&W_No"]
+        assert workbook.sheet_names == ["I&W_No", "I&W_Yes"]
 
 
 def test_condense_final_indicators_rolls_dense_subnet():
@@ -219,7 +219,7 @@ def test_zero_eligible_run_writes_headers_only_report(tmp_path, monkeypatch, cap
         "HTOC Threat Score": [600],
     })
     frame.to_excel(scores, index=False)
-    pd.DataFrame({"indicator": ["blocked"], "tag": ["I&W"]}).to_csv(tags, index=False)
+    pd.DataFrame({"indicator": ["blocked"], "tag": ["Benign PB"]}).to_csv(tags, index=False)
     config = ThreatScoreIwConfig(scores_xlsx=str(scores), tags_csv=str(tags), save_dir=str(tmp_path))
     observed = pd.DataFrame({"indicator": ["blocked"], "tags.data": [[]]})
     monkeypatch.setattr(pipeline.ThreatScoreIwConfig, "from_env", classmethod(lambda cls: config))
@@ -240,7 +240,7 @@ def test_zero_eligible_run_writes_headers_only_report(tmp_path, monkeypatch, cap
     assert "PIPELINE_OK_NOWORK" not in output
     assert "PIPELINE_OK" in output
     with pd.ExcelFile(config.output_path()) as workbook:
-        assert workbook.sheet_names == ["I&W_No"]
+        assert workbook.sheet_names == ["I&W_No", "I&W_Yes"]
         report = pd.read_excel(workbook, sheet_name="I&W_No")
     assert report.empty
     assert {"Indicator", "Host IP", "PRISM Score", "Severity", "Tags", "OpDiv"} <= set(report.columns)
@@ -263,3 +263,19 @@ def test_empty_report_write_failure_does_not_report_success(tmp_path, monkeypatc
     monkeypatch.setattr(pipeline, "write_iw_workbook", write_failed)
     assert pipeline.main() == 4
     assert "PIPELINE_OK" not in capsys.readouterr().out
+
+
+def test_report_splits_live_reported_status_and_omits_removed_columns(tmp_path):
+    tags = tmp_path / "tags.csv"
+    pd.DataFrame({"indicator": ["reported", "new"], "tag": ["malware", "malware"]}).to_csv(tags, index=False)
+    frame = pd.DataFrame({"Indicator": ["reported", "new"], "GTI Verdict": ["bad", "bad"],
+                          "Botnet Flag": [0, 0], "Observation Penalty Multiplier": [1, 1],
+                          "VirusTotal Malicious Score": [10, 10]})
+    observed = pd.DataFrame({"indicator": ["reported", "new"], "tags.data": [[{"name": "I&W"}], []]})
+    config = ThreatScoreIwConfig(tags_csv=str(tags))
+    labeled = exclude_indicators_by_tags(attach_tags(frame, observed, config), config)
+    path = write_iw_workbook(labeled, tmp_path / "split.xlsx")
+    assert pd.read_excel(path, sheet_name="I&W_Yes")["Indicator"].tolist() == ["reported"]
+    assert pd.read_excel(path, sheet_name="I&W_No")["Indicator"].tolist() == ["new"]
+    for name in ("I&W_Yes", "I&W_No"):
+        assert {"GTI Verdict", "Botnet Flag", "Observation Penalty Multiplier", "VirusTotal Malicious Score"}.isdisjoint(pd.read_excel(path, sheet_name=name).columns)

@@ -1,0 +1,231 @@
+{
+  "original": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Dashobard.pbix",
+  "candidate": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Deprecated\\test-dashboards-20261027-112133\\Temporary Tests\\htoc_details_height_k8t3_sde\\Approved Layout.pbix",
+  "work": "C:\\Users\\jaskew\\AppData\\Local\\Temp\\htoc_details_height_k8t3_sde",
+  "original_sha256": "00e04f448a6c26b8e7511c2350b0ca9b8a2d7cb111c2f29e3df72ef814d0d1b7",
+  "changes": {
+    "prism_panel": {
+      "before": {
+        "x": 590,
+        "y": 308,
+        "width": 514,
+        "height": 324
+      },
+      "after": {
+        "x": 590,
+        "y": 372,
+        "width": 514,
+        "height": 260
+      }
+    },
+    "prism": {
+      "before": {
+        "x": 590,
+        "y": 308,
+        "width": 514,
+        "height": 248
+      },
+      "after": {
+        "x": 590,
+        "y": 372,
+        "width": 514,
+        "height": 184
+      }
+    },
+    "indicator_details_frame": {
+      "before": {
+        "x": 60,
+        "y": 120,
+        "width": 1044,
+        "height": 172
+      },
+      "after": {
+        "x": 60,
+        "y": 120,
+        "width": 1044,
+        "height": 236
+      }
+    },
+    "indicator_hover_column": {
+      "before": {
+        "x": 68,
+        "y": 148,
+        "width": 1028,
+        "height": 136
+      },
+      "after": {
+        "x": 68,
+        "y": 148,
+        "width": 1028,
+        "height": 200
+      }
+    },
+    "indicator_details_frame_drawer_expanded": {
+      "before": {
+        "x": 276,
+        "y": 120,
+        "width": 828,
+        "height": 172
+      },
+      "after": {
+        "x": 276,
+        "y": 120,
+        "width": 828,
+        "height": 236
+      }
+    },
+    "indicator_hover_column_drawer_expanded": {
+      "before": {
+        "x": 284,
+        "y": 148,
+        "width": 812,
+        "height": 136
+      },
+      "after": {
+        "x": 284,
+        "y": 148,
+        "width": 812,
+        "height": 200
+      }
+    },
+    "prism_panel_drawer_expanded": {
+      "before": {
+        "x": 698,
+        "y": 308,
+        "width": 406,
+        "height": 324
+      },
+      "after": {
+        "x": 698,
+        "y": 372,
+        "width": 406,
+        "height": 260
+      }
+    },
+    "prism_drawer_expanded": {
+      "before": {
+        "x": 698,
+        "y": 308,
+        "width": 406,
+        "height": 248
+      },
+      "after": {
+        "x": 698,
+        "y": 372,
+        "width": 406,
+        "height": 184
+      }
+    },
+    "assessment_panel": {
+      "before": {
+        "x": 60,
+        "y": 308,
+        "width": 514,
+        "height": 324
+      },
+      "after": {
+        "x": 60,
+        "y": 372,
+        "width": 514,
+        "height": 260
+      }
+    },
+    "assessment_notes": {
+      "before": {
+        "x": 68,
+        "y": 312,
+        "width": 498,
+        "height": 266
+      },
+      "after": {
+        "x": 68,
+        "y": 376,
+        "width": 498,
+        "height": 202
+      }
+    },
+    "assessment_panel_narrow": {
+      "before": {
+        "x": 276,
+        "y": 308,
+        "width": 406,
+        "height": 324
+      },
+      "after": {
+        "x": 276,
+        "y": 372,
+        "width": 406,
+        "height": 260
+      }
+    },
+    "assessment_notes_narrow": {
+      "before": {
+        "x": 284,
+        "y": 312,
+        "width": 390,
+        "height": 266
+      },
+      "after": {
+        "x": 284,
+        "y": 376,
+        "width": 390,
+        "height": 202
+      }
+    }
+  },
+  "footer_changes": {
+    "prism": {
+      "x": 590,
+      "y": 372,
+      "width": 514,
+      "height": 210
+    },
+    "prism_meaning": {
+      "x": 602,
+      "y": 594,
+      "width": 490,
+      "height": 26
+    },
+    "prism_drawer_expanded": {
+      "x": 698,
+      "y": 372,
+      "width": 406,
+      "height": 210
+    },
+    "prism_meaning_drawer_expanded": {
+      "x": 710,
+      "y": 594,
+      "width": 382,
+      "height": 26
+    },
+    "assessment_notes": {
+      "x": 68,
+      "y": 376,
+      "width": 498,
+      "height": 220
+    },
+    "assessment_note_hint": {
+      "x": 72,
+      "y": 604,
+      "width": 490,
+      "height": 16
+    },
+    "assessment_notes_narrow": {
+      "x": 284,
+      "y": 376,
+      "width": 390,
+      "height": 220
+    },
+    "assessment_note_hint_narrow": {
+      "x": 288,
+      "y": 604,
+      "width": 382,
+      "height": 16
+    }
+  },
+  "test_candidate_deprecated": true,
+  "status": "staged-original-locked",
+  "tests_archive": "Z:\\HTOC\\Data_Analytics\\Data\\Threat Assessment Scores\\ThreatAssessI_W\\Dashboard\\Deprecated\\test-dashboards-20261027-112133",
+  "archived_tests": 22,
+  "archive_errors": []
+}

@@ -60,7 +60,7 @@ class ThreatScoreIwConfig:
     owner_names: tuple[str, ...] = OWNER_NAMES
     prefer_owner: str = "HTOC Org"
     severities: tuple[str, ...] = ("high", "critical")
-    exclusion_tags: tuple[str, ...] = ("i&w", "i & w", "iw", "Benign PB", "tor", "TOR Node", "TorExitNode")
+    exclusion_tags: tuple[str, ...] = ("Benign PB", "tor", "TOR Node", "TorExitNode")
     exclusion_explanation_phrases: tuple[str, ...] = ("TOR activity detected",)
 
     def __post_init__(self) -> None:
@@ -123,7 +123,7 @@ def run_threat_score_iw(config: ThreatScoreIwConfig | None = None) -> list[Path]
         eligible = exclude_indicators_by_tags(labeled, config)
     except PipelineNoWork as exc:
         # A valid zero-row result still requires the daily report, with headers.
-        print(f"No eligible indicators: {exc} Writing empty I&W_No report.")
+        print(f"No eligible indicators: {exc} Writing empty Yes/No report.")
         try:
             empty = pd.read_excel(config.scores_xlsx, nrows=0)
         except OSError as read_error:
@@ -439,6 +439,15 @@ def attach_tags(
         return ", ".join(tags) if tags else pd.NA
 
     out["Tags"] = out["Indicator"].map(combined_tags)
+    # Match the original report: reported status comes from live HTOC Org tags.
+    iw_tags = {"i&w", "i & w", "iw"}
+    out = out.drop(columns=[c for c in out.columns if c.startswith("Reported I&W?")])
+    out["Reported I&W?"] = out["Indicator"].map(
+        lambda indicator: "Yes" if any(
+            tag.casefold() in iw_tags
+            for tag in live_tags_by_indicator.get(str(indicator).strip(), [])
+        ) else "No"
+    )
     cols = [c for c in out.columns if c != "Tags"]
     out = out[cols[:-1] + ["Tags"] + cols[-1:]] if cols else out
 
@@ -559,6 +568,7 @@ def condense_final_indicators(frame: pd.DataFrame, *, min_hosts: int = 5) -> pd.
         "incidents/events": _union_csv,
         "Tags": "first",
         "Explanation": "first",
+        "Reported I&W?": lambda values: "Yes" if (values == "Yes").any() else "No",
     }
     agg.update({col: fn for col, fn in optional_aggs.items() if col in dense_df.columns})
 
@@ -658,7 +668,7 @@ def _apply_member_dropdowns(
 
 
 def write_iw_workbook(final_indicators: pd.DataFrame, output_path: Path) -> Path:
-    """Write eligible indicators to I&W_No with optional Host IP dropdowns."""
+    """Write both reported-status sheets, including headers when either is empty."""
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -672,26 +682,34 @@ def write_iw_workbook(final_indicators: pd.DataFrame, output_path: Path) -> Path
     for col in frame.select_dtypes(include=["datetimetz"]).columns:
         frame[col] = frame[col].dt.tz_convert(None)
 
+    if "Reported I&W?" not in frame.columns:
+        frame["Reported I&W?"] = "No"
     export_df, member_map = _prepare_export_df(frame)
+    sheets = {
+        "I&W_No": export_df[export_df["Reported I&W?"] == "No"].copy(),
+        "I&W_Yes": export_df[export_df["Reported I&W?"] == "Yes"].copy(),
+    }
 
     try:
         with pd.ExcelWriter(output_path, engine="xlsxwriter") as writer:
-            export_df.to_excel(writer, index=False, sheet_name="I&W_No")
+            for sheet_name, sheet_df in sheets.items():
+                sheet_df.to_excel(writer, index=False, sheet_name=sheet_name)
             workbook = writer.book
             range_names = _write_subnet_members_sheet(workbook, member_map)
             wrap_fmt = workbook.add_format({"text_wrap": True, "valign": "top"})
-            worksheet = writer.sheets["I&W_No"]
-            worksheet.set_column(0, len(export_df.columns) - 1, 18)
-            if "Explanation" in export_df.columns:
-                exp_idx = export_df.columns.get_loc("Explanation")
-                worksheet.set_column(exp_idx, exp_idx, 100, wrap_fmt)
-            if "Associated Groups" in export_df.columns:
-                ag_idx = export_df.columns.get_loc("Associated Groups")
-                worksheet.set_column(ag_idx, ag_idx, 45, wrap_fmt)
-            if "Host IP" in export_df.columns:
-                member_idx = export_df.columns.get_loc("Host IP")
-                worksheet.set_column(member_idx, member_idx, 22)
-            _apply_member_dropdowns(worksheet, export_df, member_map, range_names)
+            for sheet_name, sheet_df in sheets.items():
+                worksheet = writer.sheets[sheet_name]
+                worksheet.set_column(0, len(export_df.columns) - 1, 18)
+                if "Explanation" in export_df.columns:
+                    exp_idx = export_df.columns.get_loc("Explanation")
+                    worksheet.set_column(exp_idx, exp_idx, 100, wrap_fmt)
+                if "Associated Groups" in export_df.columns:
+                    ag_idx = export_df.columns.get_loc("Associated Groups")
+                    worksheet.set_column(ag_idx, ag_idx, 45, wrap_fmt)
+                if "Host IP" in export_df.columns:
+                    member_idx = export_df.columns.get_loc("Host IP")
+                    worksheet.set_column(member_idx, member_idx, 22)
+                _apply_member_dropdowns(worksheet, sheet_df, member_map, range_names)
     except OSError as exc:
         raise PipelineError(f"Failed to write ThreatScoreIW workbook: {exc}", exit_code=4) from exc
 
